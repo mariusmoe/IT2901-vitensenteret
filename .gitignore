@@ -38,3 +38,6 @@ jspm_packages
 
 # DO NOT INCLUDE CONFIG!
 config.js
+
+#Useless file from OSX
+.DS_Store
