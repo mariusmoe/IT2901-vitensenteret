@@ -25,6 +25,7 @@ const SurveySchema = new Schema({
 			options: [String]
     },
 		answer: [Number]
+  }]
 });
 
 
