@@ -3,11 +3,7 @@ const AuthenticationController = require('./controllers/authentication'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport')
-      /*, // libs for
-      multer  = require('multer'),
-      upload = multer({ dest: 'uploads/'}),
-      fs = require('fs');
-      */
+
 
 // Require login/auth
 const requireAuth   = passport.authenticate('jwt', { session: false });
