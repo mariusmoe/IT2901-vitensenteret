@@ -23,11 +23,7 @@ const UserSchema = new Schema({
     // Verified by email
     type: Boolean,
     default: false
-  },
-  confirmation_string: { type: String, required: true },
-  confirmation_issued: {type: Date },
-  resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Date }
+  }
 },
 {
   timestamps: true
