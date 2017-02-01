@@ -9,6 +9,7 @@ import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { AdminComponent } from './components/admin.component';
 import { HomepageComponent } from './components/homepage.component';
+import { SurveyCreateComponent } from './components/surveycreate.component';
 
 
 
@@ -16,7 +17,8 @@ import { HomepageComponent } from './components/homepage.component';
   declarations: [
     AppComponent,
     AdminComponent,
-    HomepageComponent
+    HomepageComponent,
+    SurveyCreateComponent
   ],
   imports: [
     BrowserModule,

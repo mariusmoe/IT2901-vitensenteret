@@ -3,6 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { HomepageComponent } from './components/homepage.component';
 import { AdminComponent } from './components/admin.component';
+import { SurveyCreateComponent } from './components/surveycreate.component';
 
 
 const appRoutes: Routes = [
@@ -13,6 +14,15 @@ const appRoutes: Routes = [
   {
     path: 'admin',
     component: AdminComponent
+  },
+  {
+    path: 'create-survey',
+    component: SurveyCreateComponent
+  },
+  {
+    path: '**',
+    redirectTo: '',
+    pathMatch: 'full'
   }
 ];
 

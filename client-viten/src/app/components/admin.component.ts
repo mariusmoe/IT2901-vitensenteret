@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 
 
 @Component ({
@@ -11,6 +12,8 @@ import { Router } from '@angular/router';
 
 export class AdminComponent {
 
-  constructor(){}
-
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ){}
 }
