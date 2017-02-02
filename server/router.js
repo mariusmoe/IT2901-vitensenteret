@@ -23,7 +23,7 @@ module.exports = (app) => {
   */
 
   // Register a user
-  authRoutes.post('/register/:refferal_string', AuthenticationController.register);
+  authRoutes.post('/register', AuthenticationController.register);
 
   // Login a user
   authRoutes.post('/login', requireLogin, AuthenticationController.login);

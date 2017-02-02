@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken'),
       User = require('../models/user'),
       config = require('../libs/config'),
       status = require('../status'),
-      referral = require('../models/referral');
+      Referral = require('../models/referral');
 
 /**
  * getSecureRandomBytes in hex format
@@ -43,12 +43,10 @@ exports.login = (req, res, next) => {
 }
 
 exports.register = (req, res, next) => {
-  let confirm_string = req.params.refferal_string;
-
-
-  // TODO: fix refferal link
   const email     = req.body.email,
-        password  = req.body.password;
+        password        = req.body.password,
+        confirm_string  = req.body.referral_string;
+  console.log(confirm_string);
 
   if (validator.isEmpty(email)){
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
@@ -56,24 +54,31 @@ exports.register = (req, res, next) => {
   if (validator.isEmpty(password)){
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
   }
+  if (validator.isEmpty(confirm_string)){
+    return res.status(401).send({message: status.NO_REFERRAL_LINK.message, status: status.NO_REFERRAL_LINK.code} )
+  }
 
-  User.findOne({ email: email }, (err, existingUser) => {
+  Referral.findOne({referral: confirm_string}, (err, existingReferral) => {
+    if (err) { return next(err); }
+    if (!existingReferral) {
+      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
+    }
+    User.findOne({ email: email }, (err, existingUser) => {
       if (err) { return next(err); }
 
       if (existingUser) {
         return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
       }
-
       let user = new User({
         email: email,
         password: password
       });
-
       user.save((err, user) => {
         if (err) {return next(err); }
         res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
       });
     });
+  });
 }
 
 exports.getReferralLink = (req, res, next) => {
@@ -90,13 +95,9 @@ exports.getReferralLink = (req, res, next) => {
       })
       referralString.save((err, referral) => {
         if (err) {return next(err); }
-        res.status(200).send({message: status.REFERRAL_CREATED.message, status: status.REFERRAL_CREATED.code, referral: referral} )
-      })
+        let refferalBaseLink = 'http://localhost:2000/register/';  // TODO: NEED to be changed in production
+        res.status(200).send({message: status.REFERRAL_CREATED.message, link: refferalBaseLink + token, status: status.REFERRAL_CREATED.code })
+      });
     })
-
-
-    // let refferalBaseLink = 'http://it2810-02.idi.ntnu.no:2000/api/auth/confirm_account/';
-    let refferalBaseLink = 'http://localhost:2000/api/auth/register/';  // NEED to be changed in production
-    res.status(200).send({message: refferalBaseLink + token })
-  });
+  })
 }

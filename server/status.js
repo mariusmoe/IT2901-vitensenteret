@@ -22,5 +22,13 @@ module.exports = {
   REFERRAL_CREATED: {
     message: 'Referral link established correctly',
     code: 1012
+  },
+  NO_REFERRAL_LINK: {
+    message: 'You need a referral link',
+    code: 2016
+  },
+  NOT_AN_ACTIVE_REFERRAL: {
+    message: 'The referral link is too old or not correct',
+    code: 2017
   }
 }
