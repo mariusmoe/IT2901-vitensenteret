@@ -28,6 +28,9 @@ module.exports = (app) => {
   // Login a user
   authRoutes.post('/login', requireLogin, AuthenticationController.login);
 
+  // get a referral link
+  authRoutes.get('/get_referral_link', requireAuth, AuthenticationController.getReferralLink);
+
   // // TODO Password reset request route
   // authRoutes.post('/forgot-password', AuthenticationController.forgotPassword);
   //

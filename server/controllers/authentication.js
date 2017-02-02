@@ -5,7 +5,8 @@ const jwt = require('jsonwebtoken'),
       validator = require('validator'),
       User = require('../models/user'),
       config = require('../libs/config'),
-      status = require('../status')
+      status = require('../status'),
+      referral = require('../models/referral');
 
 /**
  * getSecureRandomBytes in hex format
@@ -13,10 +14,9 @@ const jwt = require('jsonwebtoken'),
  */
 function getSecureRandomBytes() {
     crypto.randomBytes(48, function(err, buffer) {
-    if (err) { return next(err); }
-    const token = buffer.toString('hex');
-    console.log(token);
-  });
+      if (err) { return next(err); }
+      const token = buffer.toString('hex');
+    });
 }
 
 /**
@@ -44,6 +44,8 @@ exports.login = (req, res, next) => {
 
 exports.register = (req, res, next) => {
   let confirm_string = req.params.refferal_string;
+
+
   // TODO: fix refferal link
   const email     = req.body.email,
         password  = req.body.password;
@@ -75,8 +77,26 @@ exports.register = (req, res, next) => {
 }
 
 exports.getReferralLink = (req, res, next) => {
-  let random = getSecureRandomBytes();
-  // let refferalBaseLink = 'http://it2810-02.idi.ntnu.no:2000/api/auth/confirm_account/';
-  let refferalBaseLink = 'http://localhost:2000/api/auth/register/';  // NEED to be changed in production
-  res.status(200).send({message: refferalBaseLink + '/' + random })
+  crypto.randomBytes(48, function(err, buffer) {
+    if (err) { return next(err); }
+    const token = buffer.toString('hex');
+    Referral.findOne({referral: token}, (err, existingReferralLink) => {
+      if (err) { return next(err); }
+      if (existingReferralLink) {
+        return res.status(422).send( {error: status.TRY_AGAIN.message, status: status.TRY_AGAIN.code} );
+      }
+      let referralString = new Referral({
+        referral: token
+      })
+      referralString.save((err, referral) => {
+        if (err) {return next(err); }
+        res.status(200).send({message: status.REFERRAL_CREATED.message, status: status.REFERRAL_CREATED.code, referral: referral} )
+      })
+    })
+
+
+    // let refferalBaseLink = 'http://it2810-02.idi.ntnu.no:2000/api/auth/confirm_account/';
+    let refferalBaseLink = 'http://localhost:2000/api/auth/register/';  // NEED to be changed in production
+    res.status(200).send({message: refferalBaseLink + token })
+  });
 }

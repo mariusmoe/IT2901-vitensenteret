@@ -14,5 +14,13 @@ module.exports = {
   NO_EMAIL_OR_PASSWORD: {
     message: 'Missing email or password',
     code: 2014
+  },
+  TRY_AGAIN: {
+    message: 'could not do that, try again',
+    code: 2015
+  },
+  REFERRAL_CREATED: {
+    message: 'Referral link established correctly',
+    code: 1012
   }
 }
