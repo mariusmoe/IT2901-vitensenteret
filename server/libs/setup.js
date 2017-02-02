@@ -1,5 +1,6 @@
 const bodyParser = require('body-parser'),
       logger = require('morgan'),
+      config = require('./config'),
       helmet = require('helmet');
 
 module.exports = app => {
@@ -17,7 +18,11 @@ module.exports = app => {
 
   // Log requests to API using morgan
   // :method :url :status :response-time ms - :res[content-length]
-  app.use(logger('dev'));
+  // app.use(logger('dev'));
+  if(config.NODE_ENV !== 'test') {
+    //use morgan to log at command line
+    app.use(logger('dev')); //'combined' outputs the Apache style LOGs
+}
 
   // Enable CORS from client-side
   app.use(function(req, res, next) {
