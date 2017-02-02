@@ -15,6 +15,10 @@ const ReferralSchema = new Schema({
     type: Date,
     expires:  60*60*24*14,  // expire after two weeks
     default: Date.now
+  },
+  active: {
+    type: Boolean,
+    default: true
   }
 
 })

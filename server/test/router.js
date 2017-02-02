@@ -1,28 +1,27 @@
-const expect    = require("chai").expect;
-const converter = require("../router");
+process.env.NODE_ENV = 'test';
 
-describe("Color Code Converter", function() {
-  describe("RGB to Hex conversion", function() {
-    it("converts the basic colors", function() {
-      var redHex   = converter.rgbToHex(255, 0, 0);
-      var greenHex = converter.rgbToHex(0, 255, 0);
-      var blueHex  = converter.rgbToHex(0, 0, 255);
+let mongoose = require("mongoose");
 
-      expect(redHex).to.equal("ff0000");
-      expect(greenHex).to.equal("00ff00");
-      expect(blueHex).to.equal("0000ff");
+let chai = require('chai');
+let chaiHttp = require('chai-http');
+let server = require('../index');
+let should = chai.should();
+
+chai.use(chaiHttp);
+
+describe('Blobs', function() {
+  it('should list ALL blobs on /blobs GET');
+  it('should list a SINGLE blob on /blob/<id> GET');
+  it('should add a SINGLE blob on /blobs POST');
+  it('should update a SINGLE blob on /blob/<id> PUT');
+  it('should delete a SINGLE blob on /blob/<id> DELETE');
+  it('should list ALL blobs on /blobs GET', function(done) {
+  chai.request(server)
+    .post('/api/auth/login')
+    .send({'email': 'mariusomoe@gmail.com', 'password': 'test'})
+    .end(function(err, res){
+      res.should.have.status(200);
+      done();
     });
-  });
-
-  describe("Hex to RGB conversion", function() {
-    it("converts the basic colors", function() {
-      var red   = converter.hexToRgb("ff0000");
-      var green = converter.hexToRgb("00ff00");
-      var blue  = converter.hexToRgb("0000ff");
-
-      expect(red).to.deep.equal([255, 0, 0]);
-      expect(green).to.deep.equal([0, 255, 0]);
-      expect(blue).to.deep.equal([0, 0, 255]);
-    });
-  });
+});
 });

@@ -30,7 +30,11 @@ function generateToken(user) {
   });
 }
 
-
+/**
+ * Log in a user
+ *
+ * respons with a json object with a Json web token and the user
+ */
 exports.login = (req, res, next) => {
   let user = {
     _id: req.user._id,
@@ -42,12 +46,14 @@ exports.login = (req, res, next) => {
   });
 }
 
+/**
+ * Register a new user
+ */
 exports.register = (req, res, next) => {
   const email     = req.body.email,
         password        = req.body.password,
         confirm_string  = req.body.referral_string;
-  console.log(confirm_string);
-
+        
   if (validator.isEmpty(email)){
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
   }
@@ -60,27 +66,40 @@ exports.register = (req, res, next) => {
 
   Referral.findOne({referral: confirm_string}, (err, existingReferral) => {
     if (err) { return next(err); }
+
+    if (!existingReferral.active) {
+      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
+    } else {
+      existingReferral.active = false;
+    }
+
     if (!existingReferral) {
       return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
     }
-    User.findOne({ email: email }, (err, existingUser) => {
+    existingReferral.save((err) => {
       if (err) { return next(err); }
+      User.findOne({ email: email }, (err, existingUser) => {
+        if (err) { return next(err); }
 
-      if (existingUser) {
-        return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
-      }
-      let user = new User({
-        email: email,
-        password: password
+        if (existingUser) {
+          return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
+        }
+        let user = new User({
+          email: email,
+          password: password
+        });
+        user.save((err, user) => {
+          if (err) {return next(err); }
+          res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+        });
       });
-      user.save((err, user) => {
-        if (err) {return next(err); }
-        res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
-      });
-    });
+    })
   });
 }
 
+/**
+ * Get a new referral link
+ */
 exports.getReferralLink = (req, res, next) => {
   crypto.randomBytes(48, function(err, buffer) {
     if (err) { return next(err); }

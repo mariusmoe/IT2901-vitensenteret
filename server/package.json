@@ -4,7 +4,8 @@
   "description": "Backend for Vitensenteret-survey",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --reporter spec"
+    "test": "mocha --timeout 10000",
+    "test2": "./node_modules/.bin/mocha --reporter spec"
   },
   "keywords": [
     "server"
@@ -14,13 +15,11 @@
   "dependencies": {
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.16.0",
-    "chai": "^3.5.0",
     "consign": "^0.1.2",
     "crypto": "0.0.3",
     "express": "^4.14.1",
     "helmet": "^3.4.0",
     "jsonwebtoken": "^7.2.1",
-    "mocha": "^3.2.0",
     "moment": "^2.17.1",
     "mongoose": "^4.8.1",
     "morgan": "^1.7.0",
@@ -29,5 +28,10 @@
     "passport-local": "^1.0.0",
     "request": "^2.79.0",
     "validator": "^6.2.1"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "chai-http": "^3.0.0",
+    "mocha": "^3.2.0"
   }
 }
