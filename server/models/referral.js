@@ -3,17 +3,17 @@ const mongoose = require('mongoose'),
 
 
 const ReferralSchema = new Schema({
+  expirationDate: {
+    type: Date,
+    expires:  60*60*24*14,  // expire after two weeks
+    default: Date.now
+  },
   referral: {
     type: String,
     required: true
   },
   issued_date: {
     type: Date,
-    default: Date.now
-  },
-  expirationDate: {
-    type: Date,
-    expires:  60*60*24*14,  // expire after two weeks
     default: Date.now
   },
   active: {

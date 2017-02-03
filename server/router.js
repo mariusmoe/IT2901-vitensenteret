@@ -1,4 +1,5 @@
 const AuthenticationController = require('./controllers/authentication'),
+      SurveyController = require('./controllers/survey'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport')
@@ -12,9 +13,11 @@ const requireLogin  = passport.authenticate('local', { session: false });
 module.exports = (app) => {
   // route groups
   const apiRoutes  = express.Router(),
-        authRoutes = express.Router();
+        authRoutes = express.Router(),
+        surveyRoutes = express.Router();
   // Set auth routes as subgroup to apiRoutes
   apiRoutes.use('/auth', authRoutes);
+  apiRoutes.use('/survey', surveyRoutes);
 
   /*
    |--------------------------------------------------------------------------
@@ -30,6 +33,9 @@ module.exports = (app) => {
 
   // get a referral link
   authRoutes.get('/get_referral_link', requireAuth, AuthenticationController.getReferralLink);
+
+
+authRoutes.post('/register_developer', AuthenticationController.register_developer);
 
   // // TODO Password reset request route
   // authRoutes.post('/forgot-password', AuthenticationController.forgotPassword);
@@ -57,6 +63,16 @@ module.exports = (app) => {
   //
   // // Request a new token
   // authRoutes.get('/get_new_token', requireAuth, AuthenticationController.getNewJWT);
+
+  surveyRoutes.post('/', SurveyController.createSurvey);
+
+  surveyRoutes.get('/', SurveyController.getAllSurveys);
+
+  surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
+
+  surveyRoutes.patch('/:surveyId', SurveyController.patchOneSurvey);
+
+  surveyRoutes.delete('/:surveyId', SurveyController.deleteOneSurvey);
 
 
 

@@ -14,15 +14,26 @@ var jwt = '';
 chai.use(chaiHttp);
 describe('Auth', function() {
 
+
+    before( function(done) {
+      chai.request(server)
+        .post('/api/auth/register_developer')
+        .send({'email': 'test@test.no', 'password': 'test'})
+        .end(function(err, res){
+          //res.should.have.status(200);
+          done();
+        })
+    });
+
   beforeEach(function(done){
-    chai.request(server)
-      .post('/api/auth/login')
-      .send({'email': 'mariusomoe@gmail.com', 'password': 'test'})
-      .end(function(err, res){
-        jwt = res.body.token;   // Should be globaly avaliable before each test now :D
-        res.should.have.status(200);
-        done();
-      });
+        chai.request(server)
+        .post('/api/auth/login')
+        .send({'email': 'test@test.no', 'password': 'test'})
+        .end(function(err, res){
+          jwt = res.body.token;   // Should be globaly avaliable before each test now :D
+          res.should.have.status(200);
+          done();
+        });
   });
   afterEach(function(done){
     done();
@@ -33,7 +44,7 @@ describe('Auth', function() {
   it('should log in one user /api/auth/login POST', function(done) {
   chai.request(server)
     .post('/api/auth/login')
-    .send({'email': 'mariusomoe@gmail.com', 'password': 'test'})
+    .send({'email': 'test@test.no', 'password': 'test'})
     .end(function(err, res){
       res.should.have.status(200);
       done();

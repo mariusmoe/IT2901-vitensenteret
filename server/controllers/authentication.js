@@ -53,7 +53,7 @@ exports.register = (req, res, next) => {
   const email     = req.body.email,
         password        = req.body.password,
         confirm_string  = req.body.referral_string;
-        
+
   if (validator.isEmpty(email)){
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
   }
@@ -96,6 +96,45 @@ exports.register = (req, res, next) => {
     })
   });
 }
+
+
+/**
+ * development
+ * TODO: DELETE ME
+ */
+ /**
+  * Register a new user
+  */
+ exports.register_developer = (req, res, next) => {
+   const email     = req.body.email,
+         password        = req.body.password;
+
+   if (validator.isEmpty(email)){
+     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
+   }
+   if (validator.isEmpty(password)){
+     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
+   }
+
+   User.findOne({ email: email }, (err, existingUser) => {
+     if (err) { return next(err); }
+
+     if (existingUser) {
+       return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
+     }
+     let user = new User({
+       email: email,
+       password: password
+     });
+     user.save((err, user) => {
+       if (err) {return next(err); }
+       res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+     });
+   });
+
+
+ }
+
 
 /**
  * Get a new referral link
