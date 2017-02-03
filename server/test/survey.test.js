@@ -68,6 +68,19 @@ describe('Survey', function() {
     });
   });
 
+  it('should return 422 on creating one survey /api/survey/ POST', function(done) {
+    chai.request(server)
+    .post('/api/survey')
+    .set('Authorization', jwt)
+    .send({
+      "test": "test"
+      })
+    .end(function(err, res){
+      res.should.have.status(422);
+      done();
+    });
+  });
+
 
   it('should retrieve one survey /api/survey/surveyId GET', function(done) {
   chai.request(server)

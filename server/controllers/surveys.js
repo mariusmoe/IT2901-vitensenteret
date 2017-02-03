@@ -14,16 +14,16 @@ exports.createSurvey = (req, res, next) => {
   let receivedSurvey = req.body
 
   // TODO: write the validator
+  // console.log(val.surveyValidation(receivedSurvey));
   if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {error: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
-  // console.log(receivedSurvey);
-  // TODO this dos not work!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
   let newSurvey = new Survey ( receivedSurvey )
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
-    res.status(200).send( survey );
+    return res.status(200).send( survey );
   })
 }
 
@@ -46,7 +46,10 @@ exports.patchOneSurvey = (req, res, next) => {
   if (!surveyId) {
     return res.status(400).send( {error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code})
   }
-  Survey.findByIdAndUpdate( surveyId, newMesage, (err, survey) => {
+  if (!req.body) {
+    return res.status(400).send( {error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code})
+  }
+  Survey.findByIdAndUpdate( surveyId, newMesage, {new: true}, (err, survey) => {
     if (err) { return next(err); }
     return res.status(200).send({message: 'Accepted - recipe changed', survey: survey})
   });
