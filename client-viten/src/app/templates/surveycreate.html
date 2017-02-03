@@ -1,9 +1,32 @@
 <h1>Create survey here</h1>
-<div *ngFor="let question of questions">
-  <h3>{{question.type}}</h3>
-  <h1>{{question.text}}</h1>
-  <h2>{{question.subtext}}</h2>
-  <div *ngFor="let alt of question.alternatives">
-    <h3>{{alt}}</h3>
+<button (click)="addQuestion()">Add question</button>
+
+<br />
+<hr />
+<div *ngFor="let question of questions; let i=index" class="question">
+  <h1>Question: {{i+1}}</h1>
+
+  <h6>Question type</h6>
+  <p>{{question.type}}</p>
+  <br />
+
+  <h6>Question text</h6>
+  <input [(ngModel)]="question.text" />
+  <p>{{question.text}}</p>
+  <br />
+
+  <h6>Question subtext</h6>
+  <input [(ngModel)]="question.subtext" />
+  <p>{{question.subtext}}</p>
+  <br />
+
+  <h6>Question alternaltives</h6>
+  <button (click)="addAlternaltive(question)">Add alternaltive</button>
+  <div *ngFor="let alt of question.alternaltives; let j=index">
+    <input [(ngModel)]="question.alternaltives[j]" />
+    <p>{{alt}}</p>
+    <br />
   </div>
+  <hr />
+  <br />
 </div>

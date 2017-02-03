@@ -10,11 +10,17 @@ import { Question } from '../classes/question';
 
 export class SurveyCreateComponent {
 
-  questions: Question[] = [
-    {type: 'multiple', text: 'Hvordan var dagen på vitensenteret?', subtext: 'yo', alternatives: ['nr1', 'nr2']}
-  ];
+  questions: Question[] = [];
 
   constructor(
   ){}
+
+  addQuestion(): void {
+    this.questions.push({type: '', text: '', subtext: '', alternaltives: ['']});
+  }
+
+  addAlternaltive(question: Question): void {
+    question.alternaltives.push('');
+  }
 
 }
