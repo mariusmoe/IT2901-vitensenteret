@@ -10,6 +10,7 @@ import { Question } from '../classes/question';
 
 export class SurveyCreateComponent {
 
+  surveyname: string = '';
   questions: Question[] = [];
 
   constructor(
@@ -25,6 +26,7 @@ export class SurveyCreateComponent {
 
   deleteQuestion(index: number): void {
     this.questions.splice(index, 1);
+    //TODO: Popup confirmation
   }
 
   deleteAlternaltive(question: Question, index: number): void {
