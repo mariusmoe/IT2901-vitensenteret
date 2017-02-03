@@ -48,7 +48,7 @@ exports.patchOneSurvey = (req, res, next) => {
   }
   Survey.findByIdAndUpdate( surveyId, newMesage, (err, survey) => {
     if (err) { return next(err); }
-    return res.status(200).send({message: 'Accepted - recipe changed'})
+    return res.status(200).send({message: 'Accepted - recipe changed', survey: survey})
   });
 }
 
@@ -57,7 +57,7 @@ exports.deleteOneSurvey = (req, res, next) => {
   if (!surveyId) {
     return res.status(400).send( {error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code})
   }
-  Survey.deletyeById( surveyId, (err, survey) => {
+  Survey.findByIdAndRemove( surveyId, (err, survey) => {
     if (err) { return next(err); }
     return res.status(200).send({message: 'Success! - it is no more'});
   });
