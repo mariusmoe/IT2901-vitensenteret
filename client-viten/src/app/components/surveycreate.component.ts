@@ -16,11 +16,11 @@ export class SurveyCreateComponent {
   ){}
 
   addQuestion(): void {
-    this.questions.push({type: '', text: '', subtext: '', alternaltives: ['']});
+    this.questions.push({type: '', text: '', subtext: '', alternaltives: [{alt: ''}]});
   }
 
   addAlternaltive(question: Question): void {
-    question.alternaltives.push('');
+    question.alternaltives.push({alt: ''});
   }
 
 }

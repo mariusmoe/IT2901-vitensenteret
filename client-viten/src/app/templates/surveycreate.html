@@ -23,8 +23,8 @@
   <h6>Question alternaltives</h6>
   <button (click)="addAlternaltive(question)">Add alternaltive</button>
   <div *ngFor="let alt of question.alternaltives; let j=index">
-    <input [(ngModel)]="question.alternaltives[j]" />
-    <p>{{alt}}</p>
+    <input [(ngModel)]="alt.alt" />
+    <p>{{alt.alt}}</p>
     <br />
   </div>
   <hr />
