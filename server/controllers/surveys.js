@@ -2,18 +2,24 @@
 
 const validator = require('validator'),
       status = require('../status'),
-      Survey = require('../models/survey');
+      Survey = require('../models/survey'),
+      val = require('../libs/validation.js');
 
-exports.getAllSurveys = () => {
+// exports.getAllSurveys = (req, res, next) => {
+//
+//
+// }
 
+exports.createSurvey = (req, res, next) => {
+  let receivedSurvey = req.body
 
-}
-
-exports.createSurvey = () => {
-  let recivedSurvey = req.body.survey
-
+  // TODO: write the validator
+  if (!val.surveyValidation(receivedSurvey)){
+    return res.status(422).send( {error: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
+  }
+  // console.log(receivedSurvey);
   // TODO this dos not work!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  let newSurvey = new Survey ( recivedSurvey.json() )
+  let newSurvey = new Survey ( receivedSurvey )
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
@@ -21,7 +27,7 @@ exports.createSurvey = () => {
   })
 }
 
-exports.getOneSurvey = () => {
+exports.getOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId
   if (!surveyId) {
     return res.status(400).send( {error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code})
@@ -32,7 +38,7 @@ exports.getOneSurvey = () => {
   });
 }
 
-exports.patchOneSurvey = () => {
+exports.patchOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
 
   // TODO validate this
@@ -46,13 +52,13 @@ exports.patchOneSurvey = () => {
   });
 }
 
-exports.deleteOneSurvey = () => {
+exports.deleteOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId
   if (!surveyId) {
     return res.status(400).send( {error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code})
   }
   Survey.deletyeById( surveyId, (err, survey) => {
     if (err) { return next(err); }
-    return res.status(200).send({'Success! - it is no more'});
+    return res.status(200).send({message: 'Success! - it is no more'});
   });
 }

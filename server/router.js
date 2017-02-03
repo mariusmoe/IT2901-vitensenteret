@@ -1,5 +1,5 @@
 const AuthenticationController = require('./controllers/authentication'),
-      SurveyController = require('./controllers/survey'),
+      SurveyController = require('./controllers/surveys'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport')
@@ -66,7 +66,7 @@ authRoutes.post('/register_developer', AuthenticationController.register_develop
 
   surveyRoutes.post('/', SurveyController.createSurvey);
 
-  surveyRoutes.get('/', SurveyController.getAllSurveys);
+  // surveyRoutes.get('/', SurveyController.getAllSurveys);
 
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
 

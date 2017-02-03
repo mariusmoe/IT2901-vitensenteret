@@ -1,7 +1,4 @@
 process.env.NODE_ENV = 'test';
-var colors = require('mocha/lib/reporters/base').colors;
-colors['diff added'] = 32;
-colors['diff removed'] = 31;
 
 let mongoose = require("mongoose");
 mongoose.Promise = Promise;

@@ -30,5 +30,9 @@ module.exports = {
   NOT_AN_ACTIVE_REFERRAL: {
     message: 'The referral link is too old or not correct',
     code: 2017
+  },
+  SURVEY_UNPROCESSABLE: {
+    message: 'Survey coluld not be processed. It may be malformated',
+    code: 2018
   }
 }
