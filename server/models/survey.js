@@ -5,6 +5,8 @@ const mongoose = require('mongoose'),
  | Survey schema
  |--------------------------------------------------------------------------
 */
+
+// IF THIS CHANGES, DO UPDATE libs/validation.js!!
 const SurveySchema = new Schema({
   name: {
     type: String
