@@ -39,7 +39,7 @@ describe('Survey', function() {
 
 
 
-  it('should create one survey /api/survey/ POST', function(done) {
+  it('should create a survey given valid input /api/survey/ POST', function(done) {
     chai.request(server)
     .post('/api/survey')
     .set('Authorization', jwt)
@@ -47,6 +47,7 @@ describe('Survey', function() {
         "name": "måneraketten3",
         "date": "Thu Apr 16 12:40:44 +0100 2009",
         "questionlist": [{
+          "mode": "smily",
           "eng": {
             "txt": "what do you thin about mars",
             "options": ["AWSOME","coooool","blody iron planet"]
@@ -68,7 +69,7 @@ describe('Survey', function() {
     });
   });
 
-  it('should return 422 on creating one survey /api/survey/ POST', function(done) {
+  it('should return 422 given bad survey input /api/survey/ POST', function(done) {
     chai.request(server)
     .post('/api/survey')
     .set('Authorization', jwt)
@@ -82,7 +83,7 @@ describe('Survey', function() {
   });
 
 
-  it('should retrieve one survey /api/survey/surveyId GET', function(done) {
+  it('should retrieve the survey of the id given /api/survey/surveyId GET', function(done) {
   chai.request(server)
     .get('/api/survey/' + surveyId)
     .end(function(err, res){
@@ -93,7 +94,7 @@ describe('Survey', function() {
     });
   });
 
-  it('should patch one survey /api/survey/surveyId PATCH', function(done) {
+  it('should patch the survey of the id given /api/survey/surveyId PATCH', function(done) {
   chai.request(server)
     .patch('/api/survey/' + surveyId)
     .set('Authorization', jwt)
@@ -101,6 +102,7 @@ describe('Survey', function() {
         "name": "plutorakett",
         "date": "Thu Apr 16 12:40:44 +0100 2009",
         "questionlist": [{
+          "mode": "text",
           "eng": {
             "txt": "what do you thin about mars",
             "options": ["AWSOME","coooool","blody iron planet"]
@@ -122,7 +124,35 @@ describe('Survey', function() {
     });
   });
 
-  it('should delete one survey /api/survey/surveyId DELETE', function(done) {
+  it('should return 422 given bad survey input /api/survey/surveyId PATCH', function(done) {
+  chai.request(server)
+    .patch('/api/survey/' + surveyId)
+    .set('Authorization', jwt)
+    .send({
+        "name": "plutorakett",
+        "date": "Thu Apr 16 12:40:44 +0100 2009",
+        "questionlist": [{
+          // "mode": "text", <-- bad input; it is required.
+          "eng": {
+            "txt": "what do you thin about marssssssssss",
+            "options": ["AWSOME","coooool","blody iron planet"]
+            }
+          ,
+          "nor": {
+            "txt": "Hva synes du om Mars",
+            "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
+            }
+          ,
+          "answer": [1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3]
+          }]
+      })
+    .end(function(err, res){
+      res.should.have.status(422);
+      done();
+    });
+  });
+
+  it('should delete the survey of the id given /api/survey/surveyId DELETE', function(done) {
   chai.request(server)
     .delete('/api/survey/' + surveyId)
     .set('Authorization', jwt)
