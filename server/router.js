@@ -64,15 +64,15 @@ authRoutes.post('/register_developer', AuthenticationController.register_develop
   // // Request a new token
   // authRoutes.get('/get_new_token', requireAuth, AuthenticationController.getNewJWT);
 
-  surveyRoutes.post('/', SurveyController.createSurvey);
+  surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
   // surveyRoutes.get('/', SurveyController.getAllSurveys);
 
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
 
-  surveyRoutes.patch('/:surveyId', SurveyController.patchOneSurvey);
+  surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
 
-  surveyRoutes.delete('/:surveyId', SurveyController.deleteOneSurvey);
+  surveyRoutes.delete('/:surveyId', requireAuth, SurveyController.deleteOneSurvey);
 
 
 
