@@ -1,8 +1,8 @@
-import { Alternaltives } from '../classes/alternaltives';
+import { Alternaltive } from '../classes/alternaltive';
 
 export class Question {
   type: string;
   text: string;
   subtext: string;
-  alternaltives: Alternaltives[];
+  alternaltives: Alternaltive[];
 }

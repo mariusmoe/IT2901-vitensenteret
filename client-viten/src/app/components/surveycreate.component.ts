@@ -23,4 +23,12 @@ export class SurveyCreateComponent {
     question.alternaltives.push({alt: ''});
   }
 
+  deleteQuestion(index: number): void {
+    this.questions.splice(index, 1);
+  }
+
+  deleteAlternaltive(question: Question, index: number): void {
+    question.alternaltives.splice(index, 1);
+  }
+
 }
