@@ -45,16 +45,16 @@ describe('Survey', function() {
     .set('Authorization', jwt)
     .send({
         "name": "måneraketten3",
-        "date": "Thu Apr 16 12:40:44 +0100 2009",
+        "date": "2012-04-23T18:25:43.511Z",
         "questionlist": [{
           "mode": "smily",
           "eng": {
-            "txt": "what do you thin about mars",
+            "txt": "what do you think about mars?",
             "options": ["AWSOME","coooool","blody iron planet"]
             }
           ,
           "nor": {
-            "txt": "Hva synes du om Mars",
+            "txt": "Hva synes du om Mars?",
             "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
             }
           ,
@@ -100,7 +100,7 @@ describe('Survey', function() {
     .set('Authorization', jwt)
     .send({
         "name": "plutorakett",
-        "date": "Thu Apr 16 12:40:44 +0100 2009",
+        "date": "2012-04-23T18:25:43.511Z",
         "questionlist": [{
           "mode": "text",
           "eng": {
@@ -130,7 +130,7 @@ describe('Survey', function() {
     .set('Authorization', jwt)
     .send({
         "name": "plutorakett",
-        "date": "Thu Apr 16 12:40:44 +0100 2009",
+        "date": "2012-04-23T18:25:43.511Z",
         "questionlist": [{
           // "mode": "text", <-- bad input; it is required.
           "eng": {
