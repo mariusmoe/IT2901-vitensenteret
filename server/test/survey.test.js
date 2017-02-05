@@ -10,6 +10,33 @@ let should = chai.should();
 var jwt = '';
 var surveyId = '';
 chai.use(chaiHttp);
+
+
+
+/*
+      TODO:
+      This file needs to be restructured, and test all aspects of the REST API.
+
+      1) verify everything works given correct input
+      2) verify everything gives right status codes given wrong input
+        a) malformed input
+        b) missing input
+      3) verify everything gives right status codes given actions that should not be allowed
+        EXAMPLE:
+          DELETE survey with ID that doesn't exist
+          GET survey with ID that doesn't exist / used to exist
+          etc
+
+      4) Move test data separately / above, to make the tests easier to read.
+*/
+
+
+
+
+
+
+
+
 describe('Survey', function() {
 
 
@@ -63,6 +90,7 @@ describe('Survey', function() {
       })
     .end(function(err, res){
       surveyId = res.body._id;
+      res.body.should.have.property('questionlist');
       res.body.questionlist.should.not.be.empty;
       res.should.have.status(200);
       done();
@@ -88,7 +116,8 @@ describe('Survey', function() {
     .get('/api/survey/' + surveyId)
     .end(function(err, res){
       res.should.not.be.empty;
-      // res.should.not.be.questionlist;
+      res.body.should.have.property('questionlist');
+      res.body.questionlist.should.not.be.empty;
       res.should.have.status(200);
       done();
     });
@@ -117,7 +146,9 @@ describe('Survey', function() {
           }]
       })
     .end(function(err, res){
+      res.body.should.have.property('survey');
       res.body.survey.should.not.be.empty;
+      res.body.survey.should.have.property('name');
       res.body.survey.name.should.equal('plutorakett');
       res.should.have.status(200);
       done();
@@ -158,7 +189,14 @@ describe('Survey', function() {
     .set('Authorization', jwt)
     .end(function(err, res){
       res.should.have.status(200);
-      done();
+
+      // verify that it was actually deleted.
+      chai.request(server).get('/api/survey/' + surveyId)
+        .end(function(err, res){
+          // TODO: was this actually fixed?
+          res.should.have.status(404);
+          done();
+        });
     });
   });
 
