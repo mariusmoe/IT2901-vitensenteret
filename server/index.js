@@ -1,7 +1,13 @@
 const express = require('express'),
       consign = require('consign'),
       app = express(),
+      mongoose = require('mongoose'),
       path = require('path');
+
+app.use(express.static(path.join(__dirname, 'temp')));
+
+// Use ES 6 promise instead of depricated mpromise
+mongoose.Promise = Promise;
 
 consign()
   .include('models')

@@ -8,6 +8,7 @@ const bodyParser = require('body-parser'),
       methodOverride = require('method-override');
 
 module.exports = app => {
+
   // Pretty print
   app.set("json spaces", 4);
 

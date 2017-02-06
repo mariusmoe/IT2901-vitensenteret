@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "start": "NODE_ENV=dev && nodemon index.js",
+    "nomon": "NODE_ENV=dev && node index.js",
+    "nodev": "NODE_ENV=test node ./index.js",
     "test": "mocha --timeout 10000",
     "test2": "./node_modules/.bin/mocha --reporter spec"
   },
@@ -21,6 +23,7 @@
     "crypto": "0.0.3",
     "express": "^4.14.1",
     "helmet": "^3.4.0",
+    "jsonfile": "^2.4.0",
     "jsonschema": "^1.1.1",
     "jsonwebtoken": "^7.2.1",
     "method-override": "^2.3.7",
@@ -30,6 +33,7 @@
     "passport": "^0.3.2",
     "passport-jwt": "^2.2.1",
     "passport-local": "^1.0.0",
+    "path": "^0.12.7",
     "request": "^2.79.0",
     "validator": "^6.2.1"
   },
