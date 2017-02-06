@@ -1,20 +1,20 @@
-import { Component } from '@angular/core';
-import { Question } from '../classes/question';
+import { Component, OnInit } from '@angular/core';
+import { Question } from '../../classes/question';
 
-@Component ({
-  moduleId: module.id,
-  selector: 'create-survey',
-  templateUrl: '../templates/surveycreate.html',
-  styleUrls: []
+@Component({
+  selector: 'app-survey-create',
+  templateUrl: './survey-create.component.html',
+  styleUrls: ['./survey-create.component.scss']
 })
-
-export class SurveyCreateComponent {
+export class SurveyCreateComponent implements OnInit {
 
   surveyname: string = '';
   questions: Question[] = [];
 
-  constructor(
-  ){}
+  constructor() { }
+
+  ngOnInit() {
+  }
 
   addQuestion(): void {
     this.questions.push({type: '', text: '', subtext: '', alternaltives: [{alt: ''}]});

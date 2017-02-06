@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { HomepageComponent } from './components/homepage.component';
-import { AdminComponent } from './components/admin.component';
-import { SurveyCreateComponent } from './components/surveycreate.component';
+import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
+import { SurveyCreateComponent } from './admin/survey-create/survey-create.component';
+import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 
 
 const appRoutes: Routes = [
   {
     path: '',
-    component: HomepageComponent
+    component:HomepageUserComponent
   },
   {
     path: 'admin',
-    component: AdminComponent
+    component: HomepageAdminComponent
   },
   {
     path: 'create-survey',

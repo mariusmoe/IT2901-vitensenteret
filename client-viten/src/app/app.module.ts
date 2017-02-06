@@ -7,18 +7,21 @@ import { AppRoutingModule } from './app.routing-module';
 import { MaterialModule } from '@angular/material';
 
 import { AppComponent } from './app.component';
-import { AdminComponent } from './components/admin.component';
-import { HomepageComponent } from './components/homepage.component';
-import { SurveyCreateComponent } from './components/surveycreate.component';
+import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
+import { SurveyCreateComponent } from './admin/survey-create/survey-create.component';
+import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
+
+
+
 
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    AdminComponent,
-    HomepageComponent,
-    SurveyCreateComponent
+    HomepageAdminComponent,
+    SurveyCreateComponent,
+    HomepageUserComponent
   ],
   imports: [
     BrowserModule,
