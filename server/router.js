@@ -67,11 +67,11 @@ authRoutes.post('/register_developer', AuthenticationController.register_develop
   // retrive all surveys as a json object
   surveyRoutes.get('/json', SurveyController.getAllSurveysAsJson);
 
-  surveyRoutes.get('/json/:surveyId', requireAuth, SurveyController.createSurvey);
+  surveyRoutes.get('/json/:surveyId', requireAuth, SurveyController.getSurveyAsJson);
 
   surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
-  // surveyRoutes.get('/', SurveyController.createSurvey);
+  surveyRoutes.get('/', requireAuth, SurveyController.getAllSurveys);
 
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
 
