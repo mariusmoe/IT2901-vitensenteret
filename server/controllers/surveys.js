@@ -8,10 +8,16 @@ const validator = require('validator'),
       config = require('config'),
       val = require('../libs/validation.js');
 
-// exports.getAllSurveys = (req, res, next) => {
-//
-//
-// }
+exports.getAllSurveys = (req, res, next) => {
+  Survey.find( {}, (err, surveys) => {
+    if (err) { return next(err); }
+    if (!surveys) {
+      return res.status(404).send({error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code});
+    }
+    return res.status(200).send(surveys);
+  });
+
+}
 
 exports.createSurvey = (req, res, next) => {
   let receivedSurvey = req.body
@@ -114,16 +120,43 @@ exports.getAllSurveysAsJson = (req, res, next) => {
   });
 }
 
-// exports.getSurveyAsJson = (req, res, next) => {
-//   const surveyId = req.params.surveyId
-//   if (!surveyId) {
-//     return res.status(400).send( {error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code})
-//   }
-//   Survey.findById( surveyId, (err, survey) => {
-//     if (err) { return next(err); }
-//     if (!survey) {
-//       return res.status(404).send({error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code});
-//     }
-//     return res.status(200).send(survey);
-//   });
-// }
+exports.getSurveyAsJson = (req, res, next) => {
+  const surveyId = req.params.surveyId
+  if (!surveyId) {
+    return res.status(400).send( {error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code})
+  }
+  Survey.findById(surveyId, (err, survey) => {
+    if (err) { return next(err); }
+    if (!survey) {
+      return res.status(404).send({error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code});
+    }
+
+    const file = 'temp/data.json';
+
+    jsonfile.writeFile(file, survey, {spaces: 2}, function(err) {
+      // return res.status(200).download( file );
+      // TODO: GIVE THE REPORT A BETTER NAME!
+      res.download(file, 'report.json', function(err){
+      if (err) {
+        // Handle error, but keep in mind the response may be partially-sent
+        // so check res.headersSent
+        fs.unlink('temp/data.json', (err) => {
+          if (err) {console.error(err);};
+          if(config.util.getEnv('NODE_ENV') !== 'test') {
+              console.log('SUCCESS - successfully deleted temp/data.json');
+            };
+          });
+      } else {
+        // decrement a download credit, etc.
+        fs.unlink('temp/data.json', (err) => {
+          if (err) {console.error(err);};
+          // console.log(config.util.getEnv('NODE_ENV'));
+          if(config.util.getEnv('NODE_ENV') !== 'test') {
+              console.log('SUCCESS - successfully deleted temp/data.json');
+            };
+        });
+      }
+      });
+    });
+  });
+}
