@@ -34,5 +34,9 @@ module.exports = {
   SURVEY_UNPROCESSABLE: {
     message: 'Survey coluld not be processed. It may be malformated',
     code: 2018
+  },
+  CAN_NOT_FIND_SURVEY: {
+    message: 'Survey coluld not be found. It may be gone',
+    code: 2019
   }
 }

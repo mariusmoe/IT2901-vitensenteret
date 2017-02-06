@@ -183,22 +183,28 @@ describe('Survey', function() {
     });
   });
 
+describe('Should delete the survey', () => {
   it('should delete the survey of the id given /api/survey/surveyId DELETE', function(done) {
-  chai.request(server)
+    chai.request(server)
     .delete('/api/survey/' + surveyId)
     .set('Authorization', jwt)
     .end(function(err, res){
       res.should.have.status(200);
-
-      // verify that it was actually deleted.
-      chai.request(server).get('/api/survey/' + surveyId)
-        .end(function(err, res){
-          // TODO: was this actually fixed?
-          res.should.have.status(404);
-          done();
-        });
+      done();
     });
   });
+
+  it('should check that the survey actually got deleted /api/survey/surveyId GET', function(done) {
+    // verify that it was actually deleted.
+    chai.request(server).get('/api/survey/' + surveyId)
+    .end(function(err, res){
+      // TODO: was this actually fixed?
+      res.should.have.status(404);
+      done();
+    });
+  });
+
+})
 
 
 });

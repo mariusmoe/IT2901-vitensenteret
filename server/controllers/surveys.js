@@ -33,6 +33,9 @@ exports.getOneSurvey = (req, res, next) => {
   }
   Survey.findById( surveyId, (err, survey) => {
     if (err) { return next(err); }
+    if (!survey) {
+      return res.status(404).send({error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code});
+    }
     return res.status(200).send(survey);
   });
 }
@@ -51,6 +54,9 @@ exports.patchOneSurvey = (req, res, next) => {
   }
   Survey.findByIdAndUpdate( surveyId, survey, {new: true}, (err, survey) => {
     if (err) { return next(err); }
+    if (!survey) {
+      return res.status(404).send({error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code});
+    }
     return res.status(200).send({message: 'Accepted - survey has been altered', survey: survey})
   });
 }
@@ -62,6 +68,9 @@ exports.deleteOneSurvey = (req, res, next) => {
   }
   Survey.findByIdAndRemove( surveyId, (err, survey) => {
     if (err) { return next(err); }
+    if (!survey) {
+      return res.status(404).send({error: status.CAN_NOT_FIND_SURVEY.message, status: status.CAN_NOT_FIND_SURVEY.code});
+    }
     return res.status(200).send({message: 'Success! - it is no more'});
   });
 }

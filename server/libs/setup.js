@@ -4,7 +4,8 @@ const bodyParser = require('body-parser'),
       logger = require('morgan'),
       configs = require('./config'),
       config = require('config'),
-      helmet = require('helmet');
+      helmet = require('helmet'),
+      methodOverride = require('method-override');
 
 module.exports = app => {
   // Pretty print
@@ -45,4 +46,10 @@ if(config.util.getEnv('NODE_ENV') !== 'test') {
     res.header("Access-Control-Allow-Credentials", "true");
     next();
   });
+
+  app.use(methodOverride())
+  app.use(function (err, req, res, next) {
+    // logic
+    return res.status(404).send({ error: 'Something failed!' })
+  })
 };
