@@ -37,10 +37,10 @@ chai.use(chaiHttp);
 
 
 
-describe('Survey', function() {
+describe('Survey', () => {
 
 
-    before( function(done) {
+    before( (done) => {
       chai.request(server)
         .post('/api/auth/register_developer')
         .send({'email': 'test@test.no', 'password': 'test'})
@@ -50,7 +50,7 @@ describe('Survey', function() {
         })
     });
 
-  beforeEach(function(done){
+  beforeEach( (done) => {
         chai.request(server)
         .post('/api/auth/login')
         .send({'email': 'test@test.no', 'password': 'test'})
@@ -60,13 +60,13 @@ describe('Survey', function() {
           done();
         });
   });
-  afterEach(function(done){
+  afterEach((done) => {
     done();
   });
 
 
 
-  it('should create a survey given valid input /api/survey/ POST', function(done) {
+  it('should create a survey given valid input /api/survey/ POST', (done) => {
     chai.request(server)
     .post('/api/survey')
     .set('Authorization', jwt)
@@ -88,7 +88,7 @@ describe('Survey', function() {
           "answer": [1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3]
           }]
       })
-    .end(function(err, res){
+    .end((err, res) => {
       surveyId = res.body._id;
       res.body.should.have.property('questionlist');
       res.body.questionlist.should.not.be.empty;
@@ -97,24 +97,24 @@ describe('Survey', function() {
     });
   });
 
-  it('should return 422 given bad survey input /api/survey/ POST', function(done) {
+  it('should return 422 given bad survey input /api/survey/ POST', (done) => {
     chai.request(server)
     .post('/api/survey')
     .set('Authorization', jwt)
     .send({
       "test": "test"
       })
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.have.status(422);
       done();
     });
   });
 
 
-  it('should retrieve the survey of the id given /api/survey/surveyId GET', function(done) {
+  it('should retrieve the survey of the id given /api/survey/surveyId GET', (done) => {
   chai.request(server)
     .get('/api/survey/' + surveyId)
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.not.be.empty;
       res.body.should.have.property('questionlist');
       res.body.questionlist.should.not.be.empty;
@@ -123,7 +123,7 @@ describe('Survey', function() {
     });
   });
 
-  it('should patch the survey of the id given /api/survey/surveyId PATCH', function(done) {
+  it('should patch the survey of the id given /api/survey/surveyId PATCH', (done) => {
   chai.request(server)
     .patch('/api/survey/' + surveyId)
     .set('Authorization', jwt)
@@ -145,7 +145,7 @@ describe('Survey', function() {
           "answer": [1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3]
           }]
       })
-    .end(function(err, res){
+    .end((err, res) => {
       res.body.should.have.property('survey');
       res.body.survey.should.not.be.empty;
       res.body.survey.should.have.property('name');
@@ -155,7 +155,7 @@ describe('Survey', function() {
     });
   });
 
-  it('should return 422 given bad survey input /api/survey/surveyId PATCH', function(done) {
+  it('should return 422 given bad survey input /api/survey/surveyId PATCH', (done) => {
   chai.request(server)
     .patch('/api/survey/' + surveyId)
     .set('Authorization', jwt)
@@ -177,27 +177,27 @@ describe('Survey', function() {
           "answer": [1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3,1,2,1,2,1,2,2,1,1,2,1,2,1,2,1,2,2,3,3,2,2,2,3,2,1,2,1,2,2,1,2,1,2,1,2,2,1,1,1,2,2,1,1,1,1,1,2,2,2,2,3,3,3,3,3,3,3,3,3,3]
           }]
       })
-    .end(function(err, res){
+    .end( (err, res) => {
       res.should.have.status(422);
       done();
     });
   });
 
 describe('Should delete the survey', () => {
-  it('should delete the survey of the id given /api/survey/surveyId DELETE', function(done) {
+  it('should delete the survey of the id given /api/survey/surveyId DELETE', (done) => {
     chai.request(server)
     .delete('/api/survey/' + surveyId)
     .set('Authorization', jwt)
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.have.status(200);
       done();
     });
   });
 
-  it('should check that the survey actually got deleted /api/survey/surveyId GET', function(done) {
+  it('should check that the survey actually got deleted /api/survey/surveyId GET', (done) => {
     // verify that it was actually deleted.
     chai.request(server).get('/api/survey/' + surveyId)
-    .end(function(err, res){
+    .end((err, res) => {
       // TODO: was this actually fixed?
       res.should.have.status(404);
       done();

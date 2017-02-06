@@ -49,7 +49,6 @@ if(config.util.getEnv('NODE_ENV') !== 'test') {
 
   app.use(methodOverride())
   app.use(function (err, req, res, next) {
-    // logic
     return res.status(404).send({ error: 'Something failed!' })
   })
 };

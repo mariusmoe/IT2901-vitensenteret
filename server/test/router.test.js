@@ -9,10 +9,10 @@ let server = require('../index');
 let should = chai.should();
 var jwt = '';
 chai.use(chaiHttp);
-describe('Auth', function() {
+describe('Auth', () => {
 
 
-    before( function(done) {
+    before( (done) => {
       chai.request(server)
         .post('/api/auth/register_developer')
         .send({'email': 'test@test.no', 'password': 'test'})
@@ -22,7 +22,7 @@ describe('Auth', function() {
         })
     });
 
-  beforeEach(function(done){
+  beforeEach((done) => {
         chai.request(server)
         .post('/api/auth/login')
         .send({'email': 'test@test.no', 'password': 'test'})
@@ -32,28 +32,28 @@ describe('Auth', function() {
           done();
         });
   });
-  afterEach(function(done){
+  afterEach((done) => {
     done();
   });
 
 
 
-  it('should log in one user /api/auth/login POST', function(done) {
+  it('should log in one user /api/auth/login POST', (done) => {
   chai.request(server)
     .post('/api/auth/login')
     .send({'email': 'test@test.no', 'password': 'test'})
-    .end(function(err, res){
+    .end((err, res) => {
       res.should.have.status(200);
       done();
     });
   });
 
 
-  it('should create one referral link /api/auth/get_referral_link POST', function(done) {
+  it('should create one referral link /api/auth/get_referral_link POST', (done) => {
   chai.request(server)
     .get('/api/auth/get_referral_link')
     .set('Authorization', jwt)
-    .end(function(err, res){
+    .end( (err, res) => {
       res.should.have.status(200);
       done();
     });
