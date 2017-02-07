@@ -38,33 +38,6 @@ var validJsonObject = {
   }]
 }
 
-
-
-
-/*
-      TODO:
-      This file needs to be restructured, and test all aspects of the REST API.
-
-      1) verify everything works given correct input
-      2) verify everything gives right status codes given wrong input
-        a) malformed input
-        b) missing input
-      3) verify everything gives right status codes given actions that should not be allowed
-        EXAMPLE:
-          DELETE survey with ID that doesn't exist
-          GET survey with ID that doesn't exist / used to exist
-          etc
-
-      4) Move test data separately / above, to make the tests easier to read.
-*/
-
-
-
-
-
-
-
-
 describe('Survey REST API', () => {
 
   // BEFORE

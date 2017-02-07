@@ -4,11 +4,11 @@
   "description": "Backend for Vitensenteret-survey",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=dev && nodemon index.js",
-    "nomon": "NODE_ENV=dev && node index.js",
-    "nodev": "NODE_ENV=test node ./index.js",
-    "test": "mocha --timeout 10000",
-    "test2": "./node_modules/.bin/mocha --reporter spec"
+    "start": "cross-env NODE_ENV=dev nodemon index.js",
+    "nomon": "cross-env NODE_ENV=dev node index.js",
+    "nodev": "cross-env NODE_ENV=test node ./index.js",
+    "test": "cross-env NODE_ENV=test mocha --timeout 10000",
+    "test2": "cross-env NODE_ENV=test ./node_modules/.bin/mocha --reporter spec"
   },
   "keywords": [
     "server"
@@ -20,6 +20,7 @@
     "body-parser": "^1.16.0",
     "config": "^1.25.1",
     "consign": "^0.1.2",
+    "cross-env": "^3.1.4",
     "crypto": "0.0.3",
     "express": "^4.14.1",
     "helmet": "^3.4.0",

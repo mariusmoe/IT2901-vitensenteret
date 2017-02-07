@@ -2,7 +2,6 @@
 
 const bodyParser = require('body-parser'),
       logger = require('morgan'),
-      configs = require('./config'),
       config = require('config'),
       helmet = require('helmet'),
       methodOverride = require('method-override');

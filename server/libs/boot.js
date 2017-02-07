@@ -1,11 +1,10 @@
 const mongoose = require('mongoose'),
-      configs = require('./config'),
       config = require('config');
 // Use a different Promise provider then mongooses mpromise (its depricated)
 
 module.exports = app => {
   // optional callback that gets fired when initial connection completed
-  const uri = configs.database;
+  const uri = config.database;
   mongoose.connect(uri, (error) => {
     // if error is true, the problem is often with mongoDB not connection
     if (error){

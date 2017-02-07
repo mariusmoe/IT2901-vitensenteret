@@ -1,7 +1,7 @@
 // from the passport docs
 const passport = require('passport'),
       User = require('../models/user'),
-      config = require('./config'),
+      config = require('config'),
       JwtStrategy = require('passport-jwt').Strategy,
       ExtractJwt = require('passport-jwt').ExtractJwt,
       LocalStrategy = require('passport-local');
@@ -24,7 +24,6 @@ const localLogin = new LocalStrategy(localOptions, function(email, password, don
     });
   });
 });
-
 // Setting JWT strategy options
 const jwtOptions = {
   // Telling Passport to check authorization headers for JWT

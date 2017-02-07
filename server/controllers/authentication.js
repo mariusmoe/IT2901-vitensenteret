@@ -3,8 +3,8 @@
 const jwt = require('jsonwebtoken'),
       crypto = require('crypto'),
       validator = require('validator'),
+      config = require('config'),
       User = require('../models/user'),
-      config = require('../libs/config'),
       status = require('../status'),
       Referral = require('../models/referral');
 
