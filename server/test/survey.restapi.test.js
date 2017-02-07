@@ -151,7 +151,20 @@ describe('Survey REST API', () => {
 
 
   describe('/api/survey/ GET',() => {
-    // GET: GET SURVEY
+    it('should retrieve all surveys /api/survey/ GET', (done) => {
+    chai.request(server)
+      .get('/api/survey/')
+      .end((err, res) => {
+        // verify that the returned object (containing surveys) is valid
+        res.body.should.not.be.empty;
+        expect('TEST: not done').to.equal('TEST: done');
+        res.should.have.status(200);
+        done();
+      });
+    });
+
+
+    // GET: GET A SURVEY
     it('should retrieve the survey of the id given /api/survey/surveyId GET', (done) => {
     chai.request(server)
       .get('/api/survey/' + surveyId)

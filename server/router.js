@@ -74,7 +74,7 @@ authRoutes.post('/register_developer', AuthenticationController.register_develop
 
   surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
-  surveyRoutes.get('/', requireAuth, SurveyController.getAllSurveys);
+  surveyRoutes.get('/',  SurveyController.getAllSurveys);
 
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
 
