@@ -1,5 +1,6 @@
 const AuthenticationController = require('./controllers/authentication'),
       SurveyController = require('./controllers/surveys'),
+      ErrorController = require('./controllers/error'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport')
@@ -15,9 +16,11 @@ module.exports = (app) => {
   const apiRoutes  = express.Router(),
         authRoutes = express.Router(),
         surveyRoutes = express.Router();
-  // Set auth routes as subgroup to apiRoutes
+  // Set auth and survey routes as subgroup to apiRoutes
   apiRoutes.use('/auth', authRoutes);
   apiRoutes.use('/survey', surveyRoutes);
+  // Set a common fallback for /api/*; 404 for invalid route
+  apiRoutes.all('*', ErrorController.error);
 
   /*
    |--------------------------------------------------------------------------

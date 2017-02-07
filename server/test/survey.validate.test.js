@@ -7,6 +7,7 @@ let val = require('../libs/validation.js');
 let validJsonObject = {
   "name": "måneraketten3",
   "date": "2012-04-23T18:25:43.511Z",
+  "active": true,
   "questionlist": [{
     "mode": "smily",
     "eng": {
@@ -140,6 +141,11 @@ describe('Survey validation', function() {
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
+    // check non-date format
+    clone.date = "someNonDateFormatString"
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
     // check undefined
     clone.date = undefined;
     IsItValid = val.surveyValidation(clone);
@@ -158,6 +164,37 @@ describe('Survey validation', function() {
 
     done();
   });
+
+
+    it('should not validate on missing or bad active property', function(done) {
+      // make sure clone validates correctly.
+      let IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(true);
+
+      // check wrong type
+      clone.active = "Hello";
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
+
+
+      // check undefined
+      clone.active = undefined;
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
+
+      // check null
+      clone.active = null;
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
+
+      // check nonexistant
+      delete clone.active;
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
+
+
+      done();
+    });
 
 
   it('should not validate on missing or bad questionlist property', function(done) {

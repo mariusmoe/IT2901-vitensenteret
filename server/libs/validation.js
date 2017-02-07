@@ -11,6 +11,7 @@ let questionSchema = {
   "id": "/question",
   "type": "object",
   "properties": {
+    "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
     "mode": { "enum": [ "smily", "text" ] },
     "answer": { "type": "array", "items": { "type": "integer", "minimum": 0, "required": true } } // required here forces the integer type, else "undefined" would be allowed
   },
@@ -41,9 +42,11 @@ let surveySchema = {
   // survey is of type object
   "type": "object",
   "properties": {
-    // and it has the following properties
+    "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
+    "__v": { "type": "integer" }, // mongodb sends surveys back to client with this property. Not required.
     "name": { "type": "string", "pattern": /\S/ },
     "date": { "type": "string", "format": "date-time" },
+    "active": { "type": "boolean" },
     "questionlist": {
       // questionlist is an array of objects
       "type": "array",
@@ -53,7 +56,7 @@ let surveySchema = {
       "minItems": 1,
     }
   },
-  "required": ["name", "date", "questionlist"],
+  "required": ["name", "date", "active", "questionlist"],
   "additionalProperties": false
 }
 
@@ -62,9 +65,12 @@ let surveySchema = {
 v.addSchema(questionSchema, "/question");
 
 // export our surveyValidation function.
-exports.surveyValidation = function(receivedSurvey) {
+exports.surveyValidation = function(receivedSurvey, debug) {
   let validation = v.validate(receivedSurvey, surveySchema);
   // undo comment below to get full debug stack of the validation
-  // console.log(validation);
+  if (debug) {
+    console.log(validation);
+  }
+  //
   return validation.valid;
 }
