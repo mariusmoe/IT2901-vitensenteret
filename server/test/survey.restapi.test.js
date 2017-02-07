@@ -147,6 +147,28 @@ describe('Survey REST API', () => {
           done();
         });
     });
+
+    // POST: NO AUTHORIZATION
+    it('should return 401 when unauthorized - wrong jwt /api/survey/surveyId POST', (done) => {
+      chai.request(server)
+        .post('/api/survey/')
+        .set('Authorization', 'badcode') // bad code
+        .send(validJsonObject) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(401);
+          done();
+        });
+    });
+    it('should return 401 when unauthorized - omitted auth property /api/survey/surveyId POST', (done) => {
+      chai.request(server)
+        .post('/api/survey/')
+        // .set('Authorization', 'badcode') // omitted authorization property
+        .send(validJsonObject) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(401);
+          done();
+        });
+    });
   }); // end describe /api/survey/ POST
 
 
@@ -179,8 +201,7 @@ describe('Survey REST API', () => {
     // GET: GET SURVEY BAD
     it('should return 404 given surveyId not found in DB /api/survey/surveyId GET', (done) => {
       chai.request(server)
-        .get('/api/survey/' + "InvalidID") // send bad id
-        .set('Authorization', jwt)
+        .get('/api/survey/' + 'InvalidID') // send bad id
         .send(validJsonObject)
         .end( (err, res) => {
           res.body.should.have.property('message');
@@ -288,10 +309,55 @@ describe('Survey REST API', () => {
           done();
         });
     });
+
+
+    // PATCH: NO AUTHORIZATION
+    it('should return 401 when unauthorized - wrong jwt /api/survey/surveyId PATCH', (done) => {
+      chai.request(server)
+        .patch('/api/survey/' + surveyId)
+        .set('Authorization', 'badcode') // bad code
+        .send(validJsonObject) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(401);
+          done();
+        });
+    });
+    it('should return 401 when unauthorized - omitted auth property /api/survey/surveyId PATCH', (done) => {
+      chai.request(server)
+        .patch('/api/survey/' + surveyId)
+        // .set('Authorization', 'badcode') // omitted authorization property
+        .send(validJsonObject) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(401);
+          done();
+        });
+    });
   }); // end describe /api/survey/ PATCH
 
 
   describe('/api/survey/ DELETE',() => {
+    // DELETE: NO AUTHORIZATION
+    it('should return 401 when unauthorized - wrong jwt /api/survey/surveyId DELETE', (done) => {
+      chai.request(server)
+        .delete('/api/survey/' + surveyId)
+        .set('Authorization', 'badcode') // bad code
+        .send(validJsonObject) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(401);
+          done();
+        });
+    });
+    it('should return 401 when unauthorized - omitted auth property /api/survey/surveyId DELETE', (done) => {
+      chai.request(server)
+        .delete('/api/survey/' + surveyId)
+        // .set('Authorization', 'badcode') // omitted authorization property
+        .send(validJsonObject) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(401);
+          done();
+        });
+    });
+
     // DELETE: BAD
     it('should return 404 given surveyId not found in DB /api/survey/surveyId DELETE', (done) => {
       chai.request(server)
@@ -327,7 +393,6 @@ describe('Survey REST API', () => {
         });
       });
     });
-
   }); // end describe /api/survey/ DELETE
 
 
