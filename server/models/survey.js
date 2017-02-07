@@ -12,6 +12,7 @@ const SurveySchema = new Schema({
     type: String
   },
 	date: Date,
+  active: Boolean,
 	questionlist: [{
     mode: {
         type: String,

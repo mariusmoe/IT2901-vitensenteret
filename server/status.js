@@ -31,12 +31,28 @@ module.exports = {
     message: 'The referral link is too old or not correct',
     code: 2017
   },
+
+  // SURVEY CODES
   SURVEY_UNPROCESSABLE: {
-    message: 'Survey coluld not be processed. It may be malformated',
+    message: 'Survey could not be processed. Check validity.',
     code: 2018
   },
-  CAN_NOT_FIND_SURVEY: {
-    message: 'Survey coluld not be found. It may be gone',
+  SURVEY_NOT_FOUND: {
+    message: 'Survey could not be found',
     code: 2019
+  },
+  SURVEY_OBJECT_MISSING: { // used when a survey is supposedly being TO the server
+    message: 'Could not find a survey',
+    code: 2020
+  },
+  SURVEY_UPDATED: {
+    message: 'Survey has been updated',
+    code: 1013
+  },
+
+  // ROUTER CODES
+  ROUTE_INVALID: {
+    message: "The requested route does not exist. Did you forget a param?",
+    code: 2020
   }
 }
