@@ -165,47 +165,56 @@ exports.getSurveyAsJson = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-    const file = 'temp/data.json';
+    let data = JSON.stringify(survey, null, 2);
 
-    jsonfile.writeFile(file, survey, {spaces: 2}, function(err) {
-      // return res.status(200).download( file );
-      // TODO: GIVE THE REPORT A BETTER NAME!
-      res.download(file, 'report.json', function(err){
-      if (err) {
-        // Handle error, but keep in mind the response may be partially-sent
-        // so check res.headersSent
-        fs.unlink('temp/data.json', (err) => {
-          if (err) {console.error(err);};
-          if(config.util.getEnv('NODE_ENV') !== 'test') {
-              console.log('SUCCESS - successfully deleted temp/data.json');
-            };
-          });
-      } else {
-        // decrement a download credit, etc.
-        fs.unlink('temp/data.json', (err) => {
-          if (err) {console.error(err);};
-          // console.log(config.util.getEnv('NODE_ENV'));
-          if(config.util.getEnv('NODE_ENV') !== 'test') {
-              console.log('SUCCESS - successfully deleted temp/data.json');
-            };
+
+    // Open a gate to the temp directory
+    temp.open('json', function(err, info) {
+      if (!err) {
+        fs.write(info.fd, data , function(err){
+          if (err) {console.error(err);}
+        });
+        // close file system operation (it is now safe to read from file)
+        fs.close(info.fd, function(err) {
+          res.setHeader('content-type', 'application/json')
+          res.download(info.path, 'data.json', function(err){
+            if (err) {console.error(err);}
+          })
         });
       }
-      });
     });
+
+
+
+
+    //
+    // jsonfile.writeFile(file, survey, {spaces: 2}, function(err) {
+    //   // return res.status(200).download( file );
+    //   // TODO: GIVE THE REPORT A BETTER NAME!
+    //   res.download(file, 'report.json', function(err){
+    //   if (err) {
+    //     // Handle error, but keep in mind the response may be partially-sent
+    //     // so check res.headersSent
+    //     fs.unlink('temp/data.json', (err) => {
+    //       if (err) {console.error(err);};
+    //       if(config.util.getEnv('NODE_ENV') !== 'test') {
+    //           console.log('SUCCESS - successfully deleted temp/data.json');
+    //         };
+    //       });
+    //   } else {
+    //     // decrement a download credit, etc.
+    //     fs.unlink('temp/data.json', (err) => {
+    //       if (err) {console.error(err);};
+    //       // console.log(config.util.getEnv('NODE_ENV'));
+    //       if(config.util.getEnv('NODE_ENV') !== 'test') {
+    //           console.log('SUCCESS - successfully deleted temp/data.json');
+    //         };
+    //     });
+    //   }
+    //   });
+    // });
   });
 }
-
-
-// ,
-// exec = require('child_process').exec;
-
-
-
-// Fake data
-var myData = "foo\nbar\nfoo\nbaz";
-
-
-
 
 exports.getSurveyAsCSV = (req, res, next) => {
     const surveyId = req.params.surveyId
@@ -218,11 +227,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-    const file = 'temp/data.csv';
-
-    let myList  = [];
     let questionAnswar = []
-    let fields  = ['1', '2', '3', '4','5','6'];
     let csv = "";
 
       // for every question in the survey
@@ -232,7 +237,6 @@ exports.getSurveyAsCSV = (req, res, next) => {
         let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
             x => [x, questionAnswar.filter(y => y === x).length]
         ));
-
         // Add question to csv
         csv += question.lang.no.txt + '\n'
         // Add all questions to csv
@@ -241,22 +245,20 @@ exports.getSurveyAsCSV = (req, res, next) => {
         // Add accumulated answars to csv
         question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
         csv += '\n'
-
-
-    // Open a gate to the temp directory
-    temp.open('myprefix', function(err, info) {
-      if (!err) {
-        fs.write(info.fd, csv, function(err){
-          if (err) {console.error(err);}
-        });
-        // close file system operation (it is now safe to read from file)
-        fs.close(info.fd, function(err) {
-          res.download(info.path, 'data.csv', function(err){
-            if (err) {console.error(err);}
-          })
-        });
       }
-    });
-
+      // Open a gate to the temp directory
+      temp.open('myprefix', function(err, info) {
+        if (!err) {
+          fs.write(info.fd, csv, function(err){
+            if (err) {console.error(err);}
+          });
+          // close file system operation (it is now safe to read from file)
+          fs.close(info.fd, function(err) {
+            res.download(info.path, 'data.csv', function(err){
+              if (err) {console.error(err);}
+            })
+          });
+        }
+      });
   });
 }

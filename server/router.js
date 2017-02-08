@@ -70,7 +70,7 @@ authRoutes.post('/register_developer', AuthenticationController.register_develop
   // retrive all surveys as a json object
   surveyRoutes.get('/json', SurveyController.getAllSurveysAsJson);
 
-  surveyRoutes.get('/json/:surveyId', requireAuth, SurveyController.getSurveyAsJson);
+  surveyRoutes.get('/json/:surveyId', SurveyController.getSurveyAsJson);
 
   surveyRoutes.get('/csv/:surveyId',requireAuth, SurveyController.getSurveyAsCSV);
 
