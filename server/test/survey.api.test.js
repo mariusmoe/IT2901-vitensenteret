@@ -35,7 +35,7 @@ var validJsonObject = {
   }]
 }
 
-describe('Survey REST API', () => {
+describe('Survey API', () => {
 
   // BEFORE
   before( (done) => {
@@ -143,17 +143,41 @@ describe('Survey REST API', () => {
 
 
   describe('/api/survey/ GET',() => {
+    // GET: LIST OF SURVEYS
     it('should retrieve all surveys /api/survey/ GET', (done) => {
     chai.request(server)
       .get('/api/survey/')
       .end((err, res) => {
         // verify that the returned object (containing surveys) is valid
-        res.body.should.not.be.empty;
-        expect('TEST: not done').to.equal('TEST: done');
+        let listOfSurveys = res.body;
+        listOfSurveys.should.not.be.empty;
+        listOfSurveys[0].should.have.property('name');
+        listOfSurveys[0].should.have.property('date');
+        listOfSurveys[0].should.have.property('active');
         res.should.have.status(200);
         done();
       });
     });
+
+    // This test requires the DB to
+    /*
+    it('should return 200 given empty database /api/survey/ GET', (done) => {
+      chai.request(server)
+      .delete('/api/survey/' + surveyId)
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        chai.request(server)
+        .get('/api/survey/')
+        .end((err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
+          res.should.have.status(200);
+          done();
+        });
+      });
+    }); */
 
 
     // GET: GET A SURVEY

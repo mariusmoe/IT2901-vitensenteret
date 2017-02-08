@@ -54,5 +54,9 @@ module.exports = {
   ROUTE_INVALID: {
     message: "The requested route does not exist. Did you forget a param?",
     code: 2020
-  }
+  },
+  ROUTE_SURVEYS_VALID_NO_SURVEYS: {
+    message: "Request successful, but no surveys exist.",
+    code: 1014
+  },
 }

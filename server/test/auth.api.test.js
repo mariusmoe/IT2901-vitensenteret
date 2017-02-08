@@ -9,7 +9,7 @@ let server = require('../index');
 let should = chai.should();
 var jwt = '';
 chai.use(chaiHttp);
-describe('Auth', () => {
+describe('Auth API', () => {
 
 
     before( (done) => {
@@ -38,7 +38,7 @@ describe('Auth', () => {
 
 
 
-  describe('login', () => {
+  describe('/api/auth/login POST', () => {
     it('should log in one user /api/auth/login POST', (done) => {
     chai.request(server)
       .post('/api/auth/login')
@@ -77,7 +77,7 @@ describe('Auth', () => {
     });
   });
 
-  describe('referral link', () => {
+  describe('/api/auth/get_referral_link POST', () => {
     it('should create one referral link /api/auth/get_referral_link POST', (done) => {
       chai.request(server)
       .get('/api/auth/get_referral_link')

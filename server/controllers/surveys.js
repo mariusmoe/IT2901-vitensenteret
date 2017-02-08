@@ -40,10 +40,20 @@ exports.getAllSurveys = (req, res, next) => {
   Survey.find( {}, (err, surveys) => {
     if (!surveys) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
+      return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
     }
     if (err) { return next(err); }
 
-    return res.status(200).send(surveys);
+    let surveyList = [];
+    for (let survey of surveys) {
+      surveyList[surveyList.length] = {
+        'name': survey.name,
+        'active': survey.active,
+        'date': survey.date,
+      }
+    }
+
+    return res.status(200).send(surveyList);
   });
 
 }

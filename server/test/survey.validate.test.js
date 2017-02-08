@@ -25,7 +25,7 @@ let validJsonObject = {
 }
 
 
-describe('Survey validation', function() {
+describe('Survey validation', () => {
   // Set up for each test
   let clone = {};
   beforeEach(function(done){
@@ -34,13 +34,13 @@ describe('Survey validation', function() {
   });
 
 
-  it('should validate a fully valid survey json object', function(done) {
+  it('should validate a fully valid survey json object', (done) => {
     let IsItValid = val.surveyValidation(validJsonObject);
     expect(IsItValid).to.equal(true);
     done();
   });
 
-  it('should not validate a fully valid survey json object with additional properties', function(done) {
+  it('should not validate a fully valid survey json object with additional properties', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -83,7 +83,7 @@ describe('Survey validation', function() {
     done();
   });
 
-  it('should not validate on missing or bad name property', function(done) {
+  it('should not validate on missing or bad name property', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -126,7 +126,7 @@ describe('Survey validation', function() {
     done();
   });
 
-  it('should not validate on missing or bad date property', function(done) {
+  it('should not validate on missing or bad date property', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -176,7 +176,7 @@ describe('Survey validation', function() {
   });
 
 
-    it('should not validate on missing or bad active property', function(done) {
+    it('should not validate on missing or bad active property', (done) => {
       // make sure clone validates correctly.
       let IsItValid = val.surveyValidation(clone);
       expect(IsItValid).to.equal(true);
@@ -207,7 +207,7 @@ describe('Survey validation', function() {
     });
 
 
-  it('should not validate on missing or bad questionlist property', function(done) {
+  it('should not validate on missing or bad questionlist property', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -241,7 +241,7 @@ describe('Survey validation', function() {
   });
 
 
-  it('should not validate on missing or bad questionlist mode property', function(done) {
+  it('should not validate on missing or bad questionlist mode property', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -295,7 +295,7 @@ describe('Survey validation', function() {
   });
 
 
-  it('should not validate on missing or bad questionlist lang property', function(done) {
+  it('should not validate on missing or bad questionlist lang property', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -329,7 +329,7 @@ describe('Survey validation', function() {
   });
 
 
-  it('should not validate on missing or bad questionlist lang pattern properties', function(done) {
+  it('should not validate on missing or bad questionlist lang pattern properties', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -355,7 +355,7 @@ describe('Survey validation', function() {
   });
 
 
-  it('should not validate on missing or bad questionlist lang pattern txt property', function(done) {
+  it('should not validate on missing or bad questionlist lang pattern txt property', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -402,7 +402,7 @@ describe('Survey validation', function() {
 
 
 
-  it('should not validate on missing or bad questionlist lang pattern options property', function(done) {
+  it('should not validate on missing or bad questionlist lang pattern options property', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -587,5 +587,4 @@ describe('Survey validation', function() {
 
     done();
   });
-
 });
