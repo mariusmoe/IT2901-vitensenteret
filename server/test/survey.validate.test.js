@@ -301,27 +301,27 @@ describe('Survey validation', function() {
     expect(IsItValid).to.equal(true);
 
     // check empty object
-    clone.questionlist.lang = {};
+    clone.questionlist[0].lang = {};
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);  // must have languages
+
+    // check empty array
+    clone.questionlist[0].lang = []; // wrong type
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
-    // check empty array
-    clone.questionlist.lang = [];
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false); // must have questions
-
     // check undefined
-    clone.questionlist.lang = undefined;
+    clone.questionlist[0].lang = undefined;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check null
-    clone.questionlist.lang = null;
+    clone.questionlist[0].lang = null;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check nonexistant
-    delete clone.questionlist.lang;
+    delete clone.questionlist[0].lang;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 

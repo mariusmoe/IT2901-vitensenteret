@@ -3,8 +3,34 @@ const Validator = require('jsonschema').Validator;
 // validator
 let v = new Validator();
 
-// Refactoring to make things sliiiightly easier to read.
-// the questions are thusly separated into its own schema.
+// Refactored to make things sliiiightly easier to read.
+
+let languageSchema = {
+  "id": "/language",
+  "type": "object",
+  // minProperties: At least one langauge.
+  "minProperties": 1,
+  "additionalProperties": false,
+
+  "patternProperties": {
+    "^[a-z]{2}$": { // match 2 characters from a to z: i.e. language (no, en)
+      "type": "object",
+      "properties": {
+        "txt": { "type": "string", "pattern": /\S/ },
+        "options": {
+          "type": "array",
+          "items": { "type": "string", "pattern": /\S/, "required": true },  // required here forces the string type, else "undefined" would be allowed
+          "minItems": 2, // must be at least two options
+          "uniqueItems": true // the options must be different
+        },
+        "required": true,
+      },
+      "required": ["txt", "options"],
+      "additionalProperties": false,
+    },
+  },
+}
+
 
 // This is the questionSchema -- part of the surveySchema, added through reference.
 let questionSchema = {
@@ -15,27 +41,7 @@ let questionSchema = {
     "mode": { "enum": [ "smily", "text" ] },
     "answer": { "type": "array", "items": { "type": "integer", "minimum": 0, "required": true } }, // required here forces the integer type, else "undefined" would be allowed
     "lang": {
-      "type": "object",
-      "patternProperties": {
-        "^[a-z]{2}$": { // match 3 characters from a to z: i.e. language (nor, eng)
-          "type": "object",
-          "properties": {
-            "txt": { "type": "string", "pattern": /\S/ },
-            "options": {
-              "type": "array",
-              "items": { "type": "string", "pattern": /\S/, "required": true },  // required here forces the string type, else "undefined" would be allowed
-              "minItems": 2, // must be at least two options
-              "uniqueItems": true // the options must be different
-            }
-          },
-          "required": ["txt", "options"],
-          "additionalProperties": false
-        },
-      },
-      // minProperties: At least one langauge. UPDATE ME IF THE ABOVE CHANGES!
-      "minProperties": 1,
-      "required": true,
-      "additionalProperties": false,
+      "$ref": "/language", // references the languageSchema above here
     },
   },
   "required": ["mode", "answer", "lang"],
@@ -66,8 +72,9 @@ let surveySchema = {
 }
 
 // make sure our validator understands the reference
-// to the questionSchema in the surveySchema
+// to the languageSchema and the questionSchema
 v.addSchema(questionSchema, "/question");
+v.addSchema(languageSchema, "/language");
 
 // export our surveyValidation function.
 exports.surveyValidation = function(receivedSurvey, debug) {
