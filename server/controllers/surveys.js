@@ -6,6 +6,7 @@ const validator = require('validator'),
       jsonfile = require('jsonfile'),
       fs = require('fs'),
       config = require('config'),
+      json2csv = require('json2csv'),
       val = require('../libs/validation.js');
 
 
@@ -188,5 +189,97 @@ exports.getSurveyAsJson = (req, res, next) => {
       }
       });
     });
+  });
+}
+
+
+
+
+exports.getSurveyAsCSV = (req, res, next) => {
+    const surveyId = req.params.surveyId
+    if (!surveyId) {
+      return res.status(400).send( {message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code})
+    }
+    Survey.findById(surveyId, (err, survey) => {
+    if (!survey) {
+      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+    }
+    if (err) { return next(err); }
+
+    const file = 'temp/data.csv';
+
+    let myList  = [];
+    let qNumber = 0
+    let questionAnswar = []
+    let fields  = ['1', '2', '3', '4','5','6'];
+
+
+      for (let question of survey.questionlist){
+        questionAnswar = question.answer;
+        let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
+            x => [x, questionAnswar.filter(y => y === x).length]
+        ));
+        myList.push({
+          "1": question.lang.no.txt
+        });
+        myList.push({
+          "1": question.lang.no.options[0] || 0,
+          "2": question.lang.no.options[1] || 0,
+          "3": question.lang.no.options[2] || 0,
+          "4": question.lang.no.options[3] || 0,
+          "5": question.lang.no.options[4] || 0,
+          "6": question.lang.no.options[5] || 0,
+        });
+        myList.push({
+          "1": questionAnswarCount.get(1) || 0,
+          "2": questionAnswarCount.get(2) || 0,
+          "3": questionAnswarCount.get(3) || 0,
+          "4": questionAnswarCount.get(4) || 0,
+          "5": questionAnswarCount.get(5) || 0,
+          "6": questionAnswarCount.get(6) || 0,
+        });
+        qNumber += 1;
+      }
+
+
+    let csv = json2csv({ data: myList, fields: fields });
+    // Delete fieds - we dont want them
+    let lines = csv.split('\n');
+    lines.splice(0,1);
+    csv = lines.join('\n');
+
+    // TODO: delete file after sending it
+    fs.writeFile('temp/data.csv', csv, function(err) {
+      if (err) {
+        throw err;
+      } else {
+        console.log('SUCCESS - file saved!');
+        res.status(200).send({message: 'made it'});
+        return res.download(file, 'data.csv', function(err){
+          if (err) {
+            // Handle error, but keep in mind the response may be partially-sent
+            // so check res.headersSent
+            fs.unlink('temp/data.csv', (err) => {
+              if (err) {console.error(err);};
+              if(config.util.getEnv('NODE_ENV') !== 'test') {
+                  console.log('SUCCESS - successfully deleted temp/data.csv');
+                };
+              });
+          } else {
+            // decrement a download credit, etc.
+            fs.unlink('temp/data.csv', (err) => {
+              if (err) {console.error(err);};
+              // console.log(config.util.getEnv('NODE_ENV'));
+              if(config.util.getEnv('NODE_ENV') !== 'test') {
+                  console.log('SUCCESS - successfully deleted temp/data.csv');
+                };
+            });
+          }
+          // end of download
+        })
+
+      }
+    });
+
   });
 }

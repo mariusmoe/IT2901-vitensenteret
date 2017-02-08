@@ -72,6 +72,9 @@ authRoutes.post('/register_developer', AuthenticationController.register_develop
 
   surveyRoutes.get('/json/:surveyId', requireAuth, SurveyController.getSurveyAsJson);
 
+  surveyRoutes.get('/csv/:surveyId',requireAuth, SurveyController.getSurveyAsCSV);
+
+
   surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
   surveyRoutes.get('/',  SurveyController.getAllSurveys);
