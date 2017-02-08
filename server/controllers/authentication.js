@@ -144,10 +144,10 @@ exports.getReferralLink = (req, res, next) => {
     if (err) { return next(err); }
     const token = buffer.toString('hex');
     Referral.findOne({referral: token}, (err, existingReferralLink) => {
-      if (err) { return next(err); }
       if (existingReferralLink) {
         return res.status(422).send( {error: status.TRY_AGAIN.message, status: status.TRY_AGAIN.code} );
       }
+      if (err) { return next(err); }
       let referralString = new Referral({
         referral: token
       })

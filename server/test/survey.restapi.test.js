@@ -1,8 +1,5 @@
 process.env.NODE_ENV = 'test';
 
-let mongoose = require("mongoose");
-mongoose.Promise = Promise;
-
 let chai = require('chai');
 let chaiHttp = require('chai-http');
 let server = require('../index');
@@ -29,14 +26,12 @@ var validJsonObject = {
       "en": {
         "txt": "what do you think about mars?",
         "options": ["AWSOME","coooool","blody iron planet"]
-        }
-      ,
+      },
       "no": {
         "txt": "Hva synes du om Mars?",
         "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
-        }
-      ,
-    }
+      },
+    },
   }]
 }
 

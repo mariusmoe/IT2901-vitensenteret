@@ -21,6 +21,7 @@ let languageSchema = {
           "type": "array",
           "items": { "type": "string", "pattern": /\S/, "required": true },  // required here forces the string type, else "undefined" would be allowed
           "minItems": 2, // must be at least two options
+          "maxItems": 6, // max 6 options
           "uniqueItems": true // the options must be different
         },
         "required": true,
