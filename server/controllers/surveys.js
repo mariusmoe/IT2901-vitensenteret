@@ -232,53 +232,16 @@ exports.getSurveyAsCSV = (req, res, next) => {
         let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
             x => [x, questionAnswar.filter(y => y === x).length]
         ));
-        // console.log(questionAnswarCount);
 
+        // Add question to csv
         csv += question.lang.no.txt + '\n'
-        // console.log(question.lang.no.options);
-        // for (let i of question.lang.no.options) {
-        //   console.log(i);
-        //   text += i + ','
-        // }
+        // Add all questions to csv
         question.lang.no.options.forEach( (x) =>{csv += x + ','})
         csv += '\n'
-        // for (let u = 1; u < question.lang.no.options.length+1; u++) {
-        //   text += questionAnswarCount.get(u) + ','
-        // }
+        // Add accumulated answars to csv
         question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
         csv += '\n'
-        // console.log(text);
 
-
-        // myList.push({
-        //   "1": question.lang.no.txt
-        // });
-        // myList.push({
-        //   "1": question.lang.no.options[0],
-        //   "2": question.lang.no.options[1],
-        //   "3": question.lang.no.options[2],
-        //   "4": question.lang.no.options[3],
-        //   "5": question.lang.no.options[4],
-        //   "6": question.lang.no.options[5],
-        // });
-        // myList.push({
-        //   "1": questionAnswarCount.get(1),
-        //   "2": questionAnswarCount.get(2),
-        //   "3": questionAnswarCount.get(3),
-        //   "4": questionAnswarCount.get(4),
-        //   "5": questionAnswarCount.get(5),
-        //   "6": questionAnswarCount.get(6),
-        // });
-      }
-
-    // Create a CSV file
-    // let csv = json2csv({ data: myList, fields: fields });
-    // // Delete fieds - we dont want them
-    // let lines = csv.split('\n');
-    // lines.splice(0,1);
-    // csv = lines.join('\n');
-    //
-    // csv = text
 
     // Open a gate to the temp directory
     temp.open('myprefix', function(err, info) {
