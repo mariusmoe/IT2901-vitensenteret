@@ -10,17 +10,17 @@ let validJsonObject = {
   "active": true,
   "questionlist": [{
     "mode": "smily",
-    "eng": {
-      "txt": "what do you think about mars?",
-      "options": ["AWSOME","coooool","blody iron planet"]
-      }
-    ,
-    "nor": {
-      "txt": "Hva synes du om Mars?",
-      "options": ["UTROLIG","kuuuuul","teit jernplanet"]
-      }
-    ,
-    "answer": [1,3,3,3,3]
+    "answer": [1,3,3,3,3],
+    "lang": {
+      "en": {
+          "txt": "what do you think about mars?",
+          "options": ["AWSOME","coooool","blody iron planet"]
+      },
+      "no": {
+        "txt": "Hva synes du om Mars?",
+        "options": ["UTROLIG","kuuuuul","teit jernplanet"]
+      },
+    }
   }]
 }
 
@@ -65,8 +65,18 @@ describe('Survey validation', function() {
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
 
-    // check for questionlist language
-    clone.questionlist[0].eng.additionalProperty = {};
+    // check for questionlist lang
+    clone.questionlist[0].lang.additionalProperty = {};
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // revert
+    delete clone.questionlist[0].lang.additionalProperty
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check for questionlist language pattern object
+    clone.questionlist[0].lang.en.additionalProperty = {};
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
@@ -284,25 +294,60 @@ describe('Survey validation', function() {
     done();
   });
 
-  it('should not validate on missing or bad questionlist language properties', function(done) {
+
+  it('should not validate on missing or bad questionlist lang property', function(done) {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check empty object
+    clone.questionlist.lang = {};
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check empty array
+    clone.questionlist.lang = [];
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false); // must have questions
+
+    // check undefined
+    clone.questionlist.lang = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check null
+    clone.questionlist.lang = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.questionlist.lang;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    done();
+  });
+
+
+  it('should not validate on missing or bad questionlist lang pattern properties', function(done) {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
 
     // check validity given only one language (the original test data has two)
-    let backupEng = JSON.parse(JSON.stringify(clone.questionlist[0].eng))
-    delete clone.questionlist[0].eng;
+    let backupEn = JSON.parse(JSON.stringify(clone.questionlist[0].lang.en))
+    delete clone.questionlist[0].lang.en;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true); // should allow only one language (nor)
     // same test, swapped languages
-    clone.questionlist[0].eng = backupEng;
-    delete clone.questionlist[0].nor;
+    clone.questionlist[0].lang.en = backupEn;
+    delete clone.questionlist[0].lang.no;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true); // should allow only one language (eng)
 
     // chec validity given ZERO languages
-    delete clone.questionlist[0].eng;
-    delete clone.questionlist[0].nor;
+    delete clone.questionlist[0].lang.en;
+    delete clone.questionlist[0].lang.no;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false); // should not allow no languages.
 
@@ -310,7 +355,7 @@ describe('Survey validation', function() {
   });
 
 
-  it('should not validate on missing or bad questionlist language txt property', function(done) {
+  it('should not validate on missing or bad questionlist lang pattern txt property', function(done) {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -318,37 +363,37 @@ describe('Survey validation', function() {
     // check validity of the txt property
 
     // check emtpy string
-    clone.questionlist[0].eng.txt = "";
+    clone.questionlist[0].lang.en.txt = "";
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check whitespace
-    clone.questionlist[0].eng.txt = " "
+    clone.questionlist[0].lang.en.txt = " "
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check whitespace 2
-    clone.questionlist[0].eng.txt = "       "
+    clone.questionlist[0].lang.en.txt = "       "
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check whitespace 3
-    clone.questionlist[0].eng.txt = "       \n"
+    clone.questionlist[0].lang.en.txt = "       \n"
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check undefined
-    clone.questionlist[0].eng.txt = undefined;
+    clone.questionlist[0].lang.en.txt = undefined;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check null
-    clone.questionlist[0].eng.txt = null;
+    clone.questionlist[0].lang.en.txt = null;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check nonexistant
-    delete clone.questionlist[0].eng.txt;
+    delete clone.questionlist[0].lang.en.txt;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
@@ -357,7 +402,7 @@ describe('Survey validation', function() {
 
 
 
-  it('should not validate on missing or bad questionlist language options property', function(done) {
+  it('should not validate on missing or bad questionlist lang pattern options property', function(done) {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
@@ -365,27 +410,27 @@ describe('Survey validation', function() {
     // check the validity of the options property
 
     // check empty object
-    clone.questionlist[0].eng.options = {};
+    clone.questionlist[0].lang.en.options = {};
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check empty array
-    clone.questionlist[0].eng.options = [];
+    clone.questionlist[0].lang.en.options = [];
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check undefined
-    clone.questionlist[0].eng.options = undefined;
+    clone.questionlist[0].lang.en.options = undefined;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check null
-    clone.questionlist[0].eng.options = null;
+    clone.questionlist[0].lang.en.options = null;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check nonexistant
-    delete clone.questionlist[0].eng.options;
+    delete clone.questionlist[0].lang.en.options;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
@@ -397,38 +442,38 @@ describe('Survey validation', function() {
 
 
 
-  it('should not validate on missing or bad questionlist language option values', function(done) {
+  it('should not validate on missing or bad questionlist lang pattern option values', function(done) {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
 
     // check emtpy string
-    clone.questionlist[0].eng.options[0] = "";
+    clone.questionlist[0].lang.en.options[0] = "";
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check whitespace
-    clone.questionlist[0].eng.options[0] = " "
+    clone.questionlist[0].lang.en.options[0] = " "
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check whitespace 2
-    clone.questionlist[0].eng.options[0] = "       "
+    clone.questionlist[0].lang.en.options[0] = "       "
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check whitespace 3
-    clone.questionlist[0].eng.options[0] = "       \n"
+    clone.questionlist[0].lang.en.options[0] = "       \n"
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check undefined
-    clone.questionlist[0].eng.options[0] = undefined;
+    clone.questionlist[0].lang.en.options[0] = undefined;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check null
-    clone.questionlist[0].eng.options[0] = null;
+    clone.questionlist[0].lang.en.options[0] = null;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
@@ -436,23 +481,23 @@ describe('Survey validation', function() {
   });
 
 
-  it('should not validate on missing or bad questionlist language option array-properties', function(done) {
+  it('should not validate on missing or bad questionlist lang pattern option array-properties', function(done) {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
 
     // check emtpy array
-    clone.questionlist[0].eng.options = [];
+    clone.questionlist[0].lang.en.options = [];
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check only one option (should be 2)
-    clone.questionlist[0].eng.options = ["option1"];
+    clone.questionlist[0].lang.en.options = ["option1"];
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
     // check two options (should be valid)
-    clone.questionlist[0].eng.options = ["option1", "option2"];
+    clone.questionlist[0].lang.en.options = ["option1", "option2"];
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(true);
 

@@ -13,28 +13,33 @@ let questionSchema = {
   "properties": {
     "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
     "mode": { "enum": [ "smily", "text" ] },
-    "answer": { "type": "array", "items": { "type": "integer", "minimum": 0, "required": true } } // required here forces the integer type, else "undefined" would be allowed
-  },
-  "patternProperties": {
-    "^[a-z]{3}$": { // match 3 characters from a to z: i.e. language (nor, eng)
+    "answer": { "type": "array", "items": { "type": "integer", "minimum": 0, "required": true } }, // required here forces the integer type, else "undefined" would be allowed
+    "lang": {
       "type": "object",
-      "properties": {
-        "txt": { "type": "string", "pattern": /\S/ },
-        "options": {
-          "type": "array",
-          "items": { "type": "string", "pattern": /\S/, "required": true },  // required here forces the string type, else "undefined" would be allowed
-          "minItems": 2, // must be at least two options
-          "uniqueItems": true // the options must be different
-        }
+      "patternProperties": {
+        "^[a-z]{2}$": { // match 3 characters from a to z: i.e. language (nor, eng)
+          "type": "object",
+          "properties": {
+            "txt": { "type": "string", "pattern": /\S/ },
+            "options": {
+              "type": "array",
+              "items": { "type": "string", "pattern": /\S/, "required": true },  // required here forces the string type, else "undefined" would be allowed
+              "minItems": 2, // must be at least two options
+              "uniqueItems": true // the options must be different
+            }
+          },
+          "required": ["txt", "options"],
+          "additionalProperties": false
+        },
       },
-      "required": ["txt", "options"],
-      "additionalProperties": false
+      // minProperties: At least one langauge. UPDATE ME IF THE ABOVE CHANGES!
+      "minProperties": 1,
+      "required": true,
+      "additionalProperties": false,
     },
   },
-  // minProperties: mode and answer, plus at least one langauge. UPDATE ME IF THE ABOVE CHANGES!
-  "minProperties": 3,
-  "required": ["mode", "answer"], // it is assumed that properties that match the patternProperties
-  "additionalProperties": false // will NOT trigger this additionalProperties check, and thus be valid.
+  "required": ["mode", "answer", "lang"],
+  "additionalProperties": false,
 }
 
 // main survey schema.

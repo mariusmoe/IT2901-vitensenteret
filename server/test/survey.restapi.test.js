@@ -24,17 +24,19 @@ var validJsonObject = {
   "active": true,
   "questionlist": [{
     "mode": "smily",
-    "eng": {
-      "txt": "what do you think about mars?",
-      "options": ["AWSOME","coooool","blody iron planet"]
-      }
-    ,
-    "nor": {
-      "txt": "Hva synes du om Mars?",
-      "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
-      }
-    ,
-    "answer": [1,2,1,2,1,2,1,2]
+    "answer": [1,2,1,2,1,2,1,2],
+    "lang": {
+      "en": {
+        "txt": "what do you think about mars?",
+        "options": ["AWSOME","coooool","blody iron planet"]
+        }
+      ,
+      "no": {
+        "txt": "Hva synes du om Mars?",
+        "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
+        }
+      ,
+    }
   }]
 }
 

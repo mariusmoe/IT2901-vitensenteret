@@ -15,17 +15,19 @@ const SurveySchema = new Schema({
   active: Boolean,
 	questionlist: [{
     mode: {
-        type: String,
-        enum: ['smily', 'text'],
-        default: 'smily'
+      type: String,
+      enum: ['smily', 'text'],
+      default: 'smily'
+    },
+    lang: {
+      en: {
+        txt: String,
+        options: [String]
+        },
+      no: {
+        txt: String,
+        options: [String]
       },
-		eng: {
-			txt: String,
-			options: [String]
-			},
-		nor: {
-			txt: String,
-			options: [String]
     },
 		answer: [Number]
   }]
