@@ -125,34 +125,25 @@ exports.getAllSurveysAsJson = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-    const file = 'temp/data.json';
+      let data = JSON.stringify(surveys, null, 2);
 
-    jsonfile.writeFile(file, surveys, {spaces: 2}, function(err) {
-      // return res.status(200).download( file );
-      res.download(file, 'report.pdf', function(err){
-      if (err) {
-        // Handle error, but keep in mind the response may be partially-sent
-        // so check res.headersSent
-        fs.unlink('temp/data.json', (err) => {
-          if (err) {console.error(err);};
-          if(config.util.getEnv('NODE_ENV') !== 'test') {
-              console.log('SUCCESS - successfully deleted temp/data.json');
-            };
-          });
-      } else {
-        // decrement a download credit, etc.
-        fs.unlink('temp/data.json', (err) => {
-          if (err) {console.error(err);};
-          // console.log(config.util.getEnv('NODE_ENV'));
-          if(config.util.getEnv('NODE_ENV') !== 'test') {
-              console.log('SUCCESS - successfully deleted temp/data.json');
-            };
+        // Open a gate to the temp directory
+        temp.open('json', function(err, info) {
+          if (!err) {
+            fs.write(info.fd, data , function(err){
+              if (err) {console.error(err);}
+            });
+            // close file system operation (it is now safe to read from file)
+            fs.close(info.fd, function(err) {
+              res.setHeader('content-type', 'application/json')
+              res.download(info.path, 'data.json', function(err){
+                if (err) {console.error(err);}
+              })
+            });
+          }
         });
-      }
       });
-    });
-  });
-}
+  }
 
 exports.getSurveyAsJson = (req, res, next) => {
   const surveyId = req.params.surveyId
