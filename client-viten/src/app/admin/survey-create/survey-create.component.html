@@ -1,0 +1,55 @@
+<h1>Create survey here</h1>
+
+<br />
+<br />
+
+<h4>Survey Name</h4>
+<input [(ngModel)]="this.surveyname" class="survey_name_input"/>
+<h2>{{this.surveyname}}</h2>
+
+<button (click)="addQuestion()" class="add_question_button">Add question</button>
+
+<br />
+<hr />
+
+<div *ngFor="let question of questions; let i=index" class="question">
+  <h1>Question: {{i+1}}</h1>
+  <button (click)="deleteQuestion(i)" class="delete_question_button">Remove Question</button>
+
+  <h6>Question type</h6>
+  <p>{{question.type}}</p>
+
+  <br />
+
+  <h6>Question text</h6>
+  <input [(ngModel)]="question.text" class="text_input"/>
+  <p>{{question.text}}</p>
+
+  <br />
+
+  <h6>Question subtext</h6>
+  <input [(ngModel)]="question.subtext" class="subtext_input"/>
+  <p>{{question.subtext}}</p>
+
+  <br />
+
+  <h6>Question alternaltives</h6>
+  <button (click)="addAlternaltive(question)" class="add_alternaltive_button">Add alternaltive</button>
+
+  <br />
+  <br />
+
+  <div *ngFor="let alt of question.alternaltives; let j=index" class="alternaltives">
+    <input [(ngModel)]="alt.alt" class="alternaltive_input"/>
+    <p>{{alt.alt}}</p>
+    <button (click)="deleteAlternaltive(question, j)" class="delete_alternaltive_button">Remove Item</button>
+
+    <br />
+    <br />
+
+  </div>
+
+  <hr />
+  <br />
+
+</div>

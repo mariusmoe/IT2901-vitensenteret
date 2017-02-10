@@ -1,7 +1,7 @@
 const mongoose = require('mongoose'),
-      config = require('./config');
+      config = require('config');
 // Use a different Promise provider then mongooses mpromise (its depricated)
-mongoose.Promise = Promise;
+
 module.exports = app => {
   // optional callback that gets fired when initial connection completed
   const uri = config.database;
@@ -13,7 +13,9 @@ module.exports = app => {
   }).then( () => {
     // Start to listen on port specified in the config file
     app.listen(app.get("port"), () =>{
-      console.log(`Vitensenteret running on - Port ${app.get("port")}...`);
+      if(config.util.getEnv('NODE_ENV') !== 'test') {
+          console.log(`Vitensenteret running on - Port ${app.get("port")}...`);
+        };
     });
   })
 };

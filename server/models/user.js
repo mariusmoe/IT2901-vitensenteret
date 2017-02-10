@@ -23,11 +23,7 @@ const UserSchema = new Schema({
     // Verified by email
     type: Boolean,
     default: false
-  },
-  confirmation_string: { type: String, required: true },
-  confirmation_issued: {type: Date },
-  resetPasswordToken: { type: String },
-  resetPasswordExpires: { type: Date }
+  }
 },
 {
   timestamps: true
@@ -37,7 +33,7 @@ const UserSchema = new Schema({
 // Before saving do the following
 UserSchema.pre('save', function(next) {
   const user = this,
-        SALT_FACTOR = 12;
+        SALT_FACTOR = 10;
   if (!user.isModified('password')) return next();
   bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
     if (err) return next(err);
