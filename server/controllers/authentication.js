@@ -30,16 +30,21 @@ function generateToken(user) {
   });
 }
 
+exports.getJWT = (req, res, next) => {
+  let user = { _id: req.user._id, email: req.user.email }
+  res.status(200).json({
+    token: 'JWT ' + generateToken(user),
+    user: user
+  });
+}
+
 /**
  * Log in a user
  *
  * respons with a json object with a Json web token and the user
  */
 exports.login = (req, res, next) => {
-  let user = {
-    _id: req.user._id,
-    email: req.user.email
-  }
+  let user = { _id: req.user._id, email: req.user.email }
   res.status(200).json({
     token: 'JWT ' + generateToken(user),
     user: user

@@ -106,4 +106,18 @@ describe('Auth API', () => {
       });
     });
   });
+
+  describe('/api/auth/get_token GET', () => {
+    it('should get a new JWT /api/auth/get_token GET', (done) => {
+      chai.request(server)
+      .get('/api/auth/get_token')
+      .set('Authorization', jwt)
+      .end( (err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('token');
+        res.body.should.have.property('user');
+        done();
+      });
+    });
+  });
 });
