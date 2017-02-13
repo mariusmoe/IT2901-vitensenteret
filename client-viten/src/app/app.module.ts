@@ -12,6 +12,7 @@ import { SurveyCreateComponent } from './admin/survey-create/survey-create.compo
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
+import { LoginComponent } from './admin/login/login.component';
 
 
 
@@ -22,7 +23,8 @@ import { AuthenticationService } from './_services/authentication.service';
     AppComponent,
     HomepageAdminComponent,
     SurveyCreateComponent,
-    HomepageUserComponent
+    HomepageUserComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
