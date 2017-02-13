@@ -43,6 +43,9 @@ module.exports = (app) => {
   // Request a new token
   authRoutes.get('/get_token', requireAuth, AuthenticationController.getJWT);
 
+  // Delete the account with the provided JWT
+  authRoutes.delete('/delete_account', requireAuth, AuthenticationController.deleteAccount);
+  
   // // TODO Password reset request route
   // authRoutes.post('/forgot-password', AuthenticationController.forgotPassword);
   //
@@ -64,8 +67,6 @@ module.exports = (app) => {
   // // change email for this account
   // authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
   //
-  // // Delete the account with the provided JWT
-  // authRoutes.delete('/delete_my_account', requireAuth, AuthenticationController.delteAccount);
   //
 
   // retrive all surveys as a json object
