@@ -1,3 +1,3 @@
 export * from './question';
 export * from './survey_list';
-export * from './alternative';
+export * from './alternaltive';

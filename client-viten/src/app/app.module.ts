@@ -14,6 +14,8 @@ import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
 import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
+import { AllSurveysComponent } from './admin/survey-list/all-surveys/all-surveys.component';
+import { LittleSurveyComponent } from './admin/survey-list/little-survey/little-survey.component';
 
 
 
@@ -24,7 +26,9 @@ import { SurveyService } from './_services/survey.service';
     HomepageAdminComponent,
     SurveyCreateComponent,
     HomepageUserComponent,
-    LoginComponent
+    LoginComponent,
+    AllSurveysComponent,
+    LittleSurveyComponent
   ],
   imports: [
     BrowserModule,
