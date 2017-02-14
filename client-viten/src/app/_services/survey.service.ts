@@ -56,32 +56,44 @@ export class SurveyService {
    * @returns Observable<Survey> returns an observable holding the
    * requested survey
    */
-  getSurvey(idString: String): Observable<Survey> {
-    return this.http.get(this.url + '/' + idString)
-      .map((response: Response) => {
-        let json = response.json();
-        let s = new Survey();
-        s._id = json.id;
-        s.name = json.name;
-        s.date = json.date;
-        s.active = json.active;
-        s.questionlist = [];
-        for (let i = 0; i<json.questionlist.length; i++) {
-          let qo = new QuestionObject();
-          qo.mode = json.questionlist.mode;
-          qo.answer = json.questionlist.answer;
-          qo.lang = new Lang();
+   getSurvey(idString: String): Observable<Survey> {
+     return this.http.get(this.url + '/' + idString)
+     .map( response => {
+       let jsonResponse = response.json();
+       if (response.status != 200){
+         console.error(jsonResponse.status + " : " + jsonResponse.message);
+         return null;
+       }
+       console.info(jsonResponse.status + " : " + jsonResponse.message);
 
-          for (let language of json.questionlist[i].lang) {
-            let q = new Question();
-            q.txt = language.txt;
-            q.options = language.options;
-            qo.lang[language] = q;
-          }
-        }
-        return s;
-      }).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
-  }
+       let json = response.json();
+       let s = new Survey();
+       s._id = json.id;
+       s.name = json.name;
+       s.date = json.date;
+       s.active = json.active;
+       s.questionlist = [];
+       for (let i = 0; i<json.questionlist.length; i++) {
+         let qo = new QuestionObject();
+         qo.mode = json.questionlist.mode;
+         qo.answer = json.questionlist.answer;
+         qo.lang = new Lang();
+
+         for (let language of json.questionlist[i].lang) {
+           let q = new Question();
+           q.txt = language.txt;
+           q.options = language.options;
+           qo.lang[language] = q;
+         }
+       }
+       return s;
+     },
+     error => {
+       let errMsg = (error.message) ? error.message :
+         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+         return Observable.throw(false);
+     });
+ }
 
 
 
@@ -105,9 +117,20 @@ export class SurveyService {
     let options = new RequestOptions({ headers: headers }); // Create a request option
 
     return this.http.post(this.url, survey, options)
-      .map((response: Response) => {
-        return true;  // TODO: Get response code and text
-      }).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+    .map( response => {
+      let jsonResponse = response.json();
+      if (response.status != 200){
+        console.error(jsonResponse.status + " : " + jsonResponse.message);
+        return false;
+      }
+      console.info(jsonResponse.status + " : " + jsonResponse.message);
+      return true;
+    },
+    error => {
+      let errMsg = (error.message) ? error.message :
+        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+        return Observable.throw(false);
+    });
   }
 
   /**
@@ -115,24 +138,30 @@ export class SurveyService {
    *
    * @param Survey   a Survey model object holding the survey data one wants to patch
    *
-   * @returns Observable<boolean> returns an observable with the success status of the http patch
+   * @returns Observable<Survey> returns an observable with the success status of the http patch
    */
-  patchSurvey(surveyId: string, survey: Survey): Observable<boolean> {
-    let token = this.getToken();
-    if (!token) {
-      return Observable.throw('jwt not found'); // TODO: fix me.
-    }
-
+  patchSurvey(surveyId: string, survey: Survey): Observable<Survey> {
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `${token}`);
+    headers.append('Authorization', `${this.getToken()}`);
 
     let options = new RequestOptions({ headers: headers }); // Create a request option
 
     return this.http.patch(this.url + '/' + surveyId, survey, options)
-      .map((response: Response) => {
-        return true; // TODO: Get response code and text
-      }).catch((error:any) => Observable.throw(error.json().error || 'Server error'));
+      .map( response => {
+        let jsonResponse = response.json();
+        if (response.status != 200){
+          console.error(jsonResponse.status + " : " + jsonResponse.message);
+          return null;
+        }
+        console.info(jsonResponse.status + " : " + jsonResponse.message);
+        return jsonResponse.survey;
+      },
+      error => {
+        let errMsg = (error.message) ? error.message :
+          error.status ? `${error.status} - ${error.statusText}` : 'Server error';
+          return Observable.throw(false);
+      });
   }
 
   /**
@@ -156,14 +185,19 @@ export class SurveyService {
 
     return this.http.delete(this.url + '/' + surveyId, options)
       .map( response => {
-        return true; // TODO: Get response code and text
+        let jsonResponse = response.json();
+        if (response.status != 200){
+          console.error(jsonResponse.status + " : " + jsonResponse.message);
+          return false;
+        }
+        console.info(jsonResponse.status + " : " + jsonResponse.message);
+        return true;
       },
       error => {
         let errMsg = (error.message) ? error.message :
           error.status ? `${error.status} - ${error.statusText}` : 'Server error';
           return Observable.throw(false);
-      }
-    );
+      });
   }
 
 
@@ -213,8 +247,7 @@ export class SurveyService {
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
           // console.error(errMsg); // log to console instead
           return Observable.throw(errMsg);
-        }
-      )
+        });
   }
 
 
