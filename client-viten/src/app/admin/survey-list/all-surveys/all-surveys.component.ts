@@ -27,7 +27,7 @@ export class AllSurveysComponent implements OnInit {
 
     private getSurveys() {
       this.loading = true;
-      this.surveyService.getSurveys().subscribe(result => {
+      this.surveyService.getAllSurveys().subscribe(result => {
         this.surveys = result;
         this.loading = false;
       })

@@ -150,12 +150,12 @@ export class SurveyService {
 
 
   /**
-   * getSurveys
+   * getAllSurveys
    *
    * @returns Observable<SurveyList[]> returns an observable with a list of
    * objects with survey names, ids, active status and date.
    */
-  getSurveys(): Observable<SurveyList[]>{
+  getAllSurveys(): Observable<SurveyList[]>{
     let headers = new Headers()
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${this.getToken()}`);
@@ -165,7 +165,8 @@ export class SurveyService {
         response => {
           if (response.status != 200){
             // Error during login
-            console.error("can't retrive surveys")
+            let jsonResponse = response.json();
+            console.error(jsonResponse.status + " : " + jsonResponse.message);
             return this.surveyList;
           } else {
             let jsonResponse = response.json();
