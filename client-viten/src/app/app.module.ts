@@ -13,7 +13,7 @@ import { HomepageUserComponent } from './user/homepage-user/homepage-user.compon
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
 import { LoginComponent } from './admin/login/login.component';
-
+import { SurveyService } from './_services/survey.service';
 
 
 
@@ -36,6 +36,7 @@ import { LoginComponent } from './admin/login/login.component';
   providers: [
     AuthGuard,
     AuthenticationService,
+    SurveyService,
   ],
   bootstrap: [AppComponent]
 })
