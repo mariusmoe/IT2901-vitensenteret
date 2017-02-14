@@ -41,9 +41,7 @@ export class SurveyService {
    * @returns String - user token if it exists in the local storage. undefined otherwise
    */
   private getToken(): string {
-    // set token if saved in local storage
-    var currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    return currentUser && currentUser.token;
+    return localStorage.getItem('token');
   }
 
 
@@ -68,7 +66,7 @@ export class SurveyService {
 
        let json = response.json();
        let s = new Survey();
-       s._id = json.id;
+       s._id = json._id;
        s.name = json.name;
        s.date = json.date;
        s.active = json.active;
@@ -79,12 +77,13 @@ export class SurveyService {
          qo.answer = json.questionlist.answer;
          qo.lang = new Lang();
 
-         for (let language of json.questionlist[i].lang) {
+         for (let language in json.questionlist[i].lang) {
            let q = new Question();
-           q.txt = language.txt;
-           q.options = language.options;
+           q.txt = json.questionlist[i].lang.txt;
+           q.options = json.questionlist[i].lang.options;
            qo.lang[language] = q;
          }
+         s.questionlist[i] = qo;
        }
        return s;
      },
@@ -104,11 +103,13 @@ export class SurveyService {
    *
    * @returns Observable<boolean> returns an observable with the success status of the http post
    */
-  postSurvey(survey: Survey): Observable<boolean> {
+  postSurvey(survey: Survey): Observable<Survey> {
     let token = this.getToken();
     if (!token) {
       return Observable.throw('jwt not found'); // TODO: fix me.
     }
+
+    console.log(JSON.parse(JSON.stringify(survey)));
 
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -123,8 +124,28 @@ export class SurveyService {
         console.error(jsonResponse.status + " : " + jsonResponse.message);
         return false;
       }
-      console.info(jsonResponse.status + " : " + jsonResponse.message);
-      return true;
+      let json = response.json();
+      let s = new Survey();
+      s._id = json._id;
+      s.name = json.name;
+      s.date = json.date;
+      s.active = json.active;
+      s.questionlist = [];
+      for (let i = 0; i<json.questionlist.length; i++) {
+        let qo = new QuestionObject();
+        qo.mode = json.questionlist.mode;
+        qo.answer = json.questionlist.answer;
+        qo.lang = new Lang();
+
+        for (let language in json.questionlist[i].lang) {
+          let q = new Question();
+          q.txt = json.questionlist[i].lang.txt;
+          q.options = json.questionlist[i].lang.options;
+          qo.lang[language] = q;
+        }
+        s.questionlist[i] = qo;
+      }
+      return s;
     },
     error => {
       let errMsg = (error.message) ? error.message :

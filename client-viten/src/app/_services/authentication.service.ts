@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 export class AuthenticationService {
 
   private url = {
-    login: 'localhost:2000/api/auth/login'
+    login: 'http://localhost:2000/api/auth/login'
   }
 
   constructor(private http: Http) { }
@@ -34,9 +34,9 @@ export class AuthenticationService {
             } else {
               let jsonResponse = response.json();
               if (jsonResponse){
-                // Set user data in localStorage
-                // TODO!
-                
+                localStorage.setItem('token', jsonResponse.token);
+                // TODO: set user info?
+                //
                 return true;
               } else {
                 return false;

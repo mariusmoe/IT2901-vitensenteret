@@ -6,11 +6,13 @@ import { SurveyCreateComponent } from './admin/survey-create/survey-create.compo
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
+import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
 const appRoutes: Routes = [
   { path: '', component:HomepageUserComponent },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: HomepageAdminComponent },
+  { path: 'test', component: TestRestAPIComponent },
   { path: 'create-survey', component: SurveyCreateComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

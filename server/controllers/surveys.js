@@ -24,7 +24,7 @@ exports.createSurvey = (req, res, next) => {
   if (Object.keys(receivedSurvey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
   }
-  if (!val.surveyValidation(receivedSurvey)){
+  if (!val.surveyValidation(receivedSurvey, true)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
@@ -32,6 +32,7 @@ exports.createSurvey = (req, res, next) => {
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
+    console.log(survey);
     return res.status(200).send( survey );
   })
 }

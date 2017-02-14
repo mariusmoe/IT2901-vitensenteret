@@ -16,6 +16,7 @@ import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
 import { AllSurveysComponent } from './admin/survey-list/all-surveys/all-surveys.component';
 import { LittleSurveyComponent } from './admin/survey-list/little-survey/little-survey.component';
+import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
 
 
@@ -28,7 +29,8 @@ import { LittleSurveyComponent } from './admin/survey-list/little-survey/little-
     HomepageUserComponent,
     LoginComponent,
     AllSurveysComponent,
-    LittleSurveyComponent
+    LittleSurveyComponent,
+    TestRestAPIComponent
   ],
   imports: [
     BrowserModule,
