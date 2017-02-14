@@ -26,8 +26,8 @@
 
   <h5>Question type</h5>
   <select [(ngModel)]="question.type">
-    <option *ngFor="let type of this.q_type" [ngValue]="type">
-        {{type}}
+    <option *ngFor="let type of this.q_type; let g=index" [ngValue]="type">
+        {{this.q_type_name[g]}}
     </option>
   </select>
   <p>{{question.type}}</p>
@@ -61,7 +61,7 @@
 
   <br />
 
-  <div class="question_alternaltives">
+  <div *ngIf="question.type === 'multi'" class="question_alternaltives">
     <h5>Question alternaltives</h5>
     <button (click)="addAlternaltive(question)" class="add_alternaltive_button">Add alternaltive</button>
 

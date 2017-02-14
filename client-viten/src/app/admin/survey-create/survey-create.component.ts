@@ -9,6 +9,7 @@ import { Question } from '../../_models/question';
 export class SurveyCreateComponent implements OnInit {
 
   q_type: string[] = ['multi', 'smily', 'star', 'text'];
+  q_type_name: string[] = ['MultipleChoice', 'SmilyFace', '5-Stars', 'TextBlock'];
 
   surveyname: string = '';
   surveyname_e: string = '';
