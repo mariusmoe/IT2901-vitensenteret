@@ -2,8 +2,10 @@
   all-surveys works!
 </p>
 
-<div class="flex-container">
+<div class="flex-container sidebar">
   <app-little-survey
-    *ngFor="let survey of surveys" class="survey" [survey]='survey'>
+    *ngFor="let survey of surveys"
+    class="survey"
+    [survey]='survey'>
   </app-little-survey>
 </div>

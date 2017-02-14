@@ -3,15 +3,35 @@ import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angul
 import { Observable } from 'rxjs';
 import { Survey, QuestionObject, Lang, Question } from '../_models/survey';
 import { SurveyList } from '../_models/index';
+import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
+
 
 @Injectable()
 export class SurveyService {
 
-  private url = 'http://localhost/api/survey' // TODO: FIX ME
+  private url = 'http://localhost:2000/api/survey' // TODO: FIX ME
   private surveyList: SurveyList[] = []
+
+  private selectedSurvey: BehaviorSubject<string> = new BehaviorSubject<string>(null);
 
   constructor(private http: Http) {
 
+  }
+
+  /**
+   * select one surveyId
+   * @param  {string} surveyId survey ID selected
+   */
+  selectSurvey(surveyId: string) {
+    if (surveyId === this.selectedSurvey.getValue()){
+      console.log("Same survey - nothing changed")
+    } else {
+      this.selectedSurvey.next(surveyId);
+    }
+  }
+
+  getSelectedSurvey(){
+    return this.selectedSurvey.asObservable();
   }
 
 
