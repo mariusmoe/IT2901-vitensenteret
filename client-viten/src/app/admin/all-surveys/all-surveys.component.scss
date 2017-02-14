@@ -1,0 +1,22 @@
+
+
+.sidebar {
+  width: 250px;
+}
+
+// Change background-color to something better TODO!
+md-card.active {
+  background-color:#123456 !important;
+  color: white;
+  overflow: hidden;
+  color: red;
+}
+
+.mouse {
+  cursor: pointer;
+  cursor: hand;
+}
+
+.mouse:hover {
+    background-color: yellow;
+}

@@ -11,6 +11,7 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
 const appRoutes: Routes = [
   { path: '', component:HomepageUserComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'admin/:surveyId', component: HomepageAdminComponent },
   { path: 'admin', component: HomepageAdminComponent },
   { path: 'test', component: TestRestAPIComponent },
   { path: 'create-survey', component: SurveyCreateComponent, canActivate: [AuthGuard] },

@@ -14,8 +14,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
 import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
-import { AllSurveysComponent } from './admin/survey-list/all-surveys/all-surveys.component';
-import { LittleSurveyComponent } from './admin/survey-list/little-survey/little-survey.component';
+import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
 
@@ -29,7 +28,6 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
     HomepageUserComponent,
     LoginComponent,
     AllSurveysComponent,
-    LittleSurveyComponent,
     TestRestAPIComponent
   ],
   imports: [
