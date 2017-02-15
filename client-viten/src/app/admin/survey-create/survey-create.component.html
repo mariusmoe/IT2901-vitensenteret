@@ -1,11 +1,19 @@
 <h1>Create survey here</h1>
+<input type="checkbox" [(ngModel)]="this.english" />English alternaltives
 
 <br />
 <br />
 
-<h4>Survey Name</h4>
-<input [(ngModel)]="this.surveyname" class="survey_name_input"/>
-<h2>{{this.surveyname}}</h2>
+<div class="survey_name">
+  <h4>Survey Name</h4>
+  <input [(ngModel)]="this.surveyname" class="survey_name_input"/>
+  <h2>{{this.surveyname}}</h2>
+  <div *ngIf="this.english" class="name_english">
+    <h6>English</h6>
+    <input [(ngModel)]="this.surveyname_e" class="survey_name_input"/>
+    <h2>{{this.surveyname_e}}</h2>
+  </div>
+</div>
 
 <button (click)="addQuestion()" class="add_question_button">Add question</button>
 
@@ -16,40 +24,68 @@
   <h1>Question: {{i+1}}</h1>
   <button (click)="deleteQuestion(i)" class="delete_question_button">Remove Question</button>
 
-  <h6>Question type</h6>
+  <h5>Question type</h5>
+  <select [(ngModel)]="question.type">
+    <option *ngFor="let type of this.q_type; let g=index" [ngValue]="type">
+        {{this.q_type_name[g]}}
+    </option>
+  </select>
   <p>{{question.type}}</p>
 
   <br />
 
-  <h6>Question text</h6>
-  <input [(ngModel)]="question.text" class="text_input"/>
-  <p>{{question.text}}</p>
-
-  <br />
-
-  <h6>Question subtext</h6>
-  <input [(ngModel)]="question.subtext" class="subtext_input"/>
-  <p>{{question.subtext}}</p>
-
-  <br />
-
-  <h6>Question alternaltives</h6>
-  <button (click)="addAlternaltive(question)" class="add_alternaltive_button">Add alternaltive</button>
-
-  <br />
-  <br />
-
-  <div *ngFor="let alt of question.alternaltives; let j=index" class="alternaltives">
-    <input [(ngModel)]="alt.alt" class="alternaltive_input"/>
-    <p>{{alt.alt}}</p>
-    <button (click)="deleteAlternaltive(question, j)" class="delete_alternaltive_button">Remove Item</button>
-
-    <br />
-    <br />
-
+  <div class="question_text">
+    <h5>Question text</h5>
+    <input [(ngModel)]="question.text" class="text_input"/>
+    <p>{{question.text}}</p>
+    <div *ngIf="this.english" class="text_english">
+      <h6>English</h6>
+      <input [(ngModel)]="question.text_e" class="text_input"/>
+      <p>{{question.text_e}}</p>
+    </div>
   </div>
 
-  <hr />
   <br />
+
+  <div class="question_subtext">
+    <h5>Question subtext</h5>
+    <input [(ngModel)]="question.subtext" class="subtext_input"/>
+    <p>{{question.subtext}}</p>
+    <div *ngIf="this.english" class="subtext_english">
+      <h6>English</h6>
+      <input [(ngModel)]="question.subtext_e" class="subtext_input"/>
+      <p>{{question.subtext_e}}</p>
+    </div>
+  </div>
+
+
+  <br />
+
+  <div *ngIf="question.type === 'multi'" class="question_alternaltives">
+    <h5>Question alternaltives</h5>
+    <button (click)="addAlternaltive(question)" class="add_alternaltive_button">Add alternaltive</button>
+
+    <br />
+    <br />
+
+    <div *ngFor="let alt of question.alternaltives; let j=index" class="alternaltives">
+      <input [(ngModel)]="alt.alt" class="alternaltive_input"/>
+      <p>{{alt.alt}}</p>
+      <div *ngIf="this.english" class="alternaltives_english">
+        <h6>English</h6>
+        <input [(ngModel)]="alt.alt_e" class="alternaltive_input"/>
+        <p>{{alt.alt_e}}</p>
+      </div>
+      <button (click)="deleteAlternaltive(question, j)" class="delete_alternaltive_button">Remove Item</button>
+
+      <br />
+      <br />
+
+    </div>
+
+    <hr />
+    <br />
+  </div>
+
 
 </div>
