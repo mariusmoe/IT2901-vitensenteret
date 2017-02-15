@@ -1,6 +1,6 @@
 import { Alternaltive } from '../_models/alternaltive';
 
-export class Question {
+export class Questio {
   type: string;
   text: string;
   text_e: string;
