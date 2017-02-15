@@ -1,9 +1,12 @@
 <h1>Create survey here</h1>
+
+<!--Checkbox for english-->
 <input type="checkbox" [(ngModel)]="this.english" />English alternaltives
 
 <br />
 <br />
 
+<!--Input for survey name-->
 <div class="survey_name">
   <h4>Survey Name</h4>
   <input [(ngModel)]="this.surveyname" class="survey_name_input"/>
@@ -15,15 +18,20 @@
   </div>
 </div>
 
+<!--Button for adding a question to the survey-->
 <button (click)="addQuestion()" class="add_question_button">Add question</button>
 
 <br />
 <hr />
 
+<!--Question block-->
 <div *ngFor="let question of questions; let i=index" class="question">
   <h1>Question: {{i+1}}</h1>
+
+  <!--Button for deleting THIS question-->
   <button (click)="deleteQuestion(i)" class="delete_question_button">Remove Question</button>
 
+  <!--Dropdown to select question type-->
   <h5>Question type</h5>
   <select [(ngModel)]="question.type">
     <option *ngFor="let type of this.q_type; let g=index" [ngValue]="type">
@@ -34,6 +42,7 @@
 
   <br />
 
+  <!--Input for question main text-->
   <div class="question_text">
     <h5>Question text</h5>
     <input [(ngModel)]="question.text" class="text_input"/>
@@ -47,6 +56,7 @@
 
   <br />
 
+  <!--Input for question subtext-->
   <div class="question_subtext">
     <h5>Question subtext</h5>
     <input [(ngModel)]="question.subtext" class="subtext_input"/>
@@ -61,14 +71,18 @@
 
   <br />
 
+  <!--Show or hide alternaltives-->
   <div *ngIf="question.type === 'multi'" class="question_alternaltives">
     <h5>Question alternaltives</h5>
+    <!--Button for adding an alternaltive to the question-->
     <button (click)="addAlternaltive(question)" class="add_alternaltive_button">Add alternaltive</button>
 
     <br />
     <br />
 
+    <!--Alternaltives block-->
     <div *ngFor="let alt of question.alternaltives; let j=index" class="alternaltives">
+      <!--Input for alternaltive-->
       <input [(ngModel)]="alt.alt" class="alternaltive_input"/>
       <p>{{alt.alt}}</p>
       <div *ngIf="this.english" class="alternaltives_english">
@@ -76,6 +90,7 @@
         <input [(ngModel)]="alt.alt_e" class="alternaltive_input"/>
         <p>{{alt.alt_e}}</p>
       </div>
+      <!--Button for deleting THIS alternaltive-->
       <button (click)="deleteAlternaltive(question, j)" class="delete_alternaltive_button">Remove Item</button>
 
       <br />
