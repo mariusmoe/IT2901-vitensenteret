@@ -109,8 +109,6 @@ export class SurveyService {
       return Observable.throw('jwt not found'); // TODO: fix me.
     }
 
-    console.log(JSON.parse(JSON.stringify(survey)));
-
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
@@ -145,6 +143,7 @@ export class SurveyService {
         }
         s.questionlist[i] = qo;
       }
+      console.info("post successful.");
       return s;
     },
     error => {

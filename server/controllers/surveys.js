@@ -111,7 +111,7 @@ exports.deleteOneSurvey = (req, res, next) => {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
-    return res.status(200).send({message: 'Success! - it is no more'});
+    return res.status(200).send({message: status.SURVEY_DELETED.message, status: status.SURVEY_DELETED.code, survey: survey});
   });
 }
 

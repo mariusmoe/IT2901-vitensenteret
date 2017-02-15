@@ -19,7 +19,6 @@ export class TestRestAPIComponent implements OnInit {
           console.log("TEST messed up on login");
           return;
         }
-
         let s = new Survey();
         s.active = true;
         s.name = "New TEST survey";
@@ -37,12 +36,27 @@ export class TestRestAPIComponent implements OnInit {
 
         qo.lang = lang;
         s.questionlist[0] = qo;
+        console.log("ORIGINAL SURVEY:");
+        console.log(s);
 
 
 
         this.surveyService.postSurvey(s).subscribe(postResult => {
-          console.log("SURVEY");
+          console.log("POST RETURN SURVEY:");
           console.log(postResult);
+
+          s.name = "PATCHED TEST Survey";
+          s.questionlist[1] = qo; // add one more question
+
+          this.surveyService.patchSurvey(postResult._id, s).subscribe(patchResult => {
+            console.log("PATCH RETURN SURVEY:");
+            console.log(patchResult);
+
+            this.surveyService.deleteSurvey(postResult._id).subscribe(deleteResult => {
+              console.log("DELETE RETURN:");
+              console.log(deleteResult);
+            });
+          });
         });
       });
 
