@@ -51,6 +51,7 @@ exports.getAllSurveys = (req, res, next) => {
     let surveyList = [];
     for (let survey of surveys) {
       surveyList[surveyList.length] = {
+        '_id': survey._id,
         'name': survey.name,
         'active': survey.active,
         'date': survey.date,

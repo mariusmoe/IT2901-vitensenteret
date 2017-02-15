@@ -38,8 +38,14 @@ module.exports = (app) => {
   authRoutes.get('/get_referral_link', requireAuth, AuthenticationController.getReferralLink);
 
 
-authRoutes.post('/register_developer', AuthenticationController.register_developer);
+  authRoutes.post('/register_developer', AuthenticationController.register_developer);
 
+  // Request a new token
+  authRoutes.get('/get_token', requireAuth, AuthenticationController.getJWT);
+
+  // Delete the account with the provided JWT
+  authRoutes.delete('/delete_account', requireAuth, AuthenticationController.deleteAccount);
+  
   // // TODO Password reset request route
   // authRoutes.post('/forgot-password', AuthenticationController.forgotPassword);
   //
@@ -61,11 +67,7 @@ authRoutes.post('/register_developer', AuthenticationController.register_develop
   // // change email for this account
   // authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
   //
-  // // Delete the account with the provided JWT
-  // authRoutes.delete('/delete_my_account', requireAuth, AuthenticationController.delteAccount);
   //
-  // // Request a new token
-  // authRoutes.get('/get_new_token', requireAuth, AuthenticationController.getNewJWT);
 
   // retrive all surveys as a json object
   surveyRoutes.get('/json', SurveyController.getAllSurveysAsJson);

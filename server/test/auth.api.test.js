@@ -106,4 +106,52 @@ describe('Auth API', () => {
       });
     });
   });
+
+  describe('/api/auth/get_token GET', () => {
+    it('should get a new JWT /api/auth/get_token GET', (done) => {
+      chai.request(server)
+      .get('/api/auth/get_token')
+      .set('Authorization', jwt)
+      .end( (err, res) => {
+        res.should.have.status(200);
+        res.body.should.have.property('token');
+        res.body.should.have.property('user');
+        done();
+      });
+    });
+  });
+
+  describe('/api/auth/delete_account DELETE', () => {
+    let isolated_jwt = ""
+
+    it('should create a new user /api/auth/register_developer POST', (done) => {
+    chai.request(server)
+      .post('/api/auth/register_developer')
+      .send({'email': 'test-to-del@test.com', 'password': 'test'})
+      .end(function(err, res){
+        //res.should.have.status(200);
+        done();
+      })
+    });
+
+    it('should login user to be deleted /api/auth/login POST', (done) => {
+      chai.request(server)
+      .post('/api/auth/login')
+      .send({'email': 'test-to-del@test.com', 'password': 'test'})
+      .end(function(err, res){
+        isolated_jwt = res.body.token;   // Should be globaly avaliable before each test now
+        res.should.have.status(200);
+        done();
+      });
+    });
+    it('should delete this user /api/auth/delete_account DELETE', (done) => {
+      chai.request(server)
+      .delete('/api/auth/delete_account')
+      .set('Authorization', isolated_jwt)
+      .end( (err, res) => {
+        res.should.have.status(200);
+        done();
+      });
+    });
+  });
 });
