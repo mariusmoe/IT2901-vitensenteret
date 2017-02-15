@@ -17,6 +17,7 @@ import { SurveyService } from './_services/survey.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
+import { ReactiveFormsModule } from '@angular/forms';
 
 
 
@@ -33,6 +34,7 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
   imports: [
     BrowserModule,
     FormsModule,
+    ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
     MaterialModule.forRoot()
