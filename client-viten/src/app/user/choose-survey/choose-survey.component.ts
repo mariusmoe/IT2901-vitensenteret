@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,Input } from '@angular/core';
 import { Surveys } from '../../_models/surveys';
+
 
 
 @Component({
@@ -9,17 +10,25 @@ import { Surveys } from '../../_models/surveys';
 })
 export class ChooseSurveyComponent implements OnInit {
 
-  surveys: Surveys[]=[{id: 1, name: 'Utgang'}, {id: 2, name: 'Graviton'}];
-  
+  surveys: Surveys[]=[{id: 1, name: 'Utgang'}, {id: 2, name: 'Graviton'},{id: 3, name: 'planetarium'},{id: 4, name: 'makerspace'}];
+  databasefetch:Surveys[]=[];
+  search:string="";
 
+  @Input() searching: string;
 
+  constructor(){
 
-  constructor(){ }
-
-  ngOnInit() {
   }
 
+  ngOnInit() {
+    console.log("test");
+  }
 
+showresult():void{
+//TODO add the survey list in a neat and formal manner
+this.databasefetch.push({id:null,name:""});
+console.log(this.search+"");
+};
 
 
 

@@ -1,18 +1,34 @@
-<p routerLink="/chose_survey" routerLinkActive="active">Survey Choose test</p>
-
+<!--TODO remove when done with code -->
+<p routerLink="/chose-survey" routerLinkActive="active">Survey Choose test</p>
 <br />
 
-<input [(ngModel)]="this.search_name" class="choose-survey"/>
-<h2>{{this.search_name}}</h2>
+
+<input [(ngModel)]="search"/>
+<button (click)="showresult()"> Search</button>
+<p>you typed:{{this.search}}</p>
+
+<div id="showresults" *ngFor="let result of databasefetch">
+<!--TODO this div should show all matching surveys from the search -->
+<p *ngIf="this.search == result.name ">databasefetch</p>
+
+</div>
+
+
 
 <h2>Recent:</h2>
-<br />
+<div *ngFor="let surv of this.surveys">
+  <p>{{surv.id}}</p>
+</div>
 
 <h2>Popular:</h2>
 <br />
 
 
+
+
+<h2>All surveys:</h2>
 <div *ngFor="let surv of this.surveys">
-  <h1>{{surv.id}}</h1>
-  <h1>{{surv.name}}</h1>
+  <!--TODO Make another component that links to another popupwindow in -->
+  <!--TODO routerlink is just a demo that checks that the code works -->
+  <p routerLink="/chose-survey" routerLinkActive="active">{{surv.id}}</p>
 </div>
