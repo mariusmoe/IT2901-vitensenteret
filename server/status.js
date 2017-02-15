@@ -49,6 +49,10 @@ module.exports = {
     message: 'Survey has been updated',
     code: 1013
   },
+  SURVEY_DELETED: {
+    message: 'Survey has been deleted',
+    code: 1014,
+  },
 
   // ROUTER CODES
   ROUTE_INVALID: {
@@ -57,6 +61,6 @@ module.exports = {
   },
   ROUTE_SURVEYS_VALID_NO_SURVEYS: {
     message: "Request successful, but no surveys exist.",
-    code: 1014
+    code: 1015
   },
 }
