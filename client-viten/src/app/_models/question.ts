@@ -1,4 +1,4 @@
-import { Alternaltive } from '../classes/alternaltive';
+import { Alternaltive } from '../_models/alternaltive';
 
 export class Question {
   type: string;

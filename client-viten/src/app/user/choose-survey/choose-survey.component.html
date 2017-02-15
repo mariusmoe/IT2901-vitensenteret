@@ -1,0 +1,18 @@
+<p routerLink="/chose_survey" routerLinkActive="active">Survey Choose test</p>
+
+<br />
+
+<input [(ngModel)]="this.search_name" class="choose-survey"/>
+<h2>{{this.search_name}}</h2>
+
+<h2>Recent:</h2>
+<br />
+
+<h2>Popular:</h2>
+<br />
+
+
+<div *ngFor="let surv of this.surveys">
+  <h1>{{surv.id}}</h1>
+  <h1>{{surv.name}}</h1>
+</div>

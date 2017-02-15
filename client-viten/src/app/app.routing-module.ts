@@ -4,6 +4,9 @@ import { Routes, RouterModule } from '@angular/router';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
 import { SurveyCreateComponent } from './admin/survey-create/survey-create.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
+import { StartSurveyComponent} from './user/start-survey/start-survey.component';
+
+import{ChooseSurveyComponent} from  './user/choose-survey/choose-survey.component';
 
 
 const appRoutes: Routes = [
@@ -18,6 +21,14 @@ const appRoutes: Routes = [
   {
     path: 'create-survey',
     component: SurveyCreateComponent
+  },
+  {
+    path:'start_survey',
+    component:StartSurveyComponent
+  },
+  {
+    path:'choose-survey',
+    component:ChooseSurveyComponent
   },
   {
     path: '**',
