@@ -106,7 +106,7 @@ export class SurveyCreateComponent implements OnInit {
         console.log('happy');
       }
       else {
-        console.log('fackkkk');
+        console.log('whops');
       }
     });
 
