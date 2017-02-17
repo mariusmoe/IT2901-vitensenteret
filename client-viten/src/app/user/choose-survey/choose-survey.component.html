@@ -7,7 +7,8 @@
 <button (click)="showresult()"> Search</button>
 <p>you typed:{{this.search}}</p>
 
-<div id="showresults" *ngFor="let result of databasefetch">
+<div id="showresults" *ngFor="let result of resultsfromdatabase[1]">
+<h2>Results</h2>
 <!--TODO this div should show all matching surveys from the search -->
 <p *ngIf="this.search == result.name ">databasefetch</p>
 

@@ -11,10 +11,9 @@ import { Surveys } from '../../_models/surveys';
 export class ChooseSurveyComponent implements OnInit {
 
   surveys: Surveys[]=[{id: 1, name: 'Utgang'}, {id: 2, name: 'Graviton'},{id: 3, name: 'planetarium'},{id: 4, name: 'makerspace'}];
-  databasefetch:Surveys[]=[];
+  resultsfromdatabase:Surveys[]=[];
   search:string="";
 
-  @Input() searching: string;
 
   constructor(){
 
@@ -26,7 +25,7 @@ export class ChooseSurveyComponent implements OnInit {
 
 showresult():void{
 //TODO add the survey list in a neat and formal manner
-this.databasefetch.push({id:null,name:""});
+this.resultsfromdatabase.push({id:null,name:""});
 console.log(this.search+"");
 };
 
