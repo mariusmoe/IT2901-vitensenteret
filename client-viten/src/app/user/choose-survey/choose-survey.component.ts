@@ -20,12 +20,14 @@ export class ChooseSurveyComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log("test");
   }
 
 showresult():void{
 //TODO add the survey list in a neat and formal manner
-this.resultsfromdatabase.push({id:null,name:""});
+//this.resultsfromdatabase.push({id:null,name:""});
+resultid:Surveys[]=[];
+
+
 console.log(this.search+"");
 };
 
