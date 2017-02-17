@@ -6,10 +6,13 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./active-survey.component.scss']
 })
 export class ActiveSurveyComponent implements OnInit {
+  private started = false;
 
   constructor() { }
 
   ngOnInit() {
   }
-
+  public hidePlayButton(){
+    
+  }
 }

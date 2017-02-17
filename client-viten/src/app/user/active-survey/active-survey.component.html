@@ -1,3 +1,12 @@
-<p>
-  active-survey works!
-</p>
+<div class="active_survey_window">
+  <p>
+    active-survey works!
+  </p>
+  <!--Startbutton for an active survey-->
+  <div class="playbutton" *ngif="!started">
+    <button (click)="started=true, hidePlayButton()" id="start_survey"> Start </button>
+  </div>
+  <div class="surveyView" *ngif="started">
+
+  </div>
+</div>
