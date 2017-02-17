@@ -18,9 +18,7 @@ export class AuthGuard implements CanActivate {
    * @return {Date} 20 min before rotten JWT
    */
   getAlarmtime() {
-    let currentUser = localStorage.getItem('currentUser');
-    let currentToken = JSON.parse(currentUser);
-    let token = currentToken.token;
+    let token = localStorage.getItem('token');
     let expDate = this.jwtHelper.getTokenExpirationDate(token);
 
     return new Date(expDate.getTime()*1000 - 20 * 60000);     // 20 min before expDate
@@ -31,7 +29,7 @@ export class AuthGuard implements CanActivate {
    * @return {[type]} [description]
    */
   canActivate() {
-    if (localStorage.getItem('currentUser')) {
+    if (localStorage.getItem('token')) {
       // User might be loged in
       let alarmTime = this.getAlarmtime()
       if (alarmTime.getTime() < (new Date().getTime()*1000)){
