@@ -30,7 +30,7 @@ import { CreateSurveyComponent } from './admin/create-survey/create-survey.compo
     AllSurveysComponent,
     TestRestAPIComponent,
     CreateSurveyComponent,
-    CreateSurveyComponent
+    DisableEnglishDialog
   ],
   imports: [
     BrowserModule,
@@ -38,12 +38,12 @@ import { CreateSurveyComponent } from './admin/create-survey/create-survey.compo
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   providers: [
     AuthGuard,
     AuthenticationService,
-    SurveyService,
+    SurveyService
   ],
   bootstrap: [AppComponent]
 })
