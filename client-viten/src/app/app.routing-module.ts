@@ -16,6 +16,7 @@ const appRoutes: Routes = [
   { path: 'admin/:surveyId', component: HomepageAdminComponent },
   { path: 'admin', component: HomepageAdminComponent },
   { path: 'test', component: TestRestAPIComponent },
+  {path:'choose-survey',component: ChooseSurveyComponent},
   { path: 'create-survey', component: SurveyCreateComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '', pathMatch: 'full' },
   {

@@ -26,9 +26,10 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
   declarations: [
     AppComponent,
     HomepageAdminComponent,
+    HomepageUserComponent,
     SurveyCreateComponent,
     StartSurveyComponent,
-    ChooseSurveyComponent
+    ChooseSurveyComponent,
     LoginComponent,
     AllSurveysComponent,
     TestRestAPIComponent
