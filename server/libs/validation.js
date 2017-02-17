@@ -67,9 +67,17 @@ let surveySchema = {
         "$ref": "/question", // references the questionSchema above here
       },
       "minItems": 1,
+    },
+    endMessage: {
+      "type": "object",
+      "properties": {
+        "en": { "type": "string", "pattern": /\S/ },
+        "no": { "type": "string", "pattern": /\S/ }
+      },
+      "required": ["no"]
     }
   },
-  "required": ["name", "date", "active", "questionlist"],
+  "required": ["name", "date", "active", "questionlist", "endMessage"],
   "additionalProperties": false
 }
 
