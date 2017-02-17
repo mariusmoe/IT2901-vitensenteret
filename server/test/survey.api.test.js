@@ -32,7 +32,10 @@ var validJsonObject = {
         "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
       },
     },
-  }]
+  }],
+  "endMessage": {
+    "no": "Takk for at du gjennomførte denne undersøkelsen!"
+  }
 }
 
 describe('Survey API', () => {

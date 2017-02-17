@@ -17,12 +17,18 @@ export class QuestionObject {
 
 }
 
+export class EndMessage {
+  no: string;
+  en: string;
+}
+
 export class Survey {
   _id: string;
   name: string;
   comment: string;
   date: string;
   active: boolean;
+  endMessage: EndMessage;
   questionlist: QuestionObject[];
 }
 
@@ -36,18 +42,21 @@ export class Survey {
       "active": true,
       "questionlist": [{
         "mode": "smily",
-        "answer": [1,3,3,3,3],
+        "answer": [1,2,1,2,1,2,1,2],
         "lang": {
           "en": {
-              "txt": "what do you think about mars?",
-              "options": ["AWSOME","coooool","blody iron planet"]
+            "txt": "what do you think about mars?",
+            "options": ["AWSOME","coooool","blody iron planet"]
           },
           "no": {
             "txt": "Hva synes du om Mars?",
-            "options": ["UTROLIG","kuuuuul","teit jernplanet"]
+            "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
           },
-        }
-      }]
+        },
+      }],
+      "endMessage": {
+        "no": "Takk for at du gjennomførte denne undersøkelsen!"
+      }
     }
 
 */
