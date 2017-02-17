@@ -17,7 +17,7 @@ import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateSurveyComponent } from './admin/create-survey/create-survey.component';
+import { CreateSurveyComponent, DisableEnglishDialog } from './admin/create-survey/create-survey.component';
 
 
 
@@ -32,6 +32,7 @@ import { CreateSurveyComponent } from './admin/create-survey/create-survey.compo
     CreateSurveyComponent,
     DisableEnglishDialog
   ],
+  entryComponents: [DisableEnglishDialog],
   imports: [
     BrowserModule,
     FormsModule,
