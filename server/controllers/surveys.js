@@ -24,7 +24,7 @@ exports.createSurvey = (req, res, next) => {
   if (Object.keys(receivedSurvey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
   }
-  if (!val.surveyValidation(receivedSurvey, true)){
+  if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
