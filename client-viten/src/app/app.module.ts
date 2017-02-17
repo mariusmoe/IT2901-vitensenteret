@@ -16,6 +16,7 @@ import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
+import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
 
 
 
@@ -28,7 +29,8 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
     HomepageUserComponent,
     LoginComponent,
     AllSurveysComponent,
-    TestRestAPIComponent
+    TestRestAPIComponent,
+    ActiveSurveyComponent
   ],
   imports: [
     BrowserModule,
