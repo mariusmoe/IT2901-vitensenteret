@@ -31,15 +31,38 @@ function generateToken(user) {
 }
 
 /**
+ * renew JWT
+ * @return {Object}   response object with new token and user
+ */
+exports.getJWT = (req, res, next) => {
+  let user = { _id: req.user._id, email: req.user.email }
+  res.status(200).json({
+    token: 'JWT ' + generateToken(user),
+    user: user
+  });
+}
+
+/**
+ * Delete one account
+ */
+exports.deleteAccount = (req, res, next) => {
+  let id = req.user._id;
+  if (!id){
+    res.status(400).send({message: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code})
+  }
+  User.findByIdAndRemove(id, (err) => {
+    if (err) { return next(err); }
+    res.status(200).send({message: "deleted user"})
+  })
+}
+
+/**
  * Log in a user
  *
- * respons with a json object with a Json web token and the user
+ * respond with a json object with a Json web token and the user
  */
 exports.login = (req, res, next) => {
-  let user = {
-    _id: req.user._id,
-    email: req.user.email
-  }
+  let user = { _id: req.user._id, email: req.user.email }
   res.status(200).json({
     token: 'JWT ' + generateToken(user),
     user: user
@@ -67,15 +90,15 @@ exports.register = (req, res, next) => {
   Referral.findOne({referral: confirm_string}, (err, existingReferral) => {
     if (err) { return next(err); }
 
+    if (!existingReferral) {
+      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
+    }
     if (!existingReferral.active) {
       return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
     } else {
       existingReferral.active = false;
     }
 
-    if (!existingReferral) {
-      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
-    }
     existingReferral.save((err) => {
       if (err) { return next(err); }
       User.findOne({ email: email }, (err, existingUser) => {

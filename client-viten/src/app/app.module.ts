@@ -12,8 +12,12 @@ import { SurveyCreateComponent } from './admin/survey-create/survey-create.compo
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 import { StartSurveyComponent } from './user/start-survey/start-survey.component';
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
-
-
+import { AuthGuard } from './_guards/auth.guard';
+import { AuthenticationService } from './_services/authentication.service';
+import { LoginComponent } from './admin/login/login.component';
+import { SurveyService } from './_services/survey.service';
+import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
+import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
 
 
@@ -23,9 +27,11 @@ import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.compon
     AppComponent,
     HomepageAdminComponent,
     SurveyCreateComponent,
-    HomepageUserComponent,
     StartSurveyComponent,
     ChooseSurveyComponent
+    LoginComponent,
+    AllSurveysComponent,
+    TestRestAPIComponent
   ],
   imports: [
     BrowserModule,
@@ -34,7 +40,11 @@ import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.compon
     AppRoutingModule,
     MaterialModule.forRoot()
   ],
-  providers: [],
+  providers: [
+    AuthGuard,
+    AuthenticationService,
+    SurveyService,
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

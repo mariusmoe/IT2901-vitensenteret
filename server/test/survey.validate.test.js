@@ -10,6 +10,7 @@ let validJsonObject = {
   "active": true,
   "questionlist": [{
     "mode": "smily",
+    // no comment property here. Admin only. see its own test below.
     "answer": [1,3,3,3,3],
     "lang": {
       "en": {
@@ -21,7 +22,10 @@ let validJsonObject = {
         "options": ["UTROLIG","kuuuuul","teit jernplanet"]
       },
     }
-  }]
+  }],
+  "endMessage": {
+    "no": "Takk for at du gjennomførte denne undersøkelsen!"
+  }
 }
 
 
@@ -122,6 +126,34 @@ describe('Survey validation', () => {
     delete clone.name;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
+
+    done();
+  });
+
+  it('should validate the admin comment property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // no comment added yet; its not required.
+
+    // check actual valid string
+    clone.comment = "This survey was made for test purposes; demographic: testonians";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check undefined
+    clone.comment = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // Undefined allowed
+
+    // check null
+    clone.comment = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.comment;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // should validate without the comment.
 
     done();
   });
@@ -252,9 +284,17 @@ describe('Survey validation', () => {
     expect(IsItValid).to.equal(false);
 
     // check valid format but not accepted value 2
-    clone.questionlist[0].mode = "Smiley";
+    clone.questionlist[0].mode = "Smiley"; // should be 'smily'
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
+
+    // check accepted values:
+    let accepted_values = ['binary', 'star', 'multi', 'smily', 'text'];
+    for (let value of accepted_values) {
+      clone.questionlist[0].mode = value;
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(true);
+    }
 
     // check emtpy string
     clone.questionlist[0].mode = "";
@@ -587,4 +627,138 @@ describe('Survey validation', () => {
 
     done();
   });
+
+
+
+  it('should not validate on missing or bad endMessage property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check empty object
+    clone.endMessage = {};
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check empty array
+    clone.endMessage = [];
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false); // must have questions
+
+    // check undefined
+    clone.endMessage = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check null
+    clone.endMessage = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.endMessage;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    done();
+  });
+
+  it('should not validate on missing or bad endMessage properties', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // no is required. en is optional.
+
+    // check emtpy string
+    clone.endMessage.no = "";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace
+    clone.endMessage.no = " "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace 2
+    clone.endMessage.no = "       "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace 3
+    clone.endMessage.no = "       \n"
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check undefined
+    clone.endMessage.no = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check null
+    clone.endMessage.no = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // revert
+    clone.endMessage.no = validJsonObject.endMessage.no;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+
+
+    // and again for en
+
+
+    // check valid string
+    clone.endMessage.en = "Thank you!";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check emtpy string
+    clone.endMessage.en = "";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace
+    clone.endMessage.en = " "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace 2
+    clone.endMessage.en = "       "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace 3
+    clone.endMessage.en = "       \n"
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check undefined
+    clone.endMessage.en = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // true!
+
+    // check null
+    clone.endMessage.en = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+
+
+
+    // check nonexistant for both:
+    delete clone.endMessage.en;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check nonexistant
+    delete clone.endMessage.no;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    done();
+  });
+
 });

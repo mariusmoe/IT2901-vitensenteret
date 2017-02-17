@@ -8,15 +8,18 @@ const mongoose = require('mongoose'),
 
 // IF THIS CHANGES, DO UPDATE libs/validation.js!!
 const SurveySchema = new Schema({
-  name: {
-    type: String
-  },
+  name: String,
+  comment: String,
 	date: Date,
   active: Boolean,
+  endMessage: {
+    en: String,
+    no: String,
+  },
 	questionlist: [{
     mode: {
       type: String,
-      enum: ['smily', 'text'],
+      enum: ['binary', 'star', 'multi', 'smily', 'text'],
       default: 'smily'
     },
     lang: {

@@ -32,7 +32,10 @@ var validJsonObject = {
         "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
       },
     },
-  }]
+  }],
+  "endMessage": {
+    "no": "Takk for at du gjennomførte denne undersøkelsen!"
+  }
 }
 
 describe('Survey API', () => {
@@ -151,6 +154,7 @@ describe('Survey API', () => {
         // verify that the returned object (containing surveys) is valid
         let listOfSurveys = res.body;
         listOfSurveys.should.not.be.empty;
+        listOfSurveys[0].should.have.property('_id');
         listOfSurveys[0].should.have.property('name');
         listOfSurveys[0].should.have.property('date');
         listOfSurveys[0].should.have.property('active');

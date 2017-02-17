@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { SurveyService } from '../../_services/survey.service';
 
 @Component({
   selector: 'app-homepage-admin',
@@ -7,9 +8,16 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomepageAdminComponent implements OnInit {
 
-  constructor() { }
+  private getSelectedSurvey;
+  constructor(private surveyService: SurveyService) {
+    this.getSelectedSurvey = this.surveyService.getSelectedSurvey().subscribe(survey => {
+        console.log(survey); // Subscribe and get user from the authService
+      })
+    }
 
   ngOnInit() {
+    
   }
+
 
 }
