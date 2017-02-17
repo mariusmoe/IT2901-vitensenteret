@@ -90,15 +90,15 @@ exports.register = (req, res, next) => {
   Referral.findOne({referral: confirm_string}, (err, existingReferral) => {
     if (err) { return next(err); }
 
+    if (!existingReferral) {
+      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
+    }
     if (!existingReferral.active) {
       return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
     } else {
       existingReferral.active = false;
     }
 
-    if (!existingReferral) {
-      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
-    }
     existingReferral.save((err) => {
       if (err) { return next(err); }
       User.findOne({ email: email }, (err, existingUser) => {

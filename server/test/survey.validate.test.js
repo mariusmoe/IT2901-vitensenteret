@@ -10,6 +10,7 @@ let validJsonObject = {
   "active": true,
   "questionlist": [{
     "mode": "smily",
+    // no comment property here. Admin only. see its own test below.
     "answer": [1,3,3,3,3],
     "lang": {
       "en": {
@@ -122,6 +123,34 @@ describe('Survey validation', () => {
     delete clone.name;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
+
+    done();
+  });
+
+  it('should validate the admin comment property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // no comment added yet; its not required.
+
+    // check actual valid string
+    clone.comment = "This survey was made for test purposes; demographic: testonians";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check undefined
+    clone.comment = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // Undefined allowed
+
+    // check null
+    clone.comment = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.comment;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // should validate without the comment.
 
     done();
   });
@@ -252,9 +281,17 @@ describe('Survey validation', () => {
     expect(IsItValid).to.equal(false);
 
     // check valid format but not accepted value 2
-    clone.questionlist[0].mode = "Smiley";
+    clone.questionlist[0].mode = "Smiley"; // should be 'smily'
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
+
+    // check accepted values:
+    let accepted_values = ['binary', 'star', 'multi', 'smily', 'text'];
+    for (let value of accepted_values) {
+      clone.questionlist[0].mode = value;
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(true);
+    }
 
     // check emtpy string
     clone.questionlist[0].mode = "";

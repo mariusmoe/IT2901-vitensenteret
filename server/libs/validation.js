@@ -39,7 +39,7 @@ let questionSchema = {
   "type": "object",
   "properties": {
     "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
-    "mode": { "enum": [ "smily", "text" ] },
+    "mode": { "enum": [ "binary", "star", "multi", "smily", "text" ] },
     "answer": { "type": "array", "items": { "type": "integer", "minimum": 0, "required": true } }, // required here forces the integer type, else "undefined" would be allowed
     "lang": {
       "$ref": "/language", // references the languageSchema above here
@@ -56,6 +56,7 @@ let surveySchema = {
   "properties": {
     "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
     "__v": { "type": "integer" }, // mongodb sends surveys back to client with this property. Not required.
+    "comment": { "type": "string" }, // ADMIN only comment. Not required. Any type of string allowed.
     "name": { "type": "string", "pattern": /\S/ },
     "date": { "type": "string", "format": "date-time" },
     "active": { "type": "boolean" },
