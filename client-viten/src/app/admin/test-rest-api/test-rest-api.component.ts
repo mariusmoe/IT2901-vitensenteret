@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { Survey, QuestionObject, Lang, Question } from '../../_models/survey';
+import { Survey, QuestionObject, Lang, Question, EndMessage } from '../../_models/survey';
 
 @Component({
   selector: 'app-test-rest-api',
@@ -24,6 +24,8 @@ export class TestRestAPIComponent implements OnInit {
         s.name = "New TEST survey";
         s.date = "2012-04-23T18:25:43.511Z";
         s.questionlist = [];
+        s.endMessage = new EndMessage();
+        s.endMessage.no = "Takk!"
 
         let qo = new QuestionObject();
         qo.mode = "smily";

@@ -1,0 +1,96 @@
+<!-- let validJsonObject = {
+  "name": "måneraketten3",
+  "date": "2012-04-23T18:25:43.511Z",
+  "active": true,
+  "questionlist": [{
+    "mode": "smily",
+    "answer": [1,2,1,2,1,2,1,2],
+    "lang": {
+      "en": {
+        "txt": "what do you think about mars?",
+        "options": ["AWSOME","coooool","blody iron planet"]
+      },
+      "no": {
+        "txt": "Hva synes du om Mars?",
+        "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
+      },
+    },
+  }],
+  "endMessage": {
+    "no": "Takk for at du gjennomførte denne undersøkelsen!"
+  }
+} -->
+
+
+<div class="container">
+  <h2>Create Survey</h2>
+  <form [formGroup]="surveyForm" (ngSubmit)="submitForm(surveyForm.value)">
+    <div class="form-group" [ngClass]="{'has-error':!surveyForm.controls['name'].valid && surveyForm.controls['name'].touched}">
+
+      <h3>Survey options</h3>
+
+      <md-input-container class="example-full-width">
+        <input md-input class="form-control" type="text" placeholder="Title" [formControl]="surveyForm.controls['name']" required>
+        <md-hint *ngIf="surveyForm.controls['name'].hasError('required') && surveyForm.controls['name'].touched">
+          <span class="red" *ngIf="surveyForm.controls['name'].hasError('required') && surveyForm.controls['name'].touched">This field is required</span>
+        </md-hint>
+      </md-input-container>
+
+      <md-input-container class="example-full-width">
+        <input md-input class="form-control" type="date" placeholder="Date" [formControl]="surveyForm.controls['date']" required>
+        <md-hint *ngIf="surveyForm.controls['date'].hasError('required') && surveyForm.controls['date'].touched">
+          <span class="red" *ngIf="surveyForm.controls['date'].hasError('required') && surveyForm.controls['date'].touched">This field is required</span>
+        </md-hint>
+      </md-input-container>
+      <br>
+
+      <md-checkbox [formControl]="surveyForm.controls['active']">Set survey to active upon creation?</md-checkbox>
+    </div>
+    <br>
+
+    <h3>End screen message</h3>
+
+    <div class="form-group" [ngClass]="{'has-error':!surveyForm.controls['endMessage.no'].valid && surveyForm.controls['endMessage.no'].touched}">
+      <md-input-container class="example-full-width">
+        <input md-input class="form-control" type="text" placeholder="End message (Norwegian)" [formControl]="surveyForm.controls['endMessage.no']" required>
+        <md-hint *ngIf="surveyForm.controls['endMessage.no'].hasError('required') && surveyForm.controls['endMessage.no'].touched">
+          <span class="red" *ngIf="surveyForm.controls['endMessage.no'].hasError('required') && surveyForm.controls['endMessage.no'].touched">This field is required</span>
+        </md-hint>
+      </md-input-container>
+
+      <md-input-container class="example-full-width">
+        <input md-input class="form-control" type="text" placeholder="End message (English)" [formControl]="surveyForm.controls['endMessage.no']" required>
+        <md-hint *ngIf="surveyForm.controls['endMessage.en'].hasError('required') && surveyForm.controls['endMessage.en'].touched">
+          <span class="red" *ngIf="surveyForm.controls['endMessage.en'].hasError('required') && surveyForm.controls['endMessage.en'].touched">This field is required</span>
+        </md-hint>
+      </md-input-container>
+    </div>
+    <br>
+    <h3>Questions</h3>
+
+    <div formArrayName="addresses"  class="form-group">
+      <div *ngFor="let address of myForm.controls.addresses.controls; let i=index">
+        <h4>Question {{i+1}}</h4>
+        <div [formGroupName]="i">
+          
+        </div>
+      </div>
+    </div>
+
+    <br>
+    <br>
+    <button md-raised-button
+      #submitLoginForm
+      type="submit"
+      class="btn btn-success"
+      [disabled]="!surveyForm.valid"
+      color="primary">
+      <span [mdTooltip]="(!surveyForm.valid) ? 'Several fields are required. Verify that you have filled out all required fields.' : '' ">
+        Submit
+      </span>
+    </button>
+    <!-- loading circle -->
+    <md-progress-circle *ngIf="loading" mode="indeterminate" class="smaller loadingcircle" color="primary"></md-progress-circle>
+
+  </form>
+</div>
