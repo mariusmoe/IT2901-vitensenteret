@@ -26,7 +26,7 @@ let languageSchema = {
         },
         "required": true,
       },
-      "required": ["txt", "options"],
+      "required": ["txt"],
       "additionalProperties": false,
     },
   },

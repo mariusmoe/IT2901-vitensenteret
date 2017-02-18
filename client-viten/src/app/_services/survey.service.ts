@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs';
-import { Survey, QuestionObject, Lang, Question } from '../_models/survey';
+import { Survey } from '../_models/survey';
 import { SurveyList } from '../_models/index';
 import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
 
@@ -60,37 +60,15 @@ export class SurveyService {
        let jsonResponse = response.json();
        if (response.status != 200){
          console.error(jsonResponse.status + " : " + jsonResponse.message);
-         return null;
-       }
-       console.info(jsonResponse.status + " : " + jsonResponse.message);
-
-       let json = response.json();
-       let s = new Survey();
-       s._id = json._id;
-       s.name = json.name;
-       s.date = json.date;
-       s.active = json.active;
-       s.questionlist = [];
-       for (let i = 0; i<json.questionlist.length; i++) {
-         let qo = new QuestionObject();
-         qo.mode = json.questionlist.mode;
-         qo.answer = json.questionlist.answer;
-         qo.lang = new Lang();
-
-         for (let language in json.questionlist[i].lang) {
-           let q = new Question();
-           q.txt = json.questionlist[i].lang.txt;
-           q.options = json.questionlist[i].lang.options;
-           qo.lang[language] = q;
-         }
-         s.questionlist[i] = qo;
-       }
+         return Observable.create(null);
+       }   
+       let s: Survey = response.json();
        return s;
      },
      error => {
        let errMsg = (error.message) ? error.message :
          error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-         return Observable.throw(false);
+         return error;
      });
  }
 
@@ -122,34 +100,14 @@ export class SurveyService {
         console.error(jsonResponse.status + " : " + jsonResponse.message);
         return false;
       }
-      let json = response.json();
-      let s = new Survey();
-      s._id = json._id;
-      s.name = json.name;
-      s.date = json.date;
-      s.active = json.active;
-      s.questionlist = [];
-      for (let i = 0; i<json.questionlist.length; i++) {
-        let qo = new QuestionObject();
-        qo.mode = json.questionlist.mode;
-        qo.answer = json.questionlist.answer;
-        qo.lang = new Lang();
-
-        for (let language in json.questionlist[i].lang) {
-          let q = new Question();
-          q.txt = json.questionlist[i].lang.txt;
-          q.options = json.questionlist[i].lang.options;
-          qo.lang[language] = q;
-        }
-        s.questionlist[i] = qo;
-      }
+      let s: Survey = response.json();
       console.info("post successful.");
       return s;
     },
     error => {
       let errMsg = (error.message) ? error.message :
         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        return Observable.throw(false);
+        return error;
     });
   }
 
@@ -180,7 +138,7 @@ export class SurveyService {
       error => {
         let errMsg = (error.message) ? error.message :
           error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-          return Observable.throw(false);
+          return error;
       });
   }
 
@@ -194,7 +152,7 @@ export class SurveyService {
   deleteSurvey(surveyId: string): Observable<boolean> {
     let token = this.getToken();
     if (!token) {
-      return Observable.throw('jwt not found'); // TODO: fix me.
+      return Observable.apply(false);
     }
 
     let headers = new Headers();
@@ -216,7 +174,7 @@ export class SurveyService {
       error => {
         let errMsg = (error.message) ? error.message :
           error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-          return Observable.throw(false);
+          return error;
       });
   }
 
@@ -266,7 +224,7 @@ export class SurveyService {
           let errMsg = (error.message) ? error.message :
             error.status ? `${error.status} - ${error.statusText}` : 'Server error';
           // console.error(errMsg); // log to console instead
-          return Observable.throw(errMsg);
+          return error;
         });
   }
 

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { Survey, QuestionObject, Lang, Question, EndMessage } from '../../_models/survey';
+import { Survey } from '../../_models/survey';
 
 @Component({
   selector: 'app-test-rest-api',
@@ -19,25 +19,25 @@ export class TestRestAPIComponent implements OnInit {
           console.log("TEST messed up on login");
           return;
         }
-        let s = new Survey();
-        s.active = true;
-        s.name = "New TEST survey";
-        s.date = "2012-04-23T18:25:43.511Z";
-        s.questionlist = [];
-        s.endMessage = new EndMessage();
-        s.endMessage.no = "Takk!"
-
-        let qo = new QuestionObject();
-        qo.mode = "smily";
-        qo.answer = [];
-
-        let lang = new Lang();
-        lang.en = new Question();
-        lang.en.txt = "Question?";
-        lang.en.options = ["1", "2", "3"];
-
-        qo.lang = lang;
-        s.questionlist[0] = qo;
+        let s = {
+          active: true,
+          name: 'New TEST survey',
+          comment: 'for testing purposes!',
+          date: '2012-04-23T18:25:43.511Z',
+          questionlist: [
+            {
+              mode: 'smily',
+              lang: {
+                no: {
+                  txt: 'question?',
+                }
+              }
+            }
+          ],
+          endMessage: {
+            no: 'takk!'
+          }
+        }
         console.log("ORIGINAL SURVEY:");
         console.log(s);
 
@@ -48,7 +48,8 @@ export class TestRestAPIComponent implements OnInit {
           console.log(postResult);
 
           s.name = "PATCHED TEST Survey";
-          s.questionlist[1] = qo; // add one more question
+          // add one more question
+          s.questionlist[1] = {mode: 'smily', lang: {no: { txt: 'wat'}}}
 
           this.surveyService.patchSurvey(postResult._id, s).subscribe(patchResult => {
             console.log("PATCH RETURN SURVEY:");

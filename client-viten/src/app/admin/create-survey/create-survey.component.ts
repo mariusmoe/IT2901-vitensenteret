@@ -1,8 +1,8 @@
-import { Component, OnInit, Input, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
-import { Survey, QuestionObject, Lang, Question, EndMessage } from '../../_models/survey';
+import { Survey, QuestionObject } from '../../_models/survey';
 import {MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA} from '@angular/material';
-
+import { Router, ActivatedRoute, Params } from '@angular/router';
 
 @Component({
   selector: 'app-create-survey',
@@ -10,31 +10,68 @@ import {MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA} from '@angular/ma
   styleUrls: ['./create-survey.component.scss']
 })
 export class CreateSurveyComponent implements OnInit {
-  private loading: boolean = false;
+  private submitLoading: boolean = false;
+  private startupLoading: boolean = true;
   private error: string;
   private englishEnabled: boolean = false;
-  @Input() survey: Survey; // allow taking in a survey as input. This is used for the patch feature
+  private survey: Survey;
   private isPatch: boolean = false;
 
   private allowedModes = ['binary', 'star', 'multi', 'smily', 'text'];
+  private allowedModesVerbose = {
+    'binary': 'Yes/No',
+    'star': '5 Stars',
+    'multi': 'Multiple Choice',
+    'smily': 'Smily',
+    'text': 'Free Text'
+  };
   private stringPattern = /\S/;
+  private fieldIsRequiredMsg = 'This field is required.';
+  private tooltipDeleteQuestionMsg = 'Deletes this particular question! Careful!';
+  private tooltipSelectQuestionModeMsg = 'Select your question mode here!';
+  private tooltipSubmitSurveyMsg = 'Several fields are required. Verify that you have filled out all required fields.';
 
+  private maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
 
-  constructor(private dialog: MdDialog, private surveyService: SurveyService) {
-    if (!this.survey) {
-      this.survey = new Survey();
-      this.survey.name = "";
-      this.survey.active = true;
-      this.survey.date = new Date().toISOString();
-      this.survey.questionlist = [];
-      this.survey.endMessage = new EndMessage();
-    } else {
-      this.isPatch = true;
-    }
+  constructor(private dialog: MdDialog, private surveyService: SurveyService,
+    private router: Router, private route: ActivatedRoute) {
+
   }
 
   ngOnInit() {
+    if (this.route.snapshot.params['surveyId']){
+      this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+        if (!result) {
+          console.log("DEBUG: BAD surveyId param from router!");
+          return;
+        }
+        this.survey = result;
+        console.log(this.survey);
+        this.isPatch = true;
+
+        // TODO: fix me! this is a slightly awkward way to detect english.
+        if (this.survey.questionlist[0].lang.en && this.survey.questionlist[0].lang.en.txt.length > 0) {
+          this.englishEnabled = true;
+        }
+        this.startupLoading = false;
+      });
+    } else {
+      this.survey = {
+        "name": "",
+        "comment": "",
+        "date": new Date().toISOString(),
+        "active": true,
+        "questionlist": [],
+        "endMessage": {
+          "no": "",
+          "en": "",
+        }
+      }
+      this.startupLoading = false;
+    }
   }
+
+
 
   // private changeEnglishState(state) {
   //   if (!state) {
@@ -66,8 +103,7 @@ export class CreateSurveyComponent implements OnInit {
       }
     } else {
       for (let qo of this.survey.questionlist) {
-        qo.lang.en = new Question();
-        qo.lang.en.options = [];
+        qo.lang.en = { txt: '', options: [] }
       }
     }
     this.englishEnabled = state
@@ -77,13 +113,16 @@ export class CreateSurveyComponent implements OnInit {
     console.log(this.survey);
 
     let f = function(result: Survey) {
+      console.log(result);
       // 1 verify survey
       // 2 if success, redirect, else give feedback to the user
       console.log("TODO: REDIRECT ME TO LIST OF SURVEYS!")
     }
     if (this.isPatch) {
+      console.log("PATCHING...")
       this.surveyService.patchSurvey(this.survey._id, this.survey).subscribe(result => f(result));
     } else {
+      console.log("POSTING...")
       this.surveyService.postSurvey(this.survey).subscribe(result => f(result));
     }
 
@@ -91,16 +130,15 @@ export class CreateSurveyComponent implements OnInit {
   }
 
   private addQuestion() {
-    let qo = new QuestionObject();
-    qo.mode = 'smily'; // default mode
-    qo.lang = new Lang();
-    qo.lang.no = new Question();
-    qo.lang.no.options = [];
-    if (this.englishEnabled) {
-      qo.lang.en = new Question();
-      qo.lang.en.options = [];
+    let qo: QuestionObject = {
+      mode: 'smily',
+      lang: {
+        no: { txt: '', options: [] }
+      }
     }
-
+    if (this.englishEnabled) {
+      qo.lang.en = { txt: '', options: [] }
+    }
     this.survey.questionlist.push(qo);
   }
   private removeQuestion(index: number) {
@@ -109,9 +147,9 @@ export class CreateSurveyComponent implements OnInit {
 
 
   private addOption(qo: QuestionObject) {
-    qo.lang.no.options.push("1");
+    qo.lang.no.options.push("");
     if (this.englishEnabled) {
-      qo.lang.en.options.push("1");
+      qo.lang.en.options.push("");
     }
   }
   private removeOption(qo: QuestionObject, index: number) {

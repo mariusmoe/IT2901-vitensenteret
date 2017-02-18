@@ -1,24 +1,33 @@
 
+h1 {
+  text-align: center;
+  display: block;
+}
 
 md-card {
-  flex: 1 1;
+  md-input-container {
+    display: inline-block;
+  }
+
   &.questionObject {
-    margin: 20px;
-    max-width: 200px;
-    min-width: 200px;
+    flex: 1 1;
+    margin: 5px;
+    max-width: 250px;
+    min-width: 250px;
 
     md-input-container {
-      margin: 20px 0;
-      display: block;
+      width: 100%;
     }
   }
+
 }
 
-.inlineBlock {
-  display: inline-block;
+md-input-container {
+  margin: 10px 0 20px 0;
+  md-hint {
+    color: red;
+  }
 }
-
-
 
 
 .flexParent {
@@ -26,4 +35,28 @@ md-card {
   justify-content: flex-start;
   align-items: flex-start;
   flex-wrap: wrap;
+}
+
+.surveyOptions {
+  @extend .flexParent;
+  align-items: stretch;
+  md-card {
+    flex: 1 1;
+    min-width: 400px;
+  }
+}
+
+.optionContainer {
+  margin-bottom: 20px;
+}
+
+.startupLoading,
+.submitBox {
+  @extend .flexParent;
+  justify-content: center;
+
+  md-progress-circle,
+  button {
+    flex: 0 1;
+  }
 }

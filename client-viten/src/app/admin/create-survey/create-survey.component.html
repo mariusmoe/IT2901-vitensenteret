@@ -1,137 +1,128 @@
-<!-- let validJsonObject = {
-  "name": "måneraketten3",
-  "date": "2012-04-23T18:25:43.511Z",
-  "active": true,
-  "questionlist": [{
-    "mode": "smily",
-    "answer": [1,2,1,2,1,2,1,2],
-    "lang": {
-      "en": {
-        "txt": "what do you think about mars?",
-        "options": ["AWSOME","coooool","blody iron planet"]
-      },
-      "no": {
-        "txt": "Hva synes du om Mars?",
-        "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
-      },
-    },
-  }],
-  "endMessage": {
-    "no": "Takk for at du gjennomførte denne undersøkelsen!"
-  }
-} -->
-
-
 <div class="container">
-  <h2>Create Survey</h2>
-  <md-card>
-    <md-card-title>Survey options</md-card-title>
-    <md-card-content>
-      <md-input-container>
-        <!-- SURVEY NAME -->
-        <input mdInput type="text" placeholder="Title" ng-pattern="stringPattern" [(ngModel)]="survey.name" required>
-        <md-hint *ngIf="false"> <!-- fixme! -->
-          <span class="red">This field is required</span>
-        </md-hint>
-      </md-input-container>
-
-      <!-- SURVEY DATE -->
-      <!-- <md-input-container>
-        <input mdInput class="form-control" type="date" placeholder="Date" [(ngModel)]="survey.date" required>
-        <md-hint *ngIf="false">
-          <span class="red">This field is required</span>
-        </md-hint>
-      </md-input-container> -->
-      <br />
-      <!-- SURVEY ACTIVE STATE -->
-      <md-checkbox [(ngModel)]="survey.active">Set survey to active upon creation?</md-checkbox>
-      <br />
-      <!-- USE ENGLISH? -->
-      <md-checkbox [(ngModel)]='englishEnabled' (change)="changeEnglishState($event.checked)">Enable English for this survey?</md-checkbox>
-    </md-card-content>
-  </md-card>
-  <br />
-  <md-card>
-    <md-card-title>Questions</md-card-title>
-    <md-card-content>
-      <div class="flexParent">
-        <!-- QUESTIONOBJECT -->
-        <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index">
-          <md-card-title>Question {{i+1}}</md-card-title>
-          <md-card-content>
-            <!-- QUESTION MODE -->
-            <label>Question Mode</label>
-            <md-menu #questionMode="mdMenu">
-              <button md-menu-item *ngFor="let m of allowedModes" (click)='questionObject.mode = m'>{{m}}</button>
-            </md-menu>
-            <button md-raised-button [mdMenuTriggerFor]="questionMode">
-               {{questionObject.mode}}
-            </button>
-            <br />
-
-            <!-- QUESTION TEXT -->
+  <h1>Create Survey</h1>
+  <!-- DISPLAY THIS WHEN WE HAVE A SURVEY TO ACTUALLY DISPLAY. THIS IS INSTANT WHEN CREATING A NEW SURVEY -->
+  <div *ngIf="!startupLoading">
+    <div class="optionContainer surveyOptions">
+      <md-card>
+        <md-card-title>Survey options</md-card-title>
+        <md-card-subtitle>Fill in every field marked as required</md-card-subtitle>
+        <md-card-content>
+          <div>
             <md-input-container>
-              <input mdInput type="text" placeholder="Question (Norwegian)" ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.no.txt" required>
-              <md-hint *ngIf="questionObject.lang.no.txt === ''"> <!-- fixme! -->
-                <span class="red">This field is required</span>
-              </md-hint>
+              <!-- SURVEY NAME -->
+              <input mdInput type="text" placeholder="Title" ng-pattern="stringPattern" [(ngModel)]="survey.name" required>
+              <md-hint *ngIf="survey.name === ''" color="warn">{{fieldIsRequiredMsg}}</md-hint>
             </md-input-container>
-            <md-input-container *ngIf="englishEnabled">
-              <input mdInput type="text" placeholder="Question (English)" ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.en.txt">
+
+            <md-input-container>
+              <!-- SURVEY COMMENT -->
+              <input mdInput type="text" placeholder="Admin-only Comment" ng-pattern="stringPattern" [(ngModel)]="survey.comment" required>
+              <md-hint *ngIf="survey.comment === ''" color="warn">{{fieldIsRequiredMsg}}</md-hint>
             </md-input-container>
-            <br />
-            <br />
+          </div>
 
-            <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
-            <div *ngIf="questionObject.mode === 'multi'">
-              <button md-raised-button color="primary" (click)="console.log('SET ALTERNATIVES: NOT YET IMPLEMENTED!')">Set Alternatives [NYI]</button>
-            </div>
+          <!-- SURVEY DATE -->
+          <!-- <md-input-container>
+            <input mdInput class="form-control" type="date" placeholder="Date" [(ngModel)]="survey.date" required>
+            <md-hint *ngIf="false">
+              <span class="red">This field is required</span>
+            </md-hint>
+          </md-input-container> -->
 
-          </md-card-content>
-          <md-card-actions>
-            <button md-raised-button class="btn btn-success" color="warn" type="submit" (click)="removeQuestion(i)">
-              <span [mdTooltip]="'Deletes this particular question! Careful!'">
-                Delete
-              </span>
-            </button>
-          </md-card-actions>
-        </md-card>
-      </div>
-    </md-card-content>
-    <md-card-actions>
-      <button md-raised-button class="btn btn-success" color="primary" type="submit" (click)="addQuestion()">
-        <span [mdTooltip]="(error) ? '' : '' ">
-          Add a question
-        </span>
+
+          <div>
+            <!-- SURVEY ACTIVE STATE -->
+            <md-checkbox [(ngModel)]="survey.active">Set survey to active upon creation?</md-checkbox>
+          </div>
+          <div>
+            <!-- USE ENGLISH? -->
+            <md-checkbox [(ngModel)]='englishEnabled' (change)="changeEnglishState($event.checked)">Enable English for this survey?</md-checkbox>
+          </div>
+        </md-card-content>
+      </md-card>
+      <!-- FINAL MESSAGE COMES HERE! -->
+      <md-card>
+        <md-card-title>Final Message</md-card-title>
+        <md-card-subtitle>The final text to be displayed as a user completes a survey</md-card-subtitle>
+        <md-card-content>
+          <md-input-container>
+            <!-- SURVEY ENDMESSAGE NO -->
+            <input mdInput type="text" placeholder="Message (Norwegian)" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.no" required>
+            <md-hint *ngIf="survey.endMessage.no === ''" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+          </md-input-container>
+          <md-input-container *ngIf="englishEnabled">
+            <!-- SURVEY ENDMESSAGE EN -->
+            <input mdInput type="text" placeholder="Message (English)" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.en" required>
+            <md-hint *ngIf="survey.endMessage.en === ''" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+          </md-input-container>
+        </md-card-content>
+      </md-card>
+    </div>
+
+    <!-- QUESTIONS START HERE  -->
+
+    <div class="optionContainer">
+      <md-card>
+        <md-card-title>Questions</md-card-title>
+        <md-card-content>
+          <div class="flexParent">
+            <!-- QUESTIONOBJECT -->
+            <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index">
+              <md-card-title>Question {{i+1}}</md-card-title>
+              <md-card-content>
+                <!-- QUESTION MODE -->
+                <label>Question Mode:</label>
+                <button md-button [mdMenuTriggerFor]="questionMode" [mdTooltip]="tooltipSelectQuestionModeMsg" tooltip-position="above">
+                   {{allowedModesVerbose[questionObject.mode]}}
+                </button>
+                <md-menu #questionMode="mdMenu">
+                  <button md-menu-item *ngFor="let m of allowedModes" (click)='questionObject.mode = m'>{{allowedModesVerbose[m]}}</button>
+                </md-menu>
+
+                <!-- QUESTION TEXT -->
+                <md-input-container>
+                  <input mdInput type="text" placeholder="Question (Norwegian)" [attr.maxlength]="maxQuestionLength"
+                  ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.no.txt" required>
+                  <md-hint *ngIf="questionObject.lang.no.txt === ''" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+                </md-input-container>
+                <md-input-container *ngIf="englishEnabled">
+                  <input mdInput type="text" placeholder="Question (English)" [attr.maxlength]="maxQuestionLength"
+                  ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.en.txt" required>
+                  <md-hint *ngIf="questionObject.lang.en.txt === ''" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+                </md-input-container>
+
+
+                <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
+                <div *ngIf="questionObject.mode === 'multi'">
+                  <button md-raised-button color="primary" (click)="console.log('SET ALTERNATIVES: NOT YET IMPLEMENTED!')">Set Alternatives [NYI]</button>
+                </div>
+
+              </md-card-content>
+              <md-card-actions align="right">
+                <button md-raised-button class="btn btn-success" color="warn" (click)="removeQuestion(i)"
+                [mdTooltip]="tooltipDeleteQuestionMsg" tooltip-position="above">
+                  Delete
+                </button>
+              </md-card-actions>
+            </md-card>
+          </div>
+        </md-card-content>
+        <md-card-actions>
+          <button md-raised-button class="btn btn-success" color="primary" (click)="addQuestion()">
+            Add a question
+          </button>
+        </md-card-actions>
+      </md-card>
+    </div>
+    <div class="submitBox optionContainer">
+      <button md-raised-button class="btn btn-success" [disabled]="error" color="primary" type="submit" (click)="submitSurvey()"
+        [mdTooltip]="tooltipSubmitSurveyMsg" tooltip-position="above" *ngIf="!loading">
+        Submit
       </button>
-    </md-card-actions>
-  </md-card>
-  <br />
-  <md-card>
-    <md-card-title>Final Message</md-card-title>
-    <md-card-subtitle>The final text to be displayed as a user completes a survey</md-card-subtitle>
-    <md-card-content>
-      <md-input-container>
-        <!-- SURVEY ENDMESSAGE NO -->
-        <input mdInput type="text" placeholder="Message (Norwegian)" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.no" required>
-        <md-hint *ngIf="false"> <!-- fixme! -->
-          <span class="red">This field is required</span>
-        </md-hint>
-      </md-input-container>
-      <md-input-container *ngIf="englishEnabled">
-        <!-- SURVEY ENDMESSAGE EN -->
-        <input mdInput type="text" placeholder="Message (English)" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.en" required>
-      </md-input-container>
-    </md-card-content>
-  </md-card>
-
-  <br />
-  <br />
-  <button md-raised-button class="btn btn-success" [disabled]="error" color="primary" type="submit" (click)="submitSurvey()">
-    <span [mdTooltip]="(error) ? 'Several fields are required. Verify that you have filled out all required fields.' : '' ">
-      Submit
-    </span>
-  </button>
-  <!-- loading circle -->
-  <md-progress-circle *ngIf="loading" mode="indeterminate" class="smaller loadingcircle" color="primary"></md-progress-circle>
+      <div *ngIf="submitLoading">
+        <!-- loading circle -->
+        <md-progress-circle mode="indeterminate" class="smaller loadingcircle" color="primary"></md-progress-circle>
+      </div>
+    </div>
+  </div>
 </div>

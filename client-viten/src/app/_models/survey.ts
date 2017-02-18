@@ -1,35 +1,35 @@
 
 
-export class Question {
-  txt: string;
-  options: string[];
-}
 
-export class Lang {
-  en: Question;
-  no: Question;
-}
+// optional flag: '?', usage: optionalField?: valueTypeOfOptionalField
 
-export class QuestionObject {
+export interface QuestionObject {
   mode: string; // allowed values: 'binary', 'star', 'multi', 'smily', 'text'
-  answer: number[];
-  lang: Lang;
-
+  answer?: number[];
+  lang: {
+    en?: {
+      txt: string;
+      options?: string[];
+    };
+    no: {
+      txt: string;
+      options?: string[];
+    };
+  };
 }
 
-export class EndMessage {
-  no: string;
-  en: string;
-}
 
-export class Survey {
-  _id: string;
+export interface Survey {
+  _id?: string;
   name: string;
-  comment: string;
+  comment?: string;
   date: string;
   active: boolean;
-  endMessage: EndMessage;
-  questionlist: QuestionObject[];
+  questionlist?: QuestionObject[];
+  endMessage: {
+    no: string;
+    en?: string;
+  };
 }
 
 /*
@@ -50,7 +50,7 @@ export class Survey {
           },
           "no": {
             "txt": "Hva synes du om Mars?",
-            "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
+            "options": ["UTROLIG","kuuuuul","dumme jernplanet"]
           },
         },
       }],

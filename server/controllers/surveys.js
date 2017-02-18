@@ -83,6 +83,7 @@ exports.patchOneSurvey = (req, res, next) => {
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
 
   let survey = req.body;
+
   // make sure it isn't just an empty object.
   if (Object.keys(survey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
@@ -92,8 +93,14 @@ exports.patchOneSurvey = (req, res, next) => {
   }
   // Set ID
   survey._id = surveyId;
-  Survey.findByIdAndUpdate( surveyId, {$set: survey, $inc: { __v: 1 }}, {new: true, }, (err, survey) => {
+  // if we receive a __v property in our survey, mongodb will crash
+  // as it will attempt to SET and also INC the value at the same time (see below).
+  delete survey.__v; // DO NOT REMOVE THIS!!
+  // thus we delete the version here.
+
+  Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
     if (!survey) {
+      console.log(err);
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
