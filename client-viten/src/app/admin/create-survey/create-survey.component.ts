@@ -10,13 +10,15 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   styleUrls: ['./create-survey.component.scss']
 })
 export class CreateSurveyComponent implements OnInit {
+  // COMPONENT VARIABLES
   private submitLoading: boolean = false;
   private startupLoading: boolean = true;
-  private error: string;
   private englishEnabled: boolean = false;
-  private survey: Survey;
-  private isPatch: boolean = false;
 
+  // SURVEY VARIABLES
+  private survey: Survey;
+  private maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
+  private isPatch: boolean = false;
   private allowedModes = ['binary', 'star', 'multi', 'smily', 'text'];
   private allowedModesVerbose = {
     'binary': 'Yes/No',
@@ -25,24 +27,40 @@ export class CreateSurveyComponent implements OnInit {
     'smily': 'Smily',
     'text': 'Free Text'
   };
+
+  // FORMATTING VARIABLES
   private stringPattern = /\S/;
+
+  // TOOLTIP LOCALES
   private fieldIsRequiredMsg = 'This field is required.';
   private tooltipDeleteQuestionMsg = 'Deletes this particular question! Careful!';
   private tooltipSelectQuestionModeMsg = 'Select your question mode here!';
   private tooltipSubmitSurveyMsg = 'Several fields are required. Verify that you have filled out all required fields.';
 
-  private maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
 
+  /**
+   * constructor
+   *
+   * uses MdDialog, SurveyService, Router and ActivatedRoute
+   */
   constructor(private dialog: MdDialog, private surveyService: SurveyService,
     private router: Router, private route: ActivatedRoute) {
 
   }
 
+
+  /**
+   * ngOnInit()
+   *
+   * Executes when DOM is about to initialize. DOM is to render once this finishes.
+   */
   ngOnInit() {
+    // If we have a router parameter, we should attempt to use that first.
     if (this.route.snapshot.params['surveyId']){
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
           console.log("DEBUG: BAD surveyId param from router!");
+          // TODO: Redirect to base create survey ?
           return;
         }
         this.survey = result;
@@ -50,128 +68,148 @@ export class CreateSurveyComponent implements OnInit {
         this.isPatch = true;
 
         // TODO: fix me! this is a slightly awkward way to detect english.
-        if (this.survey.questionlist[0].lang.en && this.survey.questionlist[0].lang.en.txt.length > 0) {
+        if (this.survey.questionlist[0].lang.en) {
           this.englishEnabled = true;
         }
         this.startupLoading = false;
       });
-    } else {
-      this.survey = {
-        "name": "",
-        "comment": "",
-        "date": new Date().toISOString(),
-        "active": true,
-        "questionlist": [],
-        "endMessage": {
-          "no": "",
-          "en": "",
-        }
-      }
-      this.startupLoading = false;
+      return;
     }
+    // Set defaults seeing we had no router parameter
+    this.survey = {
+      "name": "",
+      "comment": "",
+      "date": new Date().toISOString(),
+      "active": true,
+      "questionlist": [],
+      "endMessage": {
+        "no": "",
+        "en": "", // do not remove. see submitSurvey for handling of english properties.
+      }
+    }
+    this.startupLoading = false;
   }
 
 
 
-  // private changeEnglishState(state) {
-  //   if (!state) {
-  //     let dialogRef = this.dialog.open(DisableEnglishDialog, {
-  //       height: '200px',
-  //       width: '400px',
-  //     });
-  //     dialogRef.afterClosed().subscribe( result => {
-  //       if (!state) {
-  //         for (let qo of this.survey.questionlist) {
-  //           delete qo.lang.en;
-  //         }
-  //       }
-  //       this.englishEnabled = state;
-  //     })
-  //   } else {
-  //     for (let qo of this.survey.questionlist) {
-  //       qo.lang.en = new Question();
-  //       qo.lang.en.options = [];
-  //     }
-  //     this.englishEnabled = state
-  //   }
-  // }
+  /**
+   * submitSurvey()
+   *
+   * Sends a http POST or a http PATCH request with the survey to the server.
+   */
+  private submitSurvey() {
+    let clone: Survey = JSON.parse(JSON.stringify(this.survey));
 
-  private changeEnglishState(state) {
-    if (!state) {
-      for (let qo of this.survey.questionlist) {
+    // remove options-properties of non-multi questions
+    for (let qo of clone.questionlist) {
+      if (qo.mode != 'multi') {
+        delete qo.lang.no.options;
+        delete qo.lang.en.options;
+      }
+    }
+    // remove english fields from our submitted survey if it is not enabled
+    if (!this.englishEnabled) {
+      delete clone.endMessage.en;
+      for (let qo of clone.questionlist) {
         delete qo.lang.en;
       }
-    } else {
-      for (let qo of this.survey.questionlist) {
-        qo.lang.en = { txt: '', options: [] }
-      }
     }
-    this.englishEnabled = state
-  }
-
-  private submitSurvey() {
-    console.log(this.survey);
-
-    let f = function(result: Survey) {
+    console.log(clone);
+    // Execute the following when we've gotten a response from the server
+    let f = (result: Survey) => {
       console.log(result);
       // 1 verify survey
       // 2 if success, redirect, else give feedback to the user
       console.log("TODO: REDIRECT ME TO LIST OF SURVEYS!")
     }
+    // Send request to the server; either PATCH or POST.
     if (this.isPatch) {
-      console.log("PATCHING...")
-      this.surveyService.patchSurvey(this.survey._id, this.survey).subscribe(result => f(result));
+      this.surveyService.patchSurvey(clone._id, clone).subscribe(result => f(result));
     } else {
-      console.log("POSTING...")
-      this.surveyService.postSurvey(this.survey).subscribe(result => f(result));
+      this.surveyService.postSurvey(clone).subscribe(result => f(result));
     }
-
-
   }
 
+
+  /**
+   * addQuestion()
+   *
+   * Adds a question to the survey form
+   */
   private addQuestion() {
     let qo: QuestionObject = {
       mode: 'smily',
       lang: {
-        no: { txt: '', options: [] }
+        no: { txt: '' },
+        en: { txt: '' },
       }
-    }
-    if (this.englishEnabled) {
-      qo.lang.en = { txt: '', options: [] }
     }
     this.survey.questionlist.push(qo);
   }
+
+  /**
+   * removeQuestion(index: number)
+   *
+   * @param index: number - the index of the question to remove
+   * Removes the n'th question, where n is specified by the index param.
+   */
   private removeQuestion(index: number) {
     this.survey.questionlist.splice(index,1);
   }
 
 
-  private addOption(qo: QuestionObject) {
-    qo.lang.no.options.push("");
-    if (this.englishEnabled) {
-      qo.lang.en.options.push("");
-    }
+  /**
+   * setAlternatives(qo: QuestionObject)
+   *
+   * @param qo: QuestionObject - the questionObject on which to add alternatives
+   * TODO: FIX ME
+   * Launches the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
+   */
+  private setAlternatives(qo: QuestionObject) {
+    console.log("TODO: IMPLEMENT ME");
   }
+
+  /**
+   * addOption(qo: QuestionObject)
+   *
+   * @param qo: QuestionObject - the questionObject on which to add an option
+   * TODO: FIX ME
+   * Adds an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
+   * and sets defaults in the survey object
+   */
+  private addOption(qo: QuestionObject) {
+    if (!qo.lang.no.options) {
+      qo.lang.no.options = [];
+      qo.lang.en.options = [];
+    }
+    qo.lang.no.options.push("");
+    qo.lang.en.options.push("");
+  }
+  /**
+   * removeOption(qo: QuestionObject, index: number)
+   *
+   * @param qo: QuestionObject - the questionObject on which to remove an option
+   * @param index: number - the index of the option to remove
+   * TODO: FIX ME
+   * Removes an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
+   * and removes it from the survey object
+   */
   private removeOption(qo: QuestionObject, index: number) {
     qo.lang.no.options.splice(index, 1);
-    if (this.englishEnabled) {
-      qo.lang.en.options.splice(index, 1);
+    qo.lang.en.options.splice(index, 1);
+    if (qo.lang.no.options.length == 0) {
+      delete qo.lang.no.options;
+      delete qo.lang.en.options;
     }
   }
-
-
 }
 
 
 
 @Component({
-  selector: 'disable-english-dialog',
-  template: `
-  <p>Are you sure you want to disable English for this survey?</p>
-  <p>Any questions already written in English will be deleted!</p>
-  <button md-raised-button type="button" (click)="dialogRef.close(true)">Yes</button>
-  <button md-raised-button type="button" (click)="dialogRef.close(false)">No</button>`
+  selector: 'alternatives-dialog',
+  template: `<p>Fix me!</p>`
 })
-export class DisableEnglishDialog {
-  constructor(public dialogRef: MdDialogRef<DisableEnglishDialog>) { }
+export class SurveyAlternativesDialog {
+  constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>) { }
 }

@@ -36,7 +36,7 @@
           </div>
           <div>
             <!-- USE ENGLISH? -->
-            <md-checkbox [(ngModel)]='englishEnabled' (change)="changeEnglishState($event.checked)">Enable English for this survey?</md-checkbox>
+            <md-checkbox [(ngModel)]='englishEnabled'>Enable English for this survey?</md-checkbox>
           </div>
         </md-card-content>
       </md-card>
@@ -91,14 +91,14 @@
                   <md-hint *ngIf="questionObject.lang.en.txt === ''" color="warn">{{fieldIsRequiredMsg}}</md-hint>
                 </md-input-container>
 
-
-                <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
-                <div *ngIf="questionObject.mode === 'multi'">
-                  <button md-raised-button color="primary" (click)="console.log('SET ALTERNATIVES: NOT YET IMPLEMENTED!')">Set Alternatives [NYI]</button>
-                </div>
-
               </md-card-content>
               <md-card-actions align="right">
+                <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
+                <button md-raised-button color="primary"
+                *ngIf="questionObject.mode === 'multi'"
+                (click)="setAlternatives(QuestionObject)">Set Alternatives [NYI]</button>
+
+                <!-- delete question button -->
                 <button md-raised-button class="btn btn-success" color="warn" (click)="removeQuestion(i)"
                 [mdTooltip]="tooltipDeleteQuestionMsg" tooltip-position="above">
                   Delete
