@@ -15,7 +15,6 @@ const validator = require('validator'),
 temp.track();
 
 
-
 // POST
 exports.createSurvey = (req, res, next) => {
   let receivedSurvey = req.body;
@@ -39,8 +38,6 @@ exports.createSurvey = (req, res, next) => {
 
 // GET
 exports.getAllSurveys = (req, res, next) => {
-  // TODO: Change me so that I return only id and name!
-
   Survey.find( {}, (err, surveys) => {
     if (!surveys) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
@@ -65,6 +62,11 @@ exports.getAllSurveys = (req, res, next) => {
 exports.getOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
+  if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
+    // but we should check the validity of the id
+    return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
+  }
+
   Survey.findById( surveyId, (err, survey) => {
     if (!survey) {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
@@ -79,8 +81,12 @@ exports.getOneSurvey = (req, res, next) => {
 
 // PATCH
 exports.patchOneSurvey = (req, res, next) => {
-  const surveyId = req.params.surveyId;
+  let surveyId = req.params.surveyId;
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
+  if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
+    // but we should check the validity of the id
+    return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
+  }
 
   let survey = req.body;
 
@@ -100,7 +106,6 @@ exports.patchOneSurvey = (req, res, next) => {
 
   Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
     if (!survey) {
-      console.log(err);
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
@@ -112,6 +117,10 @@ exports.patchOneSurvey = (req, res, next) => {
 exports.deleteOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
+  if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
+    // but we should check the validity of the id
+    return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
+  }
 
   Survey.findByIdAndRemove( surveyId, (err, survey) => {
     if (!survey) {
@@ -158,6 +167,11 @@ exports.getSurveyAsJson = (req, res, next) => {
   if (!surveyId) {
     return res.status(400).send( {message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code})
   }
+  if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
+    // but we should check the validity of the id
+    return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
+  }
+
   Survey.findById(surveyId, (err, survey) => {
     if (!survey) {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
