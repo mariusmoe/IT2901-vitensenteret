@@ -234,6 +234,10 @@ exports.getSurveyAsCSV = (req, res, next) => {
     if (!surveyId) {
       return res.status(400).send( {message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code})
     }
+    if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
+      // but we should check the validity of the id
+      return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
+    }
     Survey.findById(surveyId, (err, survey) => {
     if (!survey) {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
