@@ -1,6 +1,6 @@
 # IT2901-vitensenteret
 
-[![Build Status](http://95.85.63.98:8080/job/vitensenteret/badge/icon)](http://95.85.63.98:8080/job/vitensenteret/)
+[![Build Status](http://95.85.63.98:8080/buildStatus/icon?job=vitensenteret)](http://95.85.63.98:8080/job/vitensenteret/)
 
 Copyright 2017, Vitensenteret, All rights reserved
 
