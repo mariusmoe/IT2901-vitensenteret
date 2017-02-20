@@ -7,15 +7,22 @@ import { HomepageUserComponent } from './user/homepage-user/homepage-user.compon
 import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
+import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 
 const appRoutes: Routes = [
   { path: '', component:HomepageUserComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin/:surveyId', component: HomepageAdminComponent },
-  { path: 'admin', component: HomepageAdminComponent },
-  { path: 'test', component: TestRestAPIComponent },
-  { path: 'editsurvey', component: CreateSurveyComponent, canActivate: [AuthGuard] },
-  { path: 'editsurvey/:surveyId', component: CreateSurveyComponent, canActivate: [AuthGuard] },
+  { path: 'admin', component: AdminOutletComponent,
+    children: [
+      { path: 'test', component: TestRestAPIComponent },
+      { path: 'editsurvey', component: CreateSurveyComponent, canActivate: [AuthGuard] },
+      { path: 'editsurvey/:surveyId', component: CreateSurveyComponent, canActivate: [AuthGuard] },
+      // these two placed further down due to priority issues
+      { path: '', component: HomepageAdminComponent, pathMatch: 'full'  },
+      { path: ':surveyId', component: HomepageAdminComponent },
+      { path: '**', redirectTo: '' }
+    ]
+  },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

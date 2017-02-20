@@ -18,6 +18,7 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog } from './admin/create-survey/create-survey.component';
+import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 
 
 
@@ -30,7 +31,8 @@ import { CreateSurveyComponent, SurveyAlternativesDialog } from './admin/create-
     AllSurveysComponent,
     TestRestAPIComponent,
     CreateSurveyComponent,
-    SurveyAlternativesDialog
+    SurveyAlternativesDialog,
+    AdminOutletComponent
   ],
   entryComponents: [SurveyAlternativesDialog],
   imports: [

@@ -1,0 +1,30 @@
+<md-toolbar color="primary">
+  <span class="flexchild">NYI: logo</span>
+  <h1 class="flexchild alignCenter">Vitensenteret</h1>
+  <span class="flexchild alignRight">NYI something over here</span>
+</md-toolbar>
+<md-toolbar color="accent">
+  <div class="navbar">
+    <button md-raised-button color="primary" routerLink="/admin" routerLinkActive="active">
+      Admin Home
+    </button>
+    <button md-raised-button color="primary" routerLink="/admin/editsurvey" routerLinkActive="active">
+      Create New Survey
+    </button>
+  </div>
+</md-toolbar>
+
+<div class="routerOutlet">
+  <router-outlet></router-outlet>
+</div>
+
+
+<div class="breadcrumbs">
+  <span *ngFor="let crumb of breadcrumbs; let i = index;">
+    <a routerLink="/{{crumb.url}}" routerLinkActive="active">
+      {{crumb.text}}
+    </a>
+    <!-- do not show the '/' if it is the last crumb in the list -->
+    <span *ngIf="!(i == (breadcrumbs.length - 1))">/</span>
+  </span>
+</div>
