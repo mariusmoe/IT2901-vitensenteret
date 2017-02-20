@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 
 @Component({
-  selector: 'app-survey-graph',
-  templateUrl: './survey-graph.component.html',
-  styleUrls: ['./survey-graph.component.scss']
+  selector: 'app-survey-barchart',
+  templateUrl: './survey-barchart.component.html',
+  styleUrls: ['./survey-barchart.component.scss']
 })
-export class SurveyGraphComponent {
+export class SurveyBarChartComponent {
 
   public  barChartOptions:any = {
     scaleShowVerticalLines:false,

@@ -12,11 +12,8 @@ import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.co
 import { SurveyCreateComponent } from './admin/survey-create/survey-create.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
-import { SurveyGraphComponent } from './admin/survey-retrieval/survey-graph.component';
-
-
-
-
+import { SurveyBarChartComponent } from './admin/survey-retrieval/survey-barchart.component';
+import { SurveyDoughnutChartComponent } from './admin/survey-retrieval/survey-doughnut-chart.component'
 
 
 @NgModule({
@@ -26,7 +23,8 @@ import { SurveyGraphComponent } from './admin/survey-retrieval/survey-graph.comp
     SurveyCreateComponent,
     HomepageUserComponent,
     SurveyRetrievalComponent,
-    SurveyGraphComponent
+    SurveyBarChartComponent,
+    SurveyDoughnutChartComponent
   ],
   imports: [
     BrowserModule,

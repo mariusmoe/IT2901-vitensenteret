@@ -3,15 +3,16 @@
 }
 
 .container{
+  display: flex;
   flex-wrap: wrap;
 }
 
 .placeholder{
   background-color: blue;
-  width: 35vw;
+  width: 30vw;
   height: 100vh;
 }
 
 .graph-view{
-  width: 65vw;
+  width: 60vw;
 }
