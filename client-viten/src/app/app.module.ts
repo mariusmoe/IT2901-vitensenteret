@@ -5,11 +5,14 @@ import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app.routing-module';
 import { MaterialModule } from '@angular/material';
+import { ChartsModule } from 'ng2-charts';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
 import { SurveyCreateComponent } from './admin/survey-create/survey-create.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
+import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
+import { SurveyGraphComponent } from './admin/survey-retrieval/survey-graph.component';
 
 
 
@@ -21,14 +24,17 @@ import { HomepageUserComponent } from './user/homepage-user/homepage-user.compon
     AppComponent,
     HomepageAdminComponent,
     SurveyCreateComponent,
-    HomepageUserComponent
+    HomepageUserComponent,
+    SurveyRetrievalComponent,
+    SurveyGraphComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpModule,
     AppRoutingModule,
-    MaterialModule.forRoot()
+    MaterialModule.forRoot(),
+    ChartsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
