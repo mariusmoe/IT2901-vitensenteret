@@ -1,12 +1,23 @@
 
-<div class="flex-container sidebar">
+<div class="flexParent">
   <md-card
     *ngFor="let survey of surveys"
     (click)="select(survey._id)"
     [class.active]="survey._id == selectedID"
-    class="mouse">
-          <p>ID: {{survey._id}}</p>
-          <p>Name</p>
-          <h3>{{survey.name}}</h3>
+    class="surveyBox">
+      <md-card-title>{{survey.name}}</md-card-title>
+      <md-card-subtitle>ID: {{survey._id}}</md-card-subtitle>
+      <md-card-content>
+      </md-card-content>
+      <md-card-actions>
+        <button md-raised-button class="btn btn-success" color="accent"
+        routerLink="/admin" routerLinkActive="active">
+          NYI: Stats
+        </button>
+        <button md-raised-button class="btn btn-success" color="accent"
+        routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
+          Edit
+        </button>
+      </md-card-actions>
   </md-card>
 </div>
