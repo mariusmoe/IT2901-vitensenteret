@@ -77,28 +77,37 @@ describe('Auth API', () => {
     });
   });
 
-  describe('/api/auth/get_referral_link POST', () => {
-    it('should create one referral link /api/auth/get_referral_link POST', (done) => {
+  describe('/api/auth/get_referral_link/admin POST', () => {
+    it('should create one referral link /api/auth/get_referral_link/admin GET', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link')
+      .get('/api/auth/get_referral_link/admin')
       .set('Authorization', jwt)
       .end( (err, res) => {
         res.should.have.status(200);
         done();
       });
     });
-    it('should return 401 when unauthorized - wrong jwt /api/auth/get_referral_link POST', (done) => {
+    it('should create one referral link /api/auth/get_referral_link/member GET', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link')
+      .get('/api/auth/get_referral_link/member')
+      .set('Authorization', jwt)
+      .end( (err, res) => {
+        res.should.have.status(200);
+        done();
+      });
+    });
+    it('should return 401 when unauthorized - wrong jwt /api/auth/get_referral_link GET', (done) => {
+      chai.request(server)
+      .get('/api/auth/get_referral_link/admin')
       .set('Authorization', 'badcode')  // bad code
       .end( (err, res) => {
         res.should.have.status(401);
         done();
       });
     });
-    it('should return 401 when unauthorized - omitted auth property /api/auth/get_referral_link POST', (done) => {
+    it('should return 401 when unauthorized - omitted auth property /api/auth/get_referral_link GET', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link')
+      .get('/api/auth/get_referral_link/admin')
       // .set('Authorization', 'badcode') // omitted authorization property
       .end( (err, res) => {
         res.should.have.status(401);

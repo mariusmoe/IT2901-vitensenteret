@@ -19,6 +19,12 @@ const ReferralSchema = new Schema({
   active: {
     type: Boolean,
     default: true
+  },
+  role: {
+    // Decide which user priveleges the user is granted
+    type: String,
+    enum: ['member', 'admin'],
+    default: 'member'
   }
 
 })

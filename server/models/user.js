@@ -19,6 +19,12 @@ const UserSchema = new Schema({
     type: String,
     required: true
   },
+  role: {
+    // Decide which user priveleges the user is granted
+    type: String,
+    enum: ['member', 'admin'],
+    default: 'member'
+  },
   active: {
     // Verified by email
     type: Boolean,
