@@ -8,8 +8,8 @@ import { Component } from '@angular/core';
 
 export class SurveyDoughnutChartComponent {
 
-  public doughnutChartLabels:string[] = ['Gutt', 'Jente']
-  public doughnutChartData:number[] = [338,436]
+  public doughnutChartLabels:string[] = ['Gutt', 'Jente', 'Intetkjønn']
+  public doughnutChartData:number[] = [338,436,100]
   public doughnutChartType:string = 'doughnut';
 
   // events
