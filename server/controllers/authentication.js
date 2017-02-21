@@ -46,7 +46,8 @@ exports.getJWT = (req, res, next) => {
  * Delete one account
  */
 exports.deleteAccount = (req, res, next) => {
-  let id = req.user._id;
+  // let id = req.user._id;
+  let id = req.body.id
   if (!id){
     res.status(400).send({message: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code})
   }
@@ -166,6 +167,9 @@ exports.register = (req, res, next) => {
  */
 exports.getReferralLink = (req, res, next) => {
   let role = req.params.role
+  if (!['member', 'admin'].includes(role)){
+    return res.status(422).send( {error: status.ROLE_INCORRECT.message, status: status.ROLE_INCORRECT.code} );
+  }
   crypto.randomBytes(48, function(err, buffer) {
     if (err) { return next(err); }
     const token = buffer.toString('hex');

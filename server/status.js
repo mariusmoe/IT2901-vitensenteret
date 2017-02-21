@@ -31,6 +31,10 @@ module.exports = {
     message: 'The referral link is too old or not correct',
     code: 2017
   },
+  ROLE_INCORRECT: {
+    message: 'The role provided is invalid',
+    code: 2018
+  },
 
   // SURVEY CODES
   SURVEY_UNPROCESSABLE: {
