@@ -1,5 +1,5 @@
 <div class="container">
-  <h1>Create Survey</h1>
+  <h1>{{isPatch ? 'Edit' : 'Create'}} survey</h1>
   <!-- DISPLAY THIS WHEN WE HAVE A SURVEY TO ACTUALLY DISPLAY. THIS IS INSTANT WHEN CREATING A NEW SURVEY -->
   <div *ngIf="!startupLoading">
     <div class="optionContainer surveyOptions">

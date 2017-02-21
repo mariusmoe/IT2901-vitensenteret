@@ -1,0 +1,39 @@
+
+
+.flexchild {
+  flex: 1 1;
+}
+.alignCenter {
+  text-align: center;
+}
+.alignRight {
+  text-align: right;
+}
+
+.navbar {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+
+  button {
+    margin-left: 10px;
+  }
+  button:first-of-type {
+    margin: 0;
+  }
+}
+
+
+.routerOutlet {
+  padding: 10px;
+  padding-top: 0;
+}
+
+
+
+
+.breadcrumbs {
+  // font-size: 0.80em;
+  padding: 10px;
+}

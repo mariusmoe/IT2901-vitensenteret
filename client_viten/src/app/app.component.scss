@@ -1,40 +1,46 @@
-
 @import '~@angular/material/core/theming/all-theme';
-// Plus imports for other components in your app.
-
-// Include the base styles for Angular Material core. We include this here so that you only
-// have to load a single css file for Angular Material in your app.
 @include mat-core();
+@import 'theme.colours.scss';
+
+
+body, html {
+  padding: 0;
+  margin: 0;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
 
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue.
-$survey-app-primary: mat-palette($mat-blue-grey);
-$survey-app-accent:  mat-palette($mat-green, A200, A100, A400);
 
-// The warn palette is optional (defaults to red).
+// COLOURS:
+// $trondersea
+// $experimentalblue
+// $playblue
+// $spunkred
+// $springgreen
+// $coldgrey
+// $warmgrey
+// $juiceorange
+
+// HERE WE SET OUR THEME
+// experimentalblue + trondersea
+$survey-app-primary: mat-palette($experimentalblue);
+$survey-app-accent:  mat-palette($trondersea, A200, A100, A400);
 $survey-app-warn:    mat-palette($mat-red);
-
-// Create the theme object (a Sass map containing all of the palettes).
 $survey-app-theme: mat-light-theme($survey-app-primary, $survey-app-accent, $survey-app-warn);
-
-// Include theme styles for core and each component used in your app.
-// Alternatively, you can import and @include the theme mixins for each component
-// that you are using.
 @include angular-material-theme($survey-app-theme);
-
+body {
+  background: lighten(map-get($warmgrey, 50), 33%);
+}
 
 // To add additional styles:
 .my-other-style {
   // copy paste all the above into this one, and change.
   // to use it, change the html body to have .my-other-style class
-}
-
-body {
-  background: #dfe8dc; // sliiiight green-blue
-}
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: Roboto,"Helvetica Neue",sans-serif;
-  font-weight: 400;
 }
