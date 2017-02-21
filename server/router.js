@@ -10,6 +10,9 @@ const AuthenticationController = require('./controllers/authentication'),
 const requireAuth   = passport.authenticate('jwt', { session: false });
 const requireLogin  = passport.authenticate('local', { session: false });
 
+// Role types
+const REQUIRE_ADMIN = "admin",
+      REQUIRE_MEMBER = "member";
 
 module.exports = (app) => {
   // route groups
@@ -34,8 +37,11 @@ module.exports = (app) => {
   // Login a user
   authRoutes.post('/login', requireLogin, AuthenticationController.login);
 
-  // get a referral link
-  authRoutes.get('/get_referral_link', requireAuth, AuthenticationController.getReferralLink);
+  // get a referral link - requires admin rights
+  authRoutes.get('/get_referral_link/:role',
+                 requireAuth,
+                 AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                 AuthenticationController.getReferralLink);
 
 
   authRoutes.post('/register_developer', AuthenticationController.register_developer);
@@ -45,7 +51,7 @@ module.exports = (app) => {
 
   // Delete the account with the provided JWT
   authRoutes.delete('/delete_account', requireAuth, AuthenticationController.deleteAccount);
-  
+
   // // TODO Password reset request route
   // authRoutes.post('/forgot-password', AuthenticationController.forgotPassword);
   //
@@ -61,8 +67,19 @@ module.exports = (app) => {
   // // Request new email
   // authRoutes.post('/request_new_email_confirmation', AuthenticationController.newConfirmationLink)
   //
-  // // Test authentication
-  // authRoutes.get('/test', requireAuth, AuthenticationController.test)
+  // Test authentication with roleAuthorization
+  authRoutes.get(
+                  '/test',
+                  requireAuth,
+                  AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                  AuthenticationController.test
+               )
+   authRoutes.get(
+                   '/test2',
+                   requireAuth,
+                   AuthenticationController.roleAuthorization(REQUIRE_MEMBER),
+                   AuthenticationController.test
+                )
   //
   // // change email for this account
   // authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);

@@ -1,0 +1,62 @@
+
+h1 {
+  text-align: center;
+  display: block;
+}
+
+md-card {
+  md-input-container {
+    display: inline-block;
+  }
+
+  &.questionObject {
+    flex: 1 1;
+    margin: 5px;
+    max-width: 250px;
+    min-width: 250px;
+
+    md-input-container {
+      width: 100%;
+    }
+  }
+
+}
+
+md-input-container {
+  margin: 10px 0 20px 0;
+  md-hint {
+    color: red;
+  }
+}
+
+
+.flexParent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: wrap;
+}
+
+.surveyOptions {
+  @extend .flexParent;
+  align-items: stretch;
+  md-card {
+    flex: 1 1;
+    min-width: 400px;
+  }
+}
+
+.optionContainer {
+  margin-bottom: 20px;
+}
+
+.startupLoading,
+.submitBox {
+  @extend .flexParent;
+  justify-content: center;
+
+  md-progress-circle,
+  button {
+    flex: 0 1;
+  }
+}
