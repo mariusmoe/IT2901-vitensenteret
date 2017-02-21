@@ -7,14 +7,27 @@
 <button (click)="showresult()"> Search</button>
 <p>you typed:{{this.search}}</p>
 
+<!--
+<modal id="custom-modal-1">
+    <div class="modal">
+        <div class="modal-body">
+            <h1>A Custom Modal!</h1>
+            <p>
+                Home page text: <input type="text" [(ngModel)]="bodyText" />
+            </p>
+            <button (click)="closeModal('custom-modal-1');">Close</button>
+        </div>
+    </div>
+    <div class="modal-background"></div>
+</modal>
+-->
 
 <div id="showresults" *ngFor="let result of resultsfromdatabase">
 <!--TODO this div should show all matching surveys from the search -->
+
 <p *ngIf="this.search == result.name && !this.search == null ">{{result.name}}</p>
 <p></p>
 </div>
-
-
 
 <h2>Recent:</h2>
 <div *ngFor="let surv of this.surveys">
@@ -23,6 +36,7 @@
 
 <h2>Popular:</h2>
 <br />
+
 
 
 
