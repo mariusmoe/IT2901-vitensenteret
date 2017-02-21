@@ -41,7 +41,7 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
-    MaterialModule
+    MaterialModule.forRoot()
   ],
   providers: [
     AuthGuard,
