@@ -8,12 +8,14 @@ import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
+import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
 
 const appRoutes: Routes = [
   { path: '', component:HomepageUserComponent },
   { path: 'login', component: LoginComponent },
-  { path: 'admin', component: AdminOutletComponent,
+  { path: 'admin', component: AdminOutletComponent, canActivate: [AuthGuard],
     children: [
+      { path: 'settings', component: AdminSettingsComponent },
       { path: 'test', component: TestRestAPIComponent },
       { path: 'editsurvey', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey/:surveyId', component: CreateSurveyComponent, canActivate: [AuthGuard] },
