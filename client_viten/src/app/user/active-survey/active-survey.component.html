@@ -1,0 +1,27 @@
+<div class="active_survey_window">
+  <p>
+    active-survey works!
+  </p>
+  <!--Startbutton for an active survey-->
+  <div class="playbutton" *ngIf="!started">
+    <button md-raised-button color="primary" (click)="startSurvey()"> Start </button>
+  </div>
+  <div>
+    properSurvey {{properSurvey}}
+    started {{started}}
+  </div>
+  <div class="surveyView" *ngIf="properSurvey && started">
+    <div class="surveyQuestion">
+      <h1>{{survey.questionlist[page].lang.no.txt}}</h1>
+      <h1>{{survey.questionlist[page].mode}}</h1>
+      <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[0].options}}</h1>
+    </div>
+
+    <div class="qnavigate">
+      <div class="qnavigateArea"><button md-raised-button color="accent">back</button></div>
+      <h2>{{page+1}}/x</h2>
+      <div class="qnavigateArea alignRight"><button md-raised-button color="accent">forward</button></div>
+    </div>
+
+
+</div>

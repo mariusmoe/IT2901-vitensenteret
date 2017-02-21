@@ -1,0 +1,43 @@
+
+
+$red: red;
+
+
+
+
+
+.qnavigate {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  background: rgba(#606060, 0.2);
+  .qnavigateArea{
+    flex: 1 1;
+    &.alignRight{
+      text-align: right;
+    }
+  }
+  h2{
+    margin: 0;
+  }
+}
+
+.class2 {
+
+
+  button {
+    span {
+
+    }
+  }
+}
+
+
+
+p {
+  color: lighten($red, 20%);
+
+}

@@ -20,6 +20,9 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 
+import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
+
+
 
 
 @NgModule({
@@ -32,6 +35,7 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
     TestRestAPIComponent,
     CreateSurveyComponent,
     SurveyAlternativesDialog,
+    ActiveSurveyComponent,
     AdminOutletComponent
   ],
   entryComponents: [SurveyAlternativesDialog],
