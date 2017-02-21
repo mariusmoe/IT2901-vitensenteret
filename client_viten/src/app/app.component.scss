@@ -1,0 +1,46 @@
+@import '~@angular/material/core/theming/all-theme';
+@include mat-core();
+@import 'theme.colours.scss';
+
+
+body, html {
+  padding: 0;
+  margin: 0;
+  font-family: Roboto,"Helvetica Neue",sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 400;
+}
+
+
+// Define the palettes for your theme using the Material Design palettes available in palette.scss
+// (imported above). For each palette, you can optionally specify a default, lighter, and darker
+// hue.
+
+// COLOURS:
+// $trondersea
+// $experimentalblue
+// $playblue
+// $spunkred
+// $springgreen
+// $coldgrey
+// $warmgrey
+// $juiceorange
+
+// HERE WE SET OUR THEME
+// experimentalblue + trondersea
+$survey-app-primary: mat-palette($experimentalblue);
+$survey-app-accent:  mat-palette($trondersea, A200, A100, A400);
+$survey-app-warn:    mat-palette($mat-red);
+$survey-app-theme: mat-light-theme($survey-app-primary, $survey-app-accent, $survey-app-warn);
+@include angular-material-theme($survey-app-theme);
+body {
+  background: lighten(map-get($warmgrey, 50), 33%);
+}
+
+// To add additional styles:
+.my-other-style {
+  // copy paste all the above into this one, and change.
+  // to use it, change the html body to have .my-other-style class
+}

@@ -482,7 +482,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.questionlist[0].lang.en.options = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true); // allowed to have it omitted
 
     // check null
     clone.questionlist[0].lang.en.options = null;
@@ -492,10 +492,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.questionlist[0].lang.en.options;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
-
-
-
+    expect(IsItValid).to.equal(true); // also allowed
 
     done();
   });
@@ -584,7 +581,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.questionlist[0].answer = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
     // check null
     clone.questionlist[0].answer = null;
@@ -594,7 +591,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.questionlist[0].answer;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
     done();
   });

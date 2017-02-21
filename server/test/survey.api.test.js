@@ -199,7 +199,7 @@ describe('Survey API', () => {
     // GET: GET SURVEY BAD
     it('should return 404 given surveyId not found in DB /api/survey/surveyId GET', (done) => {
       chai.request(server)
-        .get('/api/survey/' + 'InvalidID') // send bad id
+        .get('/api/survey/' + 'aaaaaaaaaaaaaaaaaaaaaaaa') // send non-existent survey ID (24 chars)
         .send(validJsonObject)
         .end( (err, res) => {
           res.body.should.have.property('message');
@@ -207,6 +207,21 @@ describe('Survey API', () => {
           res.body.should.have.property('status');
           res.body.status.should.equal(status.SURVEY_NOT_FOUND.code);
           res.should.have.status(404);
+          done();
+        });
+    });
+
+    // GET: GET SURVEY BAD
+    it('should return 400 given bad surveyId format /api/survey/surveyId GET', (done) => {
+      chai.request(server)
+        .get('/api/survey/' + 'InvalidID') // send badly formatted ID
+        .send(validJsonObject)
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.SURVEY_BAD_ID.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.SURVEY_BAD_ID.code);
+          res.should.have.status(400);
           done();
         });
     });
@@ -293,9 +308,10 @@ describe('Survey API', () => {
           done();
         });
     });
+    // PATCH: GET SURVEY BAD
     it('should return 404 given surveyId not found in DB /api/survey/surveyId PATCH', (done) => {
       chai.request(server)
-        .patch('/api/survey/' + "InvalidID") // send bad id
+        .patch('/api/survey/' + "aaaaaaaaaaaaaaaaaaaaaaaa") // send bad id
         .set('Authorization', jwt)
         .send(validJsonObject)
         .end( (err, res) => {
@@ -307,7 +323,20 @@ describe('Survey API', () => {
           done();
         });
     });
-
+    it('should return 400 given bad surveyId format /api/survey/surveyId PATCH', (done) => {
+      chai.request(server)
+        .patch('/api/survey/' + "InvalidID") // send badly formatted ID
+        .set('Authorization', jwt)
+        .send(validJsonObject)
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.SURVEY_BAD_ID.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.SURVEY_BAD_ID.code);
+          res.should.have.status(400);
+          done();
+        });
+    });
 
     // PATCH: NO AUTHORIZATION
     it('should return 401 when unauthorized - wrong jwt /api/survey/surveyId PATCH', (done) => {
@@ -359,7 +388,7 @@ describe('Survey API', () => {
     // DELETE: BAD
     it('should return 404 given surveyId not found in DB /api/survey/surveyId DELETE', (done) => {
       chai.request(server)
-        .delete('/api/survey/' + "InvalidID") // send bad id
+        .delete('/api/survey/' + "aaaaaaaaaaaaaaaaaaaaaaaa") // send bad id
         .set('Authorization', jwt)
         .send(validJsonObject)
         .end( (err, res) => {
@@ -371,6 +400,22 @@ describe('Survey API', () => {
           done();
         });
     });
+    it('should return 400 given bad surveyId format /api/survey/surveyId DELETE', (done) => {
+      chai.request(server)
+        .delete('/api/survey/' + "InvalidID") // send badly formatted ID
+        .set('Authorization', jwt)
+        .send(validJsonObject)
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.SURVEY_BAD_ID.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.SURVEY_BAD_ID.code);
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+
 
     // DELETE: GOOD
     it('should return 200 and delete the survey of the id given /api/survey/surveyId DELETE', (done) => {

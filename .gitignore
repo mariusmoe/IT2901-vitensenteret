@@ -42,3 +42,7 @@ config
 
 #Useless file from OSX
 .DS_Store
+
+
+# dont include dist (build in angular)
+dist/

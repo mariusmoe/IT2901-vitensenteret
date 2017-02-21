@@ -20,13 +20,13 @@ let languageSchema = {
         "options": {
           "type": "array",
           "items": { "type": "string", "pattern": /\S/, "required": true },  // required here forces the string type, else "undefined" would be allowed
-          "minItems": 2, // must be at least two options
+          "minItems": 2,
           "maxItems": 6, // max 6 options
           "uniqueItems": true // the options must be different
         },
         "required": true,
       },
-      "required": ["txt", "options"],
+      "required": ["txt"],
       "additionalProperties": false,
     },
   },
@@ -45,7 +45,7 @@ let questionSchema = {
       "$ref": "/language", // references the languageSchema above here
     },
   },
-  "required": ["mode", "answer", "lang"],
+  "required": ["mode", "lang"],
   "additionalProperties": false,
 }
 

@@ -108,8 +108,9 @@ exports.register = (req, res, next) => {
           return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
         }
         let user = new User({
-          email: email,
-          password: password
+          email:      email,
+          password:   password,
+          role:       existingReferral.role
         });
         user.save((err, user) => {
           if (err) {return next(err); }
@@ -147,7 +148,8 @@ exports.register = (req, res, next) => {
      }
      let user = new User({
        email: email,
-       password: password
+       password: password,
+       role: 'admin'
      });
      user.save((err, user) => {
        if (err) {return next(err); }
@@ -163,6 +165,7 @@ exports.register = (req, res, next) => {
  * Get a new referral link
  */
 exports.getReferralLink = (req, res, next) => {
+  let role = req.params.role
   crypto.randomBytes(48, function(err, buffer) {
     if (err) { return next(err); }
     const token = buffer.toString('hex');
@@ -172,7 +175,8 @@ exports.getReferralLink = (req, res, next) => {
       }
       if (err) { return next(err); }
       let referralString = new Referral({
-        referral: token
+        referral:  token,
+        role:      role
       })
       referralString.save((err, referral) => {
         if (err) {return next(err); }
@@ -181,4 +185,27 @@ exports.getReferralLink = (req, res, next) => {
       });
     })
   })
+}
+
+
+exports.roleAuthorization = function(role){
+  return function(req,res,next){
+    let id = req.user._id;
+
+    User.findById(id, function(err,foundUser){
+      if(err){
+        res.status(422).json({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
+        return next(err);
+      }
+      if(foundUser.role == role){
+        return next();
+      }
+      res.status(401).json({error: 'You are not authorized.'});
+      return next('Unauthorized');
+    })
+  }
+}
+
+exports.test = (req, res, next) => {
+  res.status(200).send({message: 'Welcome sir, you have the right privelages to view this content' })
 }

@@ -53,11 +53,15 @@ module.exports = {
     message: 'Survey has been deleted',
     code: 1014,
   },
+  SURVEY_BAD_ID: {
+    message: 'The id provided for the survey is malformed.',
+    code: 2021
+  },
 
   // ROUTER CODES
   ROUTE_INVALID: {
     message: "The requested route does not exist. Did you forget a param?",
-    code: 2020
+    code: 2022
   },
   ROUTE_SURVEYS_VALID_NO_SURVEYS: {
     message: "Request successful, but no surveys exist.",
