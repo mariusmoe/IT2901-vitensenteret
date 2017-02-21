@@ -96,7 +96,7 @@
                 <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
                 <button md-raised-button color="primary"
                 *ngIf="questionObject.mode === 'multi'"
-                (click)="setAlternatives(QuestionObject)">Set Alternatives [NYI]</button>
+                (click)="setAlternatives(questionObject)">Set Alternatives [{{questionObject.lang.no.options.length}}]</button>
 
                 <!-- delete question button -->
                 <button md-raised-button class="btn btn-success" color="warn" (click)="removeQuestion(i)"
