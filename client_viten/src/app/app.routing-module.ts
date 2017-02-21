@@ -8,6 +8,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
+import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
 
 const appRoutes: Routes = [
   { path: '', component:HomepageUserComponent },
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
       { path: '**', redirectTo: '' }
     ]
   },
+  { path:'survey-retrieval', component: SurveyRetrievalComponent},
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app.routing-module';
 import { MaterialModule } from '@angular/material';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
@@ -19,6 +20,9 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
+import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
+import { BarChartComponent } from './admin/survey-retrieval/bar-chart.component';
+import { DoughnutChartComponent } from './admin/survey-retrieval/doughnut-chart.component';
 
 
 
@@ -32,7 +36,10 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
     TestRestAPIComponent,
     CreateSurveyComponent,
     SurveyAlternativesDialog,
-    AdminOutletComponent
+    AdminOutletComponent,
+    SurveyRetrievalComponent,
+    BarChartComponent,
+    DoughnutChartComponent
   ],
   entryComponents: [SurveyAlternativesDialog],
   imports: [
@@ -41,7 +48,8 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
-    MaterialModule
+    MaterialModule,
+    ChartsModule
   ],
   providers: [
     AuthGuard,
