@@ -7,10 +7,12 @@ import { HomepageUserComponent } from './user/homepage-user/homepage-user.compon
 import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
+import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
 
 const appRoutes: Routes = [
   { path: '', component:HomepageUserComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'activesurvey', component: ActiveSurveyComponent },
   { path: 'admin/:surveyId', component: HomepageAdminComponent },
   { path: 'admin', component: HomepageAdminComponent },
   { path: 'test', component: TestRestAPIComponent },
