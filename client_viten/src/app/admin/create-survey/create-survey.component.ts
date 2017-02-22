@@ -59,28 +59,27 @@ export class CreateSurveyComponent implements OnInit {
    */
   ngOnInit() {
     // If we have a router parameter, we should attempt to use that first.
-    console.log(this.route.snapshot.url[0].path)
+    //console.log(this.route.snapshot.url[0].path)
     let param = this.route.snapshot.params['surveyId'];
     if (param){
-      console.log("requesting edit..")
-      console.log(param);
       this.surveyService.getSurvey(param).subscribe(result => {
-        console.log("result")
         this.survey = result;
         this.isPatch = true;
 
-        // TODO: fix me! this is a slightly awkward way to detect english.
+        // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en) {
           this.englishEnabled = true;
         }
         // Do not remove the following lines!
         this.setPushReadyStatus();
         this.startupLoading = false;
-        console.log("starting up!")
       },
       error => {
-        console.log("BAD RESULT");
-        this.router.navigate([this.route.snapshot.url[0].path])
+        // this.route.snapshot is the route for the SUBDOMAIN of /admin
+        // this.route.parent gives us the PARENT domain (ranging from '' to the parent
+        // of this route). We want to return to the parent url in a programatic
+        // fashion as to avoid issues should the routes be altered.
+        this.router.navigate([this.route.parent.snapshot.url.join('/')])
       });
       return;
     }
@@ -191,14 +190,16 @@ export class CreateSurveyComponent implements OnInit {
           message: json.message,
         }
       };
-      let dialogRef = this.dialog.open(SurveyPublishDialog, config);
-      dialogRef.afterClosed().subscribe( () => {
-        //let output = dialogRef.componentInstance.outputQuestionObject;
-      });
+      // this dialog is purely to inform the user.
+      this.dialog.open(SurveyPublishDialog, config);
     }
     let success = (result) => {
       this.submitLoading = false;
-      this.router.navigate(['/admin']);
+      // this.route.snapshot is the route for the SUBDOMAIN of /admin
+      // this.route.parent gives us the PARENT domain (ranging from '' to the parent
+      // of this route). We want to return to the parent url in a programatic
+      // fashion as to avoid issues should the routes be altered.
+      this.router.navigate([this.route.parent.snapshot.url.join('/')])
     }
     // Send request to the server; either PATCH or POST.
     if (this.isPatch) {
