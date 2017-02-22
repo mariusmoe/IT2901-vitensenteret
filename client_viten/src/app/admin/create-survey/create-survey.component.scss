@@ -60,3 +60,17 @@ md-input-container {
     flex: 0 1;
   }
 }
+
+
+md-dialog-actions {
+  button {
+    margin-left: 10px;
+    &:first-of-type {
+      margin: 0;
+    }
+    &.alignRight {
+      align-self: flex-end;
+      text-align: right;
+    }
+  }
+}
