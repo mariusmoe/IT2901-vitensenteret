@@ -8,10 +8,11 @@ import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
 import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
+import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 
 const appRoutes: Routes = [
-  { path: '', component:HomepageUserComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'choosesurvey', component: ChooseSurveyComponent },
   { path: 'admin', component: AdminOutletComponent,
     children: [
       { path: 'test', component: TestRestAPIComponent },
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
       { path: '**', redirectTo: '' }
     ]
   },
+  { path: '', component:HomepageUserComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 

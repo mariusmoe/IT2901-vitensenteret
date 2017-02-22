@@ -9,7 +9,6 @@ import { MaterialModule } from '@angular/material';
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
-import { StartSurveyComponent } from './user/start-survey/start-survey.component';
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
@@ -29,8 +28,6 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
     AppComponent,
     HomepageAdminComponent,
     HomepageUserComponent,
-    SurveyCreateComponent,
-    StartSurveyComponent,
     ChooseSurveyComponent,
     LoginComponent,
     AllSurveysComponent,
