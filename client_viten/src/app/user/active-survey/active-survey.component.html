@@ -1,15 +1,17 @@
 <div class="active_survey_window">
+  <!--testdata
   <p>
     active-survey works!
-  </p>
-  <!--Startbutton for an active survey-->
-  <div class="playbutton" *ngIf="!started">
-    <button md-raised-button color="primary" (click)="startSurvey()"> Start </button>
+  </p>-->
+  <!--Startbutton for an active survey   *ngIf="!started"   -->
+  <div class="playbutton"  [ngClass]="{'clicked': started}">
+    <button id="pButton" md-raised-button color="primary" value="true" (click)="startSurvey()" > <p>Start</p> </button>
   </div>
+  <!--Test data
   <div>
     properSurvey {{properSurvey}}
     started {{started}}
-  </div>
+  </div>-->
   <div class="surveyView" *ngIf="properSurvey && started">
     <div class="surveyQuestion">
       <h1>{{survey.questionlist[page].lang.no.txt}}</h1>
@@ -22,6 +24,8 @@
       <h2>{{page+1}}/x</h2>
       <div class="qnavigateArea alignRight"><button md-raised-button color="accent">forward</button></div>
     </div>
+
+  </div>
 
 
 </div>
