@@ -25,18 +25,18 @@ export class AdminOutletComponent implements OnInit {
   private getBreadcrumbs(): string[]  {
     let urls = [];
 
-    for (let child of this.route.snapshot.firstChild.pathFromRoot) {
-      // hardcoded the /admin/. the router here is based on the router outlet in THIS component.
-      // TODO: fix hardcoding?
-      let url = '/admin/' + child.url.map(segment => segment.path).join("/");
-      let text = child.url.map(segment => segment.path).join("/");
+    let fullUrl = this.router.url;
+    let urlList = fullUrl.split('/').splice(1); // first element is ''
+
+    let accumulatedUrl: string = '';
+    for (let url of urlList) {
+      accumulatedUrl = accumulatedUrl + '\/' + url; // escaped forward slash
       urls.push({
-        url: url,
-        text: text,
+        url: accumulatedUrl,
+        text: url,
       });
     }
-
-
+    console.log(urls);
     return urls;
   }
 
