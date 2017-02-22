@@ -36,7 +36,6 @@ export class AdminOutletComponent implements OnInit {
         text: url,
       });
     }
-    console.log(urls);
     return urls;
   }
 
