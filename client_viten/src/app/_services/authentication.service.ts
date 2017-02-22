@@ -11,7 +11,9 @@ import { Observable } from 'rxjs';
 export class AuthenticationService {
 
   private url = {
-    login: 'http://localhost:2000/api/auth/login'
+    login: 'http://localhost:2000/api/auth/login',
+    allUsers: 'http://localhost:2000/api/auth/all_users',
+    delete: 'http://localhost:2000/api/auth/delete_account'
   }
 
   public token: string;
@@ -26,8 +28,10 @@ export class AuthenticationService {
     const token = (localStorage.getItem('token'));
     if (token) {
       const currentUser = this.decodeToken(token);
+      this.user._id     = currentUser._id;
       this.user.email     = currentUser.email;
       this.user.role      = currentUser.role;
+      console.log(this.user);
       // push user to subscribers
       this.userSub.next(this.user);
     }
@@ -39,6 +43,95 @@ export class AuthenticationService {
    */
   getCurrentUserObservable() {
     return this.userSub.asObservable();
+  }
+  private userList: User[] = []
+
+  /**
+   * getToken
+   *
+   * @returns String - user token if it exists in the local storage. undefined otherwise
+   */
+  private getToken(): string {
+    return localStorage.getItem('token');
+  }
+
+  /**
+   * deleteAccoutn
+   *
+   * Delete the account with the supplied id
+   * @param {string} id Id of user to be deleted
+   * @return boolean  true if deletion was successful.
+   */
+  deleteAccoutn(id:string): Observable<boolean> {
+    let token = this.getToken();
+    if (!token) {
+      return Observable.throw('jwt not found'); // TODO: fix me.
+    }
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${token}`);
+    let data = { "id": id }
+    let body = JSON.stringify(data);
+    let options = new RequestOptions({
+      headers: headers,
+      body: body
+    });
+      return this.http.delete(this.url.delete, options)
+      .map(
+        response => {
+          if (response.status != 200){
+            // Error during delete
+            console.error(response)
+          } else {
+            return true;
+          }
+        },
+        error => {
+          console.log(error.text());
+          return false;
+        }
+      )
+    }
+
+  getAllUsers():Observable<User[]>{
+    let token = this.getToken();
+    if (!token) {
+      return Observable.throw('jwt not found'); // TODO: fix me.
+    }
+    let headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${token}`);
+    let options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.get(this.url.allUsers, options)
+      .map(
+        response => {
+          if (response.status != 200){
+            // Error during login
+            console.error(response)
+          } else {
+            let jsonResponse = response.json();
+            if (jsonResponse){
+              this.userList = new Array<User>();
+              for (let user of jsonResponse){
+                let us = new User();
+                us._id = user._id;
+                us.email = user.email;
+                us.role = user.role;
+
+                this.userList.push(us);
+              }
+              return this.userList;
+            } else {
+              return null;
+            }
+          }
+        },
+        error => {
+          console.log(error.text());
+          return null;
+        }
+      )
   }
 
     /**

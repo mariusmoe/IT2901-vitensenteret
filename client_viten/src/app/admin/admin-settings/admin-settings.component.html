@@ -51,14 +51,53 @@
         </div>
       </button>
     </md-card>
+  </md-tab>
+  <md-tab *ngIf="user.role=='admin'" label="Admin settings">
+    <md-card>
+      <h1>Some more settings</h1>
+      <p>{{user.role}}</p>
+      <button md-raised-button
+        color="primary"
+        minlength="3"
+        (click)="requestAdminReferal()">
+        Request admin
+      </button>
+    </md-card>
     <md-card>
       <p>Delete account</p>
-        <button md-raised-button color="warn" (click)="openDialog()">Delete!</button>
+      <table class="userTable">
+        <tr>
+          <th>
+            ID
+          </th>
+          <th>
+            email
+          </th>
+          <th>
+            role
+          </th>
+        </tr>
+        <tr *ngFor="let user of userList;  let i=index; let odd=odd; let even=even;"
+        (click)="openDialog(user._id)"
+        [ngClass]="{ odd: odd, even: even }"
+        >
+        <td>
+          {{user._id}}
+        </td>
+        <td>
+          {{user.email}}
+        </td>
+        <td>
+          {{user.role}}
+        </td>
+        <td>
+          <md-icon>delete_forever</md-icon>
+        </td>
+      </tr>
+      </table>
+
+        <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
     </md-card>
-  </md-tab>
-  <md-tab label="Strakk settings">
-    <h1>Some more settings</h1>
-    <p>...</p>
   </md-tab>
 </md-tab-group>
 </div>

@@ -55,6 +55,12 @@ module.exports = (app) => {
                     AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
                     AuthenticationController.deleteAccount);
 
+  // Return all users to superadmin
+  authRoutes.get('/all_users',
+                    requireAuth,
+                    AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                    AuthenticationController.getAllUsers);
+
   // // TODO Password reset request route
   // authRoutes.post('/forgot-password', AuthenticationController.forgotPassword);
   //

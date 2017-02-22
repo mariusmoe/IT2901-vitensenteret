@@ -35,7 +35,7 @@ function generateToken(user) {
  * @return {Object}   response object with new token and user
  */
 exports.getJWT = (req, res, next) => {
-  let user = { _id: req.user._id, email: req.user.email }
+  let user = { _id: req.user._id, email: req.user.email, role: req.user.role }
   res.status(200).json({
     token: 'JWT ' + generateToken(user),
     user: user
@@ -63,7 +63,7 @@ exports.deleteAccount = (req, res, next) => {
  * respond with a json object with a Json web token and the user
  */
 exports.login = (req, res, next) => {
-  let user = { _id: req.user._id, email: req.user.email }
+  let user = { _id: req.user._id, email: req.user.email, role: req.user.role }
   res.status(200).json({
     token: 'JWT ' + generateToken(user),
     user: user
@@ -122,6 +122,26 @@ exports.register = (req, res, next) => {
   });
 }
 
+
+exports.getAllUsers = (req, res, next) => {
+  User.find({}, (err, users) => {
+    if (!users) {
+      // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
+      return res.status(200).send({message: status.ROUTE_USERS_VALID_NO_USERS.message, status: status.ROUTE_USERS_VALID_NO_USERS.code});
+    }
+    if (err) { return next(err); }
+    let userList = [];
+    for (let user of users) {
+      userList[userList.length] = {
+        '_id': user._id,
+        'email': user.email,
+        'role': user.role,
+      }
+    }
+
+    return res.status(200).send(userList);
+  })
+}
 
 /**
  * development

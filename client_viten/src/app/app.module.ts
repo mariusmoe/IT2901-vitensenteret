@@ -19,7 +19,7 @@ import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.compon
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
-import { AdminSettingsComponent, DeleteDialog } from './admin/admin-settings/admin-settings.component';
+import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin-settings/admin-settings.component';
 
 
 
@@ -36,6 +36,7 @@ import { AdminSettingsComponent, DeleteDialog } from './admin/admin-settings/adm
     AdminOutletComponent,
     AdminSettingsComponent,
     DeleteDialog,
+    ReferDialog
   ],
   imports: [
     BrowserModule,
@@ -47,7 +48,8 @@ import { AdminSettingsComponent, DeleteDialog } from './admin/admin-settings/adm
   ],
   entryComponents: [
     SurveyAlternativesDialog,
-    DeleteDialog
+    DeleteDialog,
+    ReferDialog
   ],
   providers: [
     AuthGuard,
