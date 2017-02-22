@@ -4,6 +4,7 @@ import { Survey, QuestionObject } from '../../_models/survey';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+
 @Component({
   selector: 'app-create-survey',
   templateUrl: './create-survey.component.html',
@@ -14,6 +15,7 @@ export class CreateSurveyComponent implements OnInit {
   private submitLoading: boolean = false;
   private startupLoading: boolean = true;
   private englishEnabled: boolean = false;
+  private canPostSurvey: boolean = false;
 
   // SURVEY VARIABLES
   private survey: Survey;
@@ -57,13 +59,13 @@ export class CreateSurveyComponent implements OnInit {
    */
   ngOnInit() {
     // If we have a router parameter, we should attempt to use that first.
-    if (this.route.snapshot.params['surveyId']){
-      this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
-        if (!result) {
-          console.log("DEBUG: BAD surveyId param from router!");
-          // TODO: Redirect to base create survey ?
-          return;
-        }
+    console.log(this.route.snapshot.url[0].path)
+    let param = this.route.snapshot.params['surveyId'];
+    if (param){
+      console.log("requesting edit..")
+      console.log(param);
+      this.surveyService.getSurvey(param).subscribe(result => {
+        console.log("result")
         this.survey = result;
         this.isPatch = true;
 
@@ -71,7 +73,14 @@ export class CreateSurveyComponent implements OnInit {
         if (this.survey.questionlist[0].lang.en) {
           this.englishEnabled = true;
         }
+        // Do not remove the following lines!
+        this.setPushReadyStatus();
         this.startupLoading = false;
+        console.log("starting up!")
+      },
+      error => {
+        console.log("BAD RESULT");
+        this.router.navigate([this.route.snapshot.url[0].path])
       });
       return;
     }
@@ -92,13 +101,69 @@ export class CreateSurveyComponent implements OnInit {
 
 
 
+    /**
+     * setSaveReadyStatus()
+     *
+     * Checks every part of the survey and returns true if the survey is valid
+     */
+    private setPushReadyStatus() {
+      let status = this.fieldValidate(this.survey.name)     // name
+        && this.survey.questionlist.length > 0              // at least one question
+        && this.fieldValidate(this.survey.comment)          // comment
+        && this.fieldValidate(this.survey.endMessage.no);   // message no
+      if (this.englishEnabled) {                            // message en
+        status = status && this.fieldValidate(this.survey.endMessage.en);
+      }
+      // check each question
+      for (let questionObject of this.survey.questionlist) {
+        // the actual question
+        status = status && this.fieldValidate(questionObject.lang.no.txt);
+        if (this.englishEnabled) {
+          status = status && this.fieldValidate(questionObject.lang.en.txt);
+        }
+        // and the options, if multi is selected
+        if (questionObject.mode == 'multi') {
+          // ..if more than 2 options are added
+          if (questionObject.lang.no.options.length < 2) {
+            status = false;
+            break;
+          }
+          // and if each option is valid
+          for (let o of questionObject.lang.no.options) {
+            status = (status && o.length > 0 && this.fieldValidate(o));
+          }
+          if (this.englishEnabled) {
+            for (let o of questionObject.lang.en.options) {
+              status = (status && o.length > 0 && this.fieldValidate(o));
+            }
+          }
+        }
+      }
+      // and finally set the status
+      this.canPostSurvey = status;
+    }
+
+    /**
+     * notWhitespace(s: string)
+     *
+     * @param s: string - a string to check
+     * returns true if the input string is not just whitespace
+     */
+    private fieldValidate(s: string) {
+      return s && s.length > 0 && (/\S/.test(s));
+    }
+
+
+
   /**
    * submitSurvey()
    *
    * Sends a http POST or a http PATCH request with the survey to the server.
    */
   private submitSurvey() {
+    //if (!this.canPostSurvey) { return; }
     let clone: Survey = JSON.parse(JSON.stringify(this.survey));
+    this.submitLoading = true;
 
     // remove options-properties of non-multi questions
     for (let qo of clone.questionlist) {
@@ -114,19 +179,34 @@ export class CreateSurveyComponent implements OnInit {
         delete qo.lang.en;
       }
     }
-    console.log(clone);
+
+    //console.log(clone);
     // Execute the following when we've gotten a response from the server
-    let f = (result: Survey) => {
-      console.log(result);
-      // 1 verify survey
-      // 2 if success, redirect, else give feedback to the user
-      console.log("TODO: REDIRECT ME TO LIST OF SURVEYS!")
+    let err = (error) => {
+      this.submitLoading = false;
+      let json = error.json(); // error is the RESPONSE object. we want the body object
+      let config: MdDialogConfig = {
+        data: {
+          status: json.status,
+          message: json.message,
+        }
+      };
+      let dialogRef = this.dialog.open(SurveyPublishDialog, config);
+      dialogRef.afterClosed().subscribe( () => {
+        //let output = dialogRef.componentInstance.outputQuestionObject;
+      });
+    }
+    let success = (result) => {
+      this.submitLoading = false;
+      this.router.navigate(['/admin']);
     }
     // Send request to the server; either PATCH or POST.
     if (this.isPatch) {
-      this.surveyService.patchSurvey(clone._id, clone).subscribe(result => f(result));
+      //console.log("PATCHING!")
+      this.surveyService.patchSurvey(clone._id, clone).subscribe(result => success(result), error => err(error));
     } else {
-      this.surveyService.postSurvey(clone).subscribe(result => f(result));
+      //console.log("POSTING!")
+      this.surveyService.postSurvey(clone).subscribe(result => success(result), error => err(error));
     }
   }
 
@@ -147,6 +227,8 @@ export class CreateSurveyComponent implements OnInit {
       }
     }
     this.survey.questionlist.push(qo);
+    // Do not remove the following line!
+    this.setPushReadyStatus();
   }
 
   /**
@@ -157,6 +239,8 @@ export class CreateSurveyComponent implements OnInit {
    */
   private removeQuestion(index: number) {
     this.survey.questionlist.splice(index,1);
+    // Do not remove the following line!
+    this.setPushReadyStatus();
   }
 
 
@@ -182,6 +266,8 @@ export class CreateSurveyComponent implements OnInit {
       if (output != null && output != undefined) {
         qo.lang.no.options = output.lang.no.options;
         qo.lang.en.options = output.lang.en.options;
+        // Do not remove the following line!
+        this.setPushReadyStatus();
       }
     });
   }
@@ -248,9 +334,20 @@ export class SurveyAlternativesDialog {
     this.setSaveReadyStatus();
   }
 
+
+  /**
+   * cancel()
+   *
+   * Hides the dialog window. No change is stored.
+   */
   private cancel() {
     this.dialogRef.close();
   }
+  /**
+   * save()
+   *
+   * Hides the dialog window, and stores any changes to alternatives
+   */
   private save() {
     this.outputQuestionObject = this.qoEditObj;
     this.dialogRef.close();
@@ -281,7 +378,7 @@ export class SurveyAlternativesDialog {
    * returns true if the input string is not just whitespace
    */
   private notWhitespace(s: string) {
-    return (/\S/.test(s));
+    return s && s.length > 0 && (/\S/.test(s));
   }
 
 
@@ -325,6 +422,47 @@ export class SurveyAlternativesDialog {
     this.numAlternatives = Array(this.qoEditObj.lang.no.options.length).fill(0).map((x,i)=>i);
     this.setSaveReadyStatus();
   }
+}
 
+
+
+
+
+
+
+@Component({
+  selector: 'post-survey-dialog',
+  styleUrls: ['./create-survey.component.scss'],
+  template: `
+  <h2 md-dialog-title class="alignCenter">Post results</h2>
+  <md-dialog-content align="center">
+    <p>Could not post your survey.</p>
+    <span class="error">
+      <span>{{data.status}}</span>
+      <span>: </span>
+      <span>{{data.message}}</span>
+    </span>
+    <p>The system cannot proceed until the issue has been resolved.</p>
+  </md-dialog-content>
+  <md-dialog-actions align="center">
+    <button md-raised-button color="primary" (click)="okay()">Okay</button>
+  </md-dialog-actions>
+  `
+})
+export class SurveyPublishDialog {
+  survey: Survey;
+
+  constructor(public dialogRef: MdDialogRef<SurveyPublishDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
+  }
+
+
+  /**
+   * okay()
+   *
+   * Hides the dialog window.
+   */
+  private okay() {
+    this.dialogRef.close();
+  }
 
 }

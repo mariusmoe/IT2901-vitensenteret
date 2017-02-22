@@ -57,18 +57,11 @@ export class SurveyService {
    getSurvey(idString: String): Observable<Survey> {
      return this.http.get(this.url + '/' + idString)
      .map( response => {
-       let jsonResponse = response.json();
-       if (response.status != 200){
-         console.error(jsonResponse.status + " : " + jsonResponse.message);
-         return Observable.create(null);
-       }   
        let s: Survey = response.json();
        return s;
      },
      error => {
-       let errMsg = (error.message) ? error.message :
-         error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-         return error;
+       return error.json();
      });
  }
 
@@ -83,10 +76,6 @@ export class SurveyService {
    */
   postSurvey(survey: Survey): Observable<Survey> {
     let token = this.getToken();
-    if (!token) {
-      return Observable.throw('jwt not found'); // TODO: fix me.
-    }
-
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
@@ -95,19 +84,11 @@ export class SurveyService {
 
     return this.http.post(this.url, survey, options)
     .map( response => {
-      let jsonResponse = response.json();
-      if (response.status != 200){
-        console.error(jsonResponse.status + " : " + jsonResponse.message);
-        return false;
-      }
       let s: Survey = response.json();
-      console.info("post successful.");
       return s;
     },
     error => {
-      let errMsg = (error.message) ? error.message :
-        error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-        return error;
+      return error.json();
     });
   }
 
@@ -119,26 +100,20 @@ export class SurveyService {
    * @returns Observable<Survey> returns an observable with the success status of the http patch
    */
   patchSurvey(surveyId: string, survey: Survey): Observable<Survey> {
+    let token = this.getToken();
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `${this.getToken()}`);
+    headers.append('Authorization', `${token}`);
 
     let options = new RequestOptions({ headers: headers }); // Create a request option
 
     return this.http.patch(this.url + '/' + surveyId, survey, options)
       .map( response => {
         let jsonResponse = response.json();
-        if (response.status != 200){
-          console.error(jsonResponse.status + " : " + jsonResponse.message);
-          return null;
-        }
-        console.info(jsonResponse.status + " : " + jsonResponse.message);
         return jsonResponse.survey;
       },
       error => {
-        let errMsg = (error.message) ? error.message :
-          error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-          return error;
+        return error.json();
       });
   }
 
@@ -151,10 +126,6 @@ export class SurveyService {
    */
   deleteSurvey(surveyId: string): Observable<boolean> {
     let token = this.getToken();
-    if (!token) {
-      return Observable.apply(false);
-    }
-
     let headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
@@ -163,18 +134,10 @@ export class SurveyService {
 
     return this.http.delete(this.url + '/' + surveyId, options)
       .map( response => {
-        let jsonResponse = response.json();
-        if (response.status != 200){
-          console.error(jsonResponse.status + " : " + jsonResponse.message);
-          return false;
-        }
-        console.info(jsonResponse.status + " : " + jsonResponse.message);
         return true;
       },
       error => {
-        let errMsg = (error.message) ? error.message :
-          error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-          return error;
+        return false;
       });
   }
 
@@ -188,43 +151,34 @@ export class SurveyService {
    * objects with survey names, ids, active status and date.
    */
   getAllSurveys(): Observable<SurveyList[]>{
+    let token = this.getToken();
     let headers = new Headers()
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `${this.getToken()}`);
+    headers.append('Authorization', `${token}`);
 
     return this.http.get(this.url, { headers })
       .map(
         response => {
-          if (response.status != 200){
-            // Error during login
-            let jsonResponse = response.json();
-            console.error(jsonResponse.status + " : " + jsonResponse.message);
+          let jsonResponse = response.json();
+          if (jsonResponse){
+            this.surveyList = new Array<SurveyList>();
+
+            for (let survey of jsonResponse){
+              let su = new SurveyList();
+              su._id    = survey._id;
+              su.name   = survey.name;
+              su.active = survey.active;
+              su.date   = survey.date;
+
+              this.surveyList.push(su);
+            }
             return this.surveyList;
           } else {
-            let jsonResponse = response.json();
-            if (jsonResponse){
-              this.surveyList = new Array<SurveyList>();
-
-              for (let survey of jsonResponse){
-                let su = new SurveyList();
-                su._id    = survey._id;
-                su.name   = survey.name;
-                su.active = survey.active;
-                su.date   = survey.date;
-
-                this.surveyList.push(su);
-              }
-              return this.surveyList;
-            } else {
-              return this.surveyList;
-            }
+            return this.surveyList;
           }
         },
         error => {
-          let errMsg = (error.message) ? error.message :
-            error.status ? `${error.status} - ${error.statusText}` : 'Server error';
-          // console.error(errMsg); // log to console instead
-          return error;
+          return this.surveyList;
         });
   }
 

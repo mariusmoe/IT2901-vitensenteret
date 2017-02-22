@@ -3,6 +3,14 @@ h1 {
   text-align: center;
   display: block;
 }
+h2.alignCenter {
+  text-align: center;
+  display: block;
+}
+
+.error {
+  color: red;
+}
 
 md-card {
   md-input-container {
@@ -46,6 +54,7 @@ md-input-container {
   }
 }
 
+
 .optionContainer {
   margin-bottom: 20px;
 }
@@ -61,6 +70,9 @@ md-input-container {
   }
 }
 
+.submitLoading {
+  display: block;
+}
 
 md-dialog-actions {
   button {
