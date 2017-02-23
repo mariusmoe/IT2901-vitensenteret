@@ -9,6 +9,10 @@
   fill: map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2));
 }
 
+.adminPortal {
+  background: $vitenBackground;
+}
+
 .flexchild {
   flex: 1 1;
 }
