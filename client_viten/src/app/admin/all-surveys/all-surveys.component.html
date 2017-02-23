@@ -1,23 +1,11 @@
-
-<div class="flexParent">
-  <md-card
+<md-list class="list">
+  <md-list-item
     *ngFor="let survey of surveys"
-    (click)="select(survey._id)"
-    [class.active]="survey._id == selectedID"
-    class="surveyBox">
-      <md-card-title>{{survey.name}}</md-card-title>
-      <md-card-subtitle>ID: {{survey._id}}</md-card-subtitle>
-      <md-card-content>
-      </md-card-content>
-      <md-card-actions>
-        <button md-raised-button class="btn btn-success" color="accent"
-        routerLink="/admin" routerLinkActive="active">
-          NYI: Stats
-        </button>
-        <button md-raised-button class="btn btn-success" color="accent"
-        routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          Edit
-        </button>
-      </md-card-actions>
-  </md-card>
-</div>
+    [ngClass]="{'survey': true, 'active': survey._id == selectedID}"
+    (click)="select(survey._id)">
+    <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
+    <h4 md-line>{{survey.name}}</h4>
+    <p md-line>{{formatDate(survey.date)}}</p>
+    <!-- <p md-line>ID: {{survey._id}}</p> -->
+  </md-list-item>
+</md-list>

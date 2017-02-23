@@ -1,0 +1,20 @@
+
+
+.flexParent {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: nowrap;
+}
+
+.emptyArea {
+  flex: 1 1;
+}
+
+.selectedSurveyArea {
+  flex: 1 1;
+  .activeIcon {
+    width: 1em;
+    height: 1em;
+    font-size: 3em;
+  }
+}

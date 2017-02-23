@@ -1,27 +1,21 @@
 
-
-// Change background-color to something better TODO!
-md-card.active {
-  background-color: darken(white, 20%);
+.list {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-left: 4px; // offset for scroll bar (for the shadow)
+  direction: rtl; // positions the scroll bar on the left side
 }
 
-.surveyBox {
+.survey {
   cursor: pointer;
   cursor: hand;
+
+
+  &.active {
+    background-color: white;
+    box-shadow: 0 3px 1px -2px rgba(0,0,0,.2), 0 2px 2px 0 rgba(0,0,0,.14), 0 1px 5px 0 rgba(0,0,0,.12);
+  }
   &:hover {
     background-color: darken(white, 10%);
-  }
-}
-
-.flexParent {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  md-card {
-    flex: 1 1;
-    margin: 5px;
-    max-width: 250px;
-    min-width: 250px;
   }
 }
