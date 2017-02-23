@@ -23,13 +23,13 @@ export class AdminOutletComponent implements OnInit {
 
 
   private getBreadcrumbs(): string[]  {
-    let urls = [];
+    const urls = [];
 
-    let fullUrl = this.router.url;
-    let urlList = fullUrl.split('/').splice(1); // first element is ''
+    const fullUrl = this.router.url;
+    const urlList = fullUrl.split('/').splice(1); // first element is ''
 
-    let accumulatedUrl: string = '';
-    for (let url of urlList) {
+    let accumulatedUrl = '';
+    for (const url of urlList) {
       accumulatedUrl = accumulatedUrl + '\/' + url; // escaped forward slash
       urls.push({
         url: accumulatedUrl,
