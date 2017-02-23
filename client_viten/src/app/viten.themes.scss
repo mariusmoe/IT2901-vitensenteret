@@ -1,21 +1,32 @@
 @import 'theme.colours.scss';
 
 // COLOURS:
-// $trondersea
-// $experimentalblue
-// $playblue
-// $spunkred
-// $springgreen
-// $coldgrey
-// $warmgrey
-// $juiceorange
+//  blue
+//    $playblue
+//    $experimentalblue
+//
+//  bluegreen
+//    $trondersea
+//
+//  yellowy-green
+//    $springgreen
+//
+//  pinkish red
+//    $spunkred
+//
+//  greys
+//    $coldgrey
+//    $warmgrey
+//
+//  orange
+//    $juiceorange
 
 // MD values: $base-palette, $default: 500, $lighter: 100, $darker: 700
 
 // COLOUR, defaultShade, lighterShade, darkerShade
 $vitenPrimary: ($experimentalblue, 900, 300, 900);
-$vitenAccent: ($juiceorange, 500, 100, 700);
+$vitenAccent: ($playblue, 600, 100, 700);
 $vitenWarn: $mat-red-warn; // imported from theme.colours.
 $vitenBackground: map-get($warmgrey, 50);
-$vitenHTMLBackground: map-get($warmgrey, 200);
+$vitenHTMLBackground: map-get($warmgrey, 100);
 $vitenIsLightTheme: true;
