@@ -17,7 +17,7 @@ export class AuthenticationService {
   };
 
   public token: string;
-  private user = new User();
+  private user: User;
   private userSub: BehaviorSubject<User> = new BehaviorSubject<User>(null); // start with null in the userSub
   private jwtHelper: JwtHelper = new JwtHelper();
   private userList: User[] = [];
@@ -29,10 +29,12 @@ export class AuthenticationService {
     const token = (localStorage.getItem('token'));
     if (token) {
       const currentUser = this.decodeToken(token);
-      this.user._id     = currentUser._id;
-      this.user.email     = currentUser.email;
-      this.user.role      = currentUser.role;
-      console.log(this.user);
+      this.user = {
+        _id: currentUser._id,
+        email: currentUser.email,
+        role: currentUser.role,
+      };
+      // console.log(this.user);
       // push user to subscribers
       this.userSub.next(this.user);
     }
@@ -114,10 +116,12 @@ export class AuthenticationService {
             if (jsonResponse) {
               this.userList = new Array<User>();
               for (const user of jsonResponse){
-                const us = new User();
-                us._id = user._id;
-                us.email = user.email;
-                us.role = user.role;
+                const us = {
+                  _id: user._id,
+                  email: user.email,
+                  role: user.role,
+                };
+
 
                 this.userList.push(us);
               }
