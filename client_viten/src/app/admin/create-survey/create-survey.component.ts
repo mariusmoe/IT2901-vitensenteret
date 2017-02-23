@@ -67,7 +67,9 @@ export class CreateSurveyComponent implements OnInit {
         this.isPatch = true;
 
         // somewhat hacky way to determine english state.
-        if (this.survey.questionlist[0].lang.en) {
+        if (this.survey.questionlist[0].lang.en
+          && this.survey.questionlist[0].lang.en.txt
+          && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
         }
         // Do not remove the following lines!
