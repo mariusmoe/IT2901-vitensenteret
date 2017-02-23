@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { MdDialogRef, MdDialog, MdDialogConfig } from '@angular/material';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
-import { Subscription }   from 'rxjs/Subscription';
+import { Subscription } from 'rxjs/Subscription';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { MdSnackBar } from '@angular/material';
 
@@ -16,8 +16,8 @@ export class AdminSettingsComponent implements OnInit {
   private userSub;
   private userListSub;
   private user: User;
-  private email: string = "";
-  private userList: User[] = []
+  private email = '';
+  private userList: User[] = [];
   private selectedRow: number;
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
@@ -33,16 +33,16 @@ export class AdminSettingsComponent implements OnInit {
 
 
   ngOnInit() {
-    this.getUsers()
+    this.getUsers();
   }
 
-  requestAdminReferal(){
+  requestAdminReferal() {
     this.dialogRef = this.dialog.open(ReferDialog, {
       disableClose: false
     });
   }
 
-  getUsers(){
+  getUsers() {
     this.userSub = this.service.getCurrentUserObservable().subscribe(user => {
       this.user = user; // Subscribe and get user from the authService
       console.log(this.user);
@@ -54,7 +54,7 @@ export class AdminSettingsComponent implements OnInit {
     });
   }
 
-  setSelected(selected:number){
+  setSelected(selected: number) {
     this.selectedRow = selected;
   }
 
@@ -63,18 +63,18 @@ export class AdminSettingsComponent implements OnInit {
    *
    * Delete the user that is currently loged in
    */
-  deleteUser(id:string) {
-    if (id === this.user._id){
-      this.openSnackBar('Can\'t delete this user','FAILURE')
+  deleteUser(id: string) {
+    if (id === this.user._id) {
+      this.openSnackBar('Can\'t delete this user', 'FAILURE');
     } else {
       this.service.deleteAccoutn(id)
           .subscribe(result => {
               if (result === true) {
                   this.getUsers();
-                  this.openSnackBar('User has been deleted','SUCCESS')
+                  this.openSnackBar('User has been deleted', 'SUCCESS');
                   // this.router.navigate(['/login']);
               } else {
-                  console.error("Error - your account might not have been deleted")
+                  console.error('Error - your account might not have been deleted');
               }
           });
         }
@@ -91,9 +91,9 @@ export class AdminSettingsComponent implements OnInit {
    *
    * Promts the user to delete the account or not
    */
-  openDialog(id:string) {
-    if (id === this.user._id){
-      this.openSnackBar('Can\'t delete current user','FAILURE')
+  openDialog(id: string) {
+    if (id === this.user._id) {
+      this.openSnackBar('Can\'t delete current user', 'FAILURE');
     } else {
     this.dialogRef = this.dialog.open(DeleteDialog, {
       disableClose: false
@@ -101,7 +101,7 @@ export class AdminSettingsComponent implements OnInit {
 
     this.dialogRef.afterClosed().subscribe(result => {
       console.log('result: ' + result);
-      if (result === "yes"){
+      if (result === 'yes') {
         this.deleteUser(id);
       }
       this.dialogRef = null;
@@ -143,7 +143,7 @@ export class DeleteDialog {
 @Component({
   selector: 'refer-acccount-dialog',
   template: `
-  <h1>Refer one {{referralrole}}</h1>
+  <h1>Refer one {{referralRole}}</h1>
   <br>
   <p>{{referralUrl}}</p>
   <md-dialog-actions>

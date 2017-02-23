@@ -34,15 +34,10 @@ import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin
     CreateSurveyComponent,
     SurveyAlternativesDialog,
     SurveyPublishDialog,
-    AdminOutletComponent
     AdminOutletComponent,
     AdminSettingsComponent,
     DeleteDialog,
     ReferDialog
-  ],
-  entryComponents: [
-    SurveyAlternativesDialog,
-    SurveyPublishDialog
   ],
   imports: [
     BrowserModule,
@@ -55,7 +50,9 @@ import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin
   entryComponents: [
     SurveyAlternativesDialog,
     DeleteDialog,
-    ReferDialog
+    ReferDialog,
+    SurveyAlternativesDialog,
+    SurveyPublishDialog
   ],
   providers: [
     AuthGuard,

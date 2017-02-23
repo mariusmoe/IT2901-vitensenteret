@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
-import { BehaviorSubject }    from 'rxjs/BehaviorSubject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { JwtHelper } from 'angular2-jwt';
 
 import { User } from '../_models/user';
 
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class AuthenticationService {
@@ -14,17 +14,18 @@ export class AuthenticationService {
     login: 'http://localhost:2000/api/auth/login',
     allUsers: 'http://localhost:2000/api/auth/all_users',
     delete: 'http://localhost:2000/api/auth/delete_account'
-  }
+  };
 
   public token: string;
   private user = new User();
   private userSub: BehaviorSubject<User> = new BehaviorSubject<User>(null); // start with null in the userSub
   private jwtHelper: JwtHelper = new JwtHelper();
-
+  private userList: User[] = [];
   /**
    * Constructor Set current user
    */
   constructor(private http: Http) {
+    // TODO make sure this work even when you log out!
     const token = (localStorage.getItem('token'));
     if (token) {
       const currentUser = this.decodeToken(token);
@@ -44,7 +45,6 @@ export class AuthenticationService {
   getCurrentUserObservable() {
     return this.userSub.asObservable();
   }
-  private userList: User[] = []
 
   /**
    * getToken
@@ -62,26 +62,26 @@ export class AuthenticationService {
    * @param {string} id Id of user to be deleted
    * @return boolean  true if deletion was successful.
    */
-  deleteAccoutn(id:string): Observable<boolean> {
-    let token = this.getToken();
+  deleteAccoutn(id: string): Observable<boolean> {
+    const token = this.getToken();
     if (!token) {
       return Observable.throw('jwt not found'); // TODO: fix me.
     }
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
-    let data = { "id": id }
-    let body = JSON.stringify(data);
-    let options = new RequestOptions({
+    const data = { 'id': id };
+    const body = JSON.stringify(data);
+    const options = new RequestOptions({
       headers: headers,
       body: body
     });
       return this.http.delete(this.url.delete, options)
       .map(
         response => {
-          if (response.status != 200){
+          if (response.status !== 200) {
             // Error during delete
-            console.error(response)
+            console.error(response);
           } else {
             return true;
           }
@@ -90,31 +90,31 @@ export class AuthenticationService {
           console.log(error.text());
           return false;
         }
-      )
+      );
     }
 
-  getAllUsers():Observable<User[]>{
-    let token = this.getToken();
+  getAllUsers(): Observable<User[]> {
+    const token = this.getToken();
     if (!token) {
       return Observable.throw('jwt not found'); // TODO: fix me.
     }
-    let headers = new Headers();
+    const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
-    let options = new RequestOptions({ headers: headers }); // Create a request option
+    const options = new RequestOptions({ headers: headers }); // Create a request option
 
     return this.http.get(this.url.allUsers, options)
       .map(
         response => {
-          if (response.status != 200){
+          if (response.status !== 200) {
             // Error during login
-            console.error(response)
+            console.error(response);
           } else {
-            let jsonResponse = response.json();
-            if (jsonResponse){
+            const jsonResponse = response.json();
+            if (jsonResponse) {
               this.userList = new Array<User>();
-              for (let user of jsonResponse){
-                let us = new User();
+              for (const user of jsonResponse){
+                const us = new User();
                 us._id = user._id;
                 us.email = user.email;
                 us.role = user.role;
@@ -131,7 +131,7 @@ export class AuthenticationService {
           console.log(error.text());
           return null;
         }
-      )
+      );
   }
 
     /**
@@ -139,33 +139,33 @@ export class AuthenticationService {
      * @param  {string} token token as it is stored in localstorage
      * @return {User}         User object
      */
-    decodeToken(token):User{
-      return this.jwtHelper.decodeToken(token)
+    decodeToken(token): User {
+      return this.jwtHelper.decodeToken(token);
     }
 
   /**
    * Try to get a new JWT
    * @return {boolean} true if JWT was successfully renewed else false
    */
-  getNewJWT():Observable<boolean> {
+  getNewJWT(): Observable<boolean> {
     // TODO
     return Observable.of(true); // placeholder
   }
 
   login(email, password): Observable<boolean> {
-      let headers = new Headers({"content-type": "application/json"});
-      let options = new RequestOptions({headers: headers});
-      let data = { "email": email, "password": password }
+      const headers = new Headers({'content-type': 'application/json'});
+      const options = new RequestOptions({headers: headers});
+      const data = { 'email': email, 'password': password };
       return this.http.post(this.url.login, JSON.stringify(data), options)
         .map(
           response => {
-            if (response.status != 200){
+            if (response.status !== 200) {
               // Error during login
-              console.error("can't login")
-              return false
+              console.error('can\'t login');
+              return false;
             } else {
-              let jsonResponse = response.json();
-              if (jsonResponse){
+              const jsonResponse = response.json();
+              if (jsonResponse) {
                 localStorage.setItem('token', jsonResponse.token);
                 // TODO: set user info? no dont to this!!!
                 //
@@ -179,7 +179,7 @@ export class AuthenticationService {
             console.log(error.text());
             return false;
           }
-        )
+        );
   }
 
 }
