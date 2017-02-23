@@ -12,11 +12,10 @@ export class HomepageAdminComponent implements OnInit {
   constructor(private surveyService: SurveyService) {
     this.getSelectedSurvey = this.surveyService.getSelectedSurvey().subscribe(survey => {
         console.log(survey); // Subscribe and get user from the authService
-      })
+      });
     }
 
   ngOnInit() {
-    
   }
 
 

@@ -249,7 +249,6 @@ export class CreateSurveyComponent implements OnInit {
    * setAlternatives(qo: QuestionObject)
    *
    * @param qo: QuestionObject - the questionObject on which to add alternatives
-   * TODO: FIX ME
    * Launches the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    */
   public setAlternatives(qo: QuestionObject) {
@@ -387,7 +386,6 @@ export class SurveyAlternativesDialog {
    * addOption(qo: QuestionObject)
    *
    * @param qo: QuestionObject - the questionObject on which to add an option
-   * TODO: FIX ME
    * Adds an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    * and sets defaults in the survey object
    */
@@ -408,7 +406,6 @@ export class SurveyAlternativesDialog {
    *
    * @param qo: QuestionObject - the questionObject on which to remove an option
    * @param index: number - the index of the option to remove
-   * TODO: FIX ME
    * Removes an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    * and removes it from the survey object
    */

@@ -110,7 +110,7 @@ export class SurveyService {
 
     return this.http.patch(this.url + '/' + surveyId, survey, options)
       .map( response => {
-        let jsonResponse = response.json();
+        const jsonResponse = response.json();
         return jsonResponse.survey;
       },
       error => {

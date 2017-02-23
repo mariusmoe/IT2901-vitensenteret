@@ -18,10 +18,10 @@ export class AuthGuard implements CanActivate {
    * @return {Date} 20 min before rotten JWT
    */
   getAlarmtime() {
-    let token = localStorage.getItem('token');
-    let expDate = this.jwtHelper.getTokenExpirationDate(token);
+    const token = localStorage.getItem('token');
+    const expDate = this.jwtHelper.getTokenExpirationDate(token);
 
-    return new Date(expDate.getTime()*1000 - 20 * 60000);     // 20 min before expDate
+    return new Date(expDate.getTime() * 1000 - 20 * 60000);     // 20 min before expDate
   }
 
   /**
@@ -31,8 +31,8 @@ export class AuthGuard implements CanActivate {
   canActivate() {
     if (localStorage.getItem('token')) {
       // User might be loged in
-      let alarmTime = this.getAlarmtime()
-      if (alarmTime.getTime() < (new Date().getTime()*1000)){
+      const alarmTime = this.getAlarmtime();
+      if (alarmTime.getTime() < (new Date().getTime() * 1000)) {
         // check if JWT can be renewed
         this.authenticationService.getNewJWT()
             .subscribe(result => {
@@ -42,7 +42,7 @@ export class AuthGuard implements CanActivate {
                 this.router.navigate(['/login']);
                 return false;
               }
-            })
+            });
       } else {
         return true;
       }

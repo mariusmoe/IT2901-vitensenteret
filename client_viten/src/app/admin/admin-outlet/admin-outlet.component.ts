@@ -7,7 +7,7 @@ import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
   styleUrls: ['./admin-outlet.component.scss']
 })
 export class AdminOutletComponent implements OnInit {
-  private breadcrumbs;
+  public breadcrumbs;
 
 
   constructor(private router: Router, private route: ActivatedRoute) {}
@@ -22,7 +22,7 @@ export class AdminOutletComponent implements OnInit {
   }
 
 
-  private getBreadcrumbs(): string[]  {
+  public getBreadcrumbs(): string[]  {
     const urls = [];
 
     const fullUrl = this.router.url;

@@ -16,11 +16,9 @@ export class LoginComponent implements OnInit {
   @HostBinding('style.position')  position = 'absolute';
 
 
-  loginForm : FormGroup;
-
-  loading : boolean = false;
-
-  error : string;
+  public loginForm: FormGroup;
+  public loading = false;
+  public error: string;
 
   constructor(
     private router: Router,
@@ -29,13 +27,13 @@ export class LoginComponent implements OnInit {
       this.loginForm = fb.group({
       'email': [null, Validators.required],
       'password': [null, Validators.required]
-    })
+    });
    }
 
   ngOnInit() {
   }
 
-  submitForm(user: any){
+  submitForm(user: any) {
     this.loading = true;
 
     console.log(user);
@@ -52,7 +50,7 @@ export class LoginComponent implements OnInit {
             }
         },
         error => {
-          user.password = "";
+          user.password = '';
           this.error = 'Email or password is incorrect.';
           this.loading = false;
         }
