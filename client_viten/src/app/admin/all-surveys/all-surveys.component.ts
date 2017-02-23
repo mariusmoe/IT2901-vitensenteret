@@ -16,10 +16,8 @@ export class AllSurveysComponent implements OnInit {
 
 
     private surveys: SurveyList[] = [];
-
-    public loading = false;
-
-    public selectedID = '';
+    loading = false;
+    selectedID = '';
 
 
     constructor(
