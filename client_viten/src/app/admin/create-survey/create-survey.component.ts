@@ -147,7 +147,7 @@ export class CreateSurveyComponent implements OnInit {
     /**
      * notWhitespace(s: string)
      *
-     * @param s: string - a string to check
+     * @param {string} s a string to check
      * returns true if the input string is not just whitespace
      */
     fieldValidate(s: string) {
@@ -236,8 +236,7 @@ export class CreateSurveyComponent implements OnInit {
 
   /**
    * removeQuestion(index: number)
-   *
-   * @param index: number - the index of the question to remove
+   * @param {number} index the index of the question to remove
    * Removes the n'th question, where n is specified by the index param.
    */
   removeQuestion(index: number) {
@@ -250,7 +249,7 @@ export class CreateSurveyComponent implements OnInit {
   /**
    * setAlternatives(qo: QuestionObject)
    *
-   * @param qo: QuestionObject - the questionObject on which to add alternatives
+   * @param {QuestionObject} qo the questionObject on which to add alternatives
    * Launches the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    */
   setAlternatives(qo: QuestionObject) {
@@ -376,7 +375,7 @@ export class SurveyAlternativesDialog {
   /**
    * notWhitespace(s: string)
    *
-   * @param s: string - a string to check
+   * @param {string} s a string to check
    * returns true if the input string is not just whitespace
    */
   fieldValidate(s: string) {
@@ -387,7 +386,7 @@ export class SurveyAlternativesDialog {
   /**
    * addOption(qo: QuestionObject)
    *
-   * @param qo: QuestionObject - the questionObject on which to add an option
+   * @param {QuestionObject} qo the questionObject on which to add an option
    * Adds an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    * and sets defaults in the survey object
    */
@@ -406,8 +405,8 @@ export class SurveyAlternativesDialog {
   /**
    * removeOption(qo: QuestionObject, index: number)
    *
-   * @param qo: QuestionObject - the questionObject on which to remove an option
-   * @param index: number - the index of the option to remove
+   * @param {QuestionObject} qo the questionObject on which to remove an option
+   * @param {number} index the index of the option to remove
    * Removes an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    * and removes it from the survey object
    */
