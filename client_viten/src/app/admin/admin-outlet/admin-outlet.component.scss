@@ -1,4 +1,10 @@
+@import '../../theme.colours.scss';
 
+
+// styling of the svg
+#VitenLogo {
+  fill: white;
+}
 
 .flexchild {
   flex: 1 1;
@@ -15,6 +21,7 @@
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
+  padding: 10px;
 
   button {
     margin-left: 10px;
@@ -31,9 +38,19 @@
 }
 
 
+.footer {
+  background: lighten(map-get($warmgrey, 50), 25%); // same as html bg
+  display: flex;
+}
 
 
 .breadcrumbs {
-  // font-size: 0.80em;
+  font-size: 0.80em;
   padding: 10px;
+  span.separator {
+    margin: 0 0.2em; // em is relative to font-size
+  }
+  a, a:active, a:visited {
+    color: inherit;
+  }
 }
