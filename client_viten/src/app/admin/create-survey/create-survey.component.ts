@@ -21,12 +21,12 @@ export class CreateSurveyComponent implements OnInit {
   public survey: Survey;
   public maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
   public isPatch = false;
-  public allowedModes = ['binary', 'star', 'multi', 'smily', 'text'];
+  public allowedModes = ['binary', 'star', 'multi', 'smiley', 'text'];
   public allowedModesVerbose = {
     'binary': 'Yes/No',
     'star': '5 Stars',
     'multi': 'Multiple Choice',
-    'smily': 'Smily',
+    'smiley': 'Smiley',
     'text': 'Free Text'
   };
 
@@ -221,7 +221,7 @@ export class CreateSurveyComponent implements OnInit {
    */
   public addQuestion() {
     const qo: QuestionObject = {
-      mode: 'smily',
+      mode: this.allowedModes[3], // default to smiley
       lang: {
         // options are added here. They are removed again for non-multi
         // questions when you submit the survey.
