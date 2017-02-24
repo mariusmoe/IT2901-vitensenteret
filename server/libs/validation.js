@@ -39,7 +39,7 @@ let questionSchema = {
   "type": "object",
   "properties": {
     "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
-    "mode": { "enum": [ "binary", "star", "multi", "smily", "text" ] },
+    "mode": { "enum": [ "binary", "star", "multi", "smiley", "text" ] },
     "answer": { "type": "array", "items": { "type": "integer", "minimum": 0, "required": true } }, // required here forces the integer type, else "undefined" would be allowed
     "lang": {
       "$ref": "/language", // references the languageSchema above here

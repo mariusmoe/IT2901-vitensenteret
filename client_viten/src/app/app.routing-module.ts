@@ -11,7 +11,7 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
 
 const appRoutes: Routes = [
-  { path: '', component:HomepageUserComponent },
+  { path: '', component: HomepageUserComponent },
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminOutletComponent, canActivate: [AuthGuard],
     children: [

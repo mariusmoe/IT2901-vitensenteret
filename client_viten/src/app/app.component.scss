@@ -1,6 +1,6 @@
 @import '~@angular/material/core/theming/all-theme';
+@import 'viten.themes.scss';
 @include mat-core();
-@import 'theme.colours.scss';
 
 
 body, html {
@@ -8,38 +8,26 @@ body, html {
   margin: 0;
   font-family: Roboto,"Helvetica Neue",sans-serif;
 }
-
 h1, h2, h3, h4, h5, h6 {
   font-weight: 400;
 }
-
-
-// Define the palettes for your theme using the Material Design palettes available in palette.scss
-// (imported above). For each palette, you can optionally specify a default, lighter, and darker
-// hue.
-
-// COLOURS:
-// $trondersea
-// $experimentalblue
-// $playblue
-// $spunkred
-// $springgreen
-// $coldgrey
-// $warmgrey
-// $juiceorange
-
-// HERE WE SET OUR THEME
-// experimentalblue + trondersea
-$survey-app-primary: mat-palette($experimentalblue);
-$survey-app-accent:  mat-palette($juiceorange, A200, A100, A400);
-$survey-app-warn:    mat-palette($mat-red);
-$survey-app-theme: mat-light-theme($survey-app-primary, $survey-app-accent, $survey-app-warn);
-@include angular-material-theme($survey-app-theme);
-body {
-  background: lighten(map-get($warmgrey, 50), 33%);
+.adminPortal {
+  max-width: 1300px;
+  margin: 0 auto;
 }
+
+
+// SET THE THEME IN viten.themes.scss! DO NOT MODIFY THE CODE BELOW
+$survey-app-primary: mat-palette(nth($vitenPrimary, 1), nth($vitenPrimary, 2), nth($vitenPrimary, 3), nth($vitenPrimary, 4));
+$survey-app-accent:  mat-palette(nth($vitenAccent, 1), nth($vitenAccent, 2), nth($vitenAccent, 3), nth($vitenAccent, 4));
+$survey-app-warn:    mat-palette($vitenWarn);
+$survey-app-theme: mat-dark-theme($survey-app-primary, $survey-app-accent, $survey-app-warn);
+@if $vitenIsLightTheme == true {
+  $survey-app-theme: mat-light-theme($survey-app-primary, $survey-app-accent, $survey-app-warn);
+}
+@include angular-material-theme($survey-app-theme);
 html {
-  background: lighten(map-get($warmgrey, 50), 25%);
+  background: $vitenHTMLBackground;
 }
 
 // To add additional styles:

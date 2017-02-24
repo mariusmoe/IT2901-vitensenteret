@@ -21,7 +21,7 @@ export class SurveyService {
 
   /**
    * select one surveyId
-   * @param  {string} surveyId survey ID selected
+   * @param {string} surveyId survey ID selected
    */
   selectSurvey(surveyId: string) {
     if (surveyId === this.selectedSurvey.getValue()) {
@@ -37,9 +37,9 @@ export class SurveyService {
 
 
   /**
-   * getToken
+   * getToken()
    *
-   * @returns String - user token if it exists in the local storage. undefined otherwise
+   * @returns {string} user token if it exists in the local storage. undefined otherwise
    */
   private getToken(): string {
     return localStorage.getItem('token');
@@ -48,12 +48,10 @@ export class SurveyService {
 
 
   /**
-   * getSurvey
+   * getSurvey(idString: String)
    *
-   * @param idString   the id of the survey one wants to get
-   *
-   * @returns Observable<Survey> returns an observable holding the
-   * requested survey
+   * @param {string} idString the id of the survey one wants to get
+   * @returns {Observable<Survey>} returns an observable holding the requested survey
    */
    getSurvey(idString: String): Observable<Survey> {
      return this.http.get(this.url + '/' + idString)
@@ -69,11 +67,10 @@ export class SurveyService {
 
 
   /**
-   * postSurvey
+   * postSurvey(survey: Survey)
    *
-   * @param Survey   a Survey model object holding the survey data one wants to post
-   *
-   * @returns Observable<boolean> returns an observable with the success status of the http post
+   * @param {Survey} survey a Survey model object holding the survey data one wants to post
+   * @returns {Observable<boolean>} returns an observable with the success status of the http post
    */
   postSurvey(survey: Survey): Observable<Survey> {
     const token = this.getToken();
@@ -94,11 +91,10 @@ export class SurveyService {
   }
 
   /**
-   * patchSurvey
+   * patchSurvey(surveyId: string, survey: Survey)
    *
-   * @param Survey   a Survey model object holding the survey data one wants to patch
-   *
-   * @returns Observable<Survey> returns an observable with the success status of the http patch
+   * @param {Survey} survey a Survey model object holding the survey data one wants to patch
+   * @returns {Observable<Survey>} returns an observable with the success status of the http patch
    */
   patchSurvey(surveyId: string, survey: Survey): Observable<Survey> {
     const token = this.getToken();
@@ -110,7 +106,7 @@ export class SurveyService {
 
     return this.http.patch(this.url + '/' + surveyId, survey, options)
       .map( response => {
-        let jsonResponse = response.json();
+        const jsonResponse = response.json();
         return jsonResponse.survey;
       },
       error => {
@@ -119,11 +115,10 @@ export class SurveyService {
   }
 
   /**
-   * deleteSurvey
+   * deleteSurvey(surveyId: string)
    *
-   * @param idString   the id of the survey one wants to get
-   *
-   * @returns Observable<boolean> returns an observable with the success status of the http delete
+   * @param {string} idString the id of the survey one wants to get
+   * @returns {Observable<boolean>} returns an observable with the success status of the http delete
    */
   deleteSurvey(surveyId: string): Observable<boolean> {
     const token = this.getToken();
@@ -146,9 +141,9 @@ export class SurveyService {
 
 
   /**
-   * getAllSurveys
+   * getAllSurveys()
    *
-   * @returns Observable<SurveyList[]> returns an observable with a list of
+   * @returns {Observable<SurveyList[]>} returns an observable with a list of
    * objects with survey names, ids, active status and date.
    */
   getAllSurveys(): Observable<SurveyList[]> {

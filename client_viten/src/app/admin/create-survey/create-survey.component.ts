@@ -12,33 +12,33 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 })
 export class CreateSurveyComponent implements OnInit {
   // COMPONENT VARIABLES
-  public submitLoading = false;
-  public startupLoading = true;
-  public englishEnabled = false;
-  public canPostSurvey = false;
+  submitLoading = false;
+  startupLoading = true;
+  englishEnabled = false;
+  canPostSurvey = false;
 
   // SURVEY VARIABLES
-  public survey: Survey;
-  public maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
-  public isPatch = false;
-  public allowedModes = ['binary', 'star', 'multi', 'smily', 'text'];
-  public allowedModesVerbose = {
+  survey: Survey;
+  maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
+  isPatch = false;
+  allowedModes = ['binary', 'star', 'multi', 'smiley', 'text'];
+  allowedModesVerbose = {
     'binary': 'Yes/No',
     'star': '5 Stars',
     'multi': 'Multiple Choice',
-    'smily': 'Smily',
+    'smiley': 'Smiley',
     'text': 'Free Text'
   };
 
   // FORMATTING VARIABLES
-  public stringPattern = /\S/;
-  public fieldIsRequiredMsg = 'This field is required.';
+  stringPattern = /\S/;
+  fieldIsRequiredMsg = 'This field is required.';
 
 
   // TOOLTIP LOCALES
-  public tooltipDeleteQuestionMsg = 'Deletes this particular question! Careful!';
-  public tooltipSelectQuestionModeMsg = 'Select your question mode here!';
-  public tooltipSubmitSurveyMsg = 'Several fields are required. Verify that you have filled out all required fields.';
+  tooltipDeleteQuestionMsg = 'Deletes this particular question! Careful!';
+  tooltipSelectQuestionModeMsg = 'Select your question mode here!';
+  tooltipSubmitSurveyMsg = 'Several fields are required. Verify that you have filled out all required fields.';
 
 
   /**
@@ -67,7 +67,9 @@ export class CreateSurveyComponent implements OnInit {
         this.isPatch = true;
 
         // somewhat hacky way to determine english state.
-        if (this.survey.questionlist[0].lang.en) {
+        if (this.survey.questionlist[0].lang.en
+          && this.survey.questionlist[0].lang.en.txt
+          && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
         }
         // Do not remove the following lines!
@@ -105,7 +107,7 @@ export class CreateSurveyComponent implements OnInit {
      *
      * Checks every part of the survey and returns true if the survey is valid
      */
-    public setPushReadyStatus() {
+    setPushReadyStatus() {
       let status = this.fieldValidate(this.survey.name)     // name
         && this.survey.questionlist.length > 0              // at least one question
         && this.fieldValidate(this.survey.comment)          // comment
@@ -145,10 +147,10 @@ export class CreateSurveyComponent implements OnInit {
     /**
      * notWhitespace(s: string)
      *
-     * @param s: string - a string to check
+     * @param {string} s a string to check
      * returns true if the input string is not just whitespace
      */
-    public fieldValidate(s: string) {
+    fieldValidate(s: string) {
       return s && s.length > 0 && (/\S/.test(s));
     }
 
@@ -159,7 +161,7 @@ export class CreateSurveyComponent implements OnInit {
    *
    * Sends a http POST or a http PATCH request with the survey to the server.
    */
-  public submitSurvey() {
+  submitSurvey() {
     // if (!this.canPostSurvey) { return; }
     const clone: Survey = JSON.parse(JSON.stringify(this.survey));
     this.submitLoading = true;
@@ -217,9 +219,9 @@ export class CreateSurveyComponent implements OnInit {
    *
    * Adds a question to the survey form
    */
-  public addQuestion() {
+  addQuestion() {
     const qo: QuestionObject = {
-      mode: 'smily',
+      mode: this.allowedModes[3], // default to smiley
       lang: {
         // options are added here. They are removed again for non-multi
         // questions when you submit the survey.
@@ -234,11 +236,10 @@ export class CreateSurveyComponent implements OnInit {
 
   /**
    * removeQuestion(index: number)
-   *
-   * @param index: number - the index of the question to remove
+   * @param {number} index the index of the question to remove
    * Removes the n'th question, where n is specified by the index param.
    */
-  public removeQuestion(index: number) {
+  removeQuestion(index: number) {
     this.survey.questionlist.splice(index, 1);
     // Do not remove the following line!
     this.setPushReadyStatus();
@@ -248,11 +249,10 @@ export class CreateSurveyComponent implements OnInit {
   /**
    * setAlternatives(qo: QuestionObject)
    *
-   * @param qo: QuestionObject - the questionObject on which to add alternatives
-   * TODO: FIX ME
+   * @param {QuestionObject} qo the questionObject on which to add alternatives
    * Launches the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    */
-  public setAlternatives(qo: QuestionObject) {
+  setAlternatives(qo: QuestionObject) {
     const config: MdDialogConfig = {
       data: {
         questionObject: qo,
@@ -287,12 +287,12 @@ export class CreateSurveyComponent implements OnInit {
       <md-input-container>
         <input mdInput type="text" placeholder="Alternative {{(i+1)}}"
         [(ngModel)]="qoEditObj.lang.no.options[i]" required (change)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!notWhitespace(qoEditObj.lang.no.options[i])">{{fieldIsRequiredMsg}}</md-hint>
+        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])">{{fieldIsRequiredMsg}}</md-hint>
       </md-input-container>
       <md-input-container *ngIf="data.englishEnabled">
         <input mdInput type="text" placeholder="Alternative {{(i+1)}} English"
         [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!notWhitespace(qoEditObj.lang.en.options[i])">{{fieldIsRequiredMsg}}</md-hint>
+        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])">{{fieldIsRequiredMsg}}</md-hint>
       </md-input-container>
       <button md-icon-button color="warn" [disabled]="i < 2" class="alignRight"
       (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
@@ -312,16 +312,16 @@ export class CreateSurveyComponent implements OnInit {
   `
 })
 export class SurveyAlternativesDialog {
-  public qoEditObj: QuestionObject;
-  public outputQuestionObject: QuestionObject;
-  public alternativeDefaults: boolean[];
-  public activeAlternatives: Object[];
-  public canSave = false;
+  qoEditObj: QuestionObject;
+  outputQuestionObject: QuestionObject;
+  alternativeDefaults: boolean[];
+  activeAlternatives: Object[];
+  canSave = false;
 
   // for complicated reasons, this is required.
-  public numAlternatives: number[];
+  numAlternatives: number[];
 
-  public fieldIsRequiredMsg = 'This field is required.';
+  fieldIsRequiredMsg = 'This field is required.';
 
   constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
     // Create a copy of our questionObject
@@ -341,7 +341,7 @@ export class SurveyAlternativesDialog {
    *
    * Hides the dialog window. No change is stored.
    */
-  public cancel() {
+  cancel() {
     this.dialogRef.close();
   }
   /**
@@ -349,7 +349,7 @@ export class SurveyAlternativesDialog {
    *
    * Hides the dialog window, and stores any changes to alternatives
    */
-  public save() {
+  save() {
     this.outputQuestionObject = this.qoEditObj;
     this.dialogRef.close();
   }
@@ -359,14 +359,14 @@ export class SurveyAlternativesDialog {
    *
    * Checks the options / alternatives and sets the canSave flag accordingly.
    */
-  public setSaveReadyStatus() {
+  setSaveReadyStatus() {
     let status = true;
     for (const o of this.qoEditObj.lang.no.options) {
-      status = (status && o.length > 0 && this.notWhitespace(o));
+      status = (status && o.length > 0 && this.fieldValidate(o));
     }
     if (this.data.englishEnabled) {
       for (const o of this.qoEditObj.lang.en.options) {
-        status = (status && o.length > 0 && this.notWhitespace(o));
+        status = (status && o.length > 0 && this.fieldValidate(o));
       }
     }
     this.canSave = status;
@@ -375,10 +375,10 @@ export class SurveyAlternativesDialog {
   /**
    * notWhitespace(s: string)
    *
-   * @param s: string - a string to check
+   * @param {string} s a string to check
    * returns true if the input string is not just whitespace
    */
-  public notWhitespace(s: string) {
+  fieldValidate(s: string) {
     return s && s.length > 0 && (/\S/.test(s));
   }
 
@@ -386,12 +386,11 @@ export class SurveyAlternativesDialog {
   /**
    * addOption(qo: QuestionObject)
    *
-   * @param qo: QuestionObject - the questionObject on which to add an option
-   * TODO: FIX ME
+   * @param {QuestionObject} qo the questionObject on which to add an option
    * Adds an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    * and sets defaults in the survey object
    */
-  public addOption(qo: QuestionObject) {
+  addOption(qo: QuestionObject) {
     if (!qo.lang.no.options) {
       qo.lang.no.options = [];
       qo.lang.en.options = [];
@@ -406,13 +405,12 @@ export class SurveyAlternativesDialog {
   /**
    * removeOption(qo: QuestionObject, index: number)
    *
-   * @param qo: QuestionObject - the questionObject on which to remove an option
-   * @param index: number - the index of the option to remove
-   * TODO: FIX ME
+   * @param {QuestionObject} qo the questionObject on which to remove an option
+   * @param {number} index the index of the option to remove
    * Removes an option to the SurveyAlternatives Dialog (TO BE IMPLEMENTED BELOW)
    * and removes it from the survey object
    */
-  public removeOption(qo: QuestionObject, index: number) {
+  removeOption(qo: QuestionObject, index: number) {
     qo.lang.no.options.splice(index, 1);
     qo.lang.en.options.splice(index, 1);
     if (qo.lang.no.options.length === 0) {
@@ -462,7 +460,7 @@ export class SurveyPublishDialog {
    *
    * Hides the dialog window.
    */
-  public okay() {
+  okay() {
     this.dialogRef.close();
   }
 

@@ -16,10 +16,8 @@ export class AllSurveysComponent implements OnInit {
 
 
     private surveys: SurveyList[] = [];
-
-    private loading: boolean = false;
-
-    private selectedID: string = "";
+    loading = false;
+    selectedID = '';
 
 
     constructor(
@@ -31,8 +29,8 @@ export class AllSurveysComponent implements OnInit {
 
     ngOnInit() {
       this.getSurveys();
-      if (this.route.snapshot.params['surveyId']){
-        console.log(this.route.snapshot.params['surveyId'])
+      if (this.route.snapshot.params['surveyId']) {
+        console.log(this.route.snapshot.params['surveyId']);
         this.setSelectedID(this.route.snapshot.params['surveyId']);
       }
     }
@@ -43,7 +41,7 @@ export class AllSurveysComponent implements OnInit {
      * Set the selected survey if it is provided in the url
      * @param  {string} selectedID surveyID to use
      */
-    setSelectedID(selectedID: string){
+    setSelectedID(selectedID: string) {
       this.selectedID = selectedID;
     }
 
@@ -66,7 +64,7 @@ export class AllSurveysComponent implements OnInit {
       this.surveyService.getAllSurveys().subscribe(result => {
         this.surveys = result;
         this.loading = false;
-      })
+      });
     }
 
 }
