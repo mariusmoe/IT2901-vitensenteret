@@ -19,7 +19,7 @@ const SurveySchema = new Schema({
 	questionlist: [{
     mode: {
       type: String,
-      enum: ['binary', 'star', 'multi', 'smily', 'text'],
+      enum: ['binary', 'star', 'multi', 'smiley', 'text'],
       default: 'smily'
     },
     lang: {

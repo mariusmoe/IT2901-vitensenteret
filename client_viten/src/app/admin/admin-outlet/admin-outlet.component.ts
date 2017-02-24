@@ -7,7 +7,7 @@ import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
   styleUrls: ['./admin-outlet.component.scss']
 })
 export class AdminOutletComponent implements OnInit {
-  private breadcrumbs;
+  public breadcrumbs;
 
 
   constructor(private router: Router, private route: ActivatedRoute) {}
@@ -22,21 +22,20 @@ export class AdminOutletComponent implements OnInit {
   }
 
 
-  private getBreadcrumbs(): string[]  {
-    let urls = [];
+  public getBreadcrumbs(): string[]  {
+    const urls = [];
 
-    for (let child of this.route.snapshot.firstChild.pathFromRoot) {
-      // hardcoded the /admin/. the router here is based on the router outlet in THIS component.
-      // TODO: fix hardcoding?
-      let url = '/admin/' + child.url.map(segment => segment.path).join("/");
-      let text = child.url.map(segment => segment.path).join("/");
+    const fullUrl = this.router.url;
+    const urlList = fullUrl.split('/').splice(1); // first element is ''
+
+    let accumulatedUrl = '';
+    for (const url of urlList) {
+      accumulatedUrl = accumulatedUrl + '\/' + url; // escaped forward slash
       urls.push({
-        url: url,
-        text: text,
+        url: accumulatedUrl,
+        text: url,
       });
     }
-
-
     return urls;
   }
 
