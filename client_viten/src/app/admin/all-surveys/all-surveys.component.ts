@@ -67,4 +67,8 @@ export class AllSurveysComponent implements OnInit {
       });
     }
 
+    formatDate(dateString: string) {
+      return new Date(dateString).toLocaleDateString();
+    }
+
 }
