@@ -10,17 +10,16 @@ import { SurveyService } from '../../_services/survey.service';
 })
 export class ChooseSurveyComponent implements OnInit,OnDestroy {
 
-  //all surveys that
   private allsurveys: SurveyList[];
-
-  private recentsurveys: SurveyList[];
   private searchedsurveys: SurveyList[];
+  private recentsurveys;
+
 
   private loaded: boolean = false;
   private search:string="";
   private search_result: boolean= false;
 
-  @Input() id: string;
+
 
 
   constructor(private surveyService: SurveyService){
@@ -38,24 +37,16 @@ export class ChooseSurveyComponent implements OnInit,OnDestroy {
       console.log(this.allsurveys);
       this.loaded = true;
     });
+
+    this.recent();
   }
 
   ngOnDestroy(){
-
   }
-
-showresult():void{
-//TODO add the survey list in a neat and formal manner
-    if(this.search){
-      this.search_result= true;}
-    else{
-      this.search_result=false;}
-};
 
 clicked(name,_id):void{
   for (let survey of this.allsurveys){
       if(survey._id.toString() == _id.toString()){
-        //TODO open a new window with the survey related to the id
         console.log("the id exists");
     }
   }
@@ -65,18 +56,26 @@ searched(search): void {
   if(this.search_result == false){
     this.search_result = !this.search_result;
   }
-
-  
   this.searchedsurveys.splice(0);
   for(let survey of this.allsurveys){
     if(survey.name.toLowerCase().indexOf(search.toLowerCase().trim()) > -1){
       this.searchedsurveys.push(survey);
-      console.log(survey);
-    }
+        }
   }
   console.log("results"+this.searchedsurveys)
 }
 
 
+recent(): void{
+for(let survey of this.allsurveys){
+  this.recentsurveys.push(this.formatmilliseconds(survey.date));
 
+  console.log(this.allsurveys);
+  console.log(this.recentsurveys);
+
+  }
+
+}
+formatDate(date): string{  return new Date(date).toLocaleDateString();}
+formatmilliseconds(date): number{  return new Date(date).valueOf();}
 }
