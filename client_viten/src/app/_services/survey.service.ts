@@ -160,12 +160,13 @@ export class SurveyService {
             this.surveyList = new Array<SurveyList>();
 
             for (const survey of jsonResponse){
-              const su = new SurveyList();
-              su._id    = survey._id;
-              su.name   = survey.name;
-              su.active = survey.active;
-              su.date   = survey.date;
-
+              const su: SurveyList = {
+                _id: survey._id,
+                name: survey.name,
+                active: survey.active,
+                date: survey.date,
+                comment: survey.comment,
+              };
               this.surveyList.push(su);
             }
             return this.surveyList;

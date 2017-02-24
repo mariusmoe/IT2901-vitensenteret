@@ -18,6 +18,7 @@ export class AllSurveysComponent implements OnInit {
     private surveys: SurveyList[] = [];
     loading = false;
     selectedID = '';
+    searchInput = '';
 
 
     constructor(
@@ -64,6 +65,7 @@ export class AllSurveysComponent implements OnInit {
       this.surveyService.getAllSurveys().subscribe(result => {
         this.surveys = result;
         this.loading = false;
+        console.log(result);
       });
     }
 

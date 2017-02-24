@@ -21,6 +21,7 @@ import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } 
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin-settings/admin-settings.component';
 
+import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
 import { ClipboardModule } from 'ngx-clipboard';
 
 
@@ -38,7 +39,8 @@ import { ClipboardModule } from 'ngx-clipboard';
     AdminOutletComponent,
     AdminSettingsComponent,
     DeleteDialog,
-    ReferDialog
+    ReferDialog,
+    AdminSurveysPipe
   ],
   imports: [
     BrowserModule,

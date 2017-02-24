@@ -52,6 +52,7 @@ exports.getAllSurveys = (req, res, next) => {
         'name': survey.name,
         'active': survey.active,
         'date': survey.date,
+        'comment': survey.comment,
       }
     }
 
