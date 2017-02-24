@@ -14,6 +14,7 @@ export class ActiveSurveyComponent implements OnInit {
   private started: boolean = false;
   private survey: Survey;
   private page: number = 0;
+  private totalPages: number = 0;
 
   constructor(private surveyService: SurveyService,
     private router: Router, private route: ActivatedRoute) {
@@ -30,6 +31,7 @@ export class ActiveSurveyComponent implements OnInit {
           return;
         }
         this.survey = result;
+        this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {
           console.log(this.survey);
@@ -42,4 +44,23 @@ export class ActiveSurveyComponent implements OnInit {
   private startSurvey(){
     this.started = true;
   }
+
+  private previousQ(){
+      if(this.page <= 0){
+        console.log("this is the first question, can't go back further");
+        return;
+      }
+      this.page -= 1;
+      console.log('previous question');
+    }
+
+  private nextQ(){
+    if(this.page+1 >= this.totalPages){
+      console.log("this is the last question, can't advance further");
+      return;
+    }
+    this.page += 1;
+    console.log('next question');
+  }
+
 }

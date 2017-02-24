@@ -1,19 +1,16 @@
 
 .active_survey_window{
   .surveyView{
-    &#playbutton.display:none{
-      -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-      -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
-      animation-name: fadeInSurvey;
-      animation-duration: 1s;
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    animation-name: fadeInSurvey;
+    animation-duration: 2s;
 
-      /* Standard syntax */
-      @keyframes fadeInSurvey {
-        from {opacity: 0;}
-        to {opacity: 1;}
-      }
+    /* Standard syntax */
+    @keyframes fadeInSurvey {
+      from {opacity: 0;}
+      to {opacity: 1;}
     }
-
 
     display: flex;
     height: 100vh;
@@ -23,7 +20,7 @@
 
 /*Styling for the big playbutton at the start of a survey*/
 .playbutton{
-  position: fixed; /* or absolute */
+  position: fixed;
   top: 35%;
   left: 40%;
   button{
@@ -37,8 +34,10 @@
     }
   }
 }
-/*The animation that triggers on click*/
+
+/*The animation that triggers when starbutton is clicked*/
 .playbutton.clicked {
+
   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
   -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
   -webkit-animation-fill-mode: forwards;
