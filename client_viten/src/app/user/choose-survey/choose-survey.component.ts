@@ -13,13 +13,11 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
   private allsurveys: SurveyList[];
   private searchedsurveys: SurveyList[];
   private recentsurveys;
-  private recentsurveysmax;
 
 
   private loaded = false;
-  private search = '';
-  private search_result = false;
-  private tall = 0;
+  search = '';
+  search_result = false;
 
 
 
@@ -28,35 +26,18 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
     this.allsurveys = [];
     this.searchedsurveys = [];
     this.recentsurveys = [];
-    this.recentsurveysmax = [];
   }
 
   ngOnInit() {
-    // Loads all surveys from the local database to list
+    // Loads all active surveys from the local database to list
     this.surveyService.getAllSurveys().subscribe( (surveys) => {
       for (const survey of surveys) {
         if (!survey.active) { continue; }
         this.allsurveys.push(survey);
       }
 
-      // No use of this yet since the database keeps the recent survey in the last indext of all surveys
-      /*
-      for (const survey of this.allsurveys) {
-        this.recentsurveys.push([this.formatmilliseconds(survey.date), survey._id, survey.name]);
-      }
-      this.recentsurveys.reverse();
-       */
-      this.allsurveys.reverse();
-
       // Shows the 10 last surveys of all surveys
-      for (const limit of this.allsurveys){
-          if (this.tall === 10) {
-            break;
-          }else {
-            this.recentsurveysmax.push(limit);
-            this.tall++;
-          };
-      }
+      this.recentsurveys = this.allsurveys.slice(this.allsurveys.length - 10);
 
       this.loaded = true;
     });
@@ -88,11 +69,6 @@ searched(search): void {
   }
   console.log('results' + this.searchedsurveys);
 }
-
-
-recent(): void {
-
-    }
 
 
 
