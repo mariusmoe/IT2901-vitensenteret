@@ -1,13 +1,12 @@
-
 <div>
   <div *ngIf="loaded">
 
-    <input [(ngModel)]="search"/>
+    <input [(ngModel)] = 'search'/>
     <!--<input #box (keyup.enter)="searched(box.search)">-->
     <button (click)="searched(this.search)"> Search</button>
 
     <div *ngIf="search_result">
-        <h2>Search results for <b>{{this.search}}</b>:</h2>
+        <h2>Search results for <b>{{ this.search }}</b>:</h2>
         <div id="searchresults" *ngFor="let searchresult of searchedsurveys">
           <button id="surveyicons" (click)="clicked(survey.name,survey._id)">{{searchresult.name}}</button>
           <!--TODO Button must route to a pop-up window-->
@@ -17,19 +16,16 @@
 
       <!--TODO Need to find a way to get the last updated surveys -->
     <h2>Recent:</h2>
-    <div id="showresults" *ngFor="let survey of recentsurveys">
-      <button id="surveyicons" (click)="clicked(survey.name,survey._id)">{{survey.name}}</button>
+    <div id="showresults" *ngFor="let survey of recentsurveysmax">
+      <button id="surveyicons" >{{survey.name}}</button>
       <!--TODO Button must route to a pop-up window-->
     </div>
-
-
 
 <h2>All Surveys:</h2>
     <div id="showresults" *ngFor="let survey of allsurveys">
       <button id="surveyicons" (click)="clicked(survey.name,survey._id)">{{survey.name}}</button>
       <!--TODO Button must route to a pop-up window-->
-      <h2>{{formatDate(survey.date)}}</h2>
-
+      <p>{{formatDate(survey.date)}}</p>
 
     </div>
 </div>
