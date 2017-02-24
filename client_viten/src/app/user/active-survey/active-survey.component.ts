@@ -47,20 +47,20 @@ export class ActiveSurveyComponent implements OnInit {
 
   private previousQ(){
       if(this.page <= 0){
-        console.log("this is the first question, can't go back further");
+        // console.log("this is the first question, can't go back further");
         return;
       }
       this.page -= 1;
-      console.log('previous question');
+      // console.log('previous question');
     }
 
   private nextQ(){
     if(this.page+1 >= this.totalPages){
-      console.log("this is the last question, can't advance further");
+      // console.log("this is the last question, can't advance further");
       return;
     }
     this.page += 1;
-    console.log('next question');
+    // console.log('next question');
   }
 
 }
