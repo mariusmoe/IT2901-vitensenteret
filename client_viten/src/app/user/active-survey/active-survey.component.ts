@@ -45,6 +45,7 @@ export class ActiveSurveyComponent implements OnInit {
     this.started = true;
   }
 
+// When you navigate to the previous question, this happens
   private previousQ(){
       if(this.page <= 0){
         // console.log("this is the first question, can't go back further");
@@ -53,7 +54,7 @@ export class ActiveSurveyComponent implements OnInit {
       this.page -= 1;
       // console.log('previous question');
     }
-
+// When you navigate to the next question, this happens
   private nextQ(){
     if(this.page+1 >= this.totalPages){
       // console.log("this is the last question, can't advance further");

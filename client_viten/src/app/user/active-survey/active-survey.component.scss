@@ -1,6 +1,12 @@
 
 .active_survey_window{
+
   .surveyView{
+    .playbutton{
+
+      margin: auto auto;
+      height: 100vh;
+    }
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
     animation-name: fadeInSurvey;
@@ -20,36 +26,38 @@
 
 /*Styling for the big playbutton at the start of a survey*/
 .playbutton{
-  position: fixed;
-  top: 35%;
-  left: 40%;
-  button{
-    width: 20vw;
-    height: 30vh;
-    font-weight: bold;
-    font-size: 30px;
-    border-radius: 10px;
-    p{
-      opacity: 0.5;
-    }
-  }
-}
+  //
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
 
+}
 /*The animation that triggers when starbutton is clicked*/
-.playbutton.clicked {
+.playbutton.clicked{
+  // Removed click-animation for playbutton, became problematic. Implement if fixed transition
+  // .svgButton.clicked {
+  //   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+  //   -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+  //   -webkit-animation-fill-mode: forwards;
+  //   animation-name: fadeStartButton;
+  //   animation-duration: 2s;
+  //
+  //   /* Standard syntax */
+  //   @keyframes fadeStartButton {
+  //     from {opacity: 1;}
+  //     to {opacity: 0; visibility: hidden;}
+  //   }
+  // }
+  display: none;
 
-  -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-  -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
-  -webkit-animation-fill-mode: forwards;
-  animation-name: fadeStartButton;
-  animation-duration: 1s;
-
-  /* Standard syntax */
-  @keyframes fadeStartButton {
-    from {opacity: 1;}
-    to {opacity: 0; visibility: hidden;}
-  }
 }
+// Styling for the playbutton
+.svgButton{
+   width: 80vh;
+   height: 80vh;
+}
+.svgButton:focus {outline: none;}
 
 /*This is the navigation pane that lets you navigate between questions*/
 .qnavigate {
