@@ -1,6 +1,7 @@
-<md-card>
-  <div class="container">
-      <h2>Login</h2>
+<div class="adminPortal">
+  <md-card>
+    <md-card-title align="center">Login</md-card-title>
+    <md-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="submitForm(loginForm.value)">
         <div class="form-group" [ngClass]="{'has-error':!loginForm.controls['email'].valid && loginForm.controls['email'].touched}">
           <!-- <label>Email:</label>
@@ -29,21 +30,23 @@
           <!-- The hasError method can work with the built in validators but custom validators as well -->
           <!-- <div *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched" class="alert alert-danger">You must include a password.</div> -->
           </div>
-          <br>
-          <button md-raised-button
-          #submitLoginForm
-          type="submit"
-          class="btn btn-success"
-          [disabled]="!loginForm.valid"
-          color="primary"
-          >
-          <div [mdTooltip]="(!loginForm.valid) ? 'email and password are required' : '' ">
-            Submit
+          <div class="actions">
+              <button md-raised-button
+              #submitLoginForm
+              type="submit"
+              class="btn btn-success"
+              [disabled]="!loginForm.valid"
+              color="primary"
+              *ngIf="!loading"
+              >
+              <div [mdTooltip]="(!loginForm.valid) ? 'email and password are required' : '' " tooltip-position="above">
+                Submit
+              </div>
+            </button>
+            <!-- loading circle -->
+            <md-progress-circle *ngIf="loading" mode="indeterminate" class="smaller loadingcircle" color="primary"></md-progress-circle>
           </div>
-        </button>
-        <!-- loading circle -->
-        <md-progress-circle *ngIf="loading" mode="indeterminate" class="smaller loadingcircle" color="primary"></md-progress-circle>
-
       </form>
-    </div>
-</md-card>
+    </md-card-content>
+  </md-card>
+</div>

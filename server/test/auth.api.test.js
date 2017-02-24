@@ -149,6 +149,7 @@ describe('Auth API', () => {
       .send({'email': 'test-to-del@test.com', 'password': 'test'})
       .end(function(err, res){
         isolated_jwt = res.body.token;   // Should be globaly avaliable before each test now
+        user_id = res.body.user._id;
         res.should.have.status(200);
         done();
       });
@@ -157,6 +158,7 @@ describe('Auth API', () => {
       chai.request(server)
       .delete('/api/auth/delete_account')
       .set('Authorization', isolated_jwt)
+      .send({'id': user_id})
       .end( (err, res) => {
         res.should.have.status(200);
         done();
