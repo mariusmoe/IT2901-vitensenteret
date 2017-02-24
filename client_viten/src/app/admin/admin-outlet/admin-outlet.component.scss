@@ -1,4 +1,17 @@
+@import '../../viten.themes.scss';
 
+// styling of the svg
+#VitenLogo {
+  // index 1 of vitenPrimary is the map of shades for our chosen colour.
+  // we access the "contrast" key of this map. The key we use in the "contrast"
+  // key's value -- which is a map -- is given by the second index in our vitenPrimary
+  // array
+  fill: map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2));
+}
+
+.adminPortal {
+  background: $vitenBackground;
+}
 
 .flexchild {
   flex: 1 1;
@@ -15,6 +28,7 @@
   justify-content: center;
   align-items: flex-start;
   flex-wrap: wrap;
+  padding: 10px;
 
   button {
     margin-left: 10px;
@@ -31,9 +45,19 @@
 }
 
 
+.footer {
+  background: $vitenHTMLBackground;
+  display: flex;
+}
 
 
 .breadcrumbs {
-  // font-size: 0.80em;
+  font-size: 0.80em;
   padding: 10px;
+  span.separator {
+    margin: 0 0.2em; // em is relative to font-size
+  }
+  a, a:active, a:visited {
+    color: inherit;
+  }
 }

@@ -50,7 +50,16 @@ module.exports = (app) => {
   authRoutes.get('/get_token', requireAuth, AuthenticationController.getJWT);
 
   // Delete the account with the provided JWT
-  authRoutes.delete('/delete_account', requireAuth, AuthenticationController.deleteAccount);
+  authRoutes.delete('/delete_account',
+                    requireAuth,
+                    AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                    AuthenticationController.deleteAccount);
+
+  // Return all users to superadmin
+  authRoutes.get('/all_users',
+                    requireAuth,
+                    AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                    AuthenticationController.getAllUsers);
 
   // // TODO Password reset request route
   // authRoutes.post('/forgot-password', AuthenticationController.forgotPassword);
@@ -68,18 +77,15 @@ module.exports = (app) => {
   // authRoutes.post('/request_new_email_confirmation', AuthenticationController.newConfirmationLink)
   //
   // Test authentication with roleAuthorization
-  authRoutes.get(
-                  '/test',
+  authRoutes.get('/test',
+                 requireAuth,
+                 AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                 AuthenticationController.test);
+
+   authRoutes.get('test2',
                   requireAuth,
-                  AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
-                  AuthenticationController.test
-               )
-   authRoutes.get(
-                   '/test2',
-                   requireAuth,
-                   AuthenticationController.roleAuthorization(REQUIRE_MEMBER),
-                   AuthenticationController.test
-                )
+                  AuthenticationController.roleAuthorization(REQUIRE_MEMBER),
+                  AuthenticationController.test);
   //
   // // change email for this account
   // authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
@@ -102,7 +108,10 @@ module.exports = (app) => {
 
   surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
 
-  surveyRoutes.delete('/:surveyId', requireAuth, SurveyController.deleteOneSurvey);
+  surveyRoutes.delete('/:surveyId',
+                      requireAuth,
+                      AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                      SurveyController.deleteOneSurvey);
 
 
   // retrive one survey as a json object

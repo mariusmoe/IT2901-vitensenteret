@@ -31,6 +31,15 @@ module.exports = {
     message: 'The referral link is too old or not correct',
     code: 2017
   },
+  ROLE_INCORRECT: {
+    message: 'The role provided is invalid',
+    code: 2013
+  },
+  ROUTE_USERS_VALID_NO_USERS: {
+    message: 'Route valid but no users was found',
+    code: 2024
+  },
+
 
   // SURVEY CODES
   SURVEY_UNPROCESSABLE: {

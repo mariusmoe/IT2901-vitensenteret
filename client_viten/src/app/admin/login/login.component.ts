@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angula
 import { slideInDownAnimation } from '../../animations';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
+import { User } from '../../_models/user';
 
 @Component({
   selector: 'app-login',
@@ -11,16 +12,15 @@ import { AuthenticationService } from '../../_services/authentication.service';
   animations: [ slideInDownAnimation ]
 })
 export class LoginComponent implements OnInit {
+  /*
   @HostBinding('@routeAnimation') routeAnimation = true;
   @HostBinding('style.display')   display = 'block';
   @HostBinding('style.position')  position = 'absolute';
+  */
 
-
-  loginForm : FormGroup;
-
-  loading : boolean = false;
-
-  error : string;
+  public loginForm: FormGroup;
+  public loading = false;
+  public error: string;
 
   constructor(
     private router: Router,
@@ -29,15 +29,14 @@ export class LoginComponent implements OnInit {
       this.loginForm = fb.group({
       'email': [null, Validators.required],
       'password': [null, Validators.required]
-    })
+    });
    }
 
   ngOnInit() {
   }
 
-  submitForm(user: any){
+  submitForm(user: User) {
     this.loading = true;
-
     console.log(user);
 
     this.loading = true;
@@ -52,7 +51,7 @@ export class LoginComponent implements OnInit {
             }
         },
         error => {
-          user.password = "";
+          user.password = '';
           this.error = 'Email or password is incorrect.';
           this.loading = false;
         }

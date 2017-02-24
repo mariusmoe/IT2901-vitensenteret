@@ -9,7 +9,7 @@ let validJsonObject = {
   "date": "2012-04-23T18:25:43.511Z",
   "active": true,
   "questionlist": [{
-    "mode": "smily",
+    "mode": "smiley",
     // no comment property here. Admin only. see its own test below.
     "answer": [1,3,3,3,3],
     "lang": {
@@ -289,7 +289,7 @@ describe('Survey validation', () => {
     expect(IsItValid).to.equal(false);
 
     // check accepted values:
-    let accepted_values = ['binary', 'star', 'multi', 'smily', 'text'];
+    let accepted_values = ['binary', 'star', 'multi', 'smiley', 'text'];
     for (let value of accepted_values) {
       clone.questionlist[0].mode = value;
       IsItValid = val.surveyValidation(clone);
