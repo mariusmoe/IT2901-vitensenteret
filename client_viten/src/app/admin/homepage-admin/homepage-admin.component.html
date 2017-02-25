@@ -30,14 +30,10 @@
         </button>
       </md-card-actions>
     </md-card>
-    <md-card *ngIf="!survey" class="emptyArea">
-      <md-card-title>Admin Area</md-card-title>
-      <md-card-subtitle>Toodleloo</md-card-subtitle>
-      <md-card-content>
-        <p>
-          Why hellooo!
-        </p>
-      </md-card-content>
-    </md-card>
+    <div *ngIf="!survey" class="emptyArea">
+      <md-progress-circle *ngIf="loadingSurvey" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
+      <div *ngIf="!loadingSurvey">
+        
+      </div>
   </div>
 </div>
