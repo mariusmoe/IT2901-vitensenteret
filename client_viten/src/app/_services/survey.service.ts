@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Survey } from '../_models/survey';
 import { SurveyList } from '../_models/index';
 

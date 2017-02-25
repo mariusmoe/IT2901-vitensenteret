@@ -62,7 +62,7 @@ export class CreateSurveyComponent implements OnInit {
     // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
     if (param) {
-      this.surveyService.getSurvey(param).subscribe(result => {
+      const sub = this.surveyService.getSurvey(param).subscribe(result => {
         this.survey = result;
         this.isPatch = true;
 
@@ -75,6 +75,11 @@ export class CreateSurveyComponent implements OnInit {
         // Do not remove the following lines!
         this.setPushReadyStatus();
         this.startupLoading = false;
+
+        // unsubscribe! the service (and the subscription) is still there
+        // after this component gets destroyed. We have no futher need of it here,
+        // so might as well unsub now.
+        sub.unsubscribe();
       },
       error => {
         // this.route.snapshot is the route for the SUBDOMAIN of /admin
@@ -260,7 +265,7 @@ export class CreateSurveyComponent implements OnInit {
       }
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
-    dialogRef.afterClosed().subscribe( () => {
+    const sub = dialogRef.afterClosed().subscribe( () => {
       const output = dialogRef.componentInstance.outputQuestionObject;
       // output doesn't exist if the user hits cancel or otherwise closes the
       // dialog window
@@ -270,6 +275,7 @@ export class CreateSurveyComponent implements OnInit {
         // Do not remove the following line!
         this.setPushReadyStatus();
       }
+      sub.unsubscribe();
     });
   }
 }
