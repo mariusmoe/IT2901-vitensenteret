@@ -16,15 +16,15 @@ export class AdminSurveysPipe implements PipeTransform {
           })
           .sort((s1, s2) => {
             if (s1.active && !s2.active) {
-              return 1;
+              return -1; // active surveys at the top (inverted list)
             }
             if (!s1.active && s2.active) {
-              return -1;
+              return 1;
             }
             const d1 = new Date(s1.date).valueOf();
             const d2 = new Date(s2.date).valueOf();
             if (d1 > d2) {
-              return -1; // recent surveys first!
+              return -1; // recent surveys at the top (inverted list)
             }
             if (d1 < d2) {
               return 1;

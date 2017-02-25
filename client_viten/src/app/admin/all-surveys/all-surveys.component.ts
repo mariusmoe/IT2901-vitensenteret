@@ -15,7 +15,7 @@ import { Observable } from 'rxjs/Observable';
 export class AllSurveysComponent implements OnInit {
 
 
-    private surveys: SurveyList[] = [];
+    surveys: SurveyList[] = [];
     loading = false;
     selectedID = '';
     searchInput = '';

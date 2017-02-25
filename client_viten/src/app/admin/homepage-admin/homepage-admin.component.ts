@@ -14,17 +14,15 @@ export class HomepageAdminComponent implements OnInit {
   private getSelectedSurvey;
   survey: Survey;
 
+  loadingSurveys = false;
+
   constructor(private surveyService: SurveyService, private router: Router, private route: ActivatedRoute) {
     }
 
   ngOnInit() {
     // If we have a router parameter, we should attempt to use that first.
     const param = this.route.snapshot.params['surveyId'];
-    if (param) {
-      this.surveyService.getSurvey(param).subscribe(result => {
-        this.survey = result;
-      });
-    }
+    this.getSurvey(param);
 
     // subscribe to continuous updates.
     this.surveyService.getSelectedSurvey().subscribe(surveyId => {
@@ -37,7 +35,9 @@ export class HomepageAdminComponent implements OnInit {
 
 
   private getSurvey(surveyId: string) {
+    this.loadingSurveys = true;
     this.surveyService.getSurvey(surveyId).subscribe( (survey: Survey) => {
+      this.loadingSurveys = false;
       this.survey = survey;
     });
   }

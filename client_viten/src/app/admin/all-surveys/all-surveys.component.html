@@ -1,6 +1,7 @@
 <div class="searchBox">
   <md-input-container>
-    <input mdInput type="search" placeholder="Search" [(ngModel)]="searchInput">
+    <input mdInput type="search" placeholder="Search" [(ngModel)]="searchInput"
+    md-tooltip="Filter results on title and / or admin comment">
   </md-input-container>
 </div>
 
@@ -14,5 +15,9 @@
     <p md-line>{{formatDate(survey.date)}}</p>
     <!-- <p md-line>ID: {{survey._id}}</p> -->
   </md-list-item>
-  <span>A maximum of 20 items are displayed.</span>
 </md-list>
+
+<!-- loading circle -->
+<md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
+
+<span class="listComment"  *ngIf="!loading">{{surveys.length}} total surveys. A maximum of 20 items are displayed.</span>
