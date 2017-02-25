@@ -1,0 +1,35 @@
+
+
+.flexParent {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  flex-wrap: nowrap;
+  align-items: stretch;
+}
+
+
+.rightSide {
+  flex: 3 3;
+}
+
+.leftSide {
+  flex: 1 1;
+  min-width: 200px;
+}
+
+.emptyArea {
+
+  .loadingCircle {
+    margin: 0 auto;
+    margin-top: 60px;
+  }
+}
+
+.selectedSurveyArea {
+  .activeIcon {
+    width: 1em;
+    height: 1em;
+    font-size: 3em;
+  }
+}

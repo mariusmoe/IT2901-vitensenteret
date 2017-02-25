@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Survey } from '../_models/survey';
 import { SurveyList } from '../_models/index';
 
@@ -11,29 +10,12 @@ import { SurveyList } from '../_models/index';
 export class SurveyService {
 
   private url = 'http://localhost:2000/api/survey'; // TODO: FIX ME
-  private surveyList: SurveyList[] = [];
-
-  private selectedSurvey: BehaviorSubject<string> = new BehaviorSubject<string>(null);
+  surveyList: SurveyList[] = [];
 
   constructor(private http: Http) {
 
   }
 
-  /**
-   * select one surveyId
-   * @param {string} surveyId survey ID selected
-   */
-  selectSurvey(surveyId: string) {
-    if (surveyId === this.selectedSurvey.getValue()) {
-      console.log('Same survey - nothing changed');
-    } else {
-      this.selectedSurvey.next(surveyId);
-    }
-  }
-
-  getSelectedSurvey() {
-    return this.selectedSurvey.asObservable();
-  }
 
 
   /**
@@ -160,12 +142,13 @@ export class SurveyService {
             this.surveyList = new Array<SurveyList>();
 
             for (const survey of jsonResponse){
-              const su = new SurveyList();
-              su._id    = survey._id;
-              su.name   = survey.name;
-              su.active = survey.active;
-              su.date   = survey.date;
-
+              const su: SurveyList = {
+                _id: survey._id,
+                name: survey.name,
+                active: survey.active,
+                date: survey.date,
+                comment: survey.comment,
+              };
               this.surveyList.push(su);
             }
             return this.surveyList;
