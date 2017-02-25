@@ -13,48 +13,28 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./all-surveys.component.scss']
 })
 export class AllSurveysComponent implements OnInit {
-
-
-    surveys: SurveyList[] = [];
     loading = false;
-    selectedID = '';
     searchInput = '';
 
 
     constructor(
       private router: Router,
-      private route: ActivatedRoute,
-      private surveyService: SurveyService) {
-
+      public route: ActivatedRoute,
+      public surveyService: SurveyService) {
+        // request fresh list of surveys
+        this.getSurveys();
       }
 
     ngOnInit() {
-      this.getSurveys();
-      if (this.route.snapshot.params['surveyId']) {
-        console.log(this.route.snapshot.params['surveyId']);
-        this.setSelectedID(this.route.snapshot.params['surveyId']);
-      }
-    }
-
-    /**
-     * Set the selected ID
-     *
-     * Set the selected survey if it is provided in the url
-     * @param  {string} selectedID surveyID to use
-     */
-    setSelectedID(selectedID: string) {
-      this.selectedID = selectedID;
     }
 
     /**
      * Select one survey form the list
      * @param  {string} surveyId [description]
-     * @return {[type]}          [description]
+     * Appends the surveyId to the router navigation.
      */
     select(surveyId: string) {
-      this.selectedID = surveyId;
       this.router.navigate(['/admin', surveyId]);
-      this.surveyService.selectSurvey(surveyId);
     }
 
     /**
@@ -63,9 +43,8 @@ export class AllSurveysComponent implements OnInit {
     private getSurveys() {
       this.loading = true;
       this.surveyService.getAllSurveys().subscribe(result => {
-        this.surveys = result;
         this.loading = false;
-        console.log(result);
+        // console.log(result);
       });
     }
 

@@ -8,17 +8,17 @@
 
 <md-list class="list">
   <md-list-item
-    *ngFor="let survey of (surveys | adminSurveyPipe: searchInput)"
-    [ngClass]="{'survey': true, 'active': survey._id == selectedID}"
+    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput)"
+    [ngClass]="{'survey': true, 'active': survey._id == route.snapshot.params['surveyId']}"
     (click)="select(survey._id)">
     <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
     <h4 md-line>{{survey.name}}</h4>
     <p md-line>{{formatDate(survey.date)}}</p>
+    <p md-line *ngIf="survey.comment">{{survey.comment}}</p>
     <!-- <p md-line>ID: {{survey._id}}</p> -->
   </md-list-item>
 </md-list>
 
 <!-- loading circle -->
 <md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-
-<span class="listComment"  *ngIf="!loading">{{surveys.length}} total surveys. A maximum of 20 items are displayed.</span>
+<span class="listComment"  *ngIf="!loading">{{surveyService.surveyList.length}} total surveys. A maximum of 20 items are displayed.</span>
