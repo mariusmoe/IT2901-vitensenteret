@@ -113,9 +113,9 @@ export class CreateSurveyComponent implements OnInit {
      * Checks every part of the survey and returns true if the survey is valid
      */
     setPushReadyStatus() {
+      // note: comment is NOT required, and is thusly not listed here.
       let status = this.fieldValidate(this.survey.name)     // name
         && this.survey.questionlist.length > 0              // at least one question
-        && this.fieldValidate(this.survey.comment)          // comment
         && this.fieldValidate(this.survey.endMessage.no);   // message no
       if (this.englishEnabled) {                            // message en
         status = status && this.fieldValidate(this.survey.endMessage.en);
