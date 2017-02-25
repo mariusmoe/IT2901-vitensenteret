@@ -1,6 +1,12 @@
+<div class="searchBox">
+  <md-input-container>
+    <input mdInput type="search" placeholder="Search" [(ngModel)]="searchInput">
+  </md-input-container>
+</div>
+
 <md-list class="list">
   <md-list-item
-    *ngFor="let survey of surveys"
+    *ngFor="let survey of (surveys | adminSurveyPipe: searchInput)"
     [ngClass]="{'survey': true, 'active': survey._id == selectedID}"
     (click)="select(survey._id)">
     <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
@@ -8,4 +14,5 @@
     <p md-line>{{formatDate(survey.date)}}</p>
     <!-- <p md-line>ID: {{survey._id}}</p> -->
   </md-list-item>
+  <span>A maximum of 20 items are displayed.</span>
 </md-list>

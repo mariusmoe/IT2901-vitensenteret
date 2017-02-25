@@ -1,5 +1,7 @@
-<div class="flexParent">
-  <app-all-surveys></app-all-surveys>
+<div>
+  <div class="surveyList">
+    <app-all-surveys></app-all-surveys>
+  </div>
   <md-card *ngIf="survey" class="selectedSurveyArea">
     <md-card-title-group>
       <md-card-title>{{survey.name}}</md-card-title>

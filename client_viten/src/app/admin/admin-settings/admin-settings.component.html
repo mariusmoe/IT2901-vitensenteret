@@ -59,8 +59,14 @@
       <button md-raised-button
         color="primary"
         minlength="3"
-        (click)="requestAdminReferal()">
+        (click)="requestReferal('admin')">
         Request admin
+      </button>
+      <button md-raised-button
+        color="primary"
+        minlength="3"
+        (click)="requestReferal('member')">
+        Request member
       </button>
     </md-card>
     <md-card>
