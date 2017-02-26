@@ -68,7 +68,7 @@
         <md-card-content>
           <div class="flexParent">
             <!-- QUESTIONOBJECT -->
-            <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@fadeInOut]="'in'">
+            <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@slideInOut]="">
               <md-card-title>Question {{i+1}}</md-card-title>
               <md-card-content>
                 <!-- QUESTION MODE -->

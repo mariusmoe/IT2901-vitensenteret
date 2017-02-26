@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, animate, state, style, transition, trigger  } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Survey } from '../../_models/survey';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
@@ -7,7 +7,13 @@ import { Subscription } from 'rxjs/Subscription';
 @Component({
   selector: 'app-homepage-admin',
   templateUrl: './homepage-admin.component.html',
-  styleUrls: ['./homepage-admin.component.scss']
+  styleUrls: ['./homepage-admin.component.scss'],
+  animations: [
+    trigger('fadeIn', [
+      state('void', style({ opacity: 0 })),
+      transition(':enter', [animate('0.3s ease-in-out', style({opacity: 1 }))])
+    ])
+  ]
 })
 export class HomepageAdminComponent implements OnInit, OnDestroy {
   survey: Survey = null;
