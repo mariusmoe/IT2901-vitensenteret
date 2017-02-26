@@ -73,8 +73,11 @@ module.exports = app => {
       }
 
       let today = new Date();
-      for (let i = 0; i<20000; i++) {
-        let s = new Survey({
+      let surveysPop = [];
+
+
+      for (let i = 0; i<4000; i++) {
+        let s = {
           name: funnify(),
           comment: funnify(),
           questionlist: [{
@@ -82,14 +85,15 @@ module.exports = app => {
             txt: generateQuestion(),
           }],
           date: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
-          active: (getRandomInt(0,1) === 1),
+          active: Math.random() < 0.5,
           endMessage: {
             no: funnify(),
           }
-        });
-        s.save(function(err) {
-          if (err) { console.error("Cant add survey" + err) }
-        });
+        };
+        surveysPop.push(s);
       }
+      Survey.insertMany(surveysPop);
+      const time = (new Date().getTime() - today.getTime());
+      console.log('seed complete: ' + time + 'ms');
   });
 }
