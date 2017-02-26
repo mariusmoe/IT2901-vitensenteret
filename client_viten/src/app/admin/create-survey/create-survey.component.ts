@@ -18,7 +18,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
       ]))
     ]),
     transition(':leave', [
-      style({ 'min-width': '0', 'max-height': '0' }),
+      style({ transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0' }),
       animate('0.1s ease-in-out', style({ 'max-width': '0' }))
     ])
   ])]
