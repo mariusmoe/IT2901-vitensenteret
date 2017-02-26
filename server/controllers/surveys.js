@@ -39,7 +39,7 @@ exports.createSurvey = (req, res, next) => {
 // GET
 exports.getAllSurveys = (req, res, next) => {
   Survey.find( {}, { 'name': true, 'active': true, 'date': true, 'comment': true }, (err, surveys) => {
-    if (!surveys) {
+    if (!surveys || surveys.length === 0) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
     }
@@ -49,9 +49,9 @@ exports.getAllSurveys = (req, res, next) => {
     // _id is always returned unless specified as false in the projection.
 
     return res.status(200).send(surveys);
-  });
-
+  }).lean();
 }
+
 exports.getOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
