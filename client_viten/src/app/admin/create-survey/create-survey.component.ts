@@ -10,7 +10,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
   templateUrl: './create-survey.component.html',
   styleUrls: ['./create-survey.component.scss'],
   animations: [trigger('fadeInOut', [
-    state('in', style({transform: 'translateX(0)'})),
+    state('in', style({transform: 'translateX(0)' })),
     transition('void => *', [
       // animation values courtesy of Ankit Singh, posted answered Nov 29 '16 at 5:05 at stackoverflow
       // http://stackoverflow.com/
@@ -22,10 +22,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
       ]))
     ]),
     transition('* => void', [
-      animate(300, keyframes([
-        style({opacity: 1, transform: 'translateX(0)',     offset: 0}),
-        style({opacity: 1, transform: 'translateX(-15px)', offset: 0.7}),
-        style({opacity: 0, transform: 'translateX(100%)',  offset: 1.0})
+      animate(200, keyframes([
+        style({opacity: 1, offset: 0}),
+        style({opacity: 0, offset: 1.0})
       ]))
     ])
   ])]
