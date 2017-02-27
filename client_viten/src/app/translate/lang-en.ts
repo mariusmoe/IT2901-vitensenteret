@@ -17,6 +17,7 @@ export const LANG_EN_TRANS = {
   'Cancel': 'Cancel',
   'Save': 'Save',
   'Settings': 'Settings',
+  'Search': 'Search',
 
   // Languages
   'Norwegian': 'Norwegian',
@@ -61,4 +62,6 @@ export const LANG_EN_TRANS = {
   'Could not post your survey. Error:': 'Could not post your survey. The server replied:',
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
 
+  // All surveys component
+  'total surveys. A maximum of 20 items are displayed.': 'total surveys. A maximum of 20 items are displayed.',
 };

@@ -17,6 +17,7 @@ export const LANG_NO_TRANS = {
   'Cancel': 'Avbryt',
   'Save': 'Lagre',
   'Settings': 'Instillinger',
+  'Search': 'Søk',
 
   // Languages
   'Norwegian': 'Norwegian',
@@ -62,4 +63,6 @@ export const LANG_NO_TRANS = {
   'Could not post your survey. Error:': 'Kunne ikke lagre undersøkelsen. Feilmelding:',
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
 
+  // All surveys component
+  'total surveys. A maximum of 20 items are displayed.': 'totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
 };
