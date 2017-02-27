@@ -72,4 +72,8 @@ export const LANG_NO_TRANS = {
   'Login': 'Innlogging',
   'Log in': 'Logg inn',
   'Email and password are required': 'Både epost og passord er påkrevd',
+
+  // Admin homepage component
+  'Download as PDF': 'Last ned som PDF',
+  'Download Raw Data': 'Last ned rådata',
 };

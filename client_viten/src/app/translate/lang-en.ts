@@ -71,4 +71,8 @@ export const LANG_EN_TRANS = {
   'Login': 'Login',
   'Log in': 'Log in',
   'Email and password are required': 'Email and password are required',
+
+  // Admin homepage component
+  'Download as PDF': 'Download as PDF',
+  'Download Raw Data': 'Download Raw Data',
 };
