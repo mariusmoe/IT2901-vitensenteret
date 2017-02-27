@@ -5,6 +5,7 @@ import { TranslateService } from '../_services/translate.service';
 
 @Pipe({
     name: 'translate',
+    pure: false // required to make translations update when language changes.
 })
 
 export class TranslatePipe implements PipeTransform {
