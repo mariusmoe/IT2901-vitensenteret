@@ -66,7 +66,7 @@
       <md-card>
         <md-card-title>Questions</md-card-title>
         <md-card-content>
-          <div class="flexParent">
+          <div class="flexParent" [dragula]="'questionsBag'" [dragulaModel]="survey.questionlist">
             <!-- QUESTIONOBJECT -->
             <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@slideInOut]="">
               <md-card-title>Question {{i+1}}</md-card-title>

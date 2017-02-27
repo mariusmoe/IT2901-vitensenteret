@@ -22,6 +22,7 @@ import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin
 
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
 import { ClipboardModule } from 'ngx-clipboard';
+import { DragulaModule } from 'ng2-dragula';
 
 
 @NgModule({
@@ -47,6 +48,7 @@ import { ClipboardModule } from 'ngx-clipboard';
     HttpModule,
     AppRoutingModule,
     ClipboardModule,
+    DragulaModule,
     MaterialModule.forRoot()
   ],
   entryComponents: [
