@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { JwtHelper } from 'angular2-jwt';
+import { environment } from '../../environments/environment';
 
 import { User } from '../_models/user';
 
@@ -10,15 +11,6 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class AuthenticationService {
 
-  private url = {
-    login: 'http://localhost:2000/api/auth/login',
-    allUsers: 'http://localhost:2000/api/auth/all_users',
-    delete: 'http://localhost:2000/api/auth/delete_account',
-    refer: 'http://localhost:2000/api/auth/get_referral_link/',
-    renewJWT: 'http://localhost:2000/api/auth/get_token/',
-    newEmail: 'http://localhost:2000/api/auth/change_email/',
-    newPassword: 'http://localhost:2000/api/auth/change_password/'
-  };
 
   public token: string;
   private user: User;
@@ -37,7 +29,7 @@ export class AuthenticationService {
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers });
     const data = { 'email': newEmail };
-      return this.http.post(this.url.newEmail, JSON.stringify(data), options)
+      return this.http.post(environment.URL.newEmail, JSON.stringify(data), options)
       .map(
         response => {
           return true;
@@ -55,7 +47,7 @@ export class AuthenticationService {
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers });
     const data = { 'password': newPassword };
-      return this.http.post(this.url.newPassword, JSON.stringify(data), options)
+      return this.http.post(environment.URL.newPassword, JSON.stringify(data), options)
       .map(
         response => {
           return true;
@@ -75,7 +67,7 @@ export class AuthenticationService {
     const headers = new Headers();
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers });
-      return this.http.get(this.url.refer + role, options)
+      return this.http.get(environment.URL.refer + role, options)
       .map(
         response => {
           const jsonResponse = response.json();
@@ -100,12 +92,12 @@ export class AuthenticationService {
     const token = this.getToken();
     if (token) {
       const currentUser = this.decodeToken(token);
-      return {
+      return <User>{
         _id: currentUser._id,
         email: currentUser.email,
-        role: currentUser.role,
-      }: User;
-    }
+        role: currentUser.role
+      };
+    };
   }
 
   /**
@@ -135,7 +127,7 @@ export class AuthenticationService {
       headers: headers,
       body: body
     });
-      return this.http.delete(this.url.delete, options)
+      return this.http.delete(environment.URL.delete, options)
       .map(
         response => {
           return true;
@@ -154,7 +146,7 @@ export class AuthenticationService {
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    return this.http.get(this.url.allUsers, options)
+    return this.http.get(environment.URL.allUsers, options)
       .map(
         response => {
           const jsonResponse = response.json();
@@ -200,7 +192,7 @@ export class AuthenticationService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${this.token}`);
     const options = new RequestOptions({ headers: headers });
-    return this.http.get(this.url.renewJWT, options)
+    return this.http.get(environment.URL.renewJWT, options)
       .map(
         response => {
           if (response.status !== 200) {
@@ -232,7 +224,7 @@ export class AuthenticationService {
       const headers = new Headers({'content-type': 'application/json'});
       const options = new RequestOptions({headers: headers});
       const data = { 'email': email, 'password': password };
-      return this.http.post(this.url.login, JSON.stringify(data), options)
+      return this.http.post(environment.URL.login, JSON.stringify(data), options)
         .map(
           response => {
             const jsonResponse = response.json();
