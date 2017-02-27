@@ -8,5 +8,10 @@
 
     <p> Selected value: {{chartType}} </p>
   </form>
-  
+  <div [ngSwitch]="chartType">
+    <p *ngSwitchCase="bar-chart">
+      {{chart.viewValue}}
+    </p>
+    <app-doughnut-chart *ngSwitchCase="doughnut-chart"></app-doughnut-chart>
+  </div>
 </div>
