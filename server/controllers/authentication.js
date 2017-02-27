@@ -122,25 +122,19 @@ exports.register = (req, res, next) => {
   });
 }
 
-
+/**
+ * get all users
+ */
 exports.getAllUsers = (req, res, next) => {
-  User.find({}, (err, users) => {
+  User.find({}, {'email': true, 'role': true}, (err, users) => {
     if (!users) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       return res.status(200).send({message: status.ROUTE_USERS_VALID_NO_USERS.message, status: status.ROUTE_USERS_VALID_NO_USERS.code});
     }
     if (err) { return next(err); }
-    let userList = [];
-    for (let user of users) {
-      userList[userList.length] = {
-        '_id': user._id,
-        'email': user.email,
-        'role': user.role,
-      }
-    }
 
-    return res.status(200).send(userList);
-  })
+    return res.status(200).send(users);
+  }).lean();
 }
 
 /**
@@ -228,6 +222,46 @@ exports.roleAuthorization = function(role){
       return next('Unauthorized');
     })
   }
+}
+
+exports.changeEmail = function(req, res, next) {
+  User.findById(req.user._id, function(err, user) {
+    if (err) {
+      res.status(422).json({ error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
+      return next(err);
+    }
+    if (req.body.email == '') {
+      res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
+      return next(err);
+    }
+    user.email = req.body.email
+    user.save(function(err){
+      if(err){
+        throw err;
+      }
+      return res.status(200).send({message: status.EMAIL_CHANGED.message, status: status.EMAIL_CHANGED.code})
+    });
+  });
+}
+
+exports.changePassword = (req, res, next) => {
+  User.findById(req.user._id, function(err, user) {
+    if (err) {
+      res.status(422).json({ error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
+      return next(err);
+    }
+    if (req.body.password == '') {
+      res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
+      return next(err);
+    }
+    user.password = req.body.password
+    user.save((err) => {
+      if(err){
+        throw err;
+      }
+      return res.status(200).send({message: status.PASSWORD_CHANGED.message, status: status.PASSWORD_CHANGED.code})
+    });
+  });
 }
 
 exports.test = (req, res, next) => {
