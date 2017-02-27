@@ -56,7 +56,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
             this.dialogRef = this.dialog.open(CredentialDialog, config);
 
             this.dialogRef.afterClosed().subscribe(dialogResult => {
-              console.log('result: ' + dialogResult);
+              // console.log('result: ' + dialogResult);
               if (dialogResult === 'yes') {
                 this.router.navigate(['/login']);
               }
@@ -86,7 +86,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
           this.dialogRef = this.dialog.open(CredentialDialog, config);
 
           this.dialogRef.afterClosed().subscribe(dialogResult => {
-            console.log('result: ' + dialogResult);
+            // console.log('result: ' + dialogResult);
             if (dialogResult === 'yes') {
               this.router.navigate(['/login']);
             }
@@ -105,7 +105,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   requestReferal(role) {
     this.service.getReferral(role)
         .subscribe(result => {
-          console.log(result);
+          // console.log(result);
           const config: MdDialogConfig = {
             data: {
               referralURL: result,
@@ -121,7 +121,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
     this.userListSub = this.service.getAllUsers().subscribe(users => {
       this.userList = users; // Subscribe and get user from the authService
-      console.log(this.userList);
+      // console.log(this.userList);
     });
   }
 
@@ -171,7 +171,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     });
 
     this.dialogRef.afterClosed().subscribe(result => {
-      console.log('result: ' + result);
+      // console.log('result: ' + result);
       if (result === 'yes') {
         this.deleteUser(id);
       }
