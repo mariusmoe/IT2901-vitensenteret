@@ -26,6 +26,18 @@ md-card {
     md-input-container {
       width: 100%;
     }
+    .modeSelect {
+      md-select {
+        display: block;
+      }
+      span.desc {
+        display: block;
+        font-size: 75%; // mimics md-hint
+        &.invalid {
+          color: red;
+        }
+      }
+    }
   }
 
 }

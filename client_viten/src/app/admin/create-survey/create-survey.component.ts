@@ -1,14 +1,27 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, animate, state, style, transition, trigger, keyframes } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-
 @Component({
   selector: 'app-create-survey',
   templateUrl: './create-survey.component.html',
-  styleUrls: ['./create-survey.component.scss']
+  styleUrls: ['./create-survey.component.scss'],
+  animations: [trigger('slideInOut', [
+    state('void', style({transform: 'translateX(0)' })),
+    transition(':enter', [
+      animate(300, keyframes([
+        style({opacity: 0, transform: 'translateX(-100%)', offset: 0}),
+        style({opacity: 1, transform: 'translateX(15px)',  offset: 0.3}),
+        style({opacity: 1, transform: 'translateX(0)',     offset: 1.0})
+      ]))
+    ]),
+    transition(':leave', [
+      style({ transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0' }),
+      animate('0.1s ease-in-out', style({ 'max-width': '0' }))
+    ])
+  ])]
 })
 export class CreateSurveyComponent implements OnInit {
   // COMPONENT VARIABLES
@@ -62,7 +75,7 @@ export class CreateSurveyComponent implements OnInit {
     // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
     if (param) {
-      this.surveyService.getSurvey(param).subscribe(result => {
+      const sub = this.surveyService.getSurvey(param).subscribe(result => {
         this.survey = result;
         this.isPatch = true;
 
@@ -75,6 +88,11 @@ export class CreateSurveyComponent implements OnInit {
         // Do not remove the following lines!
         this.setPushReadyStatus();
         this.startupLoading = false;
+
+        // unsubscribe! the service (and the subscription) is still there
+        // after this component gets destroyed. We have no futher need of it here,
+        // so might as well unsub now.
+        sub.unsubscribe();
       },
       error => {
         // this.route.snapshot is the route for the SUBDOMAIN of /admin
@@ -108,9 +126,9 @@ export class CreateSurveyComponent implements OnInit {
      * Checks every part of the survey and returns true if the survey is valid
      */
     setPushReadyStatus() {
+      // note: comment is NOT required, and is thusly not listed here.
       let status = this.fieldValidate(this.survey.name)     // name
         && this.survey.questionlist.length > 0              // at least one question
-        && this.fieldValidate(this.survey.comment)          // comment
         && this.fieldValidate(this.survey.endMessage.no);   // message no
       if (this.englishEnabled) {                            // message en
         status = status && this.fieldValidate(this.survey.endMessage.en);
@@ -260,7 +278,7 @@ export class CreateSurveyComponent implements OnInit {
       }
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
-    dialogRef.afterClosed().subscribe( () => {
+    const sub = dialogRef.afterClosed().subscribe( () => {
       const output = dialogRef.componentInstance.outputQuestionObject;
       // output doesn't exist if the user hits cancel or otherwise closes the
       // dialog window
@@ -270,6 +288,7 @@ export class CreateSurveyComponent implements OnInit {
         // Do not remove the following line!
         this.setPushReadyStatus();
       }
+      sub.unsubscribe();
     });
   }
 }

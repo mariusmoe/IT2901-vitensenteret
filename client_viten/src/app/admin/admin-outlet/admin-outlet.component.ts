@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-admin-outlet',
   templateUrl: './admin-outlet.component.html',
   styleUrls: ['./admin-outlet.component.scss']
 })
-export class AdminOutletComponent implements OnInit {
+export class AdminOutletComponent implements OnInit, OnDestroy {
   public breadcrumbs;
-
+  private routerSub: Subscription;
 
   constructor(private router: Router, private route: ActivatedRoute) {}
 
   ngOnInit() {
     // Update whenever you navigate
-    this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
+    this.routerSub = this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
       this.breadcrumbs = this.getBreadcrumbs();
 
     });
+  }
 
+  ngOnDestroy() {
+    this.routerSub.unsubscribe();
   }
 
 

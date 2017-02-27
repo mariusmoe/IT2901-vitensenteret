@@ -33,7 +33,7 @@ module.exports = app => {
         let thing = getRandomInt(0, things.length);
         let emotion = getRandomInt(0,emotions.length);
         let verb = getRandomInt(0,verbs.length);
-        return `${thing} for ${emotions[emotion]} ${verbs[verb]}ing`
+        return `${things[thing]} for ${emotions[emotion]} ${verbs[verb]}ing`
       }
 
       // Generator for a paragraph of funny text.
@@ -72,23 +72,28 @@ module.exports = app => {
         }
       }
 
-      for (let i = 0; i<1000; i++) {
-        let s = new Survey({
+      let today = new Date();
+      let surveysPop = [];
+
+
+      for (let i = 0; i<4000; i++) {
+        let s = {
           name: funnify(),
           comment: funnify(),
           questionlist: [{
             mode: 'smiley',
             txt: generateQuestion(),
           }],
-          date: new Date(),
-          active: (getRandomInt(0,1) == 1),
+          date: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
+          active: Math.random() < 0.5,
           endMessage: {
             no: funnify(),
           }
-        });
-        s.save(function(err) {
-          if (err) { console.error("Cant add survey" + err) }
-        });
+        };
+        surveysPop.push(s);
       }
+      Survey.insertMany(surveysPop);
+      const time = (new Date().getTime() - today.getTime());
+      console.log('seed complete: ' + time + 'ms');
   });
 }

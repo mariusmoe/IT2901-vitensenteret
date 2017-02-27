@@ -14,7 +14,6 @@ import { AuthenticationService } from './_services/authentication.service';
 import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
-import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
@@ -32,7 +31,6 @@ import { ClipboardModule } from 'ngx-clipboard';
     HomepageUserComponent,
     LoginComponent,
     AllSurveysComponent,
-    TestRestAPIComponent,
     CreateSurveyComponent,
     SurveyAlternativesDialog,
     SurveyPublishDialog,
