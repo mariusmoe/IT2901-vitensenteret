@@ -15,7 +15,7 @@ consign()
   .then('controllers')
   .then('router.js')
   .then('libs/boot.js')
-  //.then("seed.js")
+  .then("seed.js")
   .into(app);
 
   module.exports = app;
