@@ -137,24 +137,12 @@ export class SurveyService {
     return this.http.get(this.url, { headers })
       .map(
         response => {
-          const jsonResponse = response.json();
-          if (jsonResponse) {
-            this.surveyList = new Array<SurveyList>();
-
-            for (const survey of jsonResponse){
-              const su: SurveyList = {
-                _id: survey._id,
-                name: survey.name,
-                active: survey.active,
-                date: survey.date,
-                comment: survey.comment,
-              };
-              this.surveyList.push(su);
-            }
-            return this.surveyList;
-          } else {
-            return this.surveyList;
+          // only update our list for status in the 200 range. If we get status 304
+          // everything is good and there is no need to update our list either.
+          if (response.status >= 200 && response.status < 300) {
+            this.surveyList = <SurveyList[]>response.json();
           }
+          return this.surveyList;
         },
         error => {
           return this.surveyList;

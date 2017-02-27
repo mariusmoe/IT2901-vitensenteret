@@ -1,14 +1,27 @@
-import { Component, OnInit, Inject, Input } from '@angular/core';
+import { Component, OnInit, Inject, Input, animate, state, style, transition, trigger, keyframes } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
-
 @Component({
   selector: 'app-create-survey',
   templateUrl: './create-survey.component.html',
-  styleUrls: ['./create-survey.component.scss']
+  styleUrls: ['./create-survey.component.scss'],
+  animations: [trigger('slideInOut', [
+    state('void', style({transform: 'translateX(0)' })),
+    transition(':enter', [
+      animate(300, keyframes([
+        style({opacity: 0, transform: 'translateX(-100%)', offset: 0}),
+        style({opacity: 1, transform: 'translateX(15px)',  offset: 0.3}),
+        style({opacity: 1, transform: 'translateX(0)',     offset: 1.0})
+      ]))
+    ]),
+    transition(':leave', [
+      style({ transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0' }),
+      animate('0.1s ease-in-out', style({ 'max-width': '0' }))
+    ])
+  ])]
 })
 export class CreateSurveyComponent implements OnInit {
   // COMPONENT VARIABLES

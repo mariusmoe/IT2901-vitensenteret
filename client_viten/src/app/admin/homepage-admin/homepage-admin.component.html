@@ -3,7 +3,7 @@
     <app-all-surveys></app-all-surveys>
   </div>
   <div class="rightSide">
-    <md-card *ngIf="survey" class="selectedSurveyArea">
+    <md-card *ngIf="survey" class="selectedSurveyArea" [@fadeIn]="">
       <md-card-title-group>
         <md-card-title>{{survey.name}}</md-card-title>
         <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
@@ -33,7 +33,7 @@
     <div *ngIf="!survey" class="emptyArea">
       <md-progress-circle *ngIf="loadingSurvey" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
       <div *ngIf="!loadingSurvey">
-        
+
       </div>
   </div>
 </div>

@@ -14,13 +14,13 @@ const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'admin', component: AdminOutletComponent, canActivate: [AuthGuard],
     children: [
-      { path: 'settings', component: AdminSettingsComponent },
+      { path: 'settings', component: AdminSettingsComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey/:surveyId', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       // these two placed further down due to priority issues
-      { path: '', component: HomepageAdminComponent, pathMatch: 'full'  },
-      { path: ':surveyId', component: HomepageAdminComponent },
-      { path: '**', redirectTo: '' }
+      { path: '', component: HomepageAdminComponent, pathMatch: 'full', canActivate: [AuthGuard]   },
+      { path: ':surveyId', component: HomepageAdminComponent, canActivate: [AuthGuard] },
+      { path: '**', redirectTo: '', pathMatch: 'full' }
     ]
   },
   { path: '**', redirectTo: '', pathMatch: 'full' }
