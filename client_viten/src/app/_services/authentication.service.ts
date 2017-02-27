@@ -211,7 +211,9 @@ export class AuthenticationService {
           console.log(error.text());
           return false;
         }
-      );
+      ).catch(e => {
+        return Observable.of(false);
+      });
   }
 
   login(email, password): Observable<boolean> {
