@@ -44,8 +44,8 @@ import { TRANSLATION_PROVIDERS } from './translate/translate';
     DeleteDialog,
     ReferDialog,
     AdminSurveysPipe,
-    TranslatePipe
-    CredentialDialog,
+    TranslatePipe,
+    CredentialDialog
   ],
   imports: [
     BrowserModule,
