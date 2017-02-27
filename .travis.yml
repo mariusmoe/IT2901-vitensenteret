@@ -20,4 +20,4 @@ before_install:
   - export DISPLAY=:99.0
   - sh -e /etc/init.d/xvfb start
 
-script: cd client_viten && npm install -g angular-cli@1.0.0-beta.26 && npm install && npm run buildtest && cd .. && cd server && npm install && npm buildtest
+script: cd client_viten && npm install -g angular-cli@1.0.0-beta.26 && npm install && npm run buildtest && cd .. && cd server && npm install && npm run buildtest
