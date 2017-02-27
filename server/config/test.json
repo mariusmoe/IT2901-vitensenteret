@@ -1,0 +1,5 @@
+{
+  "secret": "testtesttesttesttesttesttesttesttesttest",
+  "database": "mongodb://localhost/vitensurveytest",
+  "port": 3000
+}
