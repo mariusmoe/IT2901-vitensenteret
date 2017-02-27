@@ -4,6 +4,9 @@ language: node_js
 env:
   - CXX=g++-4.8
 addons:
+branches:
+  only:
+    - deploy
 apt:
   sources:
     - google-chrome
