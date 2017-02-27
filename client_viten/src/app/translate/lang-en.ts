@@ -18,6 +18,8 @@ export const LANG_EN_TRANS = {
   'Save': 'Save',
   'Settings': 'Settings',
   'Search': 'Search',
+  'Email': 'Email',
+  'Password': 'Password',
 
   // Languages
   'Norwegian': 'Norwegian',
@@ -37,7 +39,7 @@ export const LANG_EN_TRANS = {
   'Admin Home': 'Admin Home',
   'Create New Survey': 'Create New Survey',
 
-  // create survey component
+  // Create survey component
   'Survey options': 'Survey options',
   'Fill in every field marked as required': 'Fill in every field marked as required',
   'Admin-only Comment': 'Admin-only Comment',
@@ -64,4 +66,9 @@ export const LANG_EN_TRANS = {
 
   // All surveys component
   'total surveys. A maximum of 20 items are displayed.': 'total surveys. A maximum of 20 items are displayed.',
+
+  // Login component
+  'Login': 'Login',
+  'Log in': 'Log in',
+  'Email and password are required': 'Email and password are required',
 };

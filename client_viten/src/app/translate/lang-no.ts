@@ -18,6 +18,8 @@ export const LANG_NO_TRANS = {
   'Save': 'Lagre',
   'Settings': 'Instillinger',
   'Search': 'Søk',
+  'Email': 'Epost',
+  'Password': 'Passord',
 
   // Languages
   'Norwegian': 'Norwegian',
@@ -37,7 +39,7 @@ export const LANG_NO_TRANS = {
   'Admin Home': 'Administrator Hjem',
   'Create New Survey': 'Create New Survey',
 
-  // create survey component
+  // Create survey component
   'Survey options': 'Innstillinger for undersøkelse',
   'Fill in every field marked as required': 'Fyll inn alle påkrevde felt',
   'Admin-only Comment': 'Kommentar for administratorer',
@@ -65,4 +67,9 @@ export const LANG_NO_TRANS = {
 
   // All surveys component
   'total surveys. A maximum of 20 items are displayed.': 'totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
+
+  // Login component
+  'Login': 'Innlogging',
+  'Log in': 'Logg inn',
+  'Email and password are required': 'Både epost og passord er påkrevd',
 };
