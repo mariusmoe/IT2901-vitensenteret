@@ -1,18 +1,18 @@
 <div class="adminPortal">
   <md-card>
-    <md-card-title align="center">Login</md-card-title>
+    <md-card-title align="center">{{ 'Login' | translate }}</md-card-title>
     <md-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="submitForm(loginForm.value)">
         <md-input-container md-block>
-          <input mdInput class="form-control" type="text" placeholder="Email" [formControl]="loginForm.controls['email']" required>
+          <input mdInput class="form-control" type="text" placeholder="{{ 'Email' | translate }}" [formControl]="loginForm.controls['email']" required>
           <md-hint *ngIf="loginForm.controls['email'].hasError('required') && loginForm.controls['email'].touched">
-            This field is invalid.
+            {{ 'This field is required.' | translate }}
           </md-hint>
         </md-input-container>
         <md-input-container md-block>
-          <input mdInput class="form-control" type="password" placeholder="password" [formControl]="loginForm.controls['password']" required>
+          <input mdInput class="form-control" type="password" placeholder="{{ 'Password' | translate }}" [formControl]="loginForm.controls['password']" required>
           <md-hint *ngIf="loginForm.controls['password'].hasError('required') && loginForm.controls['password'].touched">
-            This field is invalid.
+            {{ 'This field is required.' | translate }}
           </md-hint>
         </md-input-container>
         <div class="actions">
@@ -24,8 +24,8 @@
             color="primary"
             *ngIf="!loading"
             >
-            <div [mdTooltip]="(!loginForm.valid) ? 'email and password are required' : '' " tooltip-position="above">
-              Submit
+            <div [mdTooltip]="(!loginForm.valid) ? ('Email and password are required' | translate) : '' " tooltip-position="above">
+              {{ 'Log in' | translate }}
             </div>
           </button>
           <!-- loading circle -->
