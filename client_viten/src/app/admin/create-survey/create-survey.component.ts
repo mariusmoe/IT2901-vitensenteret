@@ -3,6 +3,7 @@ import { SurveyService } from '../../_services/survey.service';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { Router, ActivatedRoute, Params } from '@angular/router';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 
 @Component({
   selector: 'app-create-survey',
@@ -60,8 +61,12 @@ export class CreateSurveyComponent implements OnInit {
    * uses MdDialog, SurveyService, Router and ActivatedRoute
    */
   constructor(private dialog: MdDialog, private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute) {
-
+    private router: Router, private route: ActivatedRoute,
+    private dragulaService: DragulaService) {
+      dragulaService.setOptions('questionsBag', {
+        revertOnSpill: true,
+        direction: 'horizontal'
+      });
   }
 
 
