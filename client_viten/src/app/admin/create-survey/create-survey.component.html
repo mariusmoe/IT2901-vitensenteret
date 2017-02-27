@@ -78,14 +78,14 @@
                     </md-option>
                   </md-select>
                   <!--
-                    this span displays EITHER 'No alternatives need to be set'
+                    this span displays EITHER 'No alternatives need to be set.'
                     OR Alternatives: x/max(x,2)
                   -->
                   <span class="desc" [class.invalid]="(questionObject.mode == 'multi' && questionObject.lang.no.options.length < 2)">
                     {{questionObject.mode == 'multi' ?
                       ( 'Alternatives: ' | translate ) + questionObject.lang.no.options.length
                         + '/' + (questionObject.lang.no.options.length > 2 ? questionObject.lang.no.options.length : 2)
-                      : ( 'No alternatives need to be set' | translate )
+                      : ( 'No alternatives need to be set.' | translate )
                   }}</span>
                 </div>
 

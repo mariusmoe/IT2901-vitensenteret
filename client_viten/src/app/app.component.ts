@@ -12,6 +12,6 @@ import { TranslateService } from './_services/translate.service';
 })
 export class AppComponent {
   constructor(private translate: TranslateService) {
-    this.translate.use('en');
+    this.translate.use(localStorage.getItem('lang') || 'no');
   }
 }

@@ -12,7 +12,7 @@ export const LANG_NO_TRANS = {
   'Questions': 'Spørsmål',
   'Question': 'Spørsmål',
   'Delete': 'Slett',
-  'Submit': 'Submit',
+  'Submit': 'Lagre',
   'Alternative': 'Alternativ',
   'Cancel': 'Avbryt',
   'Save': 'Lagre',
@@ -22,8 +22,8 @@ export const LANG_NO_TRANS = {
   'Password': 'Passord',
 
   // Languages
-  'Norwegian': 'Norwegian',
-  'English': 'English',
+  'Norwegian': 'Norsk',
+  'English': 'Engelsk',
 
   // Forms
   'This field is required.': 'Dette feltet er påkrevd.',
@@ -37,7 +37,7 @@ export const LANG_NO_TRANS = {
 
   // Admin outlet component
   'Admin Home': 'Administrator Hjem',
-  'Create New Survey': 'Create New Survey',
+  'Create New Survey': 'Lag ny undersøkelse',
 
   // Create survey component
   'Survey options': 'Innstillinger for undersøkelse',
@@ -47,11 +47,11 @@ export const LANG_NO_TRANS = {
   'Enable English for this survey?': 'Skal undersøkelsen også ha med engelske spørsmål?',
   'Final message': 'Takkskjerm',
   'The final text to be displayed as a user completes a survey': 'Fyll inn beskjeden som gis til brukere når de fullfører undersøkelsen',
-  'Message (Norwegian)': 'beskjed (Norwegian)',
-  'Message (English)': 'beskjed (English)',
-  'No alternatives need to be set': 'No alternatives need to be set',
-  'Question (Norwegian)': 'Spørsmål (norsk)',
-  'Question (English)': 'Spørsmål (engelsk)',
+  'Message (Norwegian)': 'beskjed (Norsk)',
+  'Message (English)': 'beskjed (Engelsk)',
+  'No alternatives need to be set.': 'Ingen alternativer er påkrevd.',
+  'Question (Norwegian)': 'Spørsmål (Norsk)',
+  'Question (English)': 'Spørsmål (Engelsk)',
   'Alternatives: ': 'Alternativer: ',
   'Set Alternatives': 'Sett alternativer',
   'Add a question': 'Legg til spørsmål',

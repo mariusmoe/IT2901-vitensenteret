@@ -49,7 +49,7 @@ export const LANG_EN_TRANS = {
   'The final text to be displayed as a user completes a survey': 'The final text to be displayed as a user completes a survey',
   'Message (Norwegian)': 'Message (Norwegian)',
   'Message (English)': 'Message (English)',
-  'No alternatives need to be set': 'No alternatives need to be set',
+  'No alternatives need to be set.': 'No alternatives need to be set.',
   'Question (Norwegian)': 'Question (Norwegian)',
   'Question (English)': 'Question (English)',
   'Alternatives: ': 'Alternatives: ',
