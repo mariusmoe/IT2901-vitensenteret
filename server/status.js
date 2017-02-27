@@ -1,3 +1,8 @@
+// TODO: reserved address space for error CODES
+// example: successful auth messages have address
+// 1000 - 1100
+// successful survey messages have address
+// 1101 - 1200 and so on
 module.exports = {
   USER_NOT_FOUND: {
     message: 'Could not find user',
@@ -38,6 +43,14 @@ module.exports = {
   ROUTE_USERS_VALID_NO_USERS: {
     message: 'Route valid but no users was found',
     code: 2024
+  },
+  EMAIL_CHANGED: {
+    message: 'Email changed',
+    code: 1016
+  },
+  PASSWORD_CHANGED: {
+    message: 'Password changed',
+    code: 1017
   },
 
 

@@ -67,8 +67,8 @@ module.exports = (app) => {
   // // TODO send mail with token
   // authRoutes.post('/reset-password/:token', AuthenticationController.verifyToken);
   //
-  // // Change password from within app
-  // authRoutes.post('/change_password', requireAuth, AuthenticationController.changePassword);
+  // Change password from within app
+  authRoutes.post('/change_password', requireAuth, AuthenticationController.changePassword);
   //
   // // Confirm account from link sent with email
   // authRoutes.post('/confirm_account/:confirmation_string', AuthenticationController.confirmAccount);
@@ -87,8 +87,8 @@ module.exports = (app) => {
                   AuthenticationController.roleAuthorization(REQUIRE_MEMBER),
                   AuthenticationController.test);
   //
-  // // change email for this account
-  // authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
+  // change email for this account
+  authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
   //
   //
 

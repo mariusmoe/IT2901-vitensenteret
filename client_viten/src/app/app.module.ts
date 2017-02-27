@@ -18,7 +18,7 @@ import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
-import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin-settings/admin-settings.component';
+import { AdminSettingsComponent, DeleteDialog, ReferDialog, CredentialDialog } from './admin/admin-settings/admin-settings.component';
 
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
 import { ClipboardModule } from 'ngx-clipboard';
@@ -39,6 +39,7 @@ import { DragulaModule } from 'ng2-dragula';
     AdminSettingsComponent,
     DeleteDialog,
     ReferDialog,
+    CredentialDialog,
     AdminSurveysPipe
   ],
   imports: [
@@ -56,7 +57,8 @@ import { DragulaModule } from 'ng2-dragula';
     DeleteDialog,
     ReferDialog,
     SurveyAlternativesDialog,
-    SurveyPublishDialog
+    SurveyPublishDialog,
+    CredentialDialog
   ],
   providers: [
     AuthGuard,
