@@ -44,7 +44,7 @@
         [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ? 'You need to write the same password twice' : 'Go on and magic will happen' "
         mdTooltipPosition="below"
         [disabled]='newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== "" '
-        (click)="changenewPassword(newPassword.value)">
+        (click)="changePassword(newPassword.value)">
         <div [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ? 'You need to write the same password twice' : 'Go on and magic will happen' "
         mdTooltipPosition="below">
           Change password
