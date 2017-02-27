@@ -29,7 +29,7 @@ module.exports = {
       ref  : "origin/deploy",
       repo : "git@github.com:mariusmoe/IT2901_vitensenteret.git",
       path : "viten/IT2901_vitensenteret",
-      pre-setup : "./deploy"
+      // pre-setup : "./deploy"
       "post-deploy" : "pm2 startOrRestart ecosystem.config.js --env production"
     }
   }
