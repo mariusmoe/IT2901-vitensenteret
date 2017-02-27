@@ -1,15 +1,12 @@
 <div class="container">
-  <div class="placeholder">
-    <p id="zero-margin-p">
-      Placeholder text: LOREM IPSUM LOREM IPSUM
-    </p>
-    <p>
-      Add scrollable survey-menu here
-    </p>
-  </div>
+  <form>
+    <md-select placeholder="Select chart type" [(ngModel)]="chartType" name="chart">
+      <md-option *ngFor="let chart of chartTypes" [value]="chart.value">
+        {{chart.viewValue}}
+      </md-option>
+    </md-select>
 
-  <div class="graph-view">
-    <app-barchart></app-barchart>
-    <app-doughnut-chart></app-doughnut-chart>
-  </div>
+    <p> Selected value: {{chartType}} </p>
+  </form>
+  
 </div>

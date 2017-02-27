@@ -61,7 +61,7 @@ export class SurveyService {
        if (response.status != 200){
          console.error(jsonResponse.status + " : " + jsonResponse.message);
          return Observable.create(null);
-       }   
+       }
        let s: Survey = response.json();
        return s;
      },
