@@ -8,6 +8,7 @@ addons:
 branches:
   only:
     - deploy
+services: mongodb
 apt:
   sources:
     - google-chrome
