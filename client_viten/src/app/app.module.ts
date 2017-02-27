@@ -21,9 +21,13 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
 import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin-settings/admin-settings.component';
 
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
+
 import { ClipboardModule } from 'ngx-clipboard';
 import { DragulaModule } from 'ng2-dragula';
 
+import { TranslatePipe } from './_pipes/translate';
+import { TranslateService } from './_services/translate.service';
+import { TRANSLATION_PROVIDERS } from './translate/translate';
 
 @NgModule({
   declarations: [
@@ -39,7 +43,8 @@ import { DragulaModule } from 'ng2-dragula';
     AdminSettingsComponent,
     DeleteDialog,
     ReferDialog,
-    AdminSurveysPipe
+    AdminSurveysPipe,
+    TranslatePipe
   ],
   imports: [
     BrowserModule,
@@ -61,7 +66,9 @@ import { DragulaModule } from 'ng2-dragula';
   providers: [
     AuthGuard,
     AuthenticationService,
-    SurveyService
+    SurveyService,
+    TRANSLATION_PROVIDERS,
+    TranslateService
   ],
   bootstrap: [AppComponent]
 })

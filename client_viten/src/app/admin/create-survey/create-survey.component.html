@@ -1,22 +1,22 @@
 <div class="container">
-  <h1>{{isPatch ? 'Edit' : 'Create'}} survey</h1>
+  <h1>{{isPatch ? ('Edit' | translate) : ('Create' | translate) }} {{ 'survey' | translate }}</h1>
   <!-- DISPLAY THIS WHEN WE HAVE A SURVEY TO ACTUALLY DISPLAY. THIS IS INSTANT WHEN CREATING A NEW SURVEY -->
   <div *ngIf="!startupLoading">
     <div class="optionContainer surveyOptions">
       <md-card>
-        <md-card-title>Survey options</md-card-title>
-        <md-card-subtitle>Fill in every field marked as required</md-card-subtitle>
+        <md-card-title>{{ 'Survey options' | translate }}</md-card-title>
+        <md-card-subtitle>{{ 'Fill in every field marked as required' | translate }}</md-card-subtitle>
         <md-card-content>
           <div>
             <md-input-container>
               <!-- SURVEY NAME -->
-              <input mdInput type="text" placeholder="Title" ng-pattern="stringPattern" [(ngModel)]="survey.name" required (change)="setPushReadyStatus()">
-              <md-hint *ngIf="!fieldValidate(survey.name)" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+              <input mdInput type="text" placeholder="{{ 'Title' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.name" required (change)="setPushReadyStatus()">
+              <md-hint *ngIf="!fieldValidate(survey.name)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
             </md-input-container>
 
             <md-input-container>
               <!-- SURVEY COMMENT (not required) -->
-              <input mdInput type="text" placeholder="Admin-only Comment" ng-pattern="stringPattern" [(ngModel)]="survey.comment">
+              <input mdInput type="text" placeholder="{{ 'Admin-only Comment' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.comment">
             </md-input-container>
           </div>
 
@@ -31,30 +31,28 @@
 
           <div>
             <!-- SURVEY ACTIVE STATE -->
-            <md-checkbox [(ngModel)]="survey.active">{{
-              isPatch ? 'Active status' : 'Set survey to active upon creation?'
-            }}</md-checkbox>
+            <md-checkbox [(ngModel)]="survey.active">{{ 'Active status' | translate }}</md-checkbox>
           </div>
           <div>
             <!-- USE ENGLISH? -->
-            <md-checkbox [(ngModel)]='englishEnabled'>Enable English for this survey?</md-checkbox>
+            <md-checkbox [(ngModel)]='englishEnabled'>{{ 'Enable English for this survey?' | translate }}</md-checkbox>
           </div>
         </md-card-content>
       </md-card>
       <!-- FINAL MESSAGE COMES HERE! -->
       <md-card>
-        <md-card-title>Final Message</md-card-title>
-        <md-card-subtitle>The final text to be displayed as a user completes a survey</md-card-subtitle>
+        <md-card-title>{{ 'Final message' | translate }}</md-card-title>
+        <md-card-subtitle>{{ 'The final text to be displayed as a user completes a survey' | translate }}</md-card-subtitle>
         <md-card-content>
           <md-input-container>
             <!-- SURVEY ENDMESSAGE NO -->
-            <input mdInput type="text" placeholder="Message (Norwegian)" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.no" required (change)="setPushReadyStatus()">
-            <md-hint *ngIf="!fieldValidate(survey.endMessage.no)" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+            <input mdInput type="text" placeholder="{{ 'Message (Norwegian)' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.no" required (change)="setPushReadyStatus()">
+            <md-hint *ngIf="!fieldValidate(survey.endMessage.no)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
           </md-input-container>
           <md-input-container *ngIf="englishEnabled">
             <!-- SURVEY ENDMESSAGE EN -->
-            <input mdInput type="text" placeholder="Message (English)" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.en" required (change)="setPushReadyStatus()">
-            <md-hint *ngIf="!fieldValidate(survey.endMessage.en)" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+            <input mdInput type="text" placeholder="{{ 'Message (English)' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.en" required (change)="setPushReadyStatus()">
+            <md-hint *ngIf="!fieldValidate(survey.endMessage.en)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
           </md-input-container>
         </md-card-content>
       </md-card>
@@ -64,12 +62,12 @@
 
     <div class="optionContainer">
       <md-card>
-        <md-card-title>Questions</md-card-title>
+        <md-card-title>{{ 'Questions' | translate }}</md-card-title>
         <md-card-content>
           <div class="flexParent" [dragula]="'questionsBag'" [dragulaModel]="survey.questionlist">
             <!-- QUESTIONOBJECT -->
             <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@slideInOut]="">
-              <md-card-title>Question {{i+1}}</md-card-title>
+              <md-card-title>{{ 'Question' | translate }} {{i+1}}</md-card-title>
               <md-card-content>
                 <!-- QUESTION MODE -->
                 <div class="modeSelect">
@@ -85,22 +83,22 @@
                   -->
                   <span class="desc" [class.invalid]="(questionObject.mode == 'multi' && questionObject.lang.no.options.length < 2)">
                     {{questionObject.mode == 'multi' ?
-                      'Alternatives: ' + questionObject.lang.no.options.length
+                      ( 'Alternatives: ' | translate ) + questionObject.lang.no.options.length
                         + '/' + (questionObject.lang.no.options.length > 2 ? questionObject.lang.no.options.length : 2)
-                      : 'No alternatives need to be set'
+                      : ( 'No alternatives need to be set' | translate )
                   }}</span>
                 </div>
 
                 <!-- QUESTION TEXT -->
                 <md-input-container>
-                  <input mdInput type="text" placeholder="Question (Norwegian)" [attr.maxlength]="maxQuestionLength"
+                  <input mdInput type="text" placeholder="{{ 'Question (Norwegian)' | translate }}" [attr.maxlength]="maxQuestionLength"
                   ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.no.txt" required (change)="setPushReadyStatus()">
-                  <md-hint *ngIf="!fieldValidate(questionObject.lang.no.txt)" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+                  <md-hint *ngIf="!fieldValidate(questionObject.lang.no.txt)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
                 </md-input-container>
                 <md-input-container *ngIf="englishEnabled">
-                  <input mdInput type="text" placeholder="Question (English)" [attr.maxlength]="maxQuestionLength"
+                  <input mdInput type="text" placeholder="{{ 'Question (English)' | translate }}" [attr.maxlength]="maxQuestionLength"
                   ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.en.txt" required (change)="setPushReadyStatus()">
-                  <md-hint *ngIf="!fieldValidate(questionObject.lang.en.txt)" color="warn">{{fieldIsRequiredMsg}}</md-hint>
+                  <md-hint *ngIf="!fieldValidate(questionObject.lang.en.txt)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
                 </md-input-container>
 
               </md-card-content>
@@ -108,12 +106,12 @@
                 <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
                 <button md-raised-button color="primary"
                 *ngIf="questionObject.mode === 'multi'"
-                (click)="setAlternatives(questionObject)">Set Alternatives</button>
+                (click)="setAlternatives(questionObject)">{{ 'Set Alternatives' | translate }}</button>
 
                 <!-- delete question button -->
                 <button md-raised-button class="btn btn-success" color="warn" (click)="removeQuestion(i)"
-                [mdTooltip]="tooltipDeleteQuestionMsg" tooltip-position="above">
-                  Delete
+                [mdTooltip]="'Deletes this particular question! Careful!' | translate" tooltip-position="above">
+                  {{ 'Delete' | translate }}
                 </button>
               </md-card-actions>
             </md-card>
@@ -121,15 +119,14 @@
         </md-card-content>
         <md-card-actions>
           <button md-raised-button class="btn btn-success" color="primary" (click)="addQuestion()">
-            Add a question
+            {{ 'Add a question' | translate }}
           </button>
         </md-card-actions>
       </md-card>
     </div>
     <div class="submitBox optionContainer">
-      <button *ngIf="!submitLoading" md-raised-button class="btn btn-success" color="primary" type="submit" (click)="submitSurvey()"
-        [mdTooltip]="tooltipSubmitSurveyMsg" tooltip-position="above" [disabled]="!canPostSurvey">
-        Submit
+      <button *ngIf="!submitLoading" md-raised-button class="btn btn-success" color="primary" type="submit" (click)="submitSurvey()" [disabled]="!canPostSurvey">
+        <div [mdTooltip]="'Several fields are required. Verify that you have filled out all required fields.' | translate" tooltip-position="above">{{ 'Submit' | translate }}</div>
       </button>
       <div *ngIf="submitLoading" class="submitLoading">
         <!-- loading circle -->
