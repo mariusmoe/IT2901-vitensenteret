@@ -37,7 +37,13 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
   isPatch = false;
   allowedModes = ['binary', 'star', 'multi', 'smiley', 'text'];
-  allowedModesVerbose;
+  allowedModesVerbose = {
+   'binary': 'Yes/No',
+   'star': '5 Stars',
+   'multi': 'Multiple Choice',
+   'smiley': 'Smiley',
+   'text': 'Free Text'
+ };
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
@@ -50,14 +56,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         revertOnSpill: true,
         direction: 'horizontal'
       });
-      // TODO: update this when language changes
-      this.allowedModesVerbose = {
-       'binary': this.translate.instant('Yes/No'),
-       'star': this.translate.instant('5 Stars'),
-       'multi': this.translate.instant('Multiple Choice'),
-       'smiley': this.translate.instant('Smiley'),
-       'text': this.translate.instant('Free Text')
-     };
   }
 
   ngOnInit() {
