@@ -15,7 +15,9 @@
   </div>-->
   <div class="surveyView" *ngIf="properSurvey && started">
     <!--This is the view for each survey-question -->
-    <div class="surveyQuestion">
+    <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition">
+      page: {{page}}
+
       <div class="txt">{{survey.questionlist[page].lang.no.txt}}</div>
       <!-- REMOVED until further notice
       <h1>{{survey.questionlist[page].mode}}</h1> -->
@@ -29,9 +31,9 @@
     </div>
 
     <div class="qnavigate">
-      <div class="qnavigateArea" (click)="previousQ()"><button md-raised-button color="accent" [disabled]="page <= 0">back</button></div>
+      <div class="qnavigateArea"><button md-raised-button color="accent" (click)="previousQ()" [disabled]="page <= 0 || transition">back</button></div>
       <h2>{{page+1}}/{{totalPages}}</h2>
-      <div class="qnavigateArea alignRight" (click)="nextQ()"><button md-raised-button color="accent" [disabled]="page+1 >= totalPages">forward</button></div>
+      <div class="qnavigateArea alignRight"><button md-raised-button color="accent" (click)="nextQ()" [disabled]="page+1 >= totalPages || transition">forward</button></div>
     </div>
 
   </div>
