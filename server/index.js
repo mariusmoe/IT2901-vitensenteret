@@ -5,6 +5,7 @@ const express = require('express'),
       path = require('path');
 
 app.use(express.static(path.join(__dirname, 'temp')));
+app.use(express.static(path.join(__dirname, '../client_viten/dist')));
 
 // Use ES 6 promise instead of depricated mpromise
 mongoose.Promise = Promise;

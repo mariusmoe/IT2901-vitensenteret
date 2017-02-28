@@ -20,10 +20,10 @@ import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
+import { AdminSettingsComponent, DeleteDialog, ReferDialog, CredentialDialog } from './admin/admin-settings/admin-settings.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
 import { BarChartComponent } from './admin/survey-retrieval/bar-chart.component';
 import { DoughnutChartComponent } from './admin/survey-retrieval/doughnut-chart.component';
-import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin-settings/admin-settings.component';
 
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
 
@@ -52,6 +52,7 @@ import { TRANSLATION_PROVIDERS } from './translate/translate';
     AdminSettingsComponent,
     DeleteDialog,
     ReferDialog,
+    CredentialDialog,
     AdminSurveysPipe,
     TranslatePipe
   ],
@@ -71,7 +72,8 @@ import { TRANSLATION_PROVIDERS } from './translate/translate';
     DeleteDialog,
     ReferDialog,
     SurveyAlternativesDialog,
-    SurveyPublishDialog
+    SurveyPublishDialog,
+    CredentialDialog
   ],
   providers: [
     AuthGuard,
