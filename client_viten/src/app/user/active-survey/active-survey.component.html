@@ -17,8 +17,15 @@
     <!--This is the view for each survey-question -->
     <div class="surveyQuestion">
       <div class="txt">{{survey.questionlist[page].lang.no.txt}}</div>
-      <h1>{{survey.questionlist[page].mode}}</h1>
-      <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[page].options}}</h1>
+      <!-- REMOVED until further notice
+      <h1>{{survey.questionlist[page].mode}}</h1> -->
+      <app-stars *ngIf = "survey.questionlist[page].mode == 'star'" [questionObject] = survey.questionlist[page]></app-stars>
+      <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley'" [questionObject] = survey.questionlist[page]></app-smiley>
+      <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi'" [questionObject] = survey.questionlist[page]></app-multiplechoice>
+      <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary'" [questionObject] = survey.questionlist[page]></app-yes-no>
+      <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text'" [questionObject] = survey.questionlist[page]></app-freetxt>
+      <!-- REMOVED until further notice
+      <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[page].options}}</h1> -->
     </div>
 
     <div class="qnavigate">
