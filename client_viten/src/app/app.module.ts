@@ -22,6 +22,11 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
 import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin-settings/admin-settings.component';
 
 import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
+import { SmileyComponent } from './user/smiley/smiley.component';
+import { StarsComponent } from './user/stars/stars.component';
+import { FreetxtComponent } from './user/freetxt/freetxt.component';
+import { YesNoComponent } from './user/yes-no/yes-no.component';
+import { MultiplechoiceComponent } from './user/multiplechoice/multiplechoice.component';
 
 
 
@@ -41,7 +46,12 @@ import { ActiveSurveyComponent } from './user/active-survey/active-survey.compon
     AdminOutletComponent,
     AdminSettingsComponent,
     DeleteDialog,
-    ReferDialog
+    ReferDialog,
+    SmileyComponent,
+    StarsComponent,
+    FreetxtComponent,
+    YesNoComponent,
+    MultiplechoiceComponent
   ],
   imports: [
     BrowserModule,
