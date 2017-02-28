@@ -10,6 +10,7 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
+import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
 import { LoginComponent } from './admin/login/login.component';
@@ -34,6 +35,7 @@ import { DragulaModule } from 'ng2-dragula';
     AppComponent,
     HomepageAdminComponent,
     HomepageUserComponent,
+    ChooseSurveyComponent,
     LoginComponent,
     AllSurveysComponent,
     CreateSurveyComponent,
