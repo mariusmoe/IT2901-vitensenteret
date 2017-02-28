@@ -1,6 +1,6 @@
 # IT2901-vitensenteret
 
-[![Build Status](http://95.85.63.98:8080/buildStatus/icon?job=vitensenteret)](http://95.85.63.98:8080/job/vitensenteret/)
+[![Build Status](https://travis-ci.org/mariusmoe/IT2901_vitensenteret.svg?branch=master)](https://travis-ci.org/mariusmoe/IT2901_vitensenteret)
 
 Copyright 2017, Vitensenteret, All rights reserved
 
