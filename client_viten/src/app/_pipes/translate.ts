@@ -12,8 +12,8 @@ export class TranslatePipe implements PipeTransform {
 
     constructor(private _translate: TranslateService) { }
 
-    transform(value: string, args: any[]): any {
+    transform(value: string, args: string | string[]): any {
         if (!value) { return; }
-        return 'T:' + this._translate.instant(value);
+        return 'T:' + this._translate.instant(value, args);
     }
 }

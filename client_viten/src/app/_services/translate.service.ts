@@ -11,6 +11,7 @@ export class TranslateService {
       { display: 'English', value: 'en' },
       { display: 'Norsk (Bokmål)', value: 'no' },
     ];
+    private PLACEHOLDER = '%';
 
     public getCurrentLang() {
         return this.currentLang;
@@ -36,7 +37,22 @@ export class TranslateService {
         throw Error('NO TRANSLATION FOUND FOR : ' + key);
     }
 
-    public instant(key: string) {
-        return this.translate(key);
+
+    public replace(word = '', words: string | string[] = '') {
+        let translation: string = word;
+
+        const values: string[] = [].concat(words);
+        values.forEach((e, i) => {
+            translation = translation.replace(this.PLACEHOLDER.concat(<any>i), e);
+        });
+
+        return translation;
+    }
+
+    public instant(key: string, words?: string | string[]) { // add optional parameter
+        const translation: string = this.translate(key);
+
+        if (!words) { return translation; }
+        return this.replace(translation, words); // call replace function
     }
 }

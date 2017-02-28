@@ -21,4 +21,4 @@
 
 <!-- loading circle -->
 <md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-<span class="listComment"  *ngIf="!loading">{{surveyService.surveyList.length}} {{ 'total surveys. A maximum of 20 items are displayed.' | translate }}</span>
+<span class="listComment"  *ngIf="!loading">{{ 'n total surveys. A maximum of 20 items are displayed.' | translate: surveyService.surveyList.length }}</span>

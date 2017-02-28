@@ -43,7 +43,7 @@ export const LANG_NO_TRANS = {
   'Survey options': 'Innstillinger for undersøkelse',
   'Fill in every field marked as required': 'Fyll inn alle påkrevde felt',
   'Admin-only Comment': 'Kommentar for administratorer',
-  'Active status': 'Active status',
+  'Active status': 'Skal undersøkelsen være tilgjengelig for besøkende?',
   'Enable English for this survey?': 'Skal undersøkelsen også ha med engelske spørsmål?',
   'Final message': 'Takkskjerm',
   'The final text to be displayed as a user completes a survey': 'Fyll inn beskjeden som gis til brukere når de fullfører undersøkelsen',
@@ -52,7 +52,7 @@ export const LANG_NO_TRANS = {
   'No alternatives need to be set.': 'Ingen alternativer er påkrevd.',
   'Question (Norwegian)': 'Spørsmål (Norsk)',
   'Question (English)': 'Spørsmål (Engelsk)',
-  'Alternatives: ': 'Alternativer: ',
+  'Alternatives: n/m': 'Alternativer: %0/%1',
   'Set Alternatives': 'Sett alternativer',
   'Add a question': 'Legg til spørsmål',
   'At least two alternatives must be set, with a maximum of 6.':
@@ -66,7 +66,7 @@ export const LANG_NO_TRANS = {
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
 
   // All surveys component
-  'total surveys. A maximum of 20 items are displayed.': 'totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
+  'n total surveys. A maximum of 20 items are displayed.': '%0 totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
 
   // Login component
   'Login': 'Innlogging',

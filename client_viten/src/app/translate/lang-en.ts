@@ -52,7 +52,7 @@ export const LANG_EN_TRANS = {
   'No alternatives need to be set.': 'No alternatives need to be set.',
   'Question (Norwegian)': 'Question (Norwegian)',
   'Question (English)': 'Question (English)',
-  'Alternatives: ': 'Alternatives: ',
+  'Alternatives: n/m': 'Alternatives: %0/%1',
   'Set Alternatives': 'Set Alternatives',
   'Add a question': 'Add a question',
   'At least two alternatives must be set, with a maximum of 6.': 'At least two alternatives must be set, with a maximum of 6.',
@@ -65,7 +65,7 @@ export const LANG_EN_TRANS = {
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
 
   // All surveys component
-  'total surveys. A maximum of 20 items are displayed.': 'total surveys. A maximum of 20 items are displayed.',
+  'n total surveys. A maximum of 20 items are displayed.': '%0 total surveys. A maximum of 20 items are displayed.',
 
   // Login component
   'Login': 'Login',
