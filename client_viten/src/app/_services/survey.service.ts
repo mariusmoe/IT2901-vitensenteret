@@ -141,7 +141,13 @@ export class SurveyService {
           // only update our list for status in the 200 range. If we get status 304
           // everything is good and there is no need to update our list either.
           if (response.status >= 200 && response.status < 300) {
-            this.surveyList = <SurveyList[]>response.json();
+            const json = response.json();
+             // status 200, a statuscode and a message means that the request
+             // was successful, but there were no surveys to fetch.
+            if (json.status && json.message) {
+              return this.surveyList;
+            }
+            this.surveyList = <SurveyList[]>json;
           }
           return this.surveyList;
         },
