@@ -76,6 +76,7 @@ export const LANG_EN_TRANS = {
 
   // All surveys component
   'n total surveys. A maximum of 20 items are displayed.': '%0 total surveys. A maximum of 20 items are displayed.',
+  'Filter results on title and / or admin comment': 'Filter results on title and / or admin comment',
 
   // Login component
   'Login': 'Login',

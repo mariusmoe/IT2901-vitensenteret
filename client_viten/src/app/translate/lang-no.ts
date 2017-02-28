@@ -77,6 +77,7 @@ export const LANG_NO_TRANS = {
 
   // All surveys component
   'n total surveys. A maximum of 20 items are displayed.': '%0 totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
+  'Filter results on title and / or admin comment': 'Filtrer listen etter tittel eller kommentar for administratorer',
 
   // Login component
   'Login': 'Innlogging',
