@@ -8,6 +8,7 @@ import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
+import { NewUserComponent } from './admin/new-user/new-user.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomepageUserComponent },
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]
   },
+  { path: 'new', component: NewUserComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
