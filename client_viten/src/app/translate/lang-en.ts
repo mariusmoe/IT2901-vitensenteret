@@ -20,6 +20,12 @@ export const LANG_EN_TRANS = {
   'Search': 'Search',
   'Email': 'Email',
   'Password': 'Password',
+  'User ID': 'User ID',
+  'Role': 'Role',
+
+  // roles
+  'admin': 'Admin',
+  'member': 'Member',
 
   // Languages
   'Norwegian': 'Norwegian',
@@ -75,4 +81,17 @@ export const LANG_EN_TRANS = {
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
   'Download Raw Data': 'Download Raw Data',
+
+  // Admin settings component
+  'Retype password': 'Retype password',
+  'Minimum 4 characters': 'Minimum 4 characters',
+  'Admin settings': 'Admin settings',
+  'Change password': 'Change password',
+  'Superadmin settings': 'Superadmin settings',
+  'Request admin': 'Request admin',
+  'Request member': 'Request member',
+  'You need to write the same password twice': 'You need to write the same password twice',
+  'Delete account': 'Delete account',
+
+
 };

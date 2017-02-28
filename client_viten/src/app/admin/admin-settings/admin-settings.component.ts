@@ -29,13 +29,12 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     private service: AuthenticationService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar) {
-      this.getUsers();
+      this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
     }
 
 
 
   ngOnInit() {
-    this.getUsers();
   }
 
   ngOnDestroy() {
@@ -102,7 +101,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  requestReferal(role) {
+  requestReferral(role) {
     this.service.getReferral(role)
         .subscribe(result => {
           // console.log(result);

@@ -20,6 +20,12 @@ export const LANG_NO_TRANS = {
   'Search': 'Søk',
   'Email': 'Epost',
   'Password': 'Passord',
+  'User ID': 'BrukerID',
+  'Role': 'Kontotype',
+
+  // Roles
+  'admin': 'Superadmin',
+  'member': 'adminbruker',
 
   // Languages
   'Norwegian': 'Norsk',
@@ -76,4 +82,21 @@ export const LANG_NO_TRANS = {
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
   'Download Raw Data': 'Last ned rådata',
+
+  // Admin settings component
+  'Retype password': 'Skriv passordet igjen',
+  'Minimum 4 characters': 'Minimum 4 tegn',
+  'Admin settings': 'Admininstillinger',
+  'Change password': 'Bytt passord',
+  'Superadmin settings': 'Superadmin seksjon',
+  'Request admin': 'Få invitasjonslink for superadmin',
+  'Request member': 'Få invitasjonslink for adminbruker',
+  'You need to write the same password twice': 'Du må skrive passordet to ganger',
+  'Delete account': 'Slett kontoen',
+
+
+
+
+
+
 };

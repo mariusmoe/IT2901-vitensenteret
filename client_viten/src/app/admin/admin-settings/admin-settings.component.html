@@ -5,7 +5,7 @@
 
     <md-card>
       <p>Email</p>
-<!-- TODO: rewrite this with form controll -->
+      <!-- TODO: rewrite this with form controll -->
       <md-input-container>
         <input mdInput
           placeholder="{{user.email}}"
@@ -14,22 +14,22 @@
       <button md-raised-button color="primary" [disabled]='newEmail.value==user.email || newEmail.value== "" ' (click)="changeEmail(newEmail.value)">Change email</button>
     </md-card>
     <md-card>
-      <p class="same-line right-padding">Password</p>
+      <p class="same-line right-padding">{{ 'Password' | translate }}</p>
       <md-input-container>
         <input mdInput
           autocomplete="new-password"
           type="password"
-          placeholder="min 5 cahracters"
+          placeholder="{{ 'Minimum 4 characters' | translate }}"
           #newPassword>
           <md-hint align="end">{{newPassword.value.length}} / 4++</md-hint>
       </md-input-container>
       <br>
-      <p class="same-line right-padding">Retype password</p>
+      <p class="same-line right-padding">{{ 'Retype password' | translate }}</p>
       <md-input-container>
         <input mdInput
           [disabled]='newPassword.value.length <= 3 || newPassword.value== "" '
           type="password"
-          placeholder="min 5 cahracters"
+          placeholder="{{ 'Minimum 4 characters' | translate }}"
           #newPassword2>
           <md-hint align="end">
             {{newPassword2.value.length}} / 4++</md-hint>
@@ -41,46 +41,48 @@
         color="primary"
         minlength="3"
         md-visible="true"
-        [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ? 'You need to write the same password twice' : 'Go on and magic will happen' "
+        [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ?
+          ('You need to write the same password twice' | translate ) : '' "
         mdTooltipPosition="below"
         [disabled]='newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== "" '
         (click)="changePassword(newPassword.value)">
-        <div [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ? 'You need to write the same password twice' : 'Go on and magic will happen' "
+        <div [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ?
+        ('You need to write the same password twice' | translate ) : '' "
         mdTooltipPosition="below">
-          Change password
+          {{ 'Change password' | translate }}
         </div>
       </button>
     </md-card>
   </md-tab>
-  <md-tab *ngIf="user.role=='admin'" label="Admin settings">
+  <md-tab *ngIf="user.role=='admin'" label="{{ 'Admin settings' | translate }}">
     <md-card>
-      <h1>Some more settings</h1>
-      <p>{{user.role}}</p>
+      <h1>{{ 'Superadmin settings' | translate }}</h1>
+      <p>{{user.role | translate }}</p>
       <button md-raised-button
         color="primary"
         minlength="3"
-        (click)="requestReferal('admin')">
-        Request admin
+        (click)="requestReferral('admin')">
+        {{ 'Request admin' | translate }}
       </button>
       <button md-raised-button
         color="primary"
         minlength="3"
-        (click)="requestReferal('member')">
-        Request member
+        (click)="requestReferral('member')">
+        {{ 'Request member' | translate }}
       </button>
     </md-card>
     <md-card>
-      <p>Delete account</p>
+      <p>{{ 'Delete account' | translate }}</p>
       <table class="userTable">
         <tr>
           <th>
-            ID
+            {{ 'User ID' | translate }}
           </th>
           <th>
-            email
+            {{ 'Email' | translate }}
           </th>
           <th>
-            role
+            {{ 'Role' | translate }}
           </th>
         </tr>
         <tr *ngFor="let user of userList;  let i=index; let odd=odd; let even=even;"
