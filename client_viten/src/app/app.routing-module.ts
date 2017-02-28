@@ -7,6 +7,7 @@ import { HomepageUserComponent } from './user/homepage-user/homepage-user.compon
 import { AuthGuard } from './_guards/auth.guard';
 import { LoginComponent } from './admin/login/login.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
+import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
 
 const appRoutes: Routes = [
@@ -23,6 +24,7 @@ const appRoutes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]
   },
+  { path:'survey-retrieval', component: SurveyRetrievalComponent},
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
