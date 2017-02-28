@@ -1,0 +1,30 @@
+.newUser {
+  md-card {
+    margin: 0 auto;
+    margin-top: 50px;
+    max-width: 400px;
+    .actions {
+      text-align: center;
+    }
+  }
+  md-input-container {
+    margin: 10px 0 20px 0;
+    width: 100%;
+    md-hint {
+      color: red;
+    }
+  }
+}
+
+.smaller {
+  margin-left: 20px;
+  // fix this!
+  padding-bottom: 0px;
+  width: 30px;
+  height: 30px;
+  display:inline-block;
+}
+.loadingcircle {
+  position: relative;
+  top: 11px;
+}
