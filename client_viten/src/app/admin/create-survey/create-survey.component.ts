@@ -55,7 +55,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     private dragulaService: DragulaService, private translate: TranslateService) {
       dragulaService.setOptions('questionsBag', {
         revertOnSpill: true,
-        direction: 'horizontal'
+        direction: 'horizontal',
+        moves: function(el, container, handle) { return handle.classList.contains('dragHandle'); }
       });
   }
 

@@ -4,8 +4,10 @@
   <div *ngIf="!startupLoading">
     <div class="optionContainer surveyOptions">
       <md-card>
-        <md-card-title>{{ 'Survey options' | translate }}</md-card-title>
-        <md-card-subtitle>{{ 'Fill in every field marked as required' | translate }}</md-card-subtitle>
+        <md-card-title-group>
+          <md-card-title>{{ 'Survey options' | translate }}</md-card-title>
+          <md-card-subtitle>{{ 'Fill in every field marked as required' | translate }}</md-card-subtitle>
+        </md-card-title-group>
         <md-card-content>
           <div>
             <md-input-container>
@@ -39,7 +41,7 @@
           </div>
         </md-card-content>
       </md-card>
-      <!-- FINAL MESSAGE COMES HERE! -->
+      <!-- FINAL MESSAGE -->
       <md-card>
         <md-card-title>{{ 'Final message' | translate }}</md-card-title>
         <md-card-subtitle>{{ 'The final text to be displayed as a user completes a survey' | translate }}</md-card-subtitle>
@@ -67,7 +69,7 @@
           <div class="flexParent" [dragula]="'questionsBag'" [dragulaModel]="survey.questionlist">
             <!-- QUESTIONOBJECT -->
             <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@slideInOut]="">
-              <md-card-title>{{ 'Question' | translate }} {{i+1}}</md-card-title>
+              <md-card-title class="dragHandle">{{ 'Question' | translate }} {{i+1}}</md-card-title>
               <md-card-content>
                 <!-- QUESTION MODE -->
                 <div class="modeSelect">
