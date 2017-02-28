@@ -11,14 +11,6 @@
 }
 
 
-.same-line {
-  display:inline-block;
-}
-// TODO: smaller font and smoth roboto font
-.right-padding {
-  width: 140px;
-  font-size: 12px;
-}
 
 .done {
   position: relative;
@@ -44,9 +36,11 @@
   .odd {
     background: rgba(0, 0, 0, 0.1);
   }
-  tr:hover {
-    background: rgba(0, 0, 0, 0.2);
-    cursor: pointer;
+  tr.odd, tr.even {
+    &:hover {
+      background: rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+    }
   }
   td {
     padding: 10px;
