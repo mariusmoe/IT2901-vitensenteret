@@ -79,7 +79,7 @@ export class SurveyService {
    * @param {Survey} survey a Survey model object holding the survey data one wants to patch
    * @returns {Observable<Survey>} returns an observable with the success status of the http patch
    */
-  patchSurvey(surveyId: string, survey: Survey): Observable<Survey> {
+  patchSurvey(surveyId: string, survey: Survey): Observable<any> {
     const token = this.getToken();
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');

@@ -26,9 +26,13 @@ import { BarChartComponent } from './admin/survey-retrieval/bar-chart.component'
 import { DoughnutChartComponent } from './admin/survey-retrieval/doughnut-chart.component';
 
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
+
 import { ClipboardModule } from 'ngx-clipboard';
 import { DragulaModule } from 'ng2-dragula';
 
+import { TranslatePipe } from './_pipes/translate';
+import { TranslateService } from './_services/translate.service';
+import { TRANSLATION_PROVIDERS } from './translate/translate';
 
 @NgModule({
   declarations: [
@@ -49,7 +53,8 @@ import { DragulaModule } from 'ng2-dragula';
     DeleteDialog,
     ReferDialog,
     CredentialDialog,
-    AdminSurveysPipe
+    AdminSurveysPipe,
+    TranslatePipe
   ],
   imports: [
     BrowserModule,
@@ -73,7 +78,9 @@ import { DragulaModule } from 'ng2-dragula';
   providers: [
     AuthGuard,
     AuthenticationService,
-    SurveyService
+    SurveyService,
+    TRANSLATION_PROVIDERS,
+    TranslateService
   ],
   bootstrap: [AppComponent]
 })

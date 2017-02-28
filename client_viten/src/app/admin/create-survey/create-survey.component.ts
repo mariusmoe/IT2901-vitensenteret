@@ -1,9 +1,10 @@
-import { Component, OnInit, Inject, Input, animate, state, style, transition, trigger, keyframes } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Input, animate, state, style, transition, trigger, keyframes } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
+import { TranslateService } from '../../_services/translate.service';
 
 @Component({
   selector: 'app-create-survey',
@@ -24,7 +25,7 @@ import { DragulaService } from 'ng2-dragula/ng2-dragula';
     ])
   ])]
 })
-export class CreateSurveyComponent implements OnInit {
+export class CreateSurveyComponent implements OnInit, OnDestroy {
   // COMPONENT VARIABLES
   submitLoading = false;
   startupLoading = true;
@@ -37,44 +38,26 @@ export class CreateSurveyComponent implements OnInit {
   isPatch = false;
   allowedModes = ['binary', 'star', 'multi', 'smiley', 'text'];
   allowedModesVerbose = {
-    'binary': 'Yes/No',
-    'star': '5 Stars',
-    'multi': 'Multiple Choice',
-    'smiley': 'Smiley',
-    'text': 'Free Text'
-  };
+   'binary': 'Yes/No',
+   'star': '5 Stars',
+   'multi': 'Multiple Choice',
+   'smiley': 'Smiley',
+   'text': 'Free Text'
+ };
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
-  fieldIsRequiredMsg = 'This field is required.';
 
 
-  // TOOLTIP LOCALES
-  tooltipDeleteQuestionMsg = 'Deletes this particular question! Careful!';
-  tooltipSelectQuestionModeMsg = 'Select your question mode here!';
-  tooltipSubmitSurveyMsg = 'Several fields are required. Verify that you have filled out all required fields.';
-
-
-  /**
-   * constructor
-   *
-   * uses MdDialog, SurveyService, Router and ActivatedRoute
-   */
   constructor(private dialog: MdDialog, private surveyService: SurveyService,
     private router: Router, private route: ActivatedRoute,
-    private dragulaService: DragulaService) {
+    private dragulaService: DragulaService, private translate: TranslateService) {
       dragulaService.setOptions('questionsBag', {
         revertOnSpill: true,
         direction: 'horizontal'
       });
   }
 
-
-  /**
-   * ngOnInit()
-   *
-   * Executes when DOM is about to initialize. DOM is to render once this finishes.
-   */
   ngOnInit() {
     // If we have a router parameter, we should attempt to use that first.
     // console.log(this.route.snapshot.url[0].path)
@@ -123,7 +106,9 @@ export class CreateSurveyComponent implements OnInit {
     this.startupLoading = false;
   }
 
-
+  ngOnDestroy() {
+      this.dragulaService.destroy('questionsBag');
+  }
 
     /**
      * setSaveReadyStatus()
@@ -208,11 +193,10 @@ export class CreateSurveyComponent implements OnInit {
     // Execute the following when we've gotten a response from the server
     const err = (error) => {
       this.submitLoading = false;
-      const json = error.json(); // error is the RESPONSE object. we want the body object
       const config: MdDialogConfig = {
         data: {
-          status: json.status,
-          message: json.message,
+          status: error.status,
+          message: error.message, // TODO: FIXME! no message for unauthorized!
         }
       };
       // this dialog is purely to inform the user.
@@ -304,25 +288,25 @@ export class CreateSurveyComponent implements OnInit {
   selector: 'alternatives-dialog',
   styleUrls: ['./create-survey.component.scss'],
   template: `
-  <h2 md-dialog-title>Set Alternatives</h2>
+  <h2 md-dialog-title>{{ 'Set Alternatives' | translate }}</h2>
   <md-dialog-content>
-    <span>At least two alternatives must be set, with a maximum of 6.</span>
+    <span>{{ 'At least two alternatives must be set, with a maximum of 6.' | translate }}</span>
     <div *ngFor="let i of numAlternatives;">
       <md-input-container>
-        <input mdInput type="text" placeholder="Alternative {{(i+1)}}"
+        <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'Norwegian' | translate }})"
         [(ngModel)]="qoEditObj.lang.no.options[i]" required (change)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])">{{fieldIsRequiredMsg}}</md-hint>
+        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])">{{ 'This field is required.' | translate }}</md-hint>
       </md-input-container>
       <md-input-container *ngIf="data.englishEnabled">
-        <input mdInput type="text" placeholder="Alternative {{(i+1)}} English"
+        <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'English' | translate }})"
         [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])">{{fieldIsRequiredMsg}}</md-hint>
+        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])">{{ 'This field is required.' | translate }}</md-hint>
       </md-input-container>
       <button md-icon-button color="warn" [disabled]="i < 2" class="alignRight"
       (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
-    (click)="addOption(qoEditObj)">Add Option</button>
+    (click)="addOption(qoEditObj)">{{ 'Add Option' | translate }}</button>
   </md-dialog-content>
   <md-dialog-actions align="center">
   </md-dialog-actions>
@@ -330,8 +314,8 @@ export class CreateSurveyComponent implements OnInit {
     <button md-raised-button color="primary" [disabled]="!canSave"
     [md-tooltip]="canSave ? '' : 'All required fields must be filled in!'"
     tooltip-position="above"
-    (click)="save()">Save</button>
-    <button md-raised-button color="warn" (click)="cancel()">Cancel</button>
+    (click)="save()">{{ 'Save' | translate }}</button>
+    <button md-raised-button color="warn" (click)="cancel()">{{ 'Cancel' | translate }}</button>
   </md-dialog-actions>
   `
 })
@@ -344,8 +328,6 @@ export class SurveyAlternativesDialog {
 
   // for complicated reasons, this is required.
   numAlternatives: number[];
-
-  fieldIsRequiredMsg = 'This field is required.';
 
   constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
     // Create a copy of our questionObject
@@ -457,15 +439,15 @@ export class SurveyAlternativesDialog {
   selector: 'post-survey-dialog',
   styleUrls: ['./create-survey.component.scss'],
   template: `
-  <h2 md-dialog-title class="alignCenter">Post results</h2>
+  <h2 md-dialog-title class="alignCenter">{{ 'Post results' | translate }}</h2>
   <md-dialog-content align="center">
-    <p>Could not post your survey.</p>
+    <p>{{ 'Could not post your survey. Error:' | translate }}</p>
     <span class="error">
       <span>{{data.status}}</span>
       <span>: </span>
       <span>{{data.message}}</span>
     </span>
-    <p>The system cannot proceed until the issue has been resolved.</p>
+    <p>{{ 'The system cannot proceed until the issue has been resolved.' | translate }}</p>
   </md-dialog-content>
   <md-dialog-actions align="center">
     <button md-raised-button color="primary" (click)="okay()">Okay</button>
