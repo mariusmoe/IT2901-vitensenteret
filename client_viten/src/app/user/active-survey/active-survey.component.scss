@@ -1,0 +1,97 @@
+
+.active_survey_window{
+
+  .surveyView{
+    .playbutton{
+
+      margin: auto auto;
+      height: 100vh;
+    }
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+    animation-name: fadeInSurvey;
+    animation-duration: 2s;
+
+    /* Standard syntax */
+    @keyframes fadeInSurvey {
+      from {opacity: 0;}
+      to {opacity: 1;}
+    }
+
+    display: flex;
+    height: 100vh;
+    width: 100%;
+  }
+}
+
+/*Styling for the big playbutton at the start of a survey*/
+.playbutton{
+  //
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+
+}
+/*The animation that triggers when starbutton is clicked*/
+.playbutton.clicked{
+  // Removed click-animation for playbutton, became problematic. Implement if fixed transition
+  // .svgButton.clicked {
+  //   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+  //   -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+  //   -webkit-animation-fill-mode: forwards;
+  //   animation-name: fadeStartButton;
+  //   animation-duration: 2s;
+  //
+  //   /* Standard syntax */
+  //   @keyframes fadeStartButton {
+  //     from {opacity: 1;}
+  //     to {opacity: 0; visibility: hidden;}
+  //   }
+  // }
+  display: none;
+
+}
+// Styling for the playbutton
+.svgButton{
+   width: 80vh;
+   height: 80vh;
+}
+.svgButton:focus {outline: none;}
+
+/*This is the navigation pane that lets you navigate between questions*/
+.qnavigate {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(#606060, 0.2);
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+
+  .qnavigateArea{
+    flex: 1 1;
+    margin: 15px;
+    &.alignRight{
+      text-align: right;
+    }
+  }
+  h2{
+    margin: 15px;
+  }
+}
+
+.surveyQuestion{
+  text-align: center;
+  margin: auto auto;
+  .txt{
+
+  }
+}
+
+h1 {
+  padding: 0;
+  margin: 0;
+}

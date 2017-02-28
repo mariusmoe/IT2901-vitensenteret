@@ -10,10 +10,12 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
+import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
 
 const appRoutes: Routes = [
   { path: '', component: HomepageUserComponent },
   { path: 'login', component: LoginComponent },
+  { path: 'survey/:surveyId', component: ActiveSurveyComponent },
   { path: 'choosesurvey', component: ChooseSurveyComponent },
   { path: 'admin', component: AdminOutletComponent, canActivate: [AuthGuard],
 
@@ -27,8 +29,7 @@ const appRoutes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]
   },
-
-  { path: '', component: HomepageUserComponent },
+  { path: '', component:HomepageUserComponent, pathMatch: 'full' },
   { path: 'survey-retrieval', component: SurveyRetrievalComponent},
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];

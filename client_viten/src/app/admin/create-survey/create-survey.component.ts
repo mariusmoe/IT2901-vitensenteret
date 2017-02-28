@@ -6,6 +6,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TranslateService } from '../../_services/translate.service';
 
+
 @Component({
   selector: 'app-create-survey',
   templateUrl: './create-survey.component.html',

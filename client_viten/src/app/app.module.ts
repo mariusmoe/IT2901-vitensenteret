@@ -25,15 +25,20 @@ import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrie
 import { BarChartComponent } from './admin/survey-retrieval/bar-chart.component';
 import { DoughnutChartComponent } from './admin/survey-retrieval/doughnut-chart.component';
 
+import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
+import { SmileyComponent } from './user/smiley/smiley.component';
+import { StarsComponent } from './user/stars/stars.component';
+import { FreetxtComponent } from './user/freetxt/freetxt.component';
+import { YesNoComponent } from './user/yes-no/yes-no.component';
+import { MultiplechoiceComponent } from './user/multiplechoice/multiplechoice.component';
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
 
 import { ClipboardModule } from 'ngx-clipboard';
 import { DragulaModule } from 'ng2-dragula';
 
-import { TranslatePipe } from './_pipes/translate';
-import { TranslateService } from './_services/translate.service';
 import { TRANSLATION_PROVIDERS } from './translate/translate';
-
+import { TranslateService } from './_services/translate.service';
+import { TranslatePipe } from './_pipes/translate';
 @NgModule({
   declarations: [
     AppComponent,
@@ -44,6 +49,7 @@ import { TRANSLATION_PROVIDERS } from './translate/translate';
     AllSurveysComponent,
     CreateSurveyComponent,
     SurveyAlternativesDialog,
+    ActiveSurveyComponent,
     SurveyRetrievalComponent,
     BarChartComponent,
     DoughnutChartComponent,
@@ -52,9 +58,15 @@ import { TRANSLATION_PROVIDERS } from './translate/translate';
     AdminSettingsComponent,
     DeleteDialog,
     ReferDialog,
+    SmileyComponent,
+    StarsComponent,
+    FreetxtComponent,
+    YesNoComponent,
+    ReferDialog,
     CredentialDialog,
     AdminSurveysPipe,
-    TranslatePipe
+    TranslatePipe,
+    MultiplechoiceComponent
   ],
   imports: [
     BrowserModule,
