@@ -42,7 +42,7 @@ import { DragulaModule } from 'ng2-dragula';
     SurveyAlternativesDialog,
     SurveyRetrievalComponent,
     BarChartComponent,
-    DoughnutChartComponent
+    DoughnutChartComponent,
     SurveyPublishDialog,
     AdminOutletComponent,
     AdminSettingsComponent,
@@ -56,7 +56,7 @@ import { DragulaModule } from 'ng2-dragula';
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
-    ChartsModule
+    ChartsModule,
     ClipboardModule,
     DragulaModule,
     MaterialModule.forRoot()
