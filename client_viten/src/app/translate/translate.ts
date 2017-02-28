@@ -10,9 +10,14 @@ import { LANG_NO_NAME, LANG_NO_TRANS } from './lang-no';
 export const TRANSLATIONS = new OpaqueToken('translations');
 
 // all translations
+// const dictionary = {
+//     [LANG_EN_NAME]: LANG_EN_TRANS,
+//     [LANG_NO_NAME]: LANG_NO_TRANS,
+// };
+
 const dictionary = {
-    [LANG_EN_NAME]: LANG_EN_TRANS,
-    [LANG_NO_NAME]: LANG_NO_TRANS,
+  'en': LANG_EN_TRANS,
+  'no': LANG_NO_TRANS
 };
 
 // providers

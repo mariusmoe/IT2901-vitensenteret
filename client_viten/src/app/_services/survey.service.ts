@@ -3,13 +3,13 @@ import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angul
 import { Observable } from 'rxjs/Observable';
 import { Survey } from '../_models/survey';
 import { SurveyList } from '../_models/index';
+import { environment } from '../../environments/environment';
 
 
 
 @Injectable()
 export class SurveyService {
 
-  private url = 'http://localhost:2000/api/survey'; // TODO: FIX ME
   surveyList: SurveyList[] = [];
 
   constructor(private http: Http) {
@@ -36,7 +36,7 @@ export class SurveyService {
    * @returns {Observable<Survey>} returns an observable holding the requested survey
    */
    getSurvey(idString: String): Observable<Survey> {
-     return this.http.get(this.url + '/' + idString)
+     return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
        const s: Survey = response.json();
 
@@ -63,7 +63,7 @@ export class SurveyService {
 
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    return this.http.post(this.url, survey, options)
+    return this.http.post(environment.URL.survey, survey, options)
     .map( response => {
       const s: Survey = response.json();
       return s;
@@ -87,7 +87,7 @@ export class SurveyService {
 
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    return this.http.patch(this.url + '/' + surveyId, survey, options)
+    return this.http.patch(environment.URL.survey + '/' + surveyId, survey, options)
       .map( response => {
         const jsonResponse = response.json();
         return jsonResponse.survey;
@@ -111,7 +111,7 @@ export class SurveyService {
 
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    return this.http.delete(this.url + '/' + surveyId, options)
+    return this.http.delete(environment.URL.survey + '/' + surveyId, options)
       .map( response => {
         return true;
       },
@@ -135,7 +135,7 @@ export class SurveyService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
 
-    return this.http.get(this.url, { headers })
+    return this.http.get(environment.URL.survey, { headers })
       .map(
         response => {
           // only update our list for status in the 200 range. If we get status 304

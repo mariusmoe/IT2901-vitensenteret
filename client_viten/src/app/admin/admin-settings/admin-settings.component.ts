@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { MdSnackBar } from '@angular/material';
   templateUrl: './admin-settings.component.html',
   styleUrls: ['./admin-settings.component.scss']
 })
-export class AdminSettingsComponent implements OnInit {
+export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   private userSub;
   private userListSub;
@@ -20,6 +20,7 @@ export class AdminSettingsComponent implements OnInit {
   private userList: User[] = [];
   private selectedRow: number;
   private referralURL = '';
+  private emailSub: Subscription;
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
 
@@ -28,7 +29,7 @@ export class AdminSettingsComponent implements OnInit {
     private service: AuthenticationService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar) {
-
+      this.getUsers();
     }
 
 
@@ -37,10 +38,74 @@ export class AdminSettingsComponent implements OnInit {
     this.getUsers();
   }
 
+  ngOnDestroy() {
+    // this.emailSub.unsubscribe();
+  }
+
+  changeEmail(newEmail: string) {
+    this.service.changeEmail(newEmail)
+        .subscribe(result => {
+          if (result === true) {
+            const config: MdDialogConfig = {
+              data: {
+                credential: 'email'
+              },
+              disableClose: true,
+              width: '400px'
+            };
+            this.dialogRef = this.dialog.open(CredentialDialog, config);
+
+            this.dialogRef.afterClosed().subscribe(dialogResult => {
+              // console.log('result: ' + dialogResult);
+              if (dialogResult === 'yes') {
+                this.router.navigate(['/login']);
+              }
+              this.dialogRef = null;
+            });
+          } else {
+            this.openSnackBar('Could not change email', 'FAILURE');
+          }
+        },
+        error => {
+          this.openSnackBar('Could not change email', 'FAILURE');
+          console.error(error);
+      });
+  }
+
+  changePassword(newPassword: string) {
+    this.service.changePassword(newPassword)
+      .subscribe(result => {
+        if (result === true) {
+          const config: MdDialogConfig = {
+            data: {
+              credential: 'password'
+            },
+            disableClose: true,
+            width: '400px'
+          };
+          this.dialogRef = this.dialog.open(CredentialDialog, config);
+
+          this.dialogRef.afterClosed().subscribe(dialogResult => {
+            // console.log('result: ' + dialogResult);
+            if (dialogResult === 'yes') {
+              this.router.navigate(['/login']);
+            }
+            this.dialogRef = null;
+          });
+        } else {
+          this.openSnackBar('Could not change Password', 'FAILURE');
+        }
+      },
+      error => {
+        this.openSnackBar('Could not change Password', 'FAILURE');
+        console.error(error);
+    });
+  }
+
   requestReferal(role) {
     this.service.getReferral(role)
         .subscribe(result => {
-          console.log(result);
+          // console.log(result);
           const config: MdDialogConfig = {
             data: {
               referralURL: result,
@@ -52,14 +117,11 @@ export class AdminSettingsComponent implements OnInit {
   }
 
   getUsers() {
-    this.userSub = this.service.getCurrentUserObservable().subscribe(user => {
-      this.user = user; // Subscribe and get user from the authService
-      console.log(this.user);
+    this.user = this.service.getUser();
 
-    });
     this.userListSub = this.service.getAllUsers().subscribe(users => {
       this.userList = users; // Subscribe and get user from the authService
-      console.log(this.userList);
+      // console.log(this.userList);
     });
   }
 
@@ -76,7 +138,7 @@ export class AdminSettingsComponent implements OnInit {
     if (id === this.user._id) {
       this.openSnackBar('Can\'t delete this user', 'FAILURE');
     } else {
-      this.service.deleteAccoutn(id)
+      this.service.deleteAccount(id)
           .subscribe(result => {
               if (result === true) {
                   this.getUsers();
@@ -109,7 +171,7 @@ export class AdminSettingsComponent implements OnInit {
     });
 
     this.dialogRef.afterClosed().subscribe(result => {
-      console.log('result: ' + result);
+      // console.log('result: ' + result);
       if (result === 'yes') {
         this.deleteUser(id);
       }
@@ -186,4 +248,26 @@ export class ReferDialog {
     setCopyBox() {
       this.text = this.data.referralURL;
     }
+}
+
+/**
+ * ReferDialog
+ *
+ * Holds dialog logic
+ */
+@Component({
+  selector: 'credential-changed-dialog',
+  template: `
+  <h1>SUCCESS</h1>
+  <br>
+  <p>You have changed your <span>{{data.credential}}</span></p>
+  <p>You will now be loged out</p>
+  <md-dialog-actions>
+    <button md-raised-button color="primary" (click)="dialogRef.close('yes')">OK</button>
+  </md-dialog-actions>
+  `,
+  styleUrls: ['./admin-settings.component.scss']
+})
+export class CredentialDialog {
+  constructor(public dialogRef: MdDialogRef<CredentialDialog>, @Inject(MD_DIALOG_DATA) public data: any) { }
 }
