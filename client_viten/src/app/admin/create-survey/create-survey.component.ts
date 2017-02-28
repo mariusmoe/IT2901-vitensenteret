@@ -451,7 +451,7 @@ export class SurveyAlternativesDialog {
     <p>{{ 'The system cannot proceed until the issue has been resolved.' | translate }}</p>
   </md-dialog-content>
   <md-dialog-actions align="center">
-    <button md-raised-button color="primary" (click)="okay()">Okay</button>
+    <button md-raised-button color="primary" (click)="okay()">{{ 'Okay' | translate }}</button>
   </md-dialog-actions>
   `
 })
