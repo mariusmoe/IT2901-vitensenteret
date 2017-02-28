@@ -1,4 +1,16 @@
 
+
+.tabContent {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  md-card {
+    display: inline-block;
+    flex: 1 1;
+  }
+}
+
+
 .same-line {
   display:inline-block;
 }

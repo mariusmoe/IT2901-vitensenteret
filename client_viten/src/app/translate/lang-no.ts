@@ -22,10 +22,14 @@ export const LANG_NO_TRANS = {
   'Password': 'Passord',
   'User ID': 'BrukerID',
   'Role': 'Kontotype',
+  'Language': 'Språk',
+  'Copy': 'Kopier',
+  'Okay': 'Ok',
+  'Success': 'Success',
 
   // Roles
   'admin': 'Superadmin',
-  'member': 'adminbruker',
+  'member': 'Adminbruker',
 
   // Languages
   'Norwegian': 'Norsk',
@@ -88,13 +92,26 @@ export const LANG_NO_TRANS = {
   'Minimum 4 characters': 'Minimum 4 tegn',
   'Admin settings': 'Admininstillinger',
   'Change password': 'Bytt passord',
+  'Change email': 'Bytt epostkonto',
+  'User settings': 'Brukerinstillinger',
   'Superadmin settings': 'Superadmin seksjon',
   'Request admin': 'Få invitasjonslink for superadmin',
   'Request member': 'Få invitasjonslink for adminbruker',
   'You need to write the same password twice': 'Du må skrive passordet to ganger',
   'Delete account': 'Slett kontoen',
-
-
+  'Change the preferred language here': 'Bytt ditt foretrukne språk her',
+  'Could not change your email': 'Kunne ikke endre din epostkonto',
+  'Could not change your password': 'Kunne ikke endre passordet ditt',
+  'Can\'t delete this user': 'Kan ikke slette denne brukeren',
+  'User has been deleted': 'Brukeren har blitt slettet',
+  'Can\'t delete current user': 'Kan ikke slette brukeren du er logget inn med',
+  'Are you sure you want to delete this account?': 'Er du sikker på at du vil slette denne kontoen?',
+  'The account will be deleted! This action is permanent!': 'Kontoen vil bli slettet! Dette er permanent!',
+  'Refer one userType': 'Referer en %0',
+  'A referral link is only active for two weeks': 'A referral link is only active for two weeks',
+  'You have now changed your email': 'Du har nå byttet epostkonto for brukeren din',
+  'You have now changed your password': 'Du har nå byttet passord',
+  'You will now be logged out': 'Du blir nå logget ut',
 
 
 
