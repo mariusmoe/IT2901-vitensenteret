@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { TestRestAPIComponent } from './test-rest-api.component';
+import { SurveyRetrievalComponent } from './survey-retrieval.component';
 
-describe('TestRestAPIComponent', () => {
-  let component: TestRestAPIComponent;
-  let fixture: ComponentFixture<TestRestAPIComponent>;
+describe('SurveyRetrievalComponent', () => {
+  let component: SurveyRetrievalComponent;
+  let fixture: ComponentFixture<SurveyRetrievalComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TestRestAPIComponent ]
+      declarations: [ SurveyRetrievalComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestRestAPIComponent);
+    fixture = TestBed.createComponent(SurveyRetrievalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

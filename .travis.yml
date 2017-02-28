@@ -1,0 +1,25 @@
+sudo: required
+dist: trusty
+language: node_js
+node_js:
+env:
+  - CXX=g++-4.8
+addons:
+branches:
+  only:
+    - deploy
+services: mongodb
+apt:
+  sources:
+    - google-chrome
+    - ubuntu-toolchain-r-test
+  packages:
+    - google-chrome-stable
+    - google-chrome-beta
+    - g++-4.8
+before_install:
+  - export CHROME_BIN=chromium-browser
+  - export DISPLAY=:99.0
+  - sh -e /etc/init.d/xvfb start
+
+script: cd client_viten && npm install -g angular-cli@1.0.0-beta.26 && npm install && npm run buildtest && cd .. && cd server && npm install && npm run buildtest

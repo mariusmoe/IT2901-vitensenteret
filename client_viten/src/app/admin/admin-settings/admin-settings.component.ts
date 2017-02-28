@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { MdDialogRef, MdDialog, MdDialogConfig } from '@angular/material';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -15,10 +15,11 @@ export class AdminSettingsComponent implements OnInit {
 
   private userSub;
   private userListSub;
-  private user: User;
+  public  user: User;
   private email = '';
   private userList: User[] = [];
   private selectedRow: number;
+  private referralURL = '';
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
 
@@ -36,10 +37,18 @@ export class AdminSettingsComponent implements OnInit {
     this.getUsers();
   }
 
-  requestAdminReferal() {
-    this.dialogRef = this.dialog.open(ReferDialog, {
-      disableClose: false
-    });
+  requestReferal(role) {
+    this.service.getReferral(role)
+        .subscribe(result => {
+          console.log(result);
+          const config: MdDialogConfig = {
+            data: {
+              referralURL: result,
+              role: role,
+            }
+          };
+          this.dialogRef = this.dialog.open(ReferDialog, config);
+        });
   }
 
   getUsers() {
@@ -143,9 +152,25 @@ export class DeleteDialog {
 @Component({
   selector: 'refer-acccount-dialog',
   template: `
-  <h1>Refer one {{referralRole}}</h1>
+  <h1>Refer one {{data.role}}</h1>
   <br>
-  <p>{{referralUrl}}</p>
+  <p>A referral link is only active for two weeks</p>
+  <md-input-container class="referralField">
+    <input class="referralField"
+      mdInput placeholder="Referral link"
+      value="{{data.referralURL}}"
+      [(ngModel)] = "text">
+  </md-input-container>
+  <button md-raised-button
+    class="btn btn-default"
+    [class.btn-success] = 'isCopied'
+    type="button"
+    ngxClipboard
+    [cbContent] = 'text'
+    (cbOnSuccess) = 'isCopied = true'>
+      copy
+      <md-icon>content_copy</md-icon>
+  </button>
   <md-dialog-actions>
     <button md-raised-button color="primary"  md-dialog-close>OK</button>
   </md-dialog-actions>
@@ -153,7 +178,12 @@ export class DeleteDialog {
   styleUrls: ['./admin-settings.component.scss']
 })
 export class ReferDialog {
-  public referralRole: string;
-  public referralUrl: string;
-  constructor(public dialogRef: MdDialogRef<ReferDialog>) { }
+  public isCopied = false;
+  public text = '';
+  constructor(public dialogRef: MdDialogRef<ReferDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
+    this.setCopyBox(); }
+
+    setCopyBox() {
+      this.text = this.data.referralURL;
+    }
 }
