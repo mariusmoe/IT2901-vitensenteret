@@ -1,12 +1,20 @@
-.red {
-  color: red;
+.adminPortal {
+  md-card {
+    margin: 0 auto;
+    margin-top: 50px;
+    max-width: 400px;
+    .actions {
+      text-align: center;
+    }
+  }
+  md-input-container {
+    margin: 10px 0 20px 0;
+    width: 100%;
+    md-hint {
+      color: red;
+    }
+  }
 }
-
-.example-full-width {
-  width: 400px;
-}
-
-
 
 .smaller {
   margin-left: 20px;

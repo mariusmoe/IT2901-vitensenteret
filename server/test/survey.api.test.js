@@ -20,7 +20,7 @@ var validJsonObject = {
   "date": "2012-04-23T18:25:43.511Z",
   "active": true,
   "questionlist": [{
-    "mode": "smily",
+    "mode": "smiley",
     "answer": [1,2,1,2,1,2,1,2],
     "lang": {
       "en": {
@@ -29,7 +29,7 @@ var validJsonObject = {
       },
       "no": {
         "txt": "Hva synes du om Mars?",
-        "options": ["UTROLIG","kuuuuul","jevla jernplanet"]
+        "options": ["UTROLIG","kuuuuul","teit jernplanet"]
       },
     },
   }],

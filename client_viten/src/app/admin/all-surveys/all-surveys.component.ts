@@ -5,7 +5,7 @@ import { SurveyList } from '../../_models/index';
 import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
-
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-all-surveys',
@@ -13,49 +13,27 @@ import { Observable } from 'rxjs/Observable';
   styleUrls: ['./all-surveys.component.scss']
 })
 export class AllSurveysComponent implements OnInit {
-
-
-    private surveys: SurveyList[] = [];
-
-    private loading: boolean = false;
-
-    private selectedID: string = "";
-
+    loading = false;
+    searchInput = '';
 
     constructor(
       private router: Router,
-      private route: ActivatedRoute,
-      private surveyService: SurveyService) {
-
+      public route: ActivatedRoute,
+      public surveyService: SurveyService) {
+        // request fresh list of surveys
+        this.getSurveys();
       }
 
     ngOnInit() {
-      this.getSurveys();
-      if (this.route.snapshot.params['surveyId']){
-        console.log(this.route.snapshot.params['surveyId'])
-        this.setSelectedID(this.route.snapshot.params['surveyId']);
-      }
-    }
-
-    /**
-     * Set the selected ID
-     *
-     * Set the selected survey if it is provided in the url
-     * @param  {string} selectedID surveyID to use
-     */
-    setSelectedID(selectedID: string){
-      this.selectedID = selectedID;
     }
 
     /**
      * Select one survey form the list
      * @param  {string} surveyId [description]
-     * @return {[type]}          [description]
+     * Appends the surveyId to the router navigation.
      */
     select(surveyId: string) {
-      this.selectedID = surveyId;
       this.router.navigate(['/admin', surveyId]);
-      this.surveyService.selectSurvey(surveyId);
     }
 
     /**
@@ -63,10 +41,14 @@ export class AllSurveysComponent implements OnInit {
      */
     private getSurveys() {
       this.loading = true;
-      this.surveyService.getAllSurveys().subscribe(result => {
-        this.surveys = result;
+      const sub = this.surveyService.getAllSurveys().subscribe(result => {
         this.loading = false;
-      })
+        sub.unsubscribe();
+      });
+    }
+
+    formatDate(dateString: string) {
+      return new Date(dateString).toLocaleDateString();
     }
 
 }

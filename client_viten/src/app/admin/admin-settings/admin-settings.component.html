@@ -1,0 +1,109 @@
+<div>
+  <h1>Settings</h1>
+  <md-tab-group>
+  <md-tab label="User settings">
+
+    <md-card>
+      <p>Email</p>
+<!-- TODO: rewrite this with form controll -->
+      <md-input-container>
+        <input mdInput
+          placeholder="{{user.email}}"
+          #newEmail>
+      </md-input-container>
+      <button md-raised-button color="primary" [disabled]='newEmail.value==user.email || newEmail.value== "" ' (click)="changeEmail(newEmail.value)">Change email</button>
+    </md-card>
+    <md-card>
+      <p class="same-line right-padding">Password</p>
+      <md-input-container>
+        <input mdInput
+          autocomplete="new-password"
+          type="password"
+          placeholder="min 5 cahracters"
+          #newPassword>
+          <md-hint align="end">{{newPassword.value.length}} / 4++</md-hint>
+      </md-input-container>
+      <br>
+      <p class="same-line right-padding">Retype password</p>
+      <md-input-container>
+        <input mdInput
+          [disabled]='newPassword.value.length <= 3 || newPassword.value== "" '
+          type="password"
+          placeholder="min 5 cahracters"
+          #newPassword2>
+          <md-hint align="end">
+            {{newPassword2.value.length}} / 4++</md-hint>
+      </md-input-container>
+      <md-icon class="done" *ngIf="newPassword.value == newPassword2.value && !newPassword.value == '' ">done all</md-icon>
+      <br>
+      <button md-raised-button
+        #passwordShangeButton
+        color="primary"
+        minlength="3"
+        md-visible="true"
+        [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ? 'You need to write the same password twice' : 'Go on and magic will happen' "
+        mdTooltipPosition="below"
+        [disabled]='newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== "" '
+        (click)="changenewPassword(newPassword.value)">
+        <div [mdTooltip]="(newPassword.value.length <= 3 || !(newPassword.value == newPassword2.value) || newPassword.value== '') ? 'You need to write the same password twice' : 'Go on and magic will happen' "
+        mdTooltipPosition="below">
+          Change password
+        </div>
+      </button>
+    </md-card>
+  </md-tab>
+  <md-tab *ngIf="user.role=='admin'" label="Admin settings">
+    <md-card>
+      <h1>Some more settings</h1>
+      <p>{{user.role}}</p>
+      <button md-raised-button
+        color="primary"
+        minlength="3"
+        (click)="requestReferal('admin')">
+        Request admin
+      </button>
+      <button md-raised-button
+        color="primary"
+        minlength="3"
+        (click)="requestReferal('member')">
+        Request member
+      </button>
+    </md-card>
+    <md-card>
+      <p>Delete account</p>
+      <table class="userTable">
+        <tr>
+          <th>
+            ID
+          </th>
+          <th>
+            email
+          </th>
+          <th>
+            role
+          </th>
+        </tr>
+        <tr *ngFor="let user of userList;  let i=index; let odd=odd; let even=even;"
+        (click)="openDialog(user._id)"
+        [ngClass]="{ odd: odd, even: even }"
+        >
+        <td>
+          {{user._id}}
+        </td>
+        <td>
+          {{user.email}}
+        </td>
+        <td>
+          {{user.role}}
+        </td>
+        <td>
+          <md-icon>delete_forever</md-icon>
+        </td>
+      </tr>
+      </table>
+
+        <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
+    </md-card>
+  </md-tab>
+</md-tab-group>
+</div>

@@ -1,7 +1,17 @@
 
+
+
 h1 {
   text-align: center;
   display: block;
+}
+h2.alignCenter {
+  text-align: center;
+  display: block;
+}
+
+.error {
+  color: red;
 }
 
 md-card {
@@ -15,8 +25,27 @@ md-card {
     max-width: 250px;
     min-width: 250px;
 
+    // dragula dragging styles
+    cursor: grab;
+    .gu-transit {
+      cursor: move !important;
+    }
+    // dragula styles end
+
     md-input-container {
       width: 100%;
+    }
+    .modeSelect {
+      md-select {
+        display: block;
+      }
+      span.desc {
+        display: block;
+        font-size: 75%; // mimics md-hint
+        &.invalid {
+          color: red;
+        }
+      }
     }
   }
 
@@ -46,6 +75,7 @@ md-input-container {
   }
 }
 
+
 .optionContainer {
   margin-bottom: 20px;
 }
@@ -58,5 +88,22 @@ md-input-container {
   md-progress-circle,
   button {
     flex: 0 1;
+  }
+}
+
+.submitLoading {
+  display: block;
+}
+
+md-dialog-actions {
+  button {
+    margin-left: 10px;
+    &:first-of-type {
+      margin: 0;
+    }
+    &.alignRight {
+      align-self: flex-end;
+      text-align: right;
+    }
   }
 }

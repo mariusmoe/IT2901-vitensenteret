@@ -1,0 +1,42 @@
+
+.same-line {
+  display:inline-block;
+}
+// TODO: smaller font and smoth roboto font
+.right-padding {
+  width: 140px;
+  font-size: 12px;
+}
+
+.done {
+  position: relative;
+  top: 7px;
+}
+
+.referralField {
+  width: 500px;
+}
+
+.btn {
+  margin-left: 10px;
+}
+.btn-success {
+  background-color: green;
+  color: white;
+}
+
+.userTable {
+  border-collapse: collapse;
+  max-height: 150px;
+  overflow-y: scroll;
+  .odd {
+    background: rgba(0, 0, 0, 0.1);
+  }
+  tr:hover {
+    background: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+  }
+  td {
+    padding: 10px;
+  }
+}

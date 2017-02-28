@@ -3,21 +3,21 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { DebugElement } from '@angular/core';
 
-import { TestRestAPIComponent } from './test-rest-api.component';
+import { AdminSettingsComponent } from './admin-settings.component';
 
-describe('TestRestAPIComponent', () => {
-  let component: TestRestAPIComponent;
-  let fixture: ComponentFixture<TestRestAPIComponent>;
+describe('AdminSettingsComponent', () => {
+  let component: AdminSettingsComponent;
+  let fixture: ComponentFixture<AdminSettingsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ TestRestAPIComponent ]
+      declarations: [ AdminSettingsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(TestRestAPIComponent);
+    fixture = TestBed.createComponent(AdminSettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
