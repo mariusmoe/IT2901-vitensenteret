@@ -64,7 +64,7 @@ import { TranslatePipe } from './_pipes/translate';
     YesNoComponent,
     ReferDialog,
     AdminSurveysPipe,
-    TranslatePipe
+    TranslatePipe,
     MultiplechoiceComponent
   ],
   imports: [
