@@ -18,7 +18,8 @@
       "prefix": "app",
       "mobile": false,
       "scripts": [
-        "../node_modules/chart.js/dist/Chart.bundle.min.js"
+        "../node_modules/chart.js/dist/Chart.bundle.min.js",
+        "../node_modules/hammerjs/hammer.min.js"
       ],
       "environments": {
         "source": "environments/environment.ts",
