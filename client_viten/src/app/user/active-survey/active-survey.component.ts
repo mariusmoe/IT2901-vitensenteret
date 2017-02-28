@@ -25,6 +25,8 @@ export class ActiveSurveyComponent implements OnInit {
   private totalPages = 0;
   private nextPage = 0;
   private transition = false;
+  private forwardValue = 'Forward';
+  private done = false;
 
   constructor(private surveyService: SurveyService,
     private router: Router, private route: ActivatedRoute) {
@@ -55,30 +57,40 @@ export class ActiveSurveyComponent implements OnInit {
     this.started = true;
   }
 
-// When you navigate to the previous question, this happens
+// This method handles the transition to the previous questions in the survey
   private previousQ(){
       if(this.page <= 0){
         // console.log("this is the first question, can't go back further");
         return;
       }
+      this.forwardValue = 'Forward';
       this.page -= 1;
       this.transition = true;
 
       // console.log('previous question');
     }
-// When you navigate to the next question, this happens
+
+// This method handles the transition to the next question in the survey
   private nextQ(){
+    if(this.forwardValue == 'Finish'){
+      this.endSurvey();
+    }
     if(this.page+1 >= this.totalPages){
       // console.log("this is the last question, can't advance further");
-
-      //TODO transition to endMessage
+      this.forwardValue = 'Finish';
       return;
     }
+    this.forwardValue = 'Forward';
     this.page += 1;
     this.transition = true;
+
+    if(this.page+1 >= this.totalPages){
+      this.forwardValue = 'Finish';
+    }
     // console.log('next question');
   }
 
+// This method ends the animation
   animEnd(event) {
     if (!event.fromState) {
       this.transition = false;
@@ -86,6 +98,21 @@ export class ActiveSurveyComponent implements OnInit {
     }
     // console.log('animEnd');
     // console.log(event);
+  }
+
+// This method ends the survey if the user clicks the END button or after x amount of seconds
+  endSurvey() {
+    this.done = true;
+    // this.properSurvey = false;
+    // this.started = false;
+    // this.page = 0;
+    // this.totalPages = 0;
+    // this.nextPage = 0;
+    // this.transition = false;
+    // this.forwardValue = 'Forward';
+    // this.done = false;
+    // // this.ngOnInit();
+    // console.log('Ending survey');
   }
 
 }

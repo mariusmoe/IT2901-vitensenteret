@@ -7,7 +7,7 @@
       margin: auto auto;
       height: 100vh;
     }
-  
+
 
     display: flex;
     height: 100vh;
@@ -85,4 +85,17 @@
 h1 {
   padding: 0;
   margin: 0;
+}
+
+.surveyDone{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #606060;
+  font-size: 50px;
+  font-weight: bold;
+  height: 30vh;
+  width: 30vh;
+  border: solid;
+  border-radius: 20px;
 }
