@@ -1,6 +1,6 @@
 <div class="searchBox">
   <md-input-container>
-    <input mdInput type="search" placeholder="Search" [(ngModel)]="searchInput"
+    <input mdInput type="search" placeholder="{{'Search' | translate}}" [(ngModel)]="searchInput"
     md-tooltip="Filter results on title and / or admin comment">
     <span md-prefix><md-icon class="searchIcon">search</md-icon></span>
   </md-input-container>
@@ -21,4 +21,4 @@
 
 <!-- loading circle -->
 <md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-<span class="listComment"  *ngIf="!loading">{{surveyService.surveyList.length}} total surveys. A maximum of 20 items are displayed.</span>
+<span class="listComment"  *ngIf="!loading">{{ 'n total surveys. A maximum of 20 items are displayed.' | translate: surveyService.surveyList.length }}</span>
