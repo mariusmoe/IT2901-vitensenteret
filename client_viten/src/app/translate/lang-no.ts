@@ -112,6 +112,7 @@ export const LANG_NO_TRANS = {
   'You have now changed your email': 'Du har nå byttet epostkonto for brukeren din',
   'You have now changed your password': 'Du har nå byttet passord',
   'You will now be logged out': 'Du blir nå logget ut',
+  'Referral link': 'Referral link',
 
 
 

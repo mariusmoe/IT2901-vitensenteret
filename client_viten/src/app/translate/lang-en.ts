@@ -111,6 +111,7 @@ export const LANG_EN_TRANS = {
   'You have now changed your email': 'You have now changed your email',
   'You have now changed your password': 'You have now changed your password',
   'You will now be logged out': 'You will now be logged out',
+  'Referral link': 'Referral link',
 
 
 

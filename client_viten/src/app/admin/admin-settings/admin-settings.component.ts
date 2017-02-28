@@ -228,7 +228,7 @@ export class DeleteDialog {
   <p>{{ 'A referral link is only active for two weeks' | translate }}</p>
   <md-input-container class="referralField">
     <input class="referralField"
-      mdInput placeholder="Referral link"
+      mdInput placeholder="{{ 'Referral link' | translate }}"
       value="{{data.referralURL}}"
       [(ngModel)] = "text">
   </md-input-container>
