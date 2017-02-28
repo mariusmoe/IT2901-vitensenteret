@@ -39,6 +39,7 @@ export class SurveyService {
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
        const s: Survey = response.json();
+
        return s;
      },
      error => {
