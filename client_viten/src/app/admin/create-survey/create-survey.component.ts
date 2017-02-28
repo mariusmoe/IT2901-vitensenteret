@@ -307,7 +307,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
-    (click)="addOption(qoEditObj)">{{ 'Add Option' | translate }}</button>
+    (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
   </md-dialog-content>
   <md-dialog-actions align="center">
   </md-dialog-actions>

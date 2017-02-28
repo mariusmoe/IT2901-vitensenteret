@@ -292,17 +292,17 @@
     <h1 class="flexchild alignCenter" routerLink="/admin" routerLinkActive="active">Vitensenteret</h1>
     <span class="flexchild alignRight">
       <button md-raised-button color="accent" routerLink="/admin/settings">
-        <md-icon>face</md-icon>
+        <md-icon>account_circle</md-icon>
         {{ 'Settings' | translate }}
       </button>
     </span>
   </md-toolbar>
   <div class="navbar">
     <button md-raised-button color="accent" routerLink="/admin" routerLinkActive="active">
-      {{ 'Admin Home' | translate }}
+      <md-icon>home</md-icon>{{ 'Admin Home' | translate }}
     </button>
     <button md-raised-button color="accent" routerLink="/admin/editsurvey" routerLinkActive="active">
-      {{ 'Create New Survey' | translate }}
+      <md-icon>assignment</md-icon>{{ 'Create New Survey' | translate }}
     </button>
   </div>
 

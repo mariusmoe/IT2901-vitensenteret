@@ -47,6 +47,15 @@ md-card {
         }
       }
     }
+    .actionsBox {
+      display: flex;
+      flex-flow: row-reverse nowrap;
+      justify-content: space-between;
+      .delete {
+
+        align-self: flex-end;
+      }
+    }
   }
 
 }
