@@ -8,18 +8,15 @@
       "root": "src",
       "outDir": "dist",
       "assets": [
-  "assets",
-  "favicon.ico"
-],
+        "assets",
+        "favicon.ico"
+      ],
       "index": "index.html",
       "main": "main.ts",
       "test": "test.ts",
       "tsconfig": "tsconfig.json",
       "prefix": "app",
       "mobile": false,
-      "styles": [
-        "styles.css"
-      ],
       "scripts": [
         "../node_modules/chart.js/dist/Chart.bundle.min.js"
       ],
