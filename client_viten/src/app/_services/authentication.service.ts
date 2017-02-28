@@ -13,7 +13,9 @@ export class AuthenticationService {
   private url = {
     login: 'http://localhost:2000/api/auth/login',
     allUsers: 'http://localhost:2000/api/auth/all_users',
-    delete: 'http://localhost:2000/api/auth/delete_account'
+    delete: 'http://localhost:2000/api/auth/delete_account',
+    refer: 'http://localhost:2000/api/auth/get_referral_link/',
+    renewJWT: 'http://localhost:2000/api/auth/get_token/'
   };
 
   public token: string;
@@ -38,6 +40,36 @@ export class AuthenticationService {
       // push user to subscribers
       this.userSub.next(this.user);
     }
+  }
+
+  getReferral(role): Observable<string> {
+    const token = this.getToken();
+    if (!token) {
+      return Observable.throw('jwt not found'); // TODO: fix me.
+    }
+    const headers = new Headers();
+    headers.append('Authorization', `${token}`);
+    const options = new RequestOptions({ headers: headers });
+      return this.http.get(this.url.refer + role, options)
+      .map(
+        response => {
+          if (response.status !== 200) {
+            // Error during login
+            console.error(response);
+          } else {
+            const jsonResponse = response.json();
+            if (jsonResponse) {
+              return jsonResponse.link;
+            } else {
+              return 'null';
+            }
+          }
+        },
+        error => {
+          console.log(error.text());
+          return null;
+        }
+      );
   }
 
   /**
@@ -152,8 +184,36 @@ export class AuthenticationService {
    * @return {boolean} true if JWT was successfully renewed else false
    */
   getNewJWT(): Observable<boolean> {
-    // TODO
-    return Observable.of(true); // placeholder
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${this.token}`);
+    const options = new RequestOptions({ headers: headers });
+    return this.http.get(this.url.renewJWT, options)
+      .map(
+        response => {
+          if (response.status !== 200) {
+            // Error during login
+            console.error('can\'t renew JWT');
+            return false;
+          } else {
+            const jsonResponse = response.json();
+            if (jsonResponse) {
+              localStorage.setItem('token', jsonResponse.token);
+              // TODO: set user info? no dont to this!!!
+              //
+              return true;
+            } else {
+              return false;
+            }
+          }
+        },
+        error => {
+          console.log(error.text());
+          return false;
+        }
+      ).catch(e => {
+        return Observable.of(false);
+      });
   }
 
   login(email, password): Observable<boolean> {

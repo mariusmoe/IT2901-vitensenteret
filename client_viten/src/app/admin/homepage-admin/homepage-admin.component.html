@@ -1,2 +1,39 @@
-<h1>Admin home page</h1>
-<app-all-surveys></app-all-surveys>
+<div class="flexParent">
+  <div class="leftSide surveyList">
+    <app-all-surveys></app-all-surveys>
+  </div>
+  <div class="rightSide">
+    <md-card *ngIf="survey" class="selectedSurveyArea" [@fadeIn]="">
+      <md-card-title-group>
+        <md-card-title>{{survey.name}}</md-card-title>
+        <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
+        <md-icon md-list-avatar class="activeIcon" [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
+      </md-card-title-group>
+      <md-card-content>
+        <p>
+          {{survey.active ? 'Available to users now!' : 'This survey is not active at the moment.'}}
+        </p>
+        <!-- GRAPHS GO HERE -->
+
+
+        <!-- END GRAPHS GO HERE -->
+      </md-card-content>
+      <md-card-actions align="right">
+        <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
+          NYI: Download as PDF
+        </button>
+        <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
+          NYI: Download Raw Data
+        </button>
+        <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
+          Edit
+        </button>
+      </md-card-actions>
+    </md-card>
+    <div *ngIf="!survey" class="emptyArea">
+      <md-progress-circle *ngIf="loadingSurvey" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
+      <div *ngIf="!loadingSurvey">
+
+      </div>
+  </div>
+</div>

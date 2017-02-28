@@ -4,4 +4,5 @@ export class SurveyList {
   name: string;
   active: boolean;
   date: Date;
+  comment?: string;
 }

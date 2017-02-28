@@ -5,6 +5,7 @@ import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app.routing-module';
 import { MaterialModule } from '@angular/material';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
@@ -15,13 +16,18 @@ import { AuthenticationService } from './_services/authentication.service';
 import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
-import { TestRestAPIComponent } from './admin/test-rest-api/test-rest-api.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
+import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
+import { BarChartComponent } from './admin/survey-retrieval/bar-chart.component';
+import { DoughnutChartComponent } from './admin/survey-retrieval/doughnut-chart.component';
 import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin-settings/admin-settings.component';
 
+import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
+import { ClipboardModule } from 'ngx-clipboard';
+import { DragulaModule } from 'ng2-dragula';
 
 
 @NgModule({
@@ -32,14 +38,17 @@ import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin
     ChooseSurveyComponent,
     LoginComponent,
     AllSurveysComponent,
-    TestRestAPIComponent,
     CreateSurveyComponent,
     SurveyAlternativesDialog,
+    SurveyRetrievalComponent,
+    BarChartComponent,
+    DoughnutChartComponent
     SurveyPublishDialog,
     AdminOutletComponent,
     AdminSettingsComponent,
     DeleteDialog,
-    ReferDialog
+    ReferDialog,
+    AdminSurveysPipe
   ],
   imports: [
     BrowserModule,
@@ -47,6 +56,9 @@ import { AdminSettingsComponent, DeleteDialog, ReferDialog } from './admin/admin
     ReactiveFormsModule,
     HttpModule,
     AppRoutingModule,
+    ChartsModule
+    ClipboardModule,
+    DragulaModule,
     MaterialModule.forRoot()
   ],
   entryComponents: [

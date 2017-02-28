@@ -1,4 +1,6 @@
 
+
+
 h1 {
   text-align: center;
   display: block;
@@ -23,8 +25,27 @@ md-card {
     max-width: 250px;
     min-width: 250px;
 
+    // dragula dragging styles
+    cursor: grab;
+    .gu-transit {
+      cursor: move !important;
+    }
+    // dragula styles end
+
     md-input-container {
       width: 100%;
+    }
+    .modeSelect {
+      md-select {
+        display: block;
+      }
+      span.desc {
+        display: block;
+        font-size: 75%; // mimics md-hint
+        &.invalid {
+          color: red;
+        }
+      }
     }
   }
 

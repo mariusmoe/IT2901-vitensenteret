@@ -37,8 +37,8 @@ jspm_packages
 .node_repl_history
 
 # DO NOT INCLUDE CONFIG!
-config.js
-config
+server/config/*
+!server/config/test.json
 
 #Useless file from OSX
 .DS_Store
