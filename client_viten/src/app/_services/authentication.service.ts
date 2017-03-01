@@ -12,6 +12,17 @@ import { Observable } from 'rxjs/Observable';
 export class AuthenticationService {
 
 
+  private url = {
+    login: 'http://localhost:2000/api/auth/login',
+    allUsers: 'http://localhost:2000/api/auth/all_users',
+    delete: 'http://localhost:2000/api/auth/delete_account',
+    refer: 'http://localhost:2000/api/auth/get_referral_link/',
+    renewJWT: 'http://localhost:2000/api/auth/get_token/',
+    newUser: 'http://localhost:2000/api/auth/register'
+  };
+
+
+
   public token: string;
   private user: User;
   private jwtHelper: JwtHelper = new JwtHelper();
@@ -235,6 +246,32 @@ export class AuthenticationService {
               return true;
             } else {
               return false;
+            }
+          },
+          error => {
+            console.log(error.text());
+            return false;
+          }
+        );
+  }
+
+
+  registerUser(email: string, password: string, link: string): Observable<boolean> {
+      const headers = new Headers({'content-type': 'application/json'});
+      const options = new RequestOptions({headers: headers});
+      const data = { 'email': email, 'password': password, 'referral_string': link };
+      return this.http.post(this.url.newUser, JSON.stringify(data), options)
+        .map(
+          response => {
+            if (response.status !== 200) {
+              // Error during user create
+              console.error('can\'t create user');
+              return false;
+            }
+            else {
+              const jsonResponse = response.json();
+              console.log(jsonResponse);
+              return true;
             }
           },
           error => {

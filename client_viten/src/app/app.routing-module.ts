@@ -10,7 +10,9 @@ import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.componen
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
+import { NewUserComponent } from './admin/new-user/new-user.component';
 import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
+
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -27,7 +29,8 @@ const appRoutes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]
   },
-  { path: 'survey-retrieval', component: SurveyRetrievalComponent},
+  { path: 'register/:refLink', component: NewUserComponent },
+  { path: 'survey-retrieval', component: SurveyRetrievalComponent },
   { path: '', component: LoginComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
