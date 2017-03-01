@@ -16,6 +16,28 @@ export class SurveyService {
 
   }
 
+  /**
+   * answer one survey
+   * @param  {Array<number>}       answers  List of answers, each number
+   *                                        represents one answer.
+   * @param  {String}              idString identifier for a survey
+   * @return {Observable<boolean>}          Observable boolean, true if successful
+   */
+  answerSurvey(answers: Array<number>, idString: String): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.post(environment.URL.survey + '/' + idString, {answers}, options)
+    .map( response => {
+      console.log(response);
+      return true;
+    },
+    error => {
+      console.error(error.json());
+      return false;
+    });
+  }
 
 
   /**

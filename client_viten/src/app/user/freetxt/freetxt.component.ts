@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { QuestionObject } from '../../_models/survey';
 
 @Component({
   selector: 'app-freetxt',
@@ -6,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./freetxt.component.scss']
 })
 export class FreetxtComponent implements OnInit {
-
+  @Input() questionObject: QuestionObject;
+  
   constructor() { }
 
   ngOnInit() {

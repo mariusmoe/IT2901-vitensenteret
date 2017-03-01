@@ -8,7 +8,6 @@ import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import {FormControl} from '@angular/forms';
 import 'rxjs/add/operator/debounceTime';
-import 'rxjs/add/operator/throttleTime';
 
 
 @Component({
@@ -35,12 +34,6 @@ export class AllSurveysComponent implements OnInit {
       this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
         this.searchInput = searchQuery;
       });
-      // throttle resize events
-      Observable.fromEvent(window, 'resize')
-        .throttleTime(200)
-        .subscribe(e => {
-          console.log('resize event', e);
-        });
     }
 
     /**
