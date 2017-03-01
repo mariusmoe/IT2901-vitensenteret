@@ -24,7 +24,7 @@ const appRoutes: Routes = [
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]
   },
-  { path: 'new', component: NewUserComponent },
+  { path: 'register/:refLink', component: NewUserComponent },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
