@@ -27,6 +27,7 @@ export class ActiveSurveyComponent implements OnInit {
   private transition = false;
   private forwardValue = 'Forward';
   private done = false;
+  private answers = [];
 
   constructor(private surveyService: SurveyService,
     private router: Router, private route: ActivatedRoute) {
@@ -84,6 +85,12 @@ export class ActiveSurveyComponent implements OnInit {
     }
   }
 
+// This method adds/changes an answer with which answer-alternative the user chose
+addOrChangeAnswer(alternative) {
+  this.answers[this.page] = alternative;
+  console.log('answers updated! answer[] now looks like this: ', this.answers);
+}
+
 // This method handles the transition to the previous questions in the survey
   private previousQ(){
       if(this.page <= 0){
@@ -99,6 +106,10 @@ export class ActiveSurveyComponent implements OnInit {
 
 // This method handles the transition to the next question in the survey
   private nextQ(){
+    if(typeof this.answers[this.page] === 'undefined') {
+      this.answers[this.page] = -1;
+      console.log('answers updated! answer[] now looks like this: ', this.answers);
+    }
     if(this.forwardValue == 'Finish'){
       this.endSurvey();
     }
@@ -129,15 +140,24 @@ export class ActiveSurveyComponent implements OnInit {
 
 // This method ends the survey if the user clicks the END button or after x amount of seconds
   endSurvey() {
+    console.log(this.answers);
+    this.postSurvey();
+    this.answers = [];
     this.done = true;
   }
 
 // This method quits the survey and routes it to the choose-survey component
   quitSurvey() {
     // Route to the select-survey window
+    this.postSurvey();
     this.router.navigate(['/choosesurvey']);
     console.log("Routing to select-survey");
     return;
+  }
+
+// This method posts the survey to the database
+  private postSurvey() {
+    this.surveyService.answerSurvey(this.answers, this.survey._id);
   }
 
 }
