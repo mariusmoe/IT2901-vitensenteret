@@ -55,7 +55,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     private dragulaService: DragulaService, private translate: TranslateService) {
       dragulaService.setOptions('questionsBag', {
         revertOnSpill: true,
-        direction: 'horizontal'
+        direction: 'horizontal',
+        moves: function(el, container, handle) { return handle.classList.contains('dragHandle'); }
       });
   }
 
@@ -307,7 +308,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
-    (click)="addOption(qoEditObj)">{{ 'Add Option' | translate }}</button>
+    (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
   </md-dialog-content>
   <md-dialog-actions align="center">
   </md-dialog-actions>
@@ -451,7 +452,7 @@ export class SurveyAlternativesDialog {
     <p>{{ 'The system cannot proceed until the issue has been resolved.' | translate }}</p>
   </md-dialog-content>
   <md-dialog-actions align="center">
-    <button md-raised-button color="primary" (click)="okay()">Okay</button>
+    <button md-raised-button color="primary" (click)="okay()">{{ 'Okay' | translate }}</button>
   </md-dialog-actions>
   `
 })
