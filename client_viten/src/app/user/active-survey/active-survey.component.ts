@@ -53,8 +53,35 @@ export class ActiveSurveyComponent implements OnInit {
       return;
     }
   }
-  private startSurvey(){
+  private startSurvey() {
     this.started = true;
+  }
+
+  private exitSurvey() {
+    this.forwardValue = 'Forward';
+    this.started = false;
+    this.properSurvey = false;
+    this.page = 0;
+    this.nextPage = 0;
+    this.done = false;
+    this.transition = false;
+    if (this.route.snapshot.params['surveyId']){
+      this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+        if (!result) {
+          // console.log("DEBUG: BAD surveyId param from router!");
+          // TODO: Redirect to base create survey ?
+          return;
+        }
+        this.survey = result;
+        this.totalPages = this.survey.questionlist.length;
+
+        if (this.survey && this.survey.active) {
+          // console.log(this.survey);
+          this.properSurvey = true;
+        }
+      });
+      return;
+    }
   }
 
 // This method handles the transition to the previous questions in the survey

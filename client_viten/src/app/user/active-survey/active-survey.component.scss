@@ -22,7 +22,6 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-
 }
 /*The animation that triggers when starbutton is clicked*/
 .playbutton.clicked{
@@ -41,30 +40,57 @@
   //   }
   // }
   display: none;
-
 }
+// Styling the exit button
+.exitButton{
+  display: flex;
+  justify-content: flex-start;
+  height: 10vh;
+  width: 10vh;
+  opacity: 0.4;
+}
+.exitButton:hover{
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
+    // -webkit-animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: fadeExitButton;
+    animation-duration: 2s;
+
+    /* Standard syntax */
+    @keyframes fadeExitButton {
+      from {opacity: 0.4;}
+      50% {opacity: 1}
+      to {opacity: 0.4;}
+    }
+  // opacity: 1;
+}
+
 // Styling for the playbutton
 .svgButton{
    width: 80vh;
    height: 80vh;
 }
 .svgButton:focus {outline: none;}
+.qnavigateArea:focus {outline: none;}
+.exitButton:focus {outline: none;}
 
 /*This is the navigation pane that lets you navigate between questions*/
 .qnavigate {
   display: flex;
-  flex-direction: row;
-  flex-wrap: nowrap;
+  // flex-direction: row;
+  // flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
   background: rgba(#606060, 0.2);
-  width: 100%;
   position: fixed;
   bottom: 0;
+  height: 15vh;
+  width: 100%;
 
   .qnavigateArea{
-    flex: 1 1;
-    margin: 15px;
+    padding: 0 5px 0 5px;
+    height: inherit;
     &.alignRight{
       text-align: right;
     }
@@ -73,6 +99,19 @@
     margin: 15px;
   }
 }
+// .qnavigate.clicked{
+//   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+//   -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
+//   -webkit-animation-fill-mode: forwards;
+//   animation-name: fadeStartButton;
+//   animation-duration: 2s;
+//
+//   /* Standard syntax */
+//   @keyframes fadeStartButton {
+//     from {opacity: 1;}
+//     to {opacity: 0; }
+//   }
+// }
 
 .surveyQuestion{
   text-align: center;
