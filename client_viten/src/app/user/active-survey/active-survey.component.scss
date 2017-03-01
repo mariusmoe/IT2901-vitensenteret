@@ -1,14 +1,24 @@
-
 .active_survey_window{
+  background-color: white;
+  @keyframes fadeBetween {
+    0% {background: rgba(#2e68be, 0.5);}
+    15% {background: rgba(red, 0.5);}
+    30% {background: rgba(pink, 0.5);}
+    45% {background: rgba(brown, 0.5);}
+    60% {background: rgba(yellow, 0.5);}
+    75% {background: rgba(purple, 0.5);}
+    100% {background: rgba(blue, 0.5);}
+}
+    // background-color: #2e68be;
+    animation: fadeBetween 35s infinite;
 
+  // background: rgba(#2e68be, 0.8);
   .surveyView{
     .playbutton{
 
       margin: auto auto;
       height: 100vh;
     }
-
-
     display: flex;
     height: 100vh;
     width: 100%;
@@ -43,8 +53,9 @@
 }
 // Styling the exit button
 .exitButton{
-  display: flex;
-  justify-content: flex-start;
+  position: fixed;
+  top: 5px;
+  left: 5px;
   height: 10vh;
   width: 10vh;
   opacity: 0.4;
@@ -82,7 +93,6 @@
   // flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
-  background: rgba(#606060, 0.2);
   position: fixed;
   bottom: 0;
   height: 15vh;
@@ -91,12 +101,10 @@
   .qnavigateArea{
     padding: 0 5px 0 5px;
     height: inherit;
+    margin-bottom: 10px;
     &.alignRight{
       text-align: right;
     }
-  }
-  h2{
-    margin: 15px;
   }
 }
 // .qnavigate.clicked{
@@ -114,16 +122,26 @@
 // }
 
 .surveyQuestion{
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  // text-align: center;
+  // margin: 0 auto;
+  height: 100vh;
+  width: 100vw;
+}
+.txt{
   text-align: center;
-  margin: auto auto;
-  .txt{
-
-  }
+  margin-top: 5vh;
+  margin-bottom: 20vh;
 }
 
 h1 {
   padding: 0;
   margin: 0;
+}
+h2 {
+  font-size: 10vh;
 }
 
 .surveyDone{
@@ -137,4 +155,19 @@ h1 {
   width: 30vh;
   border: solid;
   border-radius: 20px;
+  margin: auto auto;
+}
+
+.surveyDone:hover{
+  cursor: pointer;
+}
+
+.quitSurvey{
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  height: 5vh;
+  width: 5vh;
+  opacity: 0;
+  cursor: default;
 }

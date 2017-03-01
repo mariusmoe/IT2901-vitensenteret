@@ -130,16 +130,14 @@ export class ActiveSurveyComponent implements OnInit {
 // This method ends the survey if the user clicks the END button or after x amount of seconds
   endSurvey() {
     this.done = true;
-    // this.properSurvey = false;
-    // this.started = false;
-    // this.page = 0;
-    // this.totalPages = 0;
-    // this.nextPage = 0;
-    // this.transition = false;
-    // this.forwardValue = 'Forward';
-    // this.done = false;
-    // // this.ngOnInit();
-    // console.log('Ending survey');
+  }
+
+// This method quits the survey and routes it to the choose-survey component
+  quitSurvey() {
+    // Route to the select-survey window
+    this.router.navigate(['/choosesurvey']);
+    console.log("Routing to select-survey");
+    return;
   }
 
 }
