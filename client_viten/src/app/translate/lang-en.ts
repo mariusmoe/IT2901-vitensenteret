@@ -114,6 +114,8 @@ export const LANG_EN_TRANS = {
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
 
-
+  // choose-survey component
+  'All Surveys': 'All Surveys',
+  'Search results for search': 'Search results for %0:',
 
 };
