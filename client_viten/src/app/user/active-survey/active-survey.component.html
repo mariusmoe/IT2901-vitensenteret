@@ -1,4 +1,5 @@
 <div class="active_survey_window">
+  <input class="quitSurvey" type="image" src="../../assets/images/Exit.svg" (click)="quitSurvey()">
   <!--testdata
   <p>
     active-survey works!
@@ -15,13 +16,13 @@
   </div>-->
   <div class="surveyView" *ngIf="properSurvey && started">
     <!-- The exit button that is located in the top left corner of the screen -->
-    <div class="exitbutton" ><input class="exitButton" type="image" src="../../assets/images/Exit.svg" (click)="exitSurvey()"></div>
+    <input class="exitButton" type="image" src="../../assets/images/Exit.svg" (click)="exitSurvey()">
     <!--This is the view for each survey-question -->
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
       <!-- page: {{page}} -->
 
-      <div class="txt" *ngIf="!this.done">{{survey.questionlist[page].lang.no.txt}}</div>
-      <div class="surveyDone" *ngIf="this.done" >{{survey.endMessage.no}}</div>
+      <div class="txt" *ngIf="!this.done"><h2>{{survey.questionlist[page].lang.no.txt}}</h2></div>
+      <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()">{{survey.endMessage.no}}</div>
       <!-- REMOVED until further notice
       <h1>{{survey.questionlist[page].mode}}</h1> -->
       <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page]></app-stars>
@@ -37,7 +38,7 @@
       <div class="qnavigateArea"><input class="qnavigateArea" type="image" id="previousQButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition">
       </div>
       <!-- <div class="qnavigateArea"><button md-raised-button color="accent" (click)="previousQ()" [disabled]="page <= 0 || transition">back</button></div> -->
-      <h2>{{page+1}}/{{totalPages}}</h2>
+      <h3>{{page+1}}/{{totalPages}}</h3>
       <!-- Beneath is the button for progressing in the survey -->
       <div class="qnavigateArea alignRight"><input class="qnavigateArea alignRight" type="image" id="nextQButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
       </div>
