@@ -1,0 +1,33 @@
+<div class="active_survey_window">
+  <!--testdata
+  <p>
+    active-survey works!
+  </p>-->
+  <!--Startbutton for an active survey   *ngIf="!started"   -->
+  <div class="playbutton" [ngClass]="{'clicked': started}">
+    <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
+
+  </div>
+  <!--Test data
+  <div>
+    properSurvey {{properSurvey}}
+    started {{started}}
+  </div>-->
+  <div class="surveyView" *ngIf="properSurvey && started">
+    <!--This is the view for each survey-question -->
+    <div class="surveyQuestion">
+      <div class="txt">{{survey.questionlist[page].lang.no.txt}}</div>
+      <h1>{{survey.questionlist[page].mode}}</h1>
+      <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[page].options}}</h1>
+    </div>
+
+    <div class="qnavigate">
+      <div class="qnavigateArea" (click)="previousQ()"><button md-raised-button color="accent" [disabled]="page <= 0">back</button></div>
+      <h2>{{page+1}}/{{totalPages}}</h2>
+      <div class="qnavigateArea alignRight" (click)="nextQ()"><button md-raised-button color="accent" [disabled]="page+1 >= totalPages">forward</button></div>
+    </div>
+
+  </div>
+
+
+</div>

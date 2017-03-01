@@ -3,7 +3,8 @@ const AuthenticationController = require('./controllers/authentication'),
       ErrorController = require('./controllers/error'),
       express = require('express'),
       passportService = require('./libs/passport'),
-      passport = require('passport')
+      passport = require('passport'),
+      path = require('path');
 
 
 // Require login/auth
@@ -18,7 +19,8 @@ module.exports = (app) => {
   // route groups
   const apiRoutes  = express.Router(),
         authRoutes = express.Router(),
-        surveyRoutes = express.Router();
+        surveyRoutes = express.Router(),
+        angularRoutes = express.Router();
   // Set auth and survey routes as subgroup to apiRoutes
   apiRoutes.use('/auth', authRoutes);
   apiRoutes.use('/survey', surveyRoutes);
@@ -67,8 +69,8 @@ module.exports = (app) => {
   // // TODO send mail with token
   // authRoutes.post('/reset-password/:token', AuthenticationController.verifyToken);
   //
-  // // Change password from within app
-  // authRoutes.post('/change_password', requireAuth, AuthenticationController.changePassword);
+  // Change password from within app
+  authRoutes.post('/change_password', requireAuth, AuthenticationController.changePassword);
   //
   // // Confirm account from link sent with email
   // authRoutes.post('/confirm_account/:confirmation_string', AuthenticationController.confirmAccount);
@@ -87,8 +89,8 @@ module.exports = (app) => {
                   AuthenticationController.roleAuthorization(REQUIRE_MEMBER),
                   AuthenticationController.test);
   //
-  // // change email for this account
-  // authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
+  // change email for this account
+  authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
   //
   //
 
@@ -116,8 +118,9 @@ module.exports = (app) => {
 
   // retrive one survey as a json object
   // surveyRoutes.get('/:json/:surveyId', SurveyController.getSurveyAsJson);
-
-
-
+  angularRoutes.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname + '../client_viten/dist/index.html'));
+});
 app.use('/api', apiRoutes);
+app.use('/', angularRoutes);
 };

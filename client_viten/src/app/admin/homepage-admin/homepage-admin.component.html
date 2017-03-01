@@ -10,9 +10,6 @@
         <md-icon md-list-avatar class="activeIcon" [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
       </md-card-title-group>
       <md-card-content>
-        <p>
-          {{survey.active ? 'Available to users now!' : 'This survey is not active at the moment.'}}
-        </p>
         <!-- GRAPHS GO HERE -->
 
 
@@ -20,13 +17,13 @@
       </md-card-content>
       <md-card-actions align="right">
         <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          NYI: Download as PDF
+          <md-icon>picture_as_pdf</md-icon> NYI: {{ 'Download as PDF' | translate }}
         </button>
         <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          NYI: Download Raw Data
+          <md-icon>timeline</md-icon> NYI: {{ 'Download Raw Data' | translate }}
         </button>
         <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          Edit
+          <md-icon>build</md-icon> {{ 'Edit' | translate }}
         </button>
       </md-card-actions>
     </md-card>

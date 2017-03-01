@@ -1,14 +1,18 @@
 <div class="searchBox">
   <md-input-container>
-    <input mdInput type="search" placeholder="Search" [(ngModel)]="searchInput"
-    md-tooltip="Filter results on title and / or admin comment">
+    <input mdInput type="search" placeholder="{{'Search' | translate}}"
+    [formControl]="searchFormControl" [(value)]="searchInput"
+    md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">
     <span md-prefix><md-icon class="searchIcon">search</md-icon></span>
   </md-input-container>
 </div>
 
-<md-list class="list">
+
+<md-progress-circle *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
+
+<md-list class="list" *ngIf="!searchLoading">
   <md-list-item
-    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput)"
+    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum)"
     [ngClass]="{'survey': true, 'active': survey._id == route.snapshot.params['surveyId']}"
     (click)="select(survey._id)">
     <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
@@ -21,4 +25,4 @@
 
 <!-- loading circle -->
 <md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-<span class="listComment"  *ngIf="!loading">{{surveyService.surveyList.length}} total surveys. A maximum of 20 items are displayed.</span>
+<span class="listComment"  *ngIf="!loading">{{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length, searchResultNum] }}</span>
