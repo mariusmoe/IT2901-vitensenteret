@@ -25,7 +25,7 @@ export const LANG_NO_TRANS = {
   'Language': 'Språk',
   'Copy': 'Kopier',
   'Okay': 'Ok',
-  'Success': 'Success',
+  'Success': 'Suksess',
 
   // Roles
   'admin': 'Superadmin',
@@ -70,13 +70,13 @@ export const LANG_NO_TRANS = {
   'Deletes this particular question! Careful!': 'Forsiktig! Spørsmålet blir slettet!',
   'Several fields are required. Verify that you have filled out all required fields.':
     'Flere felt er påkrevd. Overse at alle de påkrevde er utfyllt.',
-  'Add Option': 'Add Option',
+  'Add Option': 'Legg til et alternativ',
   'Post results': 'Resultat',
   'Could not post your survey. Error:': 'Kunne ikke lagre undersøkelsen. Feilmelding:',
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
 
   // All surveys component
-  'n total surveys. A maximum of 20 items are displayed.': '%0 totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
+  'n total surveys. A maximum of m items are displayed.': '%0 totalt antall undersøkelser. Maksimum %1 er vist samtidig.',
   'Filter results on title and / or admin comment': 'Filtrer listen etter tittel eller kommentar for administratorer',
 
   // Login component
