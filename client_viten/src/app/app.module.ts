@@ -35,6 +35,7 @@ import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
 
 import { ClipboardModule } from 'ngx-clipboard';
 import { DragulaModule } from 'ng2-dragula';
+import { NewUserComponent } from './admin/new-user/new-user.component';
 
 import { TRANSLATION_PROVIDERS } from './translate/translate';
 import { TranslateService } from './_services/translate.service';
@@ -58,6 +59,7 @@ import { TranslatePipe } from './_pipes/translate';
     AdminSettingsComponent,
     DeleteDialog,
     ReferDialog,
+    NewUserComponent,
     SmileyComponent,
     StarsComponent,
     FreetxtComponent,
@@ -67,6 +69,7 @@ import { TranslatePipe } from './_pipes/translate';
     AdminSurveysPipe,
     TranslatePipe,
     MultiplechoiceComponent
+
   ],
   imports: [
     BrowserModule,

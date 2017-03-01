@@ -1,0 +1,61 @@
+import { Component, OnInit, HostBinding } from '@angular/core';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
+import { slideInDownAnimation } from '../../animations';
+import { Router, ActivatedRoute, Params } from '@angular/router';
+import { AuthenticationService } from '../../_services/authentication.service';
+import { User } from '../../_models/user';
+
+@Component({
+  selector: 'app-new-user',
+  templateUrl: './new-user.component.html',
+  styleUrls: ['./new-user.component.scss']
+})
+export class NewUserComponent implements OnInit {
+
+  newUserForm: FormGroup;
+  loading = false;
+  error: string;
+  param: string;
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private fb: FormBuilder,
+    private authenticationService: AuthenticationService) {
+      this.newUserForm = fb.group({
+      'email': [null, Validators.required],
+      'password': [null, Validators.required],
+      'passwordconfirm': [null, Validators.required]
+    });
+   }
+
+  ngOnInit() {
+    this.param = this.route.snapshot.params['refLink'];
+  }
+
+  submitForm(form: {email: string, password: string, passwordconfirm: string}): void {
+    this.loading = true;
+    console.log(form);
+
+    this.loading = true;
+    const sub = this.authenticationService.registerUser(form.email, form.password, this.param)
+        .subscribe(result => {
+          sub.unsubscribe();
+          // console.log("Got response!")
+          if (result === true) {
+              this.router.navigate(['/admin']);
+          } else {
+              this.error = 'Something went wrong';
+              this.loading = false;
+          }
+        },
+        error => {
+          sub.unsubscribe();
+          this.error = 'Something went wrong';
+          this.loading = false;
+        }
+      );
+
+  }
+
+}
