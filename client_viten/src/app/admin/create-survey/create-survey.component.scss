@@ -16,7 +16,7 @@ h2.alignCenter {
 
 md-card {
   md-input-container {
-    display: inline-block;
+    width: 100%;
   }
 
   &.questionObject {
@@ -25,16 +25,6 @@ md-card {
     max-width: 250px;
     min-width: 250px;
 
-    // dragula dragging styles
-    cursor: grab;
-    .gu-transit {
-      cursor: move !important;
-    }
-    // dragula styles end
-
-    md-input-container {
-      width: 100%;
-    }
     .modeSelect {
       md-select {
         display: block;
@@ -46,6 +36,22 @@ md-card {
           color: red;
         }
       }
+    }
+    .actionsBox {
+      display: flex;
+      flex-flow: row-reverse nowrap;
+      justify-content: space-between;
+      .delete {
+        align-self: flex-end;
+      }
+    }
+    .dragHandle {
+      // dragula dragging styles
+      cursor: grab;
+      .gu-transit {
+        cursor: move !important;
+      }
+      // dragula styles end
     }
   }
 
