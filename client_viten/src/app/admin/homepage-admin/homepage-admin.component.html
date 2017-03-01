@@ -17,13 +17,13 @@
       </md-card-content>
       <md-card-actions align="right">
         <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          NYI: {{ 'Download as PDF' | translate }}
+          <md-icon>picture_as_pdf</md-icon> NYI: {{ 'Download as PDF' | translate }}
         </button>
         <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          NYI: {{ 'Download Raw Data' | translate }}
+          <md-icon>timeline</md-icon> NYI: {{ 'Download Raw Data' | translate }}
         </button>
         <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          {{ 'Edit' | translate }}
+          <md-icon>build</md-icon> {{ 'Edit' | translate }}
         </button>
       </md-card-actions>
     </md-card>

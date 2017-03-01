@@ -13,24 +13,22 @@ import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.co
 import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
 
 const appRoutes: Routes = [
-  { path: '', component: HomepageUserComponent },
   { path: 'login', component: LoginComponent },
   { path: 'survey/:surveyId', component: ActiveSurveyComponent },
   { path: 'choosesurvey', component: ChooseSurveyComponent },
   { path: 'admin', component: AdminOutletComponent, canActivate: [AuthGuard],
-
     children: [
       { path: 'settings', component: AdminSettingsComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey/:surveyId', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       // these two placed further down due to priority issues
-      { path: '', component: HomepageAdminComponent, pathMatch: 'full', canActivate: [AuthGuard]   },
       { path: ':surveyId', component: HomepageAdminComponent, canActivate: [AuthGuard] },
+      { path: '', component: HomepageAdminComponent, pathMatch: 'full', canActivate: [AuthGuard]   },
       { path: '**', redirectTo: '', pathMatch: 'full' }
     ]
   },
-  { path: '', component:HomepageUserComponent, pathMatch: 'full' },
   { path: 'survey-retrieval', component: SurveyRetrievalComponent},
+  { path: '', component: LoginComponent, pathMatch: 'full' },
   { path: '**', redirectTo: '', pathMatch: 'full' }
 ];
 
