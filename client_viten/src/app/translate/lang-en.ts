@@ -75,7 +75,7 @@ export const LANG_EN_TRANS = {
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
 
   // All surveys component
-  'n total surveys. A maximum of 20 items are displayed.': '%0 total surveys. A maximum of 20 items are displayed.',
+  'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
   'Filter results on title and / or admin comment': 'Filter results on title and / or admin comment',
 
   // Login component
