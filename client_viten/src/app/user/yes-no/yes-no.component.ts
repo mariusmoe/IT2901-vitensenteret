@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { QuestionObject } from '../../_models/survey';
 
 @Component({
   selector: 'app-yes-no',
@@ -6,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./yes-no.component.scss']
 })
 export class YesNoComponent implements OnInit {
+  @Input() questionObject: QuestionObject;
 
   constructor() { }
 

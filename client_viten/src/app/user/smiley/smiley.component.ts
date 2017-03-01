@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { QuestionObject } from '../../_models/survey';
+
 
 @Component({
   selector: 'app-smiley',
@@ -6,10 +8,9 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./smiley.component.scss']
 })
 export class SmileyComponent implements OnInit {
+  @Input() questionObject: QuestionObject;
+  
+  constructor() {  }
 
-  constructor() { }
-
-  ngOnInit() {
-  }
-
+  ngOnInit() {}
 }

@@ -115,6 +115,8 @@ module.exports = (app) => {
                       AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
                       SurveyController.deleteOneSurvey);
 
+  surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
+
 
   // retrive one survey as a json object
   // surveyRoutes.get('/:json/:surveyId', SurveyController.getSurveyAsJson);

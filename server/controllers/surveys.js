@@ -124,6 +124,28 @@ exports.deleteOneSurvey = (req, res, next) => {
   });
 }
 
+// POST
+exports.answerOneSurvey = (req, res, next) => {
+  const surveyId  = req.params.surveyId;
+  const answers   = req.body.answers;
+  // ROUTER checks for existence of surveyId. no need to have a check here as well.
+  if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
+    // but we should check the validity of the id
+    return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
+  }
+  Survey.findById( surveyId, (err, survey) => {
+    if (!survey) {
+      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+    }
+    if (err) { return next(err); }
+    survey.questionlist.forEach((question,i) => { question.answer.push(answers[i]) })
+    survey.save((err, survey) => {
+      if (err) {return next(err); }
+      return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+    })
+  });
+}
+
 
 // JSON
 

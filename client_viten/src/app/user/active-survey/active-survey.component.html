@@ -1,4 +1,5 @@
 <div class="active_survey_window">
+  <input class="quitSurvey" type="image" src="../../assets/images/Exit.svg" (click)="quitSurvey()">
   <!--testdata
   <p>
     active-survey works!
@@ -6,25 +7,44 @@
   <!--Startbutton for an active survey   *ngIf="!started"   -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
-
   </div>
+
   <!--Test data
   <div>
     properSurvey {{properSurvey}}
     started {{started}}
   </div>-->
   <div class="surveyView" *ngIf="properSurvey && started">
+    <!-- The exit button that is located in the top left corner of the screen -->
+    <input class="exitButton" type="image" src="../../assets/images/Exit.svg" (click)="exitSurvey()">
     <!--This is the view for each survey-question -->
-    <div class="surveyQuestion">
-      <div class="txt">{{survey.questionlist[page].lang.no.txt}}</div>
-      <h1>{{survey.questionlist[page].mode}}</h1>
-      <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[page].options}}</h1>
+    <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
+      <!-- page: {{page}} -->
+
+      <div class="txt" *ngIf="!this.done"><h2>{{survey.questionlist[page].lang.no.txt}}</h2></div>
+      <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()">{{survey.endMessage.no}}</div>
+      <!-- REMOVED until further notice
+      <h1>{{survey.questionlist[page].mode}}</h1> -->
+      <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page]></app-stars>
+      <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page]></app-smiley>
+      <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page]></app-multiplechoice>
+      <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page]></app-yes-no>
+      <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page]></app-freetxt>
+      <!-- REMOVED until further notice
+      <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[page].options}}</h1> -->
     </div>
 
-    <div class="qnavigate">
-      <div class="qnavigateArea" (click)="previousQ()"><button md-raised-button color="accent" [disabled]="page <= 0">back</button></div>
-      <h2>{{page+1}}/{{totalPages}}</h2>
-      <div class="qnavigateArea alignRight" (click)="nextQ()"><button md-raised-button color="accent" [disabled]="page+1 >= totalPages">forward</button></div>
+    <div class="qnavigate" *ngIf="!this.done">
+      <div class="qnavigateArea"><input class="qnavigateArea" type="image" id="previousQButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition">
+      </div>
+      <!-- <div class="qnavigateArea"><button md-raised-button color="accent" (click)="previousQ()" [disabled]="page <= 0 || transition">back</button></div> -->
+      <h3>{{page+1}}/{{totalPages}}</h3>
+      <!-- Beneath is the button for progressing in the survey -->
+      <div class="qnavigateArea alignRight"><input class="qnavigateArea alignRight" type="image" id="nextQButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
+      </div>
+        <!-- <button md-raised-button color="accent" id="nextQButton" (click)="nextQ()" [disabled]="page+1 >= totalPages || transition">forward</button></div> -->
+        <!-- <div class="qnavigateArea alignRight"><input type="button" id="nextQButton"
+          (click)="nextQ()" value="{{ forwardValue }}" [disabled]="transition"></div> -->
     </div>
 
   </div>
