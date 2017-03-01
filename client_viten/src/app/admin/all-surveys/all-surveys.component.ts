@@ -6,6 +6,9 @@ import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import {FormControl} from '@angular/forms';
+import 'rxjs/add/operator/debounceTime';
+
 
 @Component({
   selector: 'app-all-surveys',
@@ -15,6 +18,9 @@ import { Subscription } from 'rxjs/Subscription';
 export class AllSurveysComponent implements OnInit {
     loading = false;
     searchInput = '';
+    searchFormControl = new FormControl();
+    searchLoading = false;
+    searchResultNum = 20;
 
     constructor(
       private router: Router,
@@ -25,11 +31,14 @@ export class AllSurveysComponent implements OnInit {
       }
 
     ngOnInit() {
+      this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
+        this.searchInput = searchQuery;
+      });
     }
 
     /**
      * Select one survey form the list
-     * @param  {string} surveyId [description]
+     * @param  {string} surveyId the survey ID
      * Appends the surveyId to the router navigation.
      */
     select(surveyId: string) {
@@ -50,5 +59,4 @@ export class AllSurveysComponent implements OnInit {
     formatDate(dateString: string) {
       return new Date(dateString).toLocaleDateString();
     }
-
 }
