@@ -8,6 +8,8 @@ let chaiHttp = require('chai-http');
 let server = require('../index');
 let should = chai.should();
 var jwt = '';
+let referral_jwt = '';
+let adminReferralLink = '';
 chai.use(chaiHttp);
 describe('Auth API', () => {
 
@@ -77,11 +79,42 @@ describe('Auth API', () => {
     });
   });
 
-  describe('/api/auth/get_referral_link/admin POST', () => {
+  describe('/api/auth/get_referral_link/[admin/member] POST', () => {
     it('should create one referral link /api/auth/get_referral_link/admin GET', (done) => {
       chai.request(server)
       .get('/api/auth/get_referral_link/admin')
       .set('Authorization', jwt)
+      .end( (err, res) => {
+        adminReferralLink = res.body.link.substr(res.body.link.length - 96);
+        res.should.have.status(200);
+        done();
+      });
+    });
+    it('should create a new user /api/auth/register with referralLink POST', (done) => {
+      chai.request(server)
+      .post('/api/auth/register')
+      .send({'email': 'test3-to-del@test.com', 'password': 'test', 'referral_string': adminReferralLink})
+      .end( (err, res) => {
+        res.should.have.status(200);
+        done();
+      });
+    });
+    it('should login user to be deleted /api/auth/login POST', (done) => {
+      chai.request(server)
+      .post('/api/auth/login')
+      .send({'email': 'test3-to-del@test.com', 'password': 'test'})
+      .end(function(err, res){
+        referral_jwt = res.body.token;   // Should be globaly avaliable before each test now
+        user_id = res.body.user._id;
+        res.should.have.status(200);
+        done();
+      });
+    });
+    it('should delete this user /api/auth/delete_account DELETE', (done) => {
+      chai.request(server)
+      .delete('/api/auth/delete_account')
+      .set('Authorization', referral_jwt)
+      .send({'id': user_id})
       .end( (err, res) => {
         res.should.have.status(200);
         done();
