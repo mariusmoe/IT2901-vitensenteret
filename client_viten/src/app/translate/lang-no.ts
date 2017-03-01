@@ -20,6 +20,16 @@ export const LANG_NO_TRANS = {
   'Search': 'Søk',
   'Email': 'Epost',
   'Password': 'Passord',
+  'User ID': 'BrukerID',
+  'Role': 'Kontotype',
+  'Language': 'Språk',
+  'Copy': 'Kopier',
+  'Okay': 'Ok',
+  'Success': 'Suksess',
+
+  // Roles
+  'admin': 'Superadmin',
+  'member': 'Adminbruker',
 
   // Languages
   'Norwegian': 'Norsk',
@@ -60,13 +70,14 @@ export const LANG_NO_TRANS = {
   'Deletes this particular question! Careful!': 'Forsiktig! Spørsmålet blir slettet!',
   'Several fields are required. Verify that you have filled out all required fields.':
     'Flere felt er påkrevd. Overse at alle de påkrevde er utfyllt.',
-  'Add Option': 'Add Option',
+  'Add Option': 'Legg til et alternativ',
   'Post results': 'Resultat',
   'Could not post your survey. Error:': 'Kunne ikke lagre undersøkelsen. Feilmelding:',
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
 
   // All surveys component
-  'n total surveys. A maximum of 20 items are displayed.': '%0 totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
+  'n total surveys. A maximum of m items are displayed.': '%0 totalt antall undersøkelser. Maksimum %1 er vist samtidig.',
+  'Filter results on title and / or admin comment': 'Filtrer listen etter tittel eller kommentar for administratorer',
 
   // Login component
   'Login': 'Innlogging',
@@ -76,4 +87,35 @@ export const LANG_NO_TRANS = {
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
   'Download Raw Data': 'Last ned rådata',
+
+  // Admin settings component
+  'Retype password': 'Skriv passordet igjen',
+  'Minimum 4 characters': 'Minimum 4 tegn',
+  'Admin settings': 'Admininstillinger',
+  'Change password': 'Bytt passord',
+  'Change email': 'Bytt epostkonto',
+  'User settings': 'Brukerinstillinger',
+  'Superadmin settings': 'Superadmin seksjon',
+  'Request admin': 'Få invitasjonslink for superadmin',
+  'Request member': 'Få invitasjonslink for adminbruker',
+  'You need to write the same password twice': 'Du må skrive passordet to ganger',
+  'Delete account': 'Slett kontoen',
+  'Change the preferred language here': 'Bytt ditt foretrukne språk her',
+  'Could not change your email': 'Kunne ikke endre din epostkonto',
+  'Could not change your password': 'Kunne ikke endre passordet ditt',
+  'Can\'t delete this user': 'Kan ikke slette denne brukeren',
+  'User has been deleted': 'Brukeren har blitt slettet',
+  'Can\'t delete current user': 'Kan ikke slette brukeren du er logget inn med',
+  'Are you sure you want to delete this account?': 'Er du sikker på at du vil slette denne kontoen?',
+  'The account will be deleted! This action is permanent!': 'Kontoen vil bli slettet! Dette er permanent!',
+  'Refer one userType': 'Referer en %0',
+  'A referral link is only active for two weeks': 'A referral link is only active for two weeks',
+  'You have now changed your email': 'Du har nå byttet epostkonto for brukeren din',
+  'You have now changed your password': 'Du har nå byttet passord',
+  'You will now be logged out': 'Du blir nå logget ut',
+  'Referral link': 'Referral link',
+
+
+
+
 };

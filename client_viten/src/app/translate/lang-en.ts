@@ -20,6 +20,16 @@ export const LANG_EN_TRANS = {
   'Search': 'Search',
   'Email': 'Email',
   'Password': 'Password',
+  'User ID': 'User ID',
+  'Role': 'Role',
+  'Language': 'Language',
+  'Copy': 'Copy',
+  'Okay': 'Okay',
+  'Success': 'Success',
+
+  // roles
+  'admin': 'Admin',
+  'member': 'Member',
 
   // Languages
   'Norwegian': 'Norwegian',
@@ -65,7 +75,8 @@ export const LANG_EN_TRANS = {
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
 
   // All surveys component
-  'n total surveys. A maximum of 20 items are displayed.': '%0 total surveys. A maximum of 20 items are displayed.',
+  'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
+  'Filter results on title and / or admin comment': 'Filter results on title and / or admin comment',
 
   // Login component
   'Login': 'Login',
@@ -75,4 +86,34 @@ export const LANG_EN_TRANS = {
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
   'Download Raw Data': 'Download Raw Data',
+
+  // Admin settings component
+  'Retype password': 'Retype password',
+  'Minimum 4 characters': 'Minimum 4 characters',
+  'Admin settings': 'Admin settings',
+  'Change password': 'Change password',
+  'Change email': 'Change email',
+  'User settings': 'User settings',
+  'Superadmin settings': 'Superadmin settings',
+  'Request admin': 'Request admin',
+  'Request member': 'Request member',
+  'You need to write the same password twice': 'You need to write the same password twice',
+  'Delete account': 'Delete account',
+  'Change the preferred language here': 'Change the preferred language here',
+  'Could not change your email': 'Could not change your email',
+  'Could not change your password': 'Could not change your password',
+  'Can\'t delete this user': 'Can\'t delete this user',
+  'User has been deleted': 'User has been deleted',
+  'Can\'t delete current user': 'Can\'t delete current user',
+  'Are you sure you want to delete this account?': 'Are you sure you want to delete this account?',
+  'The account will be deleted! This action is permanent!': 'The account will be deleted! This action is permanent!',
+  'Refer one userType': 'Refer one %0',
+  'A referral link is only active for two weeks': 'A referral link is only active for two weeks',
+  'You have now changed your email': 'You have now changed your email',
+  'You have now changed your password': 'You have now changed your password',
+  'You will now be logged out': 'You will now be logged out',
+  'Referral link': 'Referral link',
+
+
+
 };

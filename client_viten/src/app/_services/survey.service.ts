@@ -16,6 +16,28 @@ export class SurveyService {
 
   }
 
+  /**
+   * answer one survey
+   * @param  {Array<number>}       answers  List of answers, each number
+   *                                        represents one answer.
+   * @param  {String}              idString identifier for a survey
+   * @return {Observable<boolean>}          Observable boolean, true if successful
+   */
+  answerSurvey(answers: Array<number>, idString: String): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.post(environment.URL.survey + '/' + idString, {answers}, options)
+    .map( response => {
+      console.log(response);
+      return true;
+    },
+    error => {
+      console.error(error.json());
+      return false;
+    });
+  }
 
 
   /**
@@ -141,7 +163,13 @@ export class SurveyService {
           // only update our list for status in the 200 range. If we get status 304
           // everything is good and there is no need to update our list either.
           if (response.status >= 200 && response.status < 300) {
-            this.surveyList = <SurveyList[]>response.json();
+            const json = response.json();
+             // status 200, a statuscode and a message means that the request
+             // was successful, but there were no surveys to fetch.
+            if (json.status && json.message) {
+              return this.surveyList;
+            }
+            this.surveyList = <SurveyList[]>json;
           }
           return this.surveyList;
         },

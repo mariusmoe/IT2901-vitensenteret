@@ -14,6 +14,6 @@ export class TranslatePipe implements PipeTransform {
 
     transform(value: string, args: string | string[]): any {
         if (!value) { return; }
-        return 'T:' + this._translate.instant(value, args);
+        return this._translate.instant(value, args);
     }
 }
