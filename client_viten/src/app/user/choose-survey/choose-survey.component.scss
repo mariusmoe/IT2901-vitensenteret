@@ -19,6 +19,18 @@
 .alignRight {
   text-align: right;
 }
+
+.languageSelection {
+  button {
+    input {
+      opacity: 0.5;
+    }
+    &.active input {
+      opacity: 1;
+    }
+  }
+}
+
 .searchIcon {
   width: 1em;
   height: 1em;

@@ -292,10 +292,12 @@
     <h1 class="flexchild alignCenter">Vitensenteret</h1>
 
 
-    <div class="flexchild alignRight">
-      <button md-raised-button *ngFor="let lang of translateService.supportedLangs"
-      color="accent" (click)="translateService.use(lang.value)">
-        {{ lang.display | translate }}
+    <div class="flexchild alignRight languageSelection">
+      <button md-icon-button color="accent" (click)="translateService.use('en')" [ngClass]="{'active': translateService.getCurrentLang() === 'en'}">
+        <input type="image" src="../../assets/images/FlaggUK.svg">
+      </button>
+      <button md-icon-button color="accent" (click)="translateService.use('no')" [ngClass]="{'active': translateService.getCurrentLang() === 'no'}">
+        <input type="image" src="../../assets/images/FlagNorge.svg">
       </button>
     </div>
   </md-toolbar>
