@@ -3,8 +3,8 @@
 .canvasParent,
 canvas {
   display: block;
+  color: map-get(nth($vitenPrimary,1), 900);
 }
 
 .canvasParent {
-  background-color: map-get(nth($vitenPrimary,1), "500");
 }

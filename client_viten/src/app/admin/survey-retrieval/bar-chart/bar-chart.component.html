@@ -1,14 +1,16 @@
-<div class="canvasParent" style="display: block">
-  <h3>{{questionObject.lang.no.txt}}</h3>
-  <canvas baseChart width="800" height="300"
-          [datasets]="barChartData"
-          [labels]="barChartLabels"
-          [options]="barChartOptions"
-          [legend]="false"
-          [colors]="barChartColours"
-          [chartType]="'bar'"
-          (chartHover)="chartHovered($event)"
-          (chartClick)="chartClicked($event)">
-  </canvas>
+<div>
+  <h2>{{questionObject.lang.no.txt}}</h2>
+  <div class="canvasParent" style="display: block">
+    <canvas baseChart width="800" height="300" #canvas
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [legend]="false"
+            [colors]="barChartColours"
+            [chartType]="'bar'"
+            (chartHover)="chartHovered($event)"
+            (chartClick)="chartClicked($event)">
+    </canvas>
     <button md-raised-button color="accent" (click)="downloadAsPng()">Download as PNG</button>
+  </div>
 </div>

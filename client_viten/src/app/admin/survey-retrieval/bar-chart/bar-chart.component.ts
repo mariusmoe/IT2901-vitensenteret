@@ -11,22 +11,10 @@ export class BarChartComponent implements OnInit, OnChanges {
   @Input() questionObject: QuestionObject;
   @ViewChild('canvas') canvas;
 
-  barChartOptions: Object = {
-    scaleShowVerticalLines: false,
-    responsive: true,
-    scales: {
-        yAxes: [{
-          ticks: {
-            beginAtZero: true
-          }
-      }]
-    }
-  };
+  barChartOptions: Object;
   barChartLabels: string[];
   barChartData: Object[];
-  barChartColours = [{
-    backgroundColor: '#2e68be' // TODO: FIXME
-  }];
+  barChartColours: Object[];
 
   // barChartLegend = true; not used, yet.
 
@@ -34,7 +22,25 @@ export class BarChartComponent implements OnInit, OnChanges {
   }
 
   ngOnInit() {
-
+    this.barChartOptions = {
+      scaleShowVerticalLines: false,
+      responsive: true,
+      scales: {
+          yAxes: [{
+            ticks: {
+              beginAtZero: true
+            }
+        }]
+      },
+      title: {
+          display: true,
+          text: this.questionObject.lang.no.txt,
+      }
+    };
+    this.barChartColours = [{
+      backgroundColor: getComputedStyle(this.canvas.nativeElement.parentNode, null).color
+    }];
+    console.log(this.canvas.nativeElement.parentNode);
   }
   ngOnChanges(changes: SimpleChanges) {
     this.questionObject = changes['questionObject'].currentValue;
