@@ -86,4 +86,23 @@ export class BarChartComponent implements OnInit, OnChanges {
   chartHovered(e) {
     console.log(e);
   }
+
+  /**
+   * Downloads the chart as a png
+   * Based on http://stackoverflow.com/a/30393357
+   * answered May 22 '15 at 9:40 david.barkhuizen
+   */
+  downloadAsPng() {
+    const image = this.canvas.nativeElement.toDataURL('image/png');
+
+    const MIME_TYPE = 'image/png';
+    const dlLink = document.createElement('a');
+    dlLink.download = this.questionObject.lang.no.txt.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.png';
+    dlLink.href = image;
+
+    document.body.appendChild(dlLink);
+    dlLink.click();
+    document.body.removeChild(dlLink);
+  }
+
 }
