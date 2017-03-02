@@ -75,20 +75,58 @@ module.exports = app => {
       let today = new Date();
       let surveysPop = [];
 
+      let questionModes = ['binary', 'star', 'multi', 'smiley', 'text'];
+      let questionAnswerRanges = [2, 5, 0, 3, 1];
 
       for (let i = 0; i<4000; i++) {
+        let numQuestions = getRandomInt(1,6);
+        let questions = [];
+        for (let qi = 0; qi<numQuestions; qi++) {
+          let numAnswers = getRandomInt(40,100);
+          let answers = [];
+
+          let modeIndex = getRandomInt(0,4);
+          let mode = questionModes[modeIndex]; // not text.
+          let alternatives;
+          if (mode === 'multi') {
+            let numAlternatives = getRandomInt(2,6);
+            alternatives = [];
+            for (let ai = 0; ai<numAlternatives; ai++) {
+              let alt = emotions[getRandomInt(0,emotions.length)];
+              alternatives.push(alt);
+            }
+            for (let answeri = 0; answeri < numAnswers; answeri++) {
+              let currAnswer = getRandomInt(0, alternatives.length - 1);
+              answers.push(currAnswer);
+            }
+
+          } else {
+            for (let answeri = 0; answeri < numAnswers; answeri++) {
+              let currAnswer = getRandomInt(0, questionAnswerRanges[modeIndex]);
+              answers.push(currAnswer);
+            }
+          }
+          questions.push({
+            'mode': mode,
+            'lang': {
+              'no': {
+                'txt': generateQuestion(),
+                'options': alternatives,
+              }
+            },
+            'answer': answers
+          })
+        }
+
         let s = {
           name: funnify(),
           comment: funnify(),
-          questionlist: [{
-            mode: 'smiley',
-            txt: generateQuestion(),
-          }],
+          questionlist: questions,
           date: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
           active: Math.random() < 0.5,
           endMessage: {
             no: funnify(),
-          }
+          },
         };
         surveysPop.push(s);
       }
