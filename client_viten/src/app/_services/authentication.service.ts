@@ -42,7 +42,7 @@ export class AuthenticationService {
    */
   logOut() {
     localStorage.removeItem('token');
-    this.router.navigate(['/admin']);
+    this.router.navigate(['/login']);
   }
 
   changeEmail(newEmail: string): Observable<boolean> {
