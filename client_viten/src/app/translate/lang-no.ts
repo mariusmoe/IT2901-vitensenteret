@@ -45,6 +45,18 @@ export const LANG_NO_TRANS = {
   'Smiley': 'Smiley',
   'Free Text': 'Tekst',
 
+  // Survey Question mode labels
+  'Yes': 'Yes',
+  'No': 'No',
+  '1 Star': '1 Stjerne',
+  '2 Stars': '2 Stjerner',
+  '3 Stars': '3 Stjerner',
+  '4 Stars': '4 Stjerner',
+  // '5 Stars': '5 Stars', already defined above.
+  'Sad': 'Trist',
+  'Neutral': 'Nøytral',
+  'Happy': 'Glad',
+
   // Admin outlet component
   'Admin Home': 'Administrator Hjem',
   'Create New Survey': 'Lag ny undersøkelse',
@@ -115,7 +127,17 @@ export const LANG_NO_TRANS = {
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
 
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Tekstbasert spørsmål. Last ned rådataen for å se svarene.',
 
+  // survey retrieval chart component
+  'Download as PNG': 'Last ned som PNG',
 
+  // Chart types
+  'Bar': 'Stolpediagram',
+  'Doughnut': 'Smultringdiagram',
+  'Pie': 'Sektordiagram',
+  'Line': 'Linjediagram',
+  'PolarArea': 'Rosediagram',
 
 };

@@ -15,10 +15,7 @@ export class SurveyRetrievalComponent implements OnInit {
 
   ngOnInit() {
     for (const questionObject of this.survey.questionlist) {
-      this.chartsToDisplay.push({
-        'type': 'bar', // 'bar' or 'doughnut'
-        'data': questionObject,
-      });
+      this.chartsToDisplay.push(questionObject);
     }
   }
 

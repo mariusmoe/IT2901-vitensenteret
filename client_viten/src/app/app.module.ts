@@ -22,8 +22,7 @@ import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } 
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 import { AdminSettingsComponent, DeleteDialog, ReferDialog, CredentialDialog } from './admin/admin-settings/admin-settings.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
-import { BarChartComponent } from './admin/survey-retrieval/bar-chart/bar-chart.component';
-import { DoughnutChartComponent } from './admin/survey-retrieval/doughnut-chart/doughnut-chart.component';
+import { BarChartComponent } from './admin/survey-retrieval/chart/chart.component';
 
 import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
 import { SmileyComponent } from './user/smiley/smiley.component';
@@ -53,7 +52,6 @@ import { TranslatePipe } from './_pipes/translate';
     ActiveSurveyComponent,
     SurveyRetrievalComponent,
     BarChartComponent,
-    DoughnutChartComponent,
     SurveyPublishDialog,
     AdminOutletComponent,
     AdminSettingsComponent,

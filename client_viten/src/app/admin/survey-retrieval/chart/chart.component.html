@@ -1,0 +1,27 @@
+<div class="chartWrapper">
+  <div class="chartHeader">
+    <!-- If English language is selected AND an english question txt is defined
+         then show that. Else show norwegian.
+    -->
+    <h1>{{ (languageService.getCurrentLang() === 'en' && questionObject.lang.en && questionObject.lang.en.txt) ?
+            questionObject.lang.en.txt : questionObject.lang.no.txt}}</h1>
+  </div>
+
+  <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
+    <canvas baseChart #canvas
+            [datasets]="barChartData"
+            [labels]="barChartLabels"
+            [options]="barChartOptions"
+            [colors]="barChartColours"
+            [chartType]="chartType">
+    </canvas>
+  </div>
+  <div class="actions">
+    <md-select [(ngModel)]="chartType" (change)="setChartOptions()">
+      <md-option *ngFor="let t of chartTypes; let i = index;" [value]="t">
+        {{ chartTypesVerbose[i] | translate }}
+      </md-option>
+    </md-select>
+    <button md-raised-button color="accent" (click)="downloadAsPng()">{{ 'Download as PNG' | translate }}</button>
+  </div>
+</div>
