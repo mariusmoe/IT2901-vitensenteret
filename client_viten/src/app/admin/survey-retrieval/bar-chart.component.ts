@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 @Component({
   selector: 'app-barchart',
@@ -6,29 +6,30 @@ import { Component } from '@angular/core';
   styleUrls: ['./bar-chart.component.scss']
 })
 export class BarChartComponent {
+  @Input() answers;
 
-  public  barChartOptions:any = {
-    scaleShowVerticalLines:false,
-    responsive:true
+  public  barChartOptions: Object = {
+    scaleShowVerticalLines: false,
+    responsive: true
   };
 
-  public barChartLabels:string[] = ['Veldig dårlig','Dårlig','Middels','Bra','Veldig bra']
+  barChartLabels: string[] = [ 'Veldig dårlig', 'Dårlig', 'Middels', 'Bra', 'Veldig bra' ];
 
-  public barChartType:string = 'bar';
+  barChartType = 'bar';
 
-  public barChartLegend:boolean = true;
+  barChartLegend = true;
 
-  public barChartData:any[] = [
+  barChartData: Object[] = [
     {data: [65, 59, 80, 81, 56, 55, 40], label: 'Jente'},
     {data: [28, 48, 40, 19, 86, 27, 90], label: 'Gutt'},
   ];
 
   // events
-  public chartClicked(e:any):void {
+  chartClicked(e) {
     console.log(e);
   }
 
-  public chartHovered(e:any):void {
+  chartHovered(e) {
     console.log(e);
   }
 
