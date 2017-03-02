@@ -9,12 +9,6 @@ import { Survey } from '../../_models/survey';
 export class SurveyRetrievalComponent implements OnInit {
   @Input() survey: Survey;
 
-  chartType: String;
-  chartTypes = [
-    {value: 'bar-chart', viewValue: 'Bar Chart'},
-    {value: 'doughnut-chart', viewValue: 'Doughnut Chart'}
-  ];
-
   chartsToDisplay = [];
 
   constructor() { }
@@ -23,7 +17,7 @@ export class SurveyRetrievalComponent implements OnInit {
     for (const questionObject of this.survey.questionlist) {
       this.chartsToDisplay.push({
         'type': 'bar', // 'bar' or 'doughnut'
-        'data': questionObject.answer,
+        'data': questionObject,
       });
     }
   }

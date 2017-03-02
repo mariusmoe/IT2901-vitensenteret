@@ -1,8 +1,11 @@
 <div class="container">
   <div *ngFor="let chart of chartsToDisplay">
     <div [ngSwitch]="chart.type">
-      <app-barchart *ngSwitchCase="'bar'" [answers] = "chart.data"></app-barchart>
-      <app-doughnut-chart *ngSwitchCase="'doughnut'" [answers] = "chart.data"></app-doughnut-chart>
+      <app-barchart *ngSwitchCase="'bar'" [questionObject] = "chart.data"></app-barchart>
+      <!--
+
+      <app-doughnut-chart *ngSwitchCase="'doughnut'" [questionObject] = "chart.data"></app-doughnut-chart>
+      -->
     </div>
   </div>
 </div>
