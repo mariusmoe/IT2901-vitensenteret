@@ -1,2 +1,12 @@
 
- 
+.questionHeader {
+  text-align: center;
+  //border-bottom: 2px solid map-get(nth($vitenPrimary,1), 900);
+  h1 {
+    margin: 0;
+  }
+}
+
+p {
+  text-align: center;
+}

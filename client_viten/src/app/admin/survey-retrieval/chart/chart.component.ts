@@ -49,7 +49,7 @@ export class BarChartComponent implements OnInit {
       return;
       // TODO: error.
     }
-    if (this.questionObject.mode === 'txt') {
+    if (this.questionObject.mode === 'text') {
       return;
     }
 

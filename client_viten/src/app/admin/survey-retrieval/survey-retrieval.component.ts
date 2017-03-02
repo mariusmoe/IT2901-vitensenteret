@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Survey } from '../../_models/survey';
+import { TranslateService } from '../../_services/translate.service';
 
 @Component({
   selector: 'app-survey-retrieval',
@@ -11,7 +12,7 @@ export class SurveyRetrievalComponent implements OnInit {
 
   chartsToDisplay = [];
 
-  constructor() { }
+  constructor(public languageService: TranslateService) { }
 
   ngOnInit() {
     for (const questionObject of this.survey.questionlist) {

@@ -38,7 +38,7 @@ module.exports = app => {
 
       // Generator for a paragraph of funny text.
       function generateQuestion() {
-        let thing = getRandomInt(0, things.length);
+        let thing = things[getRandomInt(0, things.length)];
         let emotion = emotions[getRandomInt(0,emotions.length)];
         let emotion2 = emotions[getRandomInt(0,emotions.length)];
         let verb = verbs[getRandomInt(0,verbs.length)];
@@ -85,8 +85,8 @@ module.exports = app => {
           let numAnswers = getRandomInt(40,100);
           let answers = [];
 
-          let modeIndex = getRandomInt(0,4);
-          let mode = questionModes[modeIndex]; // not text.
+          let modeIndex = getRandomInt(0,5);
+          let mode = questionModes[modeIndex];
           let alternatives;
           if (mode === 'multi') {
             let numAlternatives = getRandomInt(2,6);
