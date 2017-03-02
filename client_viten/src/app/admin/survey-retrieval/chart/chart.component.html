@@ -17,7 +17,7 @@
     </canvas>
   </div>
   <div class="actions">
-    <md-select [(ngModel)]="chartType" (change)="setChartOptions()">
+    <md-select [(ngModel)]="chartType" (change)="setChartOptions()" class="select">
       <md-option *ngFor="let t of chartTypes; let i = index;" [value]="t">
         {{ chartTypesVerbose[i] | translate }}
       </md-option>
