@@ -30,6 +30,7 @@ export class NewUserComponent implements OnInit {
    }
 
   ngOnInit() {
+    localStorage.removeItem('token');
     this.param = this.route.snapshot.params['refLink'];
   }
 
@@ -43,7 +44,7 @@ export class NewUserComponent implements OnInit {
           sub.unsubscribe();
           // console.log("Got response!")
           if (result === true) {
-              this.router.navigate(['/admin']);
+              this.router.navigate(['/login']);
           } else {
               this.error = 'Something went wrong';
               this.loading = false;
