@@ -17,6 +17,7 @@ export const LANG_EN_TRANS = {
   'Cancel': 'Cancel',
   'Save': 'Save',
   'Settings': 'Settings',
+  'Log out': 'Log out',
   'Search': 'Search',
   'Email': 'Email',
   'Password': 'Password',
@@ -82,6 +83,8 @@ export const LANG_EN_TRANS = {
   'Login': 'Login',
   'Log in': 'Log in',
   'Email and password are required': 'Email and password are required',
+  'Email or password is incorrect': 'Email or password is incorrect',
+
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
@@ -113,6 +116,9 @@ export const LANG_EN_TRANS = {
   'You have now changed your password': 'You have now changed your password',
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
+
+  // new-user component
+  'Could not register account': 'Could not register account',
 
 
 
