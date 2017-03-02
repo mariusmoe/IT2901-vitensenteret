@@ -4,6 +4,9 @@ import { slideInDownAnimation } from '../../animations';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { User } from '../../_models/user';
+import { MdSnackBar } from '@angular/material';
+import { TranslateService } from '../../_services/translate.service';
+
 
 @Component({
   selector: 'app-new-user',
@@ -21,6 +24,8 @@ export class NewUserComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private fb: FormBuilder,
+    public snackBar: MdSnackBar,
+    public languageService: TranslateService,
     private authenticationService: AuthenticationService) {
       this.newUserForm = fb.group({
       'email': [null, Validators.required],
@@ -52,11 +57,18 @@ export class NewUserComponent implements OnInit {
         },
         error => {
           sub.unsubscribe();
+          this.openSnackBar(this.languageService.instant('Could not register account'), 'FAILURE');
           this.error = 'Something went wrong';
           this.loading = false;
         }
       );
 
+  }
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 5000,
+    });
   }
 
 }
