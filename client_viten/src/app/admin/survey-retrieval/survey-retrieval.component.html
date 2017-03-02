@@ -1,15 +1,11 @@
 <div class="container">
-  <form>
-    <md-select placeholder="Select chart type" [(ngModel)]="chartType" name="chart">
-      <md-option *ngFor="let chart of chartTypes" [value]="chart.value">
-        {{chart.viewValue}}
-      </md-option>
-    </md-select>
+  <div *ngFor="let chart of chartsToDisplay">
+    <div [ngSwitch]="chart.type">
+      <app-barchart *ngSwitchCase="'bar'" [questionObject] = "chart.data"></app-barchart>
+      <!--
 
-    <p> Selected value: {{chartType}} </p>
-  </form>
-  <div [ngSwitch]="chartType">
-    <app-barchart *ngSwitchCase="'bar-chart'"></app-barchart>
-    <app-doughnut-chart *ngSwitchCase="'doughnut-chart'"></app-doughnut-chart>
+      <app-doughnut-chart *ngSwitchCase="'doughnut'" [questionObject] = "chart.data"></app-doughnut-chart>
+      -->
+    </div>
   </div>
 </div>
