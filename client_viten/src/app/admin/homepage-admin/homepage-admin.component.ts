@@ -3,6 +3,8 @@ import { SurveyService } from '../../_services/survey.service';
 import { Survey } from '../../_models/survey';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { DatePipe } from '@angular/common';
+
 //  import * as jsPDF from 'jspdf';
 declare const jsPDF: any;
 
@@ -25,7 +27,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
   private routerSub: Subscription;
 
-  constructor(private surveyService: SurveyService, private router: Router, private route: ActivatedRoute) {
+  constructor(private surveyService: SurveyService,
+    private router: Router,
+    private route: ActivatedRoute,
+    private datePipe: DatePipe) {
   }
 
   ngOnInit() {
@@ -82,31 +87,56 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     const filename = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
 
     pdf.setFontSize(20);
-    pdf.text(10, 10, this.survey.name);
+    pdf.text(25, 20, this.survey.name);
     pdf.setFontSize(12);
-    pdf.text(10, 20, this.survey.comment);
+    pdf.text(25, 30, this.survey.comment);
+    pdf.text(25, 40, 'Date created: ' + this.datePipe.transform(this.survey.date, 'yyyy-MM-dd'));
+    const now = Date.now();
+    const nowText = this.datePipe.transform(now, 'yyyy-MM-dd');
+    pdf.text(25, 45, 'Date printed: ' + nowText);
     const canvases = this.surveyDOM.nativeElement.querySelectorAll('canvas');
     console.log(canvases);
-
-
-    function canvasesAdded() {
-      pdf.save(filename);
-      that.generatingPDF = false;
-    }
-
-
-    function recursiveAddQuestions(index, offset) {
-      if (index < canvases.length) {
-        pdf.addHTML(canvases[index], 0, offset, function() {
-          recursiveAddQuestions(index + 1, offset + 100);
-          console.log('added following canvas at offset: ' + 100);
-          console.log(canvases[index]);
-        });
-      } else {
-        canvasesAdded();
+    const images = [];
+    let index = 0;
+    let i = 0;
+    let firstPage = 35;
+    for (const canvas of canvases) {
+      if ((i * 90) > 180 || index === 2) {
+        pdf.addPage();
+        i = 0;
       }
+      pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 25, 20 + firstPage + (i * 90), 160, 80);
+      // pdf.text(10, 40 + i * 90, 'this.survey.name');
+      if (index === 1) { firstPage = 0; }
+      i++;
+      index++;
     }
-    // add canvases
-    recursiveAddQuestions(0, 30);
+
+    // console.log(images);
+    // pdf.addImage(imgData,'JPEG',15,40,180,160)
+    pdf.save(filename);
+    this.generatingPDF = false;
+    //  pdf.createPdf(docDefinition).download('optionalName.pdf');
+
+  //
+  //   function canvasesAdded() {
+  //     pdf.save(filename);
+  //     that.generatingPDF = false;
+  //   }
+  //
+  //
+  //   function recursiveAddQuestions(index, offset) {
+  //     if (index < canvases.length) {
+  //       pdf.addHTML(canvases[index], 0, offset, function() {
+  //         recursiveAddQuestions(index + 1, offset + 100);
+  //         console.log('added following canvas at offset: ' + 100);
+  //         console.log(canvases[index]);
+  //       });
+  //     } else {
+  //       canvasesAdded();
+  //     }
+  //   }
+  //   // add canvases
+  //   recursiveAddQuestions(0, 30);
   }
 }
