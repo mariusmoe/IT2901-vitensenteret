@@ -1,4 +1,4 @@
-.adminPortal {
+.newUser {
   md-card {
     margin: 0 auto;
     margin-top: 50px;
@@ -10,10 +10,11 @@
   md-input-container {
     margin: 10px 0 20px 0;
     width: 100%;
-    md-hint {
-      color: red;
-    }
   }
+}
+
+.warning {
+  color: red;
 }
 
 .smaller {
@@ -27,10 +28,4 @@
 .loadingcircle {
   position: relative;
   top: 11px;
-}
-
-.error {
-  color: red;
-  top: 11px;
-  margin-bottom: 11px;
 }

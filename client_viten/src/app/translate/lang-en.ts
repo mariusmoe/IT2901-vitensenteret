@@ -17,6 +17,7 @@ export const LANG_EN_TRANS = {
   'Cancel': 'Cancel',
   'Save': 'Save',
   'Settings': 'Settings',
+  'Log out': 'Log out',
   'Search': 'Search',
   'Email': 'Email',
   'Password': 'Password',
@@ -44,6 +45,18 @@ export const LANG_EN_TRANS = {
   'Multiple Choice': 'Multiple Choice',
   'Smiley': 'Smiley',
   'Free Text': 'Free Text',
+
+  // Survey Question mode labels
+  'Yes': 'Yes',
+  'No': 'No',
+  '1 Star': '1 Star',
+  '2 Stars': '2 Stars',
+  '3 Stars': '3 Stars',
+  '4 Stars': '4 Stars',
+  // '5 Stars': '5 Stars', already defined above.
+  'Sad': 'Sad',
+  'Neutral': 'Neutral',
+  'Happy': 'Happy',
 
   // Admin outlet component
   'Admin Home': 'Admin Home',
@@ -75,13 +88,15 @@ export const LANG_EN_TRANS = {
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
 
   // All surveys component
-  'n total surveys. A maximum of 20 items are displayed.': '%0 total surveys. A maximum of 20 items are displayed.',
+  'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
   'Filter results on title and / or admin comment': 'Filter results on title and / or admin comment',
 
   // Login component
   'Login': 'Login',
   'Log in': 'Log in',
   'Email and password are required': 'Email and password are required',
+  'Email or password is incorrect': 'Email or password is incorrect',
+
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
@@ -114,6 +129,26 @@ export const LANG_EN_TRANS = {
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
 
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Text based question. Download raw data to extract this.',
+  // new-user component
+  'Could not register account': 'Could not register account',
+
+  // survey retrieval chart component
+  'Download as PNG': 'Download as PNG',
+
+  // Chart types
+  'Bar': 'Bar chart',
+  'Doughnut': 'Doughnut chart',
+  'Pie': 'Pie chart',
+  'Line': 'Line chart',
+  'PolarArea': 'PolarArea chart',
+
+
+
+  // choose-survey component
+  'All Surveys': 'All Surveys',
+  'Search results for search': 'Search results for %0:',
 
 
 };

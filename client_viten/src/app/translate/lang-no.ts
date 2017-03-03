@@ -17,6 +17,7 @@ export const LANG_NO_TRANS = {
   'Cancel': 'Avbryt',
   'Save': 'Lagre',
   'Settings': 'Instillinger',
+  'Log out': 'Logg ut',
   'Search': 'Søk',
   'Email': 'Epost',
   'Password': 'Passord',
@@ -25,7 +26,7 @@ export const LANG_NO_TRANS = {
   'Language': 'Språk',
   'Copy': 'Kopier',
   'Okay': 'Ok',
-  'Success': 'Success',
+  'Success': 'Suksess',
 
   // Roles
   'admin': 'Superadmin',
@@ -44,6 +45,18 @@ export const LANG_NO_TRANS = {
   'Multiple Choice': 'Flervalgs',
   'Smiley': 'Smiley',
   'Free Text': 'Tekst',
+
+  // Survey Question mode labels
+  'Yes': 'Yes',
+  'No': 'No',
+  '1 Star': '1 Stjerne',
+  '2 Stars': '2 Stjerner',
+  '3 Stars': '3 Stjerner',
+  '4 Stars': '4 Stjerner',
+  // '5 Stars': '5 Stars', already defined above.
+  'Sad': 'Trist',
+  'Neutral': 'Nøytral',
+  'Happy': 'Glad',
 
   // Admin outlet component
   'Admin Home': 'Administrator Hjem',
@@ -70,19 +83,20 @@ export const LANG_NO_TRANS = {
   'Deletes this particular question! Careful!': 'Forsiktig! Spørsmålet blir slettet!',
   'Several fields are required. Verify that you have filled out all required fields.':
     'Flere felt er påkrevd. Overse at alle de påkrevde er utfyllt.',
-  'Add Option': 'Add Option',
+  'Add Option': 'Legg til et alternativ',
   'Post results': 'Resultat',
   'Could not post your survey. Error:': 'Kunne ikke lagre undersøkelsen. Feilmelding:',
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
 
   // All surveys component
-  'n total surveys. A maximum of 20 items are displayed.': '%0 totalt antall undersøkelser. Maksimum 20 er vist samtidig.',
+  'n total surveys. A maximum of m items are displayed.': '%0 totalt antall undersøkelser. Maksimum %1 er vist samtidig.',
   'Filter results on title and / or admin comment': 'Filtrer listen etter tittel eller kommentar for administratorer',
 
   // Login component
   'Login': 'Innlogging',
   'Log in': 'Logg inn',
   'Email and password are required': 'Både epost og passord er påkrevd',
+  'Email or password is incorrect': 'Epost eller passord er galt',
 
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
@@ -109,13 +123,32 @@ export const LANG_NO_TRANS = {
   'Are you sure you want to delete this account?': 'Er du sikker på at du vil slette denne kontoen?',
   'The account will be deleted! This action is permanent!': 'Kontoen vil bli slettet! Dette er permanent!',
   'Refer one userType': 'Referer en %0',
-  'A referral link is only active for two weeks': 'A referral link is only active for two weeks',
+  'A referral link is only active for two weeks': 'En invitasjonslink er kun gyldig i to uker',
   'You have now changed your email': 'Du har nå byttet epostkonto for brukeren din',
   'You have now changed your password': 'Du har nå byttet passord',
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
 
 
+  // new-user component
+  'Could not register account': 'Kunne ikke registrere brukeren',
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Tekstbasert spørsmål. Last ned rådataen for å se svarene.',
+
+  // survey retrieval chart component
+  'Download as PNG': 'Last ned som PNG',
+
+    // choose-survey component
+    'All Surveys': 'Alle undersøkelsene',
+    'Search results for search': 'Søkeresultatene for %0:',
+
+
+  // Chart types
+  'Bar': 'Stolpediagram',
+  'Doughnut': 'Smultringdiagram',
+  'Pie': 'Sektordiagram',
+  'Line': 'Linjediagram',
+  'PolarArea': 'Rosediagram',
 
 
 };
