@@ -10,10 +10,11 @@
   md-input-container {
     margin: 10px 0 20px 0;
     width: 100%;
-    md-hint {
-      color: red;
-    }
   }
+}
+
+.warning {
+  color: red;
 }
 
 .smaller {

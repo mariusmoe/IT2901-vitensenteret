@@ -3,16 +3,16 @@
     <app-all-surveys></app-all-surveys>
   </div>
   <div class="rightSide">
-    <md-card *ngIf="survey" class="selectedSurveyArea" [@fadeIn]="">
+    <md-card *ngIf="survey && !loadingSurvey" class="selectedSurveyArea" [@fadeIn]="">
       <md-card-title-group>
         <md-card-title>{{survey.name}}</md-card-title>
         <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
-        <md-icon md-list-avatar class="activeIcon" [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
+        <md-icon align="left" class="activeIcon" [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
       </md-card-title-group>
       <md-card-content>
         <!-- GRAPHS GO HERE -->
 
-
+        <app-survey-retrieval [survey] = "survey"></app-survey-retrieval>
         <!-- END GRAPHS GO HERE -->
       </md-card-content>
       <md-card-actions align="right">
@@ -27,7 +27,7 @@
         </button>
       </md-card-actions>
     </md-card>
-    <div *ngIf="!survey" class="emptyArea">
+    <div *ngIf="!survey || loadingSurvey" class="emptyArea">
       <md-progress-circle *ngIf="loadingSurvey" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
       <div *ngIf="!loadingSurvey">
 
