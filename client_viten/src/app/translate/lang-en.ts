@@ -17,6 +17,7 @@ export const LANG_EN_TRANS = {
   'Cancel': 'Cancel',
   'Save': 'Save',
   'Settings': 'Settings',
+  'Log out': 'Log out',
   'Search': 'Search',
   'Email': 'Email',
   'Password': 'Password',
@@ -94,6 +95,8 @@ export const LANG_EN_TRANS = {
   'Login': 'Login',
   'Log in': 'Log in',
   'Email and password are required': 'Email and password are required',
+  'Email or password is incorrect': 'Email or password is incorrect',
+
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
@@ -130,6 +133,8 @@ export const LANG_EN_TRANS = {
 
   // survey retrieval component
   'Text based question. Download raw data to extract this.': 'Text based question. Download raw data to extract this.',
+  // new-user component
+  'Could not register account': 'Could not register account',
 
   // survey retrieval chart component
   'Download as PNG': 'Download as PNG',
@@ -140,6 +145,12 @@ export const LANG_EN_TRANS = {
   'Pie': 'Pie chart',
   'Line': 'Line chart',
   'PolarArea': 'PolarArea chart',
+
+
+
+  // choose-survey component
+  'All Surveys': 'All Surveys',
+  'Search results for search': 'Search results for %0:',
 
 
 };
