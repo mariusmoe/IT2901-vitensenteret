@@ -158,7 +158,9 @@ addOrChangeAnswer(alternative) {
 
 // This method posts the survey to the database
   private postSurvey() {
-    this.surveyService.answerSurvey(this.answers, this.survey._id);
+    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((properSurvey:boolean)=>{
+      this.properSurvey = true;
+    });
   }
 
 }
