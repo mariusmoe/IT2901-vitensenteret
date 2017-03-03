@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { AuthenticationService } from '../../_services/authentication.service';
 
 @Component({
   selector: 'app-admin-outlet',
@@ -11,7 +12,9 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
   public breadcrumbs;
   private routerSub: Subscription;
 
-  constructor(private router: Router, private route: ActivatedRoute) {}
+  constructor(private router: Router,
+    private route: ActivatedRoute,
+    private service: AuthenticationService) {}
 
   ngOnInit() {
     // Update whenever you navigate
@@ -23,6 +26,10 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.routerSub.unsubscribe();
+  }
+
+  public logout() {
+    this.service.logOut();
   }
 
 

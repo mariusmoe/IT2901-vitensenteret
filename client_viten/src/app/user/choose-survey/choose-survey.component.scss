@@ -1,0 +1,59 @@
+@import '../../viten.themes.scss';
+
+// styling of the svg
+#VitenLogo {
+  // index 1 of vitenPrimary is the map of shades for our chosen colour.
+  // we access the "contrast" key of this map. The key we use in the "contrast"
+  // key's value -- which is a map -- is given by the second index in our vitenPrimary
+  // array
+  fill: map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2));
+}
+
+
+.flexchild {
+  flex: 1 1;
+}
+.alignCenter {
+  text-align: center;
+}
+.alignRight {
+  text-align: right;
+}
+
+.languageSelection {
+  button {
+    input {
+      opacity: 0.5;
+    }
+    &.active input {
+      opacity: 1;
+    }
+  }
+}
+
+.searchIcon {
+  width: 1em;
+  height: 1em;
+  font-size: 1em;
+}
+
+.wrapper {
+  padding: 1vh;
+  .searchbar {
+    display: inline-block;
+    margin: 0 auto;
+  }
+}
+
+.surveyParent {
+  display: flex;
+  flex-flow: row wrap;
+}
+md-card {
+  &.survey {
+    flex: 1 1;
+    margin: 5px;
+    max-width: 250px;
+    min-width: 250px;
+  }
+}
