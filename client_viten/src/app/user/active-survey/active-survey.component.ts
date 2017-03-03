@@ -1,4 +1,4 @@
-import { Component, OnInit, trigger, state, transition, style, keyframes, animate } from '@angular/core';
+import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
@@ -18,6 +18,7 @@ import { Survey, QuestionObject } from '../../_models/survey';
 })
 
 export class ActiveSurveyComponent implements OnInit {
+  @Input() alternative : number;
   private properSurvey = false;
   private started = false;
   private survey: Survey;
