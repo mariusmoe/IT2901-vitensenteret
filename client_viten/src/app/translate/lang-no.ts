@@ -129,6 +129,7 @@ export const LANG_NO_TRANS = {
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
 
+
   // new-user component
   'Could not register account': 'Kunne ikke registrere brukeren',
   // survey retrieval component
@@ -136,6 +137,11 @@ export const LANG_NO_TRANS = {
 
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
+
+    // choose-survey component
+    'All Surveys': 'Alle undersøkelsene',
+    'Search results for search': 'Søkeresultatene for %0:',
+
 
   // Chart types
   'Bar': 'Stolpediagram',
