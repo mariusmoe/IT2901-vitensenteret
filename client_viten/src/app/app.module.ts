@@ -39,6 +39,8 @@ import { NewUserComponent } from './admin/new-user/new-user.component';
 import { TRANSLATION_PROVIDERS } from './translate/translate';
 import { TranslateService } from './_services/translate.service';
 import { TranslatePipe } from './_pipes/translate';
+import { DatePipe } from '@angular/common';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -93,7 +95,8 @@ import { TranslatePipe } from './_pipes/translate';
     AuthenticationService,
     SurveyService,
     TRANSLATION_PROVIDERS,
-    TranslateService
+    TranslateService,
+    DatePipe
   ],
   bootstrap: [AppComponent]
 })
