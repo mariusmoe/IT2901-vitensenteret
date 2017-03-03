@@ -76,7 +76,7 @@ module.exports = app => {
       let surveysPop = [];
 
 
-      for (let i = 0; i<4000; i++) {
+      for (let i = 0; i<25; i++) {
         let s = {
           name: funnify(),
           comment: funnify(),

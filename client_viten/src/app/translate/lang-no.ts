@@ -115,6 +115,9 @@ export const LANG_NO_TRANS = {
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
 
+    // choose-survey component
+    'All Surveys': 'Alle undersøkelsene',
+    'Search results for search': 'Søkeresultatene for %0:',
 
 
 
