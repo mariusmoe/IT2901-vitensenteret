@@ -49,13 +49,6 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-  clicked(name, _id): void {
-    for (const survey of this.allsurveys){
-        if (survey._id.toString() === _id.toString()) {
-          console.log('the id exists');
-      }
-    }
-  }
 
   formatDate(date): string {  return new Date(date).toLocaleDateString(); }
   formatmilliseconds(date): number {  return new Date(date).valueOf(); }

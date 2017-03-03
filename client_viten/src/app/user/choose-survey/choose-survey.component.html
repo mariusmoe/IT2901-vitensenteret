@@ -323,7 +323,7 @@
           {{survey.comment}}
         </md-card-content>
         <md-card-actions>
-          <button md-raised-button color="primary" id="surveyicons" (click)="clicked(survey.name,survey._id)">NYI</button>
+          <button md-raised-button color="primary" id="surveyicons" routerLink="/survey/{{survey._id}}" routerLinkActive="active">Start</button>
         </md-card-actions>
       </md-card>
     </div>
@@ -343,7 +343,7 @@
           {{survey.comment}}
         </md-card-content>
         <md-card-actions>
-          <button md-raised-button color="primary" id="surveyicons" (click)="clicked(survey.name,survey._id)">NYI</button>
+          <button md-raised-button color="primary" id="surveyicons"  routerLink="/survey/{{survey._id}}" routerLinkActive="active">Start</button>
         </md-card-actions>
       </md-card>
     </div>
