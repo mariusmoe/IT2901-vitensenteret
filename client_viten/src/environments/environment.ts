@@ -14,6 +14,8 @@ export const environment = {
     renewJWT: 'http://localhost:2000/api/auth/get_token/',
     newEmail: 'http://localhost:2000/api/auth/change_email/',
     newPassword: 'http://localhost:2000/api/auth/change_password/',
-    survey: 'http://localhost:2000/api/survey'
+    survey: 'http://localhost:2000/api/survey',
+    surveyAsJson: 'http://localhost:2000/api/survey/json',
+    surveyAsCSV: 'http://localhost:2000/api/survey/csv'
   }
 };

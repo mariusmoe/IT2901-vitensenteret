@@ -7,20 +7,23 @@
       <md-card-title-group>
         <md-card-title>{{survey.name}}</md-card-title>
         <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
+        <md-card-subtitle>{{ 'Total number of answers: n' | translate: [survey.questionlist[0].answer.length || 0] }}</md-card-subtitle>
         <md-icon align="left" class="activeIcon" [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
       </md-card-title-group>
       <md-card-content>
         <!-- GRAPHS GO HERE -->
-
         <app-survey-retrieval [survey] = "survey"></app-survey-retrieval>
         <!-- END GRAPHS GO HERE -->
       </md-card-content>
       <md-card-actions align="right">
         <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          <md-icon>picture_as_pdf</md-icon> NYI: {{ 'Download as PDF' | translate }}
+          <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
         </button>
-        <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          <md-icon>timeline</md-icon> NYI: {{ 'Download Raw Data' | translate }}
+        <button md-raised-button color="primary" (click)="downloadAs('json')" routerLinkActive="active">
+          <md-icon>file_download</md-icon> {{ 'Download as JSON' | translate }}
+        </button>
+        <button md-raised-button color="primary" (click)="downloadAs('csv')" routerLinkActive="active">
+          <md-icon>timeline</md-icon> {{ 'Download Raw Data' | translate }}
         </button>
         <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
           <md-icon>build</md-icon> {{ 'Edit' | translate }}
