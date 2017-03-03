@@ -261,9 +261,16 @@ exports.getSurveyAsCSV = (req, res, next) => {
 
     let questionAnswar = []
     let csv = "";
+    const numOptions = {
+      smiley: 3,
+      binary: 2,
+      text: 1,
+      star: 5
+    }
 
       // for every question in the survey
       for (let question of survey.questionlist){
+        // console.log(question);
         questionAnswar = question.answer;
         // Count the occurance of each element in the array
         let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
@@ -272,11 +279,25 @@ exports.getSurveyAsCSV = (req, res, next) => {
         // Add question to csv
         csv += question.lang.no.txt + '\n'
         // Add all questions to csv
-        question.lang.no.options.forEach( (x) =>{csv += x + ','})
-        csv += '\n'
-        // Add accumulated answars to csv
-        question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
-        csv += '\n'
+        if ( question.mode === 'multi') {
+          // Add question text
+          question.lang.no.options.forEach( (x) =>{csv += x + ','});
+          csv += '\n'
+          // Add accumulated answars to csv
+          question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
+          csv += '\n'
+        } else {
+          // Create a list with length according to question mode
+          // This list is also numerated from 0 - length of questionmode - 1
+          let optionsList = Array.apply(null, Array(numOptions[question.mode])).map(function (x, i) { return i; });
+          // Add question text (in this case it is a number)
+          optionsList.forEach( (x) =>{csv += x + ','});
+          csv += '\n'
+          // Add accumulated answars to csv
+          optionsList.forEach( (x,y) => { csv += questionAnswarCount.get(y) + ',' })
+          csv += '\n'
+
+        }
       }
       // Open a gate to the temp directory
       temp.open('myprefix', function(err, info) {
