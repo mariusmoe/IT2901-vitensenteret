@@ -128,6 +128,8 @@ exports.deleteOneSurvey = (req, res, next) => {
 exports.answerOneSurvey = (req, res, next) => {
   const surveyId  = req.params.surveyId;
   const answers   = req.body.answers;
+  // TODO: if answers object does not exist, stop here.
+
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
   if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
     // but we should check the validity of the id
@@ -138,6 +140,7 @@ exports.answerOneSurvey = (req, res, next) => {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
+    if (survey.questionlist.answer == undefined) { survey.questionlist.answer = []; }
     survey.questionlist.forEach((question,i) => { question.answer.push(answers[i]) })
     survey.save((err, survey) => {
       if (err) {return next(err); }

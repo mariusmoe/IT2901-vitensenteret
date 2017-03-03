@@ -98,6 +98,8 @@ export const LANG_EN_TRANS = {
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
   'Download Raw Data': 'Download Raw Data',
+  'Download as JSON': 'Download as JSON',
+  'Total number of answers: n': 'Total number of answers: %0',
 
   // Admin settings component
   'Retype password': 'Retype password',

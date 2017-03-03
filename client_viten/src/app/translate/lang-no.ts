@@ -99,6 +99,8 @@ export const LANG_NO_TRANS = {
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
   'Download Raw Data': 'Last ned rådata',
+  'Download as JSON': 'Last ned som JSON',
+  'Total number of answers: n': 'Totalt antall svar: %0',
 
   // Admin settings component
   'Retype password': 'Skriv passordet igjen',

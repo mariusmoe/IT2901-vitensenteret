@@ -46,4 +46,28 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       this.survey = survey;
     });
   }
+
+
+
+  /**
+   * Downloads the raw data of the survey
+   * @param  {string} type the type of raw data. Either 'csv' or 'json'
+   */
+  downloadAs(type: string) {
+    this.surveyService.getSurveyAs(this.survey._id, type).subscribe(
+      result => {
+        const data = (type === 'csv' ? result._body : result.json());
+        const dlLink = document.createElement('a');
+        dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
+        const blob = new Blob([result._body], { type: 'text/csv' });
+        const url = window.URL.createObjectURL(blob);
+        dlLink.href = url;
+        // Then we do some DOM trickery to click this link to begin the download
+        document.body.appendChild(dlLink);
+        dlLink.click();
+        document.body.removeChild(dlLink);
+      },
+      error => {console.log('error downloading as ' + type); }, // TODO: clean up error logging
+    );
+  }
 }
