@@ -1,3 +1,17 @@
-<p>
+<div class="starsContainer">
+  <div [ngClass]="{ 'star': true, 'active': (selectedStar >= 0) }" (click)="fillStar(0)"></div>
+  <div [ngClass]="{ 'star': true, 'active': (selectedStar >= 1) }"  (click)="fillStar(1)"></div>
+  <div [ngClass]="{ 'star': true, 'active': (selectedStar >= 2) }" (click)="fillStar(2)"></div>
+  <div [ngClass]="{ 'star': true, 'active': (selectedStar >= 3) }" (click)="fillStar(3)"></div>
+  <div [ngClass]="{ 'star': true, 'active': (selectedStar >= 4) }"  (click)="fillStar(4)"></div>
+
+
+  <!-- <div class="starBox" (click)="fillStar(0)"><input class="star0" type="image" src="../../assets/images/Star.svg"></div>
+  <div class="starBox" (click)="fillStar(1)"><input class="star1" type="image" src="../../assets/images/Star.svg"></div>
+  <div class="starBox" (click)="fillStar(2)"><input class="star2" type="image" src="../../assets/images/Star.svg"></div>
+  <div class="starBox" (click)="fillStar(3)"><input class="star3" type="image" src="../../assets/images/Star.svg"></div>
+  <div class="starBox" (click)="fillStar(4)"><input class="star4" type="image" src="../../assets/images/Star.svg"></div> -->
+</div>
+<!-- <p>
   stars works!
-</p>
+</p> -->

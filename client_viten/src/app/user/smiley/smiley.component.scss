@@ -6,11 +6,17 @@
   height: 15vh;
   justify-content: space-between;
 }
-.smiley {
+.smile {
   height: 30vh;
   width: 30vh;
+  opacity: 0.5;
+
+  &.active{
+    opacity: 1;
+  }
 }
 
+.smile:focus{outline: none;}
 .angrySmiley:focus{outline: none;}
 .normalSmiley:focus{outline: none;}
 .smilingSmiley:focus{outline: none;}
