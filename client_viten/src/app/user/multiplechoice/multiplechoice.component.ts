@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
 
 @Component({
@@ -8,10 +8,13 @@ import { QuestionObject } from '../../_models/survey';
 })
 export class MultiplechoiceComponent implements OnInit {
   @Input() questionObject: QuestionObject;
-  
+  @Output() answer = new EventEmitter();
+  selectedChoice;
+
   constructor() { }
 
   ngOnInit() {
+    
   }
 
 }

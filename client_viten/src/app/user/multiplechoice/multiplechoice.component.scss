@@ -1,0 +1,13 @@
+.multiChoiceContainer{
+  display : flex;
+  flex-wrap : wrap;
+  flex-direction : row;
+  justify-content : flex-start;
+  align-items : stretch;
+  // align-content: center;
+}
+
+.radioOption {
+  display: flex;
+  justify-content: space-between;
+}
