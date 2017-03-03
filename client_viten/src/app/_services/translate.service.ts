@@ -9,7 +9,7 @@ export class TranslateService {
     private currentLang: string;
     private supportedLangs = [
       { display: 'English', value: 'en' },
-      { display: 'Norsk (Bokmål)', value: 'no' },
+      { display: 'Norwegian', value: 'no' },
     ];
     private PLACEHOLDER = '%';
 

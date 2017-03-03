@@ -33,7 +33,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     public snackBar: MdSnackBar,
     public languageService: TranslateService) {
       this.selectedLanguage = languageService.getCurrentLang();
-      this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
+      this.user = this.service.getUser();
+      if (this.user.role === 'admin') {
+        this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
+      }
     }
 
 

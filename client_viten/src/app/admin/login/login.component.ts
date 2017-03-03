@@ -9,14 +9,13 @@ import { User } from '../../_models/user';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  // animations: [ slideInDownAnimation ]
+  animations: [ slideInDownAnimation ]
 })
 export class LoginComponent implements OnInit {
-  /*
   @HostBinding('@routeAnimation') routeAnimation = true;
   @HostBinding('style.display')   display = 'block';
   @HostBinding('style.position')  position = 'relative';
-  */
+
 
   loginForm: FormGroup;
   loading = false;
@@ -54,7 +53,7 @@ export class LoginComponent implements OnInit {
         error => {
           sub.unsubscribe();
           user.password = '';
-          this.error = 'Email or password is incorrect.';
+          this.error = 'Email or password is incorrect';
           this.loading = false;
         }
       );

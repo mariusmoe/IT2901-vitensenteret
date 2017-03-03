@@ -3,6 +3,7 @@ import { Http, Headers, Response, RequestOptions } from '@angular/http';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { JwtHelper } from 'angular2-jwt';
 import { environment } from '../../environments/environment';
+import { Router } from '@angular/router';
 
 import { User } from '../_models/user';
 
@@ -30,8 +31,18 @@ export class AuthenticationService {
   /**
    * Constructor Set current user
    */
-  constructor(private http: Http) {
+  constructor(
+    private http: Http,
+    private router: Router ) {
     // TODO make sure this work even when you log out!
+  }
+
+  /**
+   * Log out current user
+   */
+  logOut() {
+    localStorage.removeItem('token');
+    this.router.navigate(['/login']);
   }
 
   changeEmail(newEmail: string): Observable<boolean> {
@@ -263,16 +274,9 @@ export class AuthenticationService {
       return this.http.post(this.url.newUser, JSON.stringify(data), options)
         .map(
           response => {
-            if (response.status !== 200) {
-              // Error during user create
-              console.error('can\'t create user');
-              return false;
-            }
-            else {
-              const jsonResponse = response.json();
-              console.log(jsonResponse);
-              return true;
-            }
+            const jsonResponse = response.json();
+            console.log(jsonResponse);
+            return true;
           },
           error => {
             console.log(error.text());

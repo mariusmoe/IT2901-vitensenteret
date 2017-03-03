@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
-import {MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA} from '@angular/material';
+import { Component, OnInit, Input } from '@angular/core';
+import { Survey } from '../../_models/survey';
+import { TranslateService } from '../../_services/translate.service';
 
 @Component({
   selector: 'app-survey-retrieval',
@@ -7,16 +8,16 @@ import {MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA} from '@angular/ma
   styleUrls: ['./survey-retrieval.component.scss']
 })
 export class SurveyRetrievalComponent implements OnInit {
+  @Input() survey: Survey;
 
-  private chartType: String;
-  private chartTypes = [
-    {value: 'bar-chart', viewValue: 'Bar Chart'},
-    {value: 'doughnut-chart', viewValue: 'Doughnut Chart'}
-  ]
+  chartsToDisplay = [];
 
-  constructor() { }
+  constructor(public languageService: TranslateService) { }
 
   ngOnInit() {
+    for (const questionObject of this.survey.questionlist) {
+      this.chartsToDisplay.push(questionObject);
+    }
   }
 
 }

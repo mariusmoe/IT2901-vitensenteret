@@ -1,0 +1,16 @@
+.smileyContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 75vw;
+  height: 15vh;
+  justify-content: space-between;
+}
+.smiley {
+  height: 30vh;
+  width: 30vh;
+}
+
+.angrySmiley:focus{outline: none;}
+.normalSmiley:focus{outline: none;}
+.smilingSmiley:focus{outline: none;}
