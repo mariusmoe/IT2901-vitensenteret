@@ -3,12 +3,21 @@
   flex-direction: row;
   flex-wrap: nowrap;
   width: 55vw;
-  height: 25vh;
+  height: 35vh;
   justify-content: space-between;
 }
 .yesno-btn {
   height: 30vh;
   width: 30vh;
+}
+
+.thumbsDown{
+  padding-top: 38%;
+  padding-left: 10%;
+}
+
+.thumbsUp{
+  padding-right: 10%;
 }
 
 .thumbsDown:focus{outline: none;}

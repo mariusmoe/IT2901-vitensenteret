@@ -26,13 +26,13 @@
       <!-- REMOVED until further notice
       <h1>{{survey.questionlist[page].mode}}</h1> -->
       <div class="answerTypes">
-      <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-stars>
-      <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-smiley>
-      <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-multiplechoice>
-      <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-yes-no>
-      <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-freetxt>
-      <!-- REMOVED until further notice
-      <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[page].options}}</h1> -->
+        <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-stars>
+        <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-smiley>
+        <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-multiplechoice>
+        <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-yes-no>
+        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-freetxt>
+        <!-- REMOVED until further notice
+        <h1 *ngIf="survey.questionlist[page].options != null">{{survey.questionlist[page].options}}</h1> -->
       </div>
     </div>
 
