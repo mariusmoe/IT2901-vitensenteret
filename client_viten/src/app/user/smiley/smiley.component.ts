@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
-// import { ActiveSurveyComponent } from '../active-survey/active-survey';
 
 
 @Component({
@@ -16,6 +15,7 @@ export class SmileyComponent implements OnInit {
 
   ngOnInit() {}
 
+// This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
   addChange(alt){
     console.log('Answer changed');
     this.answer.emit(alt);
