@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, ElementRef, OnDestroy } from '@angular/core';
 import { SurveyList } from '../../_models/survey_list';
 import { SurveyService } from '../../_services/survey.service';
+import { FormControl } from '@angular/forms';
+import { TranslateService } from '../../_services/translate.service';
 
 
 @Component({
@@ -10,22 +12,19 @@ import { SurveyService } from '../../_services/survey.service';
 })
 export class ChooseSurveyComponent implements OnInit, OnDestroy {
 
-  private allsurveys: SurveyList[];
-  private searchedsurveys: SurveyList[];
-  private recentsurveys;
+  allsurveys: SurveyList[];
+  searchFormControl = new FormControl();
 
 
-  private loaded = false;
+  loaded = false;
   search = '';
   search_result = false;
 
 
 
 
-  constructor(private surveyService: SurveyService) {
+  constructor(private surveyService: SurveyService, private translateService: TranslateService) {
     this.allsurveys = [];
-    this.searchedsurveys = [];
-    this.recentsurveys = [];
   }
 
   ngOnInit() {
@@ -36,9 +35,10 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
         this.allsurveys.push(survey);
       }
 
-      // Shows the 10 last surveys of all surveys
-      this.recentsurveys = this.allsurveys.slice(this.allsurveys.length - 10);
-
+      // subscribe to the search form for searching
+      this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
+        this.search = searchQuery;
+      });
       this.loaded = true;
     });
 
@@ -49,30 +49,7 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
   }
 
-clicked(name, _id): void {
-  for (const survey of this.allsurveys){
-      if (survey._id.toString() === _id.toString()) {
-        console.log('the id exists');
-    }
-  }
-}
 
-searched(search): void {
-  if (this.search_result === false) {
-    this.search_result = !this.search_result;
-  }
-  this.searchedsurveys.splice(0);
-  for (const survey of this.allsurveys){
-    if (survey.name.toLowerCase().indexOf(search.toLowerCase().trim()) > -1) {
-      this.searchedsurveys.push(survey);
-        }
-  }
-  console.log('results' + this.searchedsurveys);
-}
-
-
-
-
-formatDate(date): string {  return new Date(date).toLocaleDateString(); }
-formatmilliseconds(date): number {  return new Date(date).valueOf(); }
+  formatDate(date): string {  return new Date(date).toLocaleDateString(); }
+  formatmilliseconds(date): number {  return new Date(date).valueOf(); }
 }

@@ -17,6 +17,7 @@ export const LANG_NO_TRANS = {
   'Cancel': 'Avbryt',
   'Save': 'Lagre',
   'Settings': 'Instillinger',
+  'Log out': 'Logg ut',
   'Search': 'Søk',
   'Email': 'Epost',
   'Password': 'Passord',
@@ -95,6 +96,7 @@ export const LANG_NO_TRANS = {
   'Login': 'Innlogging',
   'Log in': 'Logg inn',
   'Email and password are required': 'Både epost og passord er påkrevd',
+  'Email or password is incorrect': 'Epost eller passord er galt',
 
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
@@ -123,17 +125,25 @@ export const LANG_NO_TRANS = {
   'Are you sure you want to delete this account?': 'Er du sikker på at du vil slette denne kontoen?',
   'The account will be deleted! This action is permanent!': 'Kontoen vil bli slettet! Dette er permanent!',
   'Refer one userType': 'Referer en %0',
-  'A referral link is only active for two weeks': 'A referral link is only active for two weeks',
+  'A referral link is only active for two weeks': 'En invitasjonslink er kun gyldig i to uker',
   'You have now changed your email': 'Du har nå byttet epostkonto for brukeren din',
   'You have now changed your password': 'Du har nå byttet passord',
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
 
+
+  // new-user component
+  'Could not register account': 'Kunne ikke registrere brukeren',
   // survey retrieval component
   'Text based question. Download raw data to extract this.': 'Tekstbasert spørsmål. Last ned rådataen for å se svarene.',
 
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
+
+    // choose-survey component
+    'All Surveys': 'Alle undersøkelsene',
+    'Search results for search': 'Søkeresultatene for %0:',
+
 
   // Chart types
   'Bar': 'Stolpediagram',
@@ -141,5 +151,6 @@ export const LANG_NO_TRANS = {
   'Pie': 'Sektordiagram',
   'Line': 'Linjediagram',
   'PolarArea': 'Rosediagram',
+
 
 };
