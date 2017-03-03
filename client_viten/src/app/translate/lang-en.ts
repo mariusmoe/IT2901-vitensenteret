@@ -46,6 +46,18 @@ export const LANG_EN_TRANS = {
   'Smiley': 'Smiley',
   'Free Text': 'Free Text',
 
+  // Survey Question mode labels
+  'Yes': 'Yes',
+  'No': 'No',
+  '1 Star': '1 Star',
+  '2 Stars': '2 Stars',
+  '3 Stars': '3 Stars',
+  '4 Stars': '4 Stars',
+  // '5 Stars': '5 Stars', already defined above.
+  'Sad': 'Sad',
+  'Neutral': 'Neutral',
+  'Happy': 'Happy',
+
   // Admin outlet component
   'Admin Home': 'Admin Home',
   'Create New Survey': 'Create New Survey',
@@ -117,8 +129,20 @@ export const LANG_EN_TRANS = {
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
 
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Text based question. Download raw data to extract this.',
   // new-user component
   'Could not register account': 'Could not register account',
+
+  // survey retrieval chart component
+  'Download as PNG': 'Download as PNG',
+
+  // Chart types
+  'Bar': 'Bar chart',
+  'Doughnut': 'Doughnut chart',
+  'Pie': 'Pie chart',
+  'Line': 'Line chart',
+  'PolarArea': 'PolarArea chart',
 
 
 

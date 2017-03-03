@@ -1,11 +1,17 @@
 <div class="container">
-  <div *ngFor="let chart of chartsToDisplay">
-    <div [ngSwitch]="chart.type">
-      <app-barchart *ngSwitchCase="'bar'" [questionObject] = "chart.data"></app-barchart>
-      <!--
-
-      <app-doughnut-chart *ngSwitchCase="'doughnut'" [questionObject] = "chart.data"></app-doughnut-chart>
+  <div *ngFor="let qo of chartsToDisplay">
+    <div *ngIf="qo.mode === 'text'">
+      <!-- If English language is selected AND an english question txt is defined
+           then show that. Else show norwegian.
       -->
+      <div class="questionHeader">
+        <h1>{{ (languageService.getCurrentLang() === 'en' && qo.lang.en && qo.lang.en.txt ) ?
+              qo.lang.en.txt : qo.lang.no.txt }}</h1>
+      </div>
+      <p>
+        {{ 'Text based question. Download raw data to extract this.' | translate }}
+      </p>
     </div>
+    <app-chart *ngIf="qo.mode !== 'text'" [questionObject] = "qo"></app-chart>
   </div>
 </div>
