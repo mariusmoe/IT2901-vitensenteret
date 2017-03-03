@@ -9,6 +9,11 @@
 .yesno-btn {
   height: 30vh;
   width: 30vh;
+  opacity: 0.5;
+
+  &.active{
+    opacity: 1;
+  }
 }
 
 .thumbsDown{
