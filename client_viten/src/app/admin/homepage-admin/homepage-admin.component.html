@@ -2,7 +2,7 @@
   <div class="leftSide surveyList">
     <app-all-surveys></app-all-surveys>
   </div>
-  <div class="rightSide">
+  <div class="rightSide" #surveyDOM>
     <md-card *ngIf="survey && !loadingSurvey" class="selectedSurveyArea" [@fadeIn]="">
       <md-card-title-group>
         <md-card-title>{{survey.name}}</md-card-title>
@@ -12,11 +12,11 @@
       </md-card-title-group>
       <md-card-content>
         <!-- GRAPHS GO HERE -->
-        <app-survey-retrieval [survey] = "survey"></app-survey-retrieval>
+        <app-survey-retrieval [survey] = "survey" class="surveyRetrieval"></app-survey-retrieval>
         <!-- END GRAPHS GO HERE -->
       </md-card-content>
       <md-card-actions align="right">
-        <button md-raised-button color="primary" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
+        <button md-raised-button color="primary" (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
           <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
         </button>
         <button md-raised-button color="primary" (click)="downloadAs('json')" routerLinkActive="active">

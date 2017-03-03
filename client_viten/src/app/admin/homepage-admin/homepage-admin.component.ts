@@ -1,8 +1,10 @@
-import { Component, OnInit, OnDestroy, animate, state, style, transition, trigger  } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, animate, state, style, transition, trigger  } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Survey } from '../../_models/survey';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+//  import * as jsPDF from 'jspdf';
+declare const jsPDF: any;
 
 @Component({
   selector: 'app-homepage-admin',
@@ -18,6 +20,8 @@ import { Subscription } from 'rxjs/Subscription';
 export class HomepageAdminComponent implements OnInit, OnDestroy {
   survey: Survey = null;
   loadingSurvey = false;
+  @ViewChild('surveyDOM') surveyDOM;
+  generatingPDF = false;
 
   private routerSub: Subscription;
 
@@ -69,5 +73,40 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       },
       error => {console.log('error downloading as ' + type); }, // TODO: clean up error logging
     );
+  }
+
+  downloadAsPDF() {
+    const that = this;
+    this.generatingPDF = true;
+    const pdf = new jsPDF();
+    const filename = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
+
+    pdf.setFontSize(20);
+    pdf.text(10, 10, this.survey.name);
+    pdf.setFontSize(12);
+    pdf.text(10, 20, this.survey.comment);
+    const canvases = this.surveyDOM.nativeElement.querySelectorAll('canvas');
+    console.log(canvases);
+
+
+    function canvasesAdded() {
+      pdf.save(filename);
+      that.generatingPDF = false;
+    }
+
+
+    function recursiveAddQuestions(index, offset) {
+      if (index < canvases.length) {
+        pdf.addHTML(canvases[index], 0, offset, function() {
+          recursiveAddQuestions(index + 1, offset + 100);
+          console.log('added following canvas at offset: ' + 100);
+          console.log(canvases[index]);
+        });
+      } else {
+        canvasesAdded();
+      }
+    }
+    // add canvases
+    recursiveAddQuestions(0, 30);
   }
 }
