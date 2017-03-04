@@ -93,6 +93,9 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     // notify component that we are generating the PDF
     this.generatingPDF = true;
     const pdf = new jsPDF();
+    // Get date of today
+    const today = Date.now();
+    const todayFormatted = this.datePipe.transform(today, 'yyyy-MM-dd');
 
     // define functions that allow us some text position manipulation
     const centeredText = function(y, text) {
@@ -115,10 +118,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     pdf.text(25, 44, this.survey.comment);
     // Dates and num answers are right-aligned
     rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
-    const now = Date.now();
-    const nowText = this.datePipe.transform(now, 'yyyy-MM-dd');
 
-    rightAlignedText(25, 39, this.translateService.instant('Date printed: d', nowText));
+    rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
     const answers = this.survey.questionlist[0].answer.length || 0;
     rightAlignedText(25, 44, this.translateService.instant('Number of responses: n', answers.toString()));
 
@@ -133,28 +134,37 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     dummyCanvasContext.fillStyle = '#FFFFFF';
 
     // Declare variables that are used to handle positioning of our charts
-    let index = 0;
-    let i = 0;
-    let firstPage = 35;
+    let pageNr = 1;           // page number (starting at 1)
+    let offset = 0;           // the offsetMultiplier for each chart
+    let baseOffset = 55;      // The fixed base offset from the top of the page
+    const offsetAmount = 85;  // Multiplied with offset to get the actual page offset
+    const chartHeight = 80;   // The drawn chart's height in the PDF
     for (const canvas of canvases) {
       // Add another page if necessary
-      if ((i * 90) > 180 || index === 2) {
+      if ( ((offset * offsetAmount) + chartHeight + baseOffset) > (pdf.internal.pageSize.height - 20)) {
         pdf.addPage();
-        i = 0;
+        pageNr++;
+        offset = 0;
+        baseOffset = 20; // Base page offset is 20
       }
       // Draw our white background on the dummy canvas
       dummyCanvasContext.fillRect(0, 0, dummyCanvas.width, dummyCanvas.height);
       // Draw the chart from the real canvas onto our dummy canvas, centered in the dummy canvas
       dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
       // Add the chart with white background into our PDF at the right position
-      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.6), 'JPEG', 25, 20 + firstPage + (i * 90), 160, 80);
+      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.6), 'JPEG', 25, baseOffset + (offset * offsetAmount), 160, chartHeight);
       // Update our positioning variables
-      if (index === 1) { firstPage = 0; }
-      i++;
-      index++;
+      offset++;
     }
+    // Add page count to the bottom of the page
+    pdf.setFontSize(8);
+    for (let i = 1; i <= pageNr; i++) {
+      pdf.setPage(i); // Set the current page to write on first, then add page count to each page
+      rightAlignedText(25, pdf.internal.pageSize.height - 20, i + '/' + pageNr);
+    }
+
     // save our doc with a OS-friendly filename that is related to the survey at hand
-    const filename = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
+    const filename = todayFormatted + '_' + this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
     pdf.save(filename);
     // update our component with our new status
     this.generatingPDF = false;
