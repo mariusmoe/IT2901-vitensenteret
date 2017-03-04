@@ -40,6 +40,7 @@ import { TRANSLATION_PROVIDERS } from './translate/translate';
 import { TranslateService } from './_services/translate.service';
 import { TranslatePipe } from './_pipes/translate';
 import { DatePipe } from '@angular/common';
+import { LogoComponentComponent } from './logo-component/logo-component.component';
 
 @NgModule({
   declarations: [
@@ -68,7 +69,8 @@ import { DatePipe } from '@angular/common';
     CredentialDialog,
     AdminSurveysPipe,
     TranslatePipe,
-    MultiplechoiceComponent
+    MultiplechoiceComponent,
+    LogoComponentComponent
 
   ],
   imports: [
