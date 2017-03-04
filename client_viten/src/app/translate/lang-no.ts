@@ -131,19 +131,11 @@ export const LANG_NO_TRANS = {
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
 
-
-  // new-user component
-  'Could not register account': 'Kunne ikke registrere brukeren',
-  // survey retrieval component
-  'Text based question. Download raw data to extract this.': 'Tekstbasert spørsmål. Last ned rådataen for å se svarene.',
-
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
 
-    // choose-survey component
-    'All Surveys': 'Alle undersøkelsene',
-    'Search results for search': 'Søkeresultatene for %0:',
-
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Tekstbasert spørsmål. Last ned rådataen for å se svarene.',
 
   // Chart types
   'Bar': 'Stolpediagram',
@@ -151,6 +143,20 @@ export const LANG_NO_TRANS = {
   'Pie': 'Sektordiagram',
   'Line': 'Linjediagram',
   'PolarArea': 'Rosediagram',
+
+  // new-user component
+  'Could not register account': 'Kunne ikke registrere brukeren',
+
+  // choose-survey component
+  'All Surveys': 'Alle undersøkelsene',
+  'Search results for search': 'Søkeresultatene for %0:',
+
+  // PDF download lines
+  'Date created: d': 'Dato laget: %0',
+  'Date printed: d': 'Dato printet: %0',
+  'Number of responses: n': 'Antall svar: %0',
+
+
 
 
 };

@@ -131,13 +131,11 @@ export const LANG_EN_TRANS = {
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
 
-  // survey retrieval component
-  'Text based question. Download raw data to extract this.': 'Text based question. Download raw data to extract this.',
-  // new-user component
-  'Could not register account': 'Could not register account',
-
   // survey retrieval chart component
   'Download as PNG': 'Download as PNG',
+
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Text based question. Download raw data to extract this.',
 
   // Chart types
   'Bar': 'Bar chart',
@@ -146,11 +144,18 @@ export const LANG_EN_TRANS = {
   'Line': 'Line chart',
   'PolarArea': 'PolarArea chart',
 
-
+  // new-user component
+  'Could not register account': 'Could not register account',
 
   // choose-survey component
   'All Surveys': 'All Surveys',
   'Search results for search': 'Search results for %0:',
+
+  // PDF download lines
+  'Date created: d': 'Date created: %0',
+  'Date printed: d': 'Date printed: %0',
+  'Number of responses: n': 'Number of responses: %0',
+
 
 
 };
