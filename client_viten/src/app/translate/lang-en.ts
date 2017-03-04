@@ -97,6 +97,9 @@ export const LANG_EN_TRANS = {
   'Email and password are required': 'Email and password are required',
   'Email or password is incorrect': 'Email or password is incorrect',
 
+  // New user component
+  'You need to write the same pasword twice': 'You need to write the same pasword twice',
+  'Register New User': 'Register New User',
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',

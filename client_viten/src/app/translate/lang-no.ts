@@ -98,6 +98,11 @@ export const LANG_NO_TRANS = {
   'Email and password are required': 'Både epost og passord er påkrevd',
   'Email or password is incorrect': 'Epost eller passord er galt',
 
+  // New user component
+  'You need to write the same pasword twice': 'You need to write the same pasword twice',
+  'Register New User': 'Register New User',
+  'Could not register account': 'Kunne ikke registrere brukeren',
+
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
   'Download Raw Data': 'Last ned rådata',
@@ -143,9 +148,6 @@ export const LANG_NO_TRANS = {
   'Pie': 'Sektordiagram',
   'Line': 'Linjediagram',
   'PolarArea': 'Rosediagram',
-
-  // new-user component
-  'Could not register account': 'Kunne ikke registrere brukeren',
 
   // choose-survey component
   'All Surveys': 'Alle undersøkelsene',
