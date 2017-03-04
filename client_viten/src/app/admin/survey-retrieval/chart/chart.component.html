@@ -8,7 +8,8 @@
   </div>
 
   <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
-    <canvas baseChart #canvas
+    <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
+    <canvas baseChart #canvas class="surveyQuestionChart"
             [datasets]="barChartData"
             [labels]="barChartLabels"
             [options]="barChartOptions"
