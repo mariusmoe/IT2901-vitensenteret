@@ -11,20 +11,28 @@
   }
 }
 
+@mixin logoColor($color) {
+  fill: $color;
+  filter: drop-shadow( 1px 1px 3px darken($color, 80%) );
+}
+
 // styling of the svg
 #VitenLogo {
   display: inline-block;
+  fill: white;
+  filter: drop-shadow( 1px 1px 3px #000 );
 
-  $colour: 'white';
-  &.primary {
-    $colour: $vitenPrimary;
-  }
   &.accent {
-    $colour: $vitenAccent;
+    @include logoColor(map-get(nth($vitenAccent,1), nth($vitenAccent, 2)));
+    &.contrast {
+      @include logoColor(map-get(map-get(nth($vitenAccent,1), "contrast"), nth($vitenAccent, 2)));
+    }
   }
-  fill: map-get(nth($colour,1), nth($colour, 2));
-  &.contrast {
-    fill: map-get(map-get(nth($colour,1), "contrast"), nth($colour, 2));
+  &.primary {
+    @include logoColor(map-get(nth($vitenPrimary,1), nth($vitenPrimary, 2)));
+    &.contrast {
+      @include logoColor(map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2)));
+    }
   }
 
   // index 1 of vitenPrimary is the map of shades for our chosen colour.
