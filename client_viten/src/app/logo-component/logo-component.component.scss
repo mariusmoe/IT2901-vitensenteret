@@ -2,12 +2,16 @@
 
 
 .svgContainer {
-  display: inline-block;
+  display: block;
   &.full {
     display: block;
   }
   &.icon {
-    max-width: 18%;
+    display: inline-block;
+    #VitenLogo {
+      max-height: 64px;
+      max-width: 85px;
+    }
   }
 }
 
@@ -33,6 +37,10 @@
     &.contrast {
       @include logoColor(map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2)));
     }
+  }
+  &.black {
+    fill: black;
+    filter: none;
   }
 
   // index 1 of vitenPrimary is the map of shades for our chosen colour.

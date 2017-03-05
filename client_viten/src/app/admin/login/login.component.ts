@@ -1,6 +1,6 @@
 import { Component, OnInit, HostBinding } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { slideInDownAnimation } from '../../animations';
+import { slideDownFadeInAnimation } from '../../animations';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { User } from '../../_models/user';
@@ -9,7 +9,7 @@ import { User } from '../../_models/user';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  animations: [ slideInDownAnimation ]
+  animations: [ slideDownFadeInAnimation ]
 })
 export class LoginComponent implements OnInit {
   @HostBinding('@routeAnimation') routeAnimation = true;

@@ -1,6 +1,6 @@
-<div class="svgContainer" [ngClass]="{ 'icon': logoVariant === 'icon', 'text': logoVariant === 'text', 'full': logoVariant === 'full' }">
+<div class="svgContainer" [ngClass]="logoVariant">
   <svg version="1.1" id="VitenLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-  [ngClass]="{ 'primary': color === 'primary', 'accent': color === 'accent', 'contrast': useColorContrast == true }"
+  [ngClass]="[color, useColorContrast == true ? 'contrast' : '']"
   [attr.viewBox]="viewBoxValues[logoVariant]" width="100%" height="100%" xml:space="preserve"> <!-- default: width="100px" height="100px" viewBox="0 0 100 100" -->
   <path fill-rule="evenodd" clip-rule="evenodd" d="M76.219,5c0.063,0.027,0.123,0.068,0.188,0.08
   c2.208,0.373,3.819,2.231,3.824,4.483c0.004,2.223-0.042,4.446-0.064,6.669c-0.019,1.81-0.031,3.62-0.05,5.429

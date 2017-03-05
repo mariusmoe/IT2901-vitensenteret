@@ -1,6 +1,8 @@
 <div class="adminPortal">
+  <div class="logo">
+    <app-logo-component logoVariant="full" color="black" [useColorContrast]="true"></app-logo-component>
+  </div>
   <md-card>
-    <md-card-title align="center">{{ 'Login' | translate }}</md-card-title>
     <md-card-content>
       <form [formGroup]="loginForm" (ngSubmit)="submitForm(loginForm.value)">
         <md-input-container md-block>
