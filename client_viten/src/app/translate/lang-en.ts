@@ -153,6 +153,7 @@ export const LANG_EN_TRANS = {
   // choose-survey component
   'All Surveys': 'All Surveys',
   'Search results for search': 'Search results for %0:',
+  'Start': 'Start',
 
   // PDF download lines
   'Date created: d': 'Date created: %0',

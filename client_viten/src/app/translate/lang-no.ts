@@ -152,6 +152,7 @@ export const LANG_NO_TRANS = {
   // choose-survey component
   'All Surveys': 'Alle undersøkelsene',
   'Search results for search': 'Søkeresultatene for %0:',
+  'Start': 'Start',
 
   // PDF download lines
   'Date created: d': 'Dato laget: %0',
