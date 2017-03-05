@@ -6,9 +6,9 @@
 
   md-card {
     margin: 0 auto;
-
     max-width: 250px;
     .actions {
+      text-align: center;
       button {
         width: 100%;
       }
@@ -30,10 +30,6 @@
   width: 30px;
   height: 30px;
   display:inline-block;
-}
-.loadingcircle {
-  position: relative;
-  top: 11px;
 }
 
 .error {
