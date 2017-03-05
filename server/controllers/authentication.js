@@ -74,9 +74,10 @@ exports.login = (req, res, next) => {
  * Register a new user
  */
 exports.register = (req, res, next) => {
-  const email     = req.body.email,
-        password        = req.body.password,
+  const password        = req.body.password,
         confirm_string  = req.body.referral_string;
+  let   email           = req.body.email;
+
 
   if (validator.isEmpty(email)){
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
@@ -87,6 +88,8 @@ exports.register = (req, res, next) => {
   if (validator.isEmpty(confirm_string)){
     return res.status(401).send({message: status.NO_REFERRAL_LINK.message, status: status.NO_REFERRAL_LINK.code} )
   }
+
+  email = email.toLowerCase(); // use lower case to avoid case sensitivity issues later
 
   Referral.findOne({referral: confirm_string}, (err, existingReferral) => {
     if (err) { return next(err); }

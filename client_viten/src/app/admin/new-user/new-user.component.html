@@ -4,7 +4,7 @@
     <md-card-content>
       <form [formGroup]="newUserForm" (ngSubmit)="submitForm(newUserForm.value)">
         <md-input-container md-block>
-          <input mdInput class="form-control" type="text" placeholder="Email" [formControl]="newUserForm.controls['email']" required />
+          <input mdInput class="form-control" type="email" placeholder="Email" [formControl]="newUserForm.controls['email']" required />
           <md-hint class="warning" *ngIf="newUserForm.controls['email'].hasError('required') && newUserForm.controls['email'].touched">
             {{ 'This field is required.' | translate }}
           </md-hint>
