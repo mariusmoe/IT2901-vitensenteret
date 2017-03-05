@@ -22,7 +22,6 @@ export class BarChartComponent implements OnInit {
   bigCharts = ['doughnut', 'pie', 'polarArea'];
   chartLegends = ['doughnut', 'pie', 'polarArea'];
   chartLabels; // instantiated in constructor
-  colours; // instantiated in ngOnInit
 
   constructor(public languageService: TranslateService) {
     this.chartLabels = {
@@ -40,14 +39,9 @@ export class BarChartComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.questionObject = changes['questionObject'].currentValue;
-    // console.log("CHANGE!")
-    // console.log(this.questionObject);
-
     // set up the bar chart
     if (!this.questionObject) {
       return;
-      // TODO: error.
     }
     if (this.questionObject.mode === 'text') {
       return;
@@ -69,12 +63,29 @@ export class BarChartComponent implements OnInit {
       this.barChartData[0]['fillColor'] = 'red';
     }
 
-    // Set colours (TODO: FIXME)
-    this.colours = [
-      getComputedStyle(this.canvas.nativeElement.parentNode, null).color,
-      getComputedStyle(this.canvas.nativeElement.parentNode, null).borderColor
-    ];
+    // Set colours
+    const colourChoices = ['#fa7337', '#6ecdb4', '#c8dc32', '#b44682', '#7378cd', '#5a96d7', '#a0968c', '#c8c8c8'];
+    // initialize our variable holder. We need each of the properties we want to adjust in here
+    this.barChartColours = [{backgroundColor: [], pointBackgroundColor: [], borderColor: [], pointBorderColor: [] }];
+    for (const colour of colourChoices) {
+      // follows the static order above. Expansion opportunity; Filter out the theme colours and adjust order accordingly
+      this.barChartColours[0]['backgroundColor'].push(this.hexConverter(colour, 0.65));
+      this.barChartColours[0]['pointBackgroundColor'].push(this.hexConverter(colour, 0.65));
+      this.barChartColours[0]['borderColor'].push(this.hexConverter(colour, 1));
+      this.barChartColours[0]['pointBorderColor'].push(this.hexConverter(colour, 1));
+    }
+    // Angular 2 charts properties:
+    // backgroundColor, borderColor, pointBackgroundColor,
+    // pointBorderColor, pointHoverBackgroundColor, pointHoverBorderColor
     this.setChartOptions();
+  }
+
+  private hexConverter(hex: string, opacity: number) {
+    hex = hex.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + opacity + ')';
   }
 
   /**
@@ -103,8 +114,6 @@ export class BarChartComponent implements OnInit {
         display: (this.chartLegends.indexOf(this.chartType) >= 0),
       }
     };
-    // TODO: Colours are difficult to do.
-    this.barChartColours = [];
     if (this.chartType === 'bar') {
       this.barChartOptions['scales'] = {
         yAxes: [{ ticks: { beginAtZero: true } }]
