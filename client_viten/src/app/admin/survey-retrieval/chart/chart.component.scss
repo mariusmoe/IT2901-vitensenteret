@@ -2,8 +2,6 @@
 
 .canvasParent {
   display: block;
-  color: map-get(nth($vitenPrimary,1), 900);
-  border-color: map-get(nth($vitenAccent,1), 900);
 }
 
 .questionHeader {
