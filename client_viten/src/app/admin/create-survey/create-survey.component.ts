@@ -209,7 +209,12 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // this.route.snapshot is the route for the SUBDOMAIN of /admin
       // this.route.parent gives us the PARENT domain (ranging from '' to the parent
       // of this route). We want to return to the parent url in a programatic
-      // fashion as to avoid issues should the routes be altered.
+      // fashion as to avoid issues should the route name be altered.
+      if (this.isPatch) {
+        // We append /:surveyId at the end to bring the user back to the survey he or she just edited.
+        this.router.navigate([this.route.parent.snapshot.url.join('/') + '/' + this.survey._id]);
+        return;
+      }
       this.router.navigate([this.route.parent.snapshot.url.join('/')]);
     };
     // Send request to the server; either PATCH or POST.
