@@ -1,4 +1,4 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { slideInDownAnimation } from '../../animations';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -13,7 +13,7 @@ import { TranslateService } from '../../_services/translate.service';
   templateUrl: './new-user.component.html',
   styleUrls: ['./new-user.component.scss']
 })
-export class NewUserComponent implements OnInit {
+export class NewUserComponent implements OnInit, OnDestroy {
 
   newUserForm: FormGroup;
   loading = false;
@@ -29,14 +29,18 @@ export class NewUserComponent implements OnInit {
     private authenticationService: AuthenticationService) {
       this.newUserForm = fb.group({
       'email': [null, Validators.required],
-      'password': [null, Validators.required],
-      'passwordconfirm': [null, Validators.required]
+      'password': [null, Validators.compose([Validators.required, Validators.minLength(4)])],
+      'passwordconfirm': [null, Validators.compose([Validators.required, Validators.minLength(4)])]
     });
    }
 
   ngOnInit() {
     localStorage.removeItem('token');
     this.param = this.route.snapshot.params['refLink'];
+    document.querySelector('html').classList.add('noWrapper');
+  }
+  ngOnDestroy() {
+    document.querySelector('html').classList.remove('noWrapper');
   }
 
   submitForm(form: {email: string, password: string, passwordconfirm: string}): void {

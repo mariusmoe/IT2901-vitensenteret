@@ -100,6 +100,8 @@ export const LANG_EN_TRANS = {
   // New user component
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
   'Register New User': 'Register New User',
+  'Could not register account': 'Could not register account',
+  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
@@ -146,9 +148,6 @@ export const LANG_EN_TRANS = {
   'Pie': 'Pie chart',
   'Line': 'Line chart',
   'PolarArea': 'PolarArea chart',
-
-  // new-user component
-  'Could not register account': 'Could not register account',
 
   // choose-survey component
   'All Surveys': 'All Surveys',
