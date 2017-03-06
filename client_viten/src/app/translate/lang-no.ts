@@ -102,6 +102,7 @@ export const LANG_NO_TRANS = {
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
   'Register New User': 'Register New User',
   'Could not register account': 'Kunne ikke registrere brukeren',
+  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',

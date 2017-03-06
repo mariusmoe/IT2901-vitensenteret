@@ -18,6 +18,23 @@ export const slideInDownAnimation: AnimationEntryMetadata =
     ])
   ]);
 
+  export const slideDownFadeInAnimation: AnimationEntryMetadata =
+    trigger('routeAnimation', [
+      state('*',
+        style({
+          opacity: 1,
+        })
+      ),
+      transition(':enter', [
+        style({
+          offset: 0,
+          opacity: 0,
+          transform: 'translateY(-25%)'
+        }),
+        animate('0.3s ease-out')
+      ])
+    ]);
+
   export const slideOutAnimation: AnimationEntryMetadata =
     trigger('routeAnimation', [
       state('*',

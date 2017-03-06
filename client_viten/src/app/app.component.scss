@@ -28,6 +28,9 @@ $survey-app-theme: mat-dark-theme($survey-app-primary, $survey-app-accent, $surv
 @include angular-material-theme($survey-app-theme);
 html {
   background: $vitenHTMLBackground;
+  &.noWrapper {
+    background: $vitenBackground;
+  }
 }
 
 // To add additional styles:
