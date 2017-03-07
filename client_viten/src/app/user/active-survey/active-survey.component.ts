@@ -35,21 +35,27 @@ export class ActiveSurveyComponent implements OnInit {
 
   }
 
-
+  /**
+   * ngOnInit
+   * Take the URL and get the survey from url-Param
+   */
   ngOnInit() {
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
-          // console.log("DEBUG: BAD surveyId param from router!");
+          console.log('DEBUG: BAD surveyId param from router!');
           // TODO: Redirect to base create survey ?
           return;
         }
+        // console.log(result);
         this.survey = result;
         this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {
           // console.log(this.survey);
           this.properSurvey = true;
+        } else {
+          console.error('Survey is not active or something else is wrong!');
         }
       });
       return;
@@ -70,7 +76,7 @@ export class ActiveSurveyComponent implements OnInit {
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
-          // console.log("DEBUG: BAD surveyId param from router!");
+          console.log("DEBUG: BAD surveyId param from router!");
           // TODO: Redirect to base create survey ?
           return;
         }
@@ -86,13 +92,19 @@ export class ActiveSurveyComponent implements OnInit {
     }
   }
 
-// This method adds/changes an answer with which answer-alternative the user chose
+/**
+ * This method adds/changes an answer with which answer-alternative the user chose
+ * @param  {number[]} alternative a list of numbers to send to survey
+ */
 addOrChangeAnswer(alternative) {
   this.answers[this.page] = alternative;
   // console.log('answers updated! answer[] now looks like this: ', this.answers);
 }
 
-// This method handles the transition to the previous questions in the survey
+/**
+ * This method handles the transition to the previous questions in the survey
+ * @return {undefined} Returns nothing just to prevent overflow
+ */
   private previousQ() {
       if (this.page <= 0) {
         // console.log("this is the first question, can't go back further");
@@ -105,7 +117,10 @@ addOrChangeAnswer(alternative) {
       // console.log('previous question');
     }
 
-// This method handles the transition to the next question in the survey
+/**
+ * This method handles the transition to the next question in the survey
+ * @return {undefined} Returns nothing to prevent overflow
+ */
   private nextQ() {
     if (typeof this.answers[this.page] === 'undefined') {
       this.answers[this.page] = -1;
@@ -129,7 +144,10 @@ addOrChangeAnswer(alternative) {
     // console.log('next question');
   }
 
-// This method ends the animation
+/**
+ * This method ends the animation
+ * @param  {$event} event An EventEmitter is taken as input from child-components
+ */
   animEnd(event) {
     if (!event.fromState) {
       this.transition = false;
@@ -139,7 +157,9 @@ addOrChangeAnswer(alternative) {
     // console.log(event);
   }
 
-// This method ends the survey if the user clicks the END button or after x amount of seconds
+/**
+ * This method ends the survey if the user clicks the END button or after x amount of seconds
+ */
   endSurvey() {
     console.log(this.answers);
     this.postSurvey();
@@ -147,16 +167,19 @@ addOrChangeAnswer(alternative) {
     this.done = true;
   }
 
-// This method quits the survey and routes it to the choose-survey component
+/**
+ * This method quits the survey and routes it to the choose-survey component
+ */
   quitSurvey() {
     // Route to the select-survey window
-    this.postSurvey();
+    // this.postSurvey();
     this.router.navigate(['/choosesurvey']);
     // console.log('Routing to select-survey');
-    return;
   }
 
-// This method posts the survey to the database
+/**
+ * This method posts the survey to the database
+ */
   private postSurvey() {
     this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper : boolean) => {
       this.properSurvey = true;
