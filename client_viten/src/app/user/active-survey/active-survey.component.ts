@@ -35,12 +35,15 @@ export class ActiveSurveyComponent implements OnInit {
 
   }
 
-
+  /**
+   * ngOnInit
+   * Take the URL and get the survey from url-Param
+   */
   ngOnInit() {
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
-          console.log("DEBUG: BAD surveyId param from router!");
+          console.log('DEBUG: BAD surveyId param from router!');
           // TODO: Redirect to base create survey ?
           return;
         }
@@ -52,7 +55,7 @@ export class ActiveSurveyComponent implements OnInit {
           // console.log(this.survey);
           this.properSurvey = true;
         } else {
-          console.error('Survey is not active or something else is wrong!')
+          console.error('Survey is not active or something else is wrong!');
         }
       });
       return;
