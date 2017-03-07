@@ -117,7 +117,10 @@ addOrChangeAnswer(alternative) {
       // console.log('previous question');
     }
 
-// This method handles the transition to the next question in the survey
+/**
+ * This method handles the transition to the next question in the survey
+ * @return {undefined} Returns nothing to prevent overflow
+ */
   private nextQ() {
     if (typeof this.answers[this.page] === 'undefined') {
       this.answers[this.page] = -1;
@@ -141,7 +144,10 @@ addOrChangeAnswer(alternative) {
     // console.log('next question');
   }
 
-// This method ends the animation
+/**
+ * This method ends the animation
+ * @param  {$event} event An EventEmitter is taken as input from child-components
+ */
   animEnd(event) {
     if (!event.fromState) {
       this.transition = false;
@@ -151,7 +157,9 @@ addOrChangeAnswer(alternative) {
     // console.log(event);
   }
 
-// This method ends the survey if the user clicks the END button or after x amount of seconds
+/**
+ * This method ends the survey if the user clicks the END button or after x amount of seconds
+ */
   endSurvey() {
     console.log(this.answers);
     this.postSurvey();
@@ -159,16 +167,19 @@ addOrChangeAnswer(alternative) {
     this.done = true;
   }
 
-// This method quits the survey and routes it to the choose-survey component
+/**
+ * This method quits the survey and routes it to the choose-survey component
+ */
   quitSurvey() {
     // Route to the select-survey window
     // this.postSurvey();
     this.router.navigate(['/choosesurvey']);
     // console.log('Routing to select-survey');
-    return;
   }
 
-// This method posts the survey to the database
+/**
+ * This method posts the survey to the database
+ */
   private postSurvey() {
     this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper : boolean) => {
       this.properSurvey = true;

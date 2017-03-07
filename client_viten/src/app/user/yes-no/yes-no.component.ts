@@ -16,14 +16,20 @@ export class YesNoComponent implements OnInit {
   ngOnInit() {
   }
 
-// This method selects the thumb-answer and calls addChange()
-  selectAnswer(selectedAnswer){
+  /**
+   * This method selects the thumb-answer and calls addChange()
+   * @param  {number[]} selectedAnswer The output answer sent to active-survey-component
+   */
+  selectAnswer(selectedAnswer) {
     this.selectedAnswer = selectedAnswer;
     this.addChange(this.selectedAnswer);
   }
 
-  // This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
-  addChange(alt){
+  /**
+   * This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
+   * @param  {number[]} alt The selected answer ID
+   */
+  addChange(alt) {
     console.log('Answer changed');
     this.answer.emit(alt);
   }

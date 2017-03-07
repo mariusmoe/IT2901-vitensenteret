@@ -18,13 +18,20 @@ export class StarsComponent implements OnInit {
   ngOnInit() {
   }
 
-// This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
+  /**
+   * This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
+   * @param  {number[]} alt The output answer sent to active-survey-component
+   */
   private addChange(alt) {
     console.log('Answer changed');
     this.answer.emit(alt);
   }
 
-  // This method fills the stars with >= selectedIDStar and calls addChange()
+  /**
+   * This method fills the stars with >= selectedIDStar and calls addChange()
+   * @param  {number[]} selectedStar The selected answer ID
+   * @return {[type]}              [description]
+   */
   fillStar(selectedStar) {
     this.selectedStar = selectedStar;
     this.addChange(selectedStar);
