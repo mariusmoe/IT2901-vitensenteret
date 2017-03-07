@@ -40,16 +40,19 @@ export class ActiveSurveyComponent implements OnInit {
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
-          // console.log("DEBUG: BAD surveyId param from router!");
+          console.log("DEBUG: BAD surveyId param from router!");
           // TODO: Redirect to base create survey ?
           return;
         }
+        // console.log(result);
         this.survey = result;
         this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {
           // console.log(this.survey);
           this.properSurvey = true;
+        } else {
+          console.error('Survey is not active or something else is wrong!')
         }
       });
       return;
@@ -70,7 +73,7 @@ export class ActiveSurveyComponent implements OnInit {
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
-          // console.log("DEBUG: BAD surveyId param from router!");
+          console.log("DEBUG: BAD surveyId param from router!");
           // TODO: Redirect to base create survey ?
           return;
         }
@@ -150,7 +153,7 @@ addOrChangeAnswer(alternative) {
 // This method quits the survey and routes it to the choose-survey component
   quitSurvey() {
     // Route to the select-survey window
-    this.postSurvey();
+    // this.postSurvey();
     this.router.navigate(['/choosesurvey']);
     // console.log('Routing to select-survey');
     return;
