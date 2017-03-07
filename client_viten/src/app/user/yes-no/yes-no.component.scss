@@ -1,0 +1,29 @@
+.yesnoContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 55vw;
+  height: 35vh;
+  justify-content: space-between;
+}
+.yesno-btn {
+  height: 30vh;
+  width: 30vh;
+  opacity: 0.5;
+
+  &.active{
+    opacity: 1;
+  }
+}
+
+.thumbsDown{
+  padding-top: 38%;
+  padding-left: 10%;
+}
+
+.thumbsUp{
+  padding-right: 10%;
+}
+
+.thumbsUp:focus{outline: none;}
+.thumbsDown:focus{outline: none;}

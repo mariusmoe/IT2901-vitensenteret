@@ -8,7 +8,8 @@
   </div>
 
   <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
-    <canvas baseChart #canvas
+    <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
+    <canvas baseChart #canvas class="surveyQuestionChart"
             [datasets]="barChartData"
             [labels]="barChartLabels"
             [options]="barChartOptions"
@@ -22,6 +23,6 @@
         {{ chartTypesVerbose[i] | translate }}
       </md-option>
     </md-select>
-    <button md-raised-button color="accent" (click)="downloadAsPng()">{{ 'Download as PNG' | translate }}</button>
+    <button md-raised-button color="accent" (click)="downloadAsPng()"><md-icon>insert_chart</md-icon> {{ 'Download as PNG' | translate }}</button>
   </div>
 </div>

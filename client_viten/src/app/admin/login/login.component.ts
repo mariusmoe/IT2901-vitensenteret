@@ -1,6 +1,6 @@
-import { Component, OnInit, HostBinding } from '@angular/core';
+import { Component, OnInit, OnDestroy, HostBinding } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { slideInDownAnimation } from '../../animations';
+import { slideDownFadeInAnimation } from '../../animations';
 import { Router } from '@angular/router';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { User } from '../../_models/user';
@@ -9,12 +9,11 @@ import { User } from '../../_models/user';
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  animations: [ slideInDownAnimation ]
+  animations: [ slideDownFadeInAnimation ]
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   @HostBinding('@routeAnimation') routeAnimation = true;
   @HostBinding('style.display')   display = 'block';
-  @HostBinding('style.position')  position = 'relative';
 
 
   loginForm: FormGroup;
@@ -32,11 +31,15 @@ export class LoginComponent implements OnInit {
    }
 
   ngOnInit() {
+    document.querySelector('html').classList.add('noWrapper');
+  }
+  ngOnDestroy() {
+    document.querySelector('html').classList.remove('noWrapper');
   }
 
   submitForm(user: User) {
     this.loading = true;
-    console.log(user);
+    // console.log(user);
 
     this.loading = true;
     const sub = this.authenticationService.login(user.email, user.password)

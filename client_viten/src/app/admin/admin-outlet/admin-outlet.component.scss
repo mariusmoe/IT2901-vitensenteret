@@ -1,14 +1,5 @@
 @import '../../viten.themes.scss';
 
-// styling of the svg
-#VitenLogo {
-  // index 1 of vitenPrimary is the map of shades for our chosen colour.
-  // we access the "contrast" key of this map. The key we use in the "contrast"
-  // key's value -- which is a map -- is given by the second index in our vitenPrimary
-  // array
-  fill: map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2));
-}
-
 .adminPortal {
   background: $vitenBackground;
 }

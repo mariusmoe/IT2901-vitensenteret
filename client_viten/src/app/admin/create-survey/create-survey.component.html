@@ -37,7 +37,7 @@
           </div>
           <div>
             <!-- USE ENGLISH? -->
-            <md-checkbox [(ngModel)]='englishEnabled'>{{ 'Enable English for this survey?' | translate }}</md-checkbox>
+            <md-checkbox [(ngModel)]='englishEnabled' (change)="setPushReadyStatus()">{{ 'Enable English for this survey?' | translate }}</md-checkbox>
           </div>
         </md-card-content>
       </md-card>

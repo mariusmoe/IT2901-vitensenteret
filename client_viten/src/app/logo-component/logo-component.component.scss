@@ -1,0 +1,50 @@
+@import '../viten.themes.scss';
+
+
+.svgContainer {
+  display: block;
+  &.full {
+    display: block;
+  }
+  &.icon {
+    display: inline-block;
+    #VitenLogo {
+      max-height: 64px;
+      max-width: 85px;
+    }
+  }
+}
+
+@mixin logoColor($color) {
+  fill: $color;
+  filter: drop-shadow( 1px 1px 3px darken($color, 80%) );
+}
+
+// styling of the svg
+#VitenLogo {
+  display: inline-block;
+  fill: white;
+  filter: drop-shadow( 1px 1px 3px #000 );
+
+  &.accent {
+    @include logoColor(map-get(nth($vitenAccent,1), nth($vitenAccent, 2)));
+    &.contrast {
+      @include logoColor(map-get(map-get(nth($vitenAccent,1), "contrast"), nth($vitenAccent, 2)));
+    }
+  }
+  &.primary {
+    @include logoColor(map-get(nth($vitenPrimary,1), nth($vitenPrimary, 2)));
+    &.contrast {
+      @include logoColor(map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2)));
+    }
+  }
+  &.black {
+    fill: black;
+    filter: none;
+  }
+
+  // index 1 of vitenPrimary is the map of shades for our chosen colour.
+  // we access the "contrast" key of this map. The key we use in the "contrast"
+  // key's value -- which is a map -- is given by the second index in our vitenPrimary
+  // array
+}

@@ -1,0 +1,19 @@
+.starsContainer {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  width: 75vw;
+  height: 15vh;
+  justify-content: space-between;
+}
+
+.star{
+  // background: no-repeat 50% 50%;
+  height: 30vh;
+  width: 30vh;
+  outline: none;
+  background: url(../../assets/images/EmptyStar.svg) no-repeat center center;
+  &.active {
+    background-image: url(../../assets/images/Star.svg);
+  }
+}

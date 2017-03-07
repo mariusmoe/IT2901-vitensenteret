@@ -1,38 +1,47 @@
 <div class="newUser">
   <md-card>
-    <md-card-title align="center">Register New User</md-card-title>
+    <md-card-title align="center">{{ 'Register New User' | translate }}</md-card-title>
     <md-card-content>
       <form [formGroup]="newUserForm" (ngSubmit)="submitForm(newUserForm.value)">
         <md-input-container md-block>
-          <input mdInput class="form-control" type="text" placeholder="Email" [formControl]="newUserForm.controls['email']" required />
+          <input mdInput class="form-control" type="email" placeholder="{{ 'Email' | translate }}"
+          pattern="\S+@\S+\.\S+" [formControl]="newUserForm.controls['email']" required />
           <md-hint class="warning" *ngIf="newUserForm.controls['email'].hasError('required') && newUserForm.controls['email'].touched">
-            This field is invalid.
+            {{ 'This field is required.' | translate }}
+          </md-hint>
+          <md-hint class="warning" *ngIf="!newUserForm.controls['email'].hasError('required') &&
+              newUserForm.controls['email'].invalid && newUserForm.controls['email'].touched">
+            {{ 'This field is invalid.' | translate }}
           </md-hint>
         </md-input-container>
         <md-input-container md-block>
           <input mdInput
             class="form-control"
             type="password"
-            placeholder="Password"
+            placeholder="{{ 'Password' | translate }}"
             [formControl]="newUserForm.controls['password']"
             required
             #newPassword/>
-          <md-hint align="end">{{newPassword.value.length}} / 4++</md-hint>
+          <md-hint align="end"
+          [ngClass]="{ 'warning': newUserForm.controls['password'].invalid && newUserForm.controls['password'].touched }">
+          {{newPassword.value.length}} / 4++</md-hint>
           <md-hint class="warning" *ngIf="newUserForm.controls['password'].hasError('required') && newUserForm.controls['password'].touched">
-            Required
+            {{ 'This field is required.' | translate }}
           </md-hint>
         </md-input-container>
         <md-input-container md-block>
           <input mdInput
             class="form-control"
             type="password"
-            placeholder="Confirm Password"
+            placeholder="{{ 'Retype password' | translate }}"
             [formControl]="newUserForm.controls['passwordconfirm']"
             required
             #newPasswordConfirm/>
-            <md-hint align="end">{{newPasswordConfirm.value.length}} / 4++</md-hint>
+            <md-hint align="end"
+            [ngClass]="{ 'warning': newUserForm.controls['passwordconfirm'].invalid && newUserForm.controls['passwordconfirm'].touched }">
+            {{newPasswordConfirm.value.length}} / 4++</md-hint>
           <md-hint class="warning" *ngIf="newPassword.value != newPasswordConfirm.value && newUserForm.controls['passwordconfirm'].touched">
-            You need to write the same pasword twice
+            {{ 'You need to write the same pasword twice' | translate }}
           </md-hint>
         </md-input-container>
         <div class="actions">
@@ -44,8 +53,8 @@
             color="primary"
             *ngIf="!loading"
             >
-            <div [mdTooltip]="(!newUserForm.valid) ? 'email and password are required' : '' " tooltip-position="above">
-              Submit
+            <div [mdTooltip]="(!newUserForm.valid) ? ( 'Email and password are required' | translate ) : '' " tooltip-position="above">
+              {{ 'Submit' | translate }}
             </div>
           </button>
           <!-- loading circle -->

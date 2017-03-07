@@ -97,10 +97,17 @@ export const LANG_EN_TRANS = {
   'Email and password are required': 'Email and password are required',
   'Email or password is incorrect': 'Email or password is incorrect',
 
+  // New user component
+  'You need to write the same pasword twice': 'You need to write the same pasword twice',
+  'Register New User': 'Register New User',
+  'Could not register account': 'Could not register account',
+  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
   'Download Raw Data': 'Download Raw Data',
+  'Download as JSON': 'Download as JSON',
+  'Total number of answers: n': 'Total number of answers: %0',
 
   // Admin settings component
   'Retype password': 'Retype password',
@@ -129,13 +136,11 @@ export const LANG_EN_TRANS = {
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
 
-  // survey retrieval component
-  'Text based question. Download raw data to extract this.': 'Text based question. Download raw data to extract this.',
-  // new-user component
-  'Could not register account': 'Could not register account',
-
   // survey retrieval chart component
   'Download as PNG': 'Download as PNG',
+
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Text based question. Download raw data to extract this.',
 
   // Chart types
   'Bar': 'Bar chart',
@@ -144,11 +149,16 @@ export const LANG_EN_TRANS = {
   'Line': 'Line chart',
   'PolarArea': 'PolarArea chart',
 
-
-
   // choose-survey component
   'All Surveys': 'All Surveys',
   'Search results for search': 'Search results for %0:',
+  'Start': 'Start',
+
+  // PDF download lines
+  'Date created: d': 'Date created: %0',
+  'Date printed: d': 'Date printed: %0',
+  'Number of responses: n': 'Number of responses: %0',
+
 
 
 };

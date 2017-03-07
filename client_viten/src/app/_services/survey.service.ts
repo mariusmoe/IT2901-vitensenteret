@@ -178,7 +178,27 @@ export class SurveyService {
         });
   }
 
-
-
+  /**
+   * getSurveyAs(surveyId: string, type: string)
+   * @param  {string}          surveyId the ID of the survey to get
+   * @param  {string}          type     the type ('json' or 'csv') of data to get
+   * @return {Observable<any>}          the raw data, as observable.
+   */
+  getSurveyAs(surveyId: string, type: string): Observable<any> {
+    const token = this.getToken();
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${token}`);
+    const url = type === 'csv' ? environment.URL.surveyAsCSV : environment.URL.surveyAsJson;
+    return this.http.get(url + '/' + surveyId, { headers })
+      .map(
+        response => {
+          return response;
+        },
+        error => {
+          return error;
+        }
+      );
+  }
 
 }

@@ -10,6 +10,8 @@ export const environment = {
       renewJWT: 'http://95.85.63.98:2000/api/auth/get_token/',
       newEmail: 'http://95.85.63.98:2000/api/auth/change_email/',
       newPassword: 'http://95.85.63.98:2000/api/auth/change_password/',
-      survey: 'http://95.85.63.98:2000/api/survey'
+      survey: 'http://95.85.63.98:2000/api/survey',
+      surveyAsJson: 'http://95.85.63.98:2000/api/survey/json',
+      surveyAsCSV: 'http://95.85.63.98:2000/api/survey/csv'
     }
 };

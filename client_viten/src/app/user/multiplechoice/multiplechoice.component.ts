@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
 
 @Component({
@@ -8,10 +8,22 @@ import { QuestionObject } from '../../_models/survey';
 })
 export class MultiplechoiceComponent implements OnInit {
   @Input() questionObject: QuestionObject;
-  
+  @Output() answer = new EventEmitter();
+  selectedOption;
+  options;
+
   constructor() { }
 
   ngOnInit() {
+    this.options = this.questionObject.lang.no.options;
   }
-
+// This posts to the answer-list in active-survey component
+  postAnswer(alt) {
+    this.answer.emit(alt);
+  }
+// This updates the local variable that posts to the active-survey component
+  updateAnswers(userChoice) {
+    this.selectedOption = userChoice;
+    this.postAnswer(this.selectedOption);
+  }
 }

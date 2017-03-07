@@ -98,9 +98,17 @@ export const LANG_NO_TRANS = {
   'Email and password are required': 'Både epost og passord er påkrevd',
   'Email or password is incorrect': 'Epost eller passord er galt',
 
+  // New user component
+  'You need to write the same pasword twice': 'You need to write the same pasword twice',
+  'Register New User': 'Register New User',
+  'Could not register account': 'Kunne ikke registrere brukeren',
+  'This field is invalid.': 'This field is invalid.',
+
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
   'Download Raw Data': 'Last ned rådata',
+  'Download as JSON': 'Last ned som JSON',
+  'Total number of answers: n': 'Totalt antall svar: %0',
 
   // Admin settings component
   'Retype password': 'Skriv passordet igjen',
@@ -129,19 +137,11 @@ export const LANG_NO_TRANS = {
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
 
-
-  // new-user component
-  'Could not register account': 'Kunne ikke registrere brukeren',
-  // survey retrieval component
-  'Text based question. Download raw data to extract this.': 'Tekstbasert spørsmål. Last ned rådataen for å se svarene.',
-
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
 
-    // choose-survey component
-    'All Surveys': 'Alle undersøkelsene',
-    'Search results for search': 'Søkeresultatene for %0:',
-
+  // survey retrieval component
+  'Text based question. Download raw data to extract this.': 'Tekstbasert spørsmål. Last ned rådataen for å se svarene.',
 
   // Chart types
   'Bar': 'Stolpediagram',
@@ -149,6 +149,18 @@ export const LANG_NO_TRANS = {
   'Pie': 'Sektordiagram',
   'Line': 'Linjediagram',
   'PolarArea': 'Rosediagram',
+
+  // choose-survey component
+  'All Surveys': 'Alle undersøkelsene',
+  'Search results for search': 'Søkeresultatene for %0:',
+  'Start': 'Start',
+
+  // PDF download lines
+  'Date created: d': 'Dato laget: %0',
+  'Date printed: d': 'Dato printet: %0',
+  'Number of responses: n': 'Antall svar: %0',
+
+
 
 
 };
