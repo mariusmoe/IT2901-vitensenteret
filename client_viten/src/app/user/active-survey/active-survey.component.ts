@@ -89,7 +89,7 @@ export class ActiveSurveyComponent implements OnInit {
 // This method adds/changes an answer with which answer-alternative the user chose
 addOrChangeAnswer(alternative) {
   this.answers[this.page] = alternative;
-  console.log('answers updated! answer[] now looks like this: ', this.answers);
+  // console.log('answers updated! answer[] now looks like this: ', this.answers);
 }
 
 // This method handles the transition to the previous questions in the survey
@@ -109,7 +109,7 @@ addOrChangeAnswer(alternative) {
   private nextQ() {
     if (typeof this.answers[this.page] === 'undefined') {
       this.answers[this.page] = -1;
-      console.log('answers updated! answer[] now looks like this: ', this.answers);
+      // console.log('answers updated! answer[] now looks like this: ', this.answers);
     }
     if (this.forwardValue === 'Finish') {
       this.endSurvey();
@@ -152,7 +152,7 @@ addOrChangeAnswer(alternative) {
     // Route to the select-survey window
     this.postSurvey();
     this.router.navigate(['/choosesurvey']);
-    console.log('Routing to select-survey');
+    // console.log('Routing to select-survey');
     return;
   }
 
