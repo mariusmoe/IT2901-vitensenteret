@@ -1,4 +1,4 @@
-import { Component, OnInit, trigger, state, transition, style, keyframes, animate } from '@angular/core';
+import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
@@ -18,6 +18,7 @@ import { Survey, QuestionObject } from '../../_models/survey';
 })
 
 export class ActiveSurveyComponent implements OnInit {
+  @Input() alternative: number;
   private properSurvey = false;
   private started = false;
   private survey: Survey;
@@ -36,7 +37,7 @@ export class ActiveSurveyComponent implements OnInit {
 
 
   ngOnInit() {
-    if (this.route.snapshot.params['surveyId']){
+    if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
           // console.log("DEBUG: BAD surveyId param from router!");
@@ -66,7 +67,7 @@ export class ActiveSurveyComponent implements OnInit {
     this.nextPage = 0;
     this.done = false;
     this.transition = false;
-    if (this.route.snapshot.params['surveyId']){
+    if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
           // console.log("DEBUG: BAD surveyId param from router!");
@@ -88,12 +89,12 @@ export class ActiveSurveyComponent implements OnInit {
 // This method adds/changes an answer with which answer-alternative the user chose
 addOrChangeAnswer(alternative) {
   this.answers[this.page] = alternative;
-  console.log('answers updated! answer[] now looks like this: ', this.answers);
+  // console.log('answers updated! answer[] now looks like this: ', this.answers);
 }
 
 // This method handles the transition to the previous questions in the survey
-  private previousQ(){
-      if(this.page <= 0){
+  private previousQ() {
+      if (this.page <= 0) {
         // console.log("this is the first question, can't go back further");
         return;
       }
@@ -105,15 +106,15 @@ addOrChangeAnswer(alternative) {
     }
 
 // This method handles the transition to the next question in the survey
-  private nextQ(){
-    if(typeof this.answers[this.page] === 'undefined') {
+  private nextQ() {
+    if (typeof this.answers[this.page] === 'undefined') {
       this.answers[this.page] = -1;
-      console.log('answers updated! answer[] now looks like this: ', this.answers);
+      // console.log('answers updated! answer[] now looks like this: ', this.answers);
     }
-    if(this.forwardValue == 'Finish'){
+    if (this.forwardValue === 'Finish') {
       this.endSurvey();
     }
-    if(this.page+1 >= this.totalPages){
+    if (this.page + 1 >= this.totalPages) {
       // console.log("this is the last question, can't advance further");
       this.forwardValue = 'Finish';
       return;
@@ -122,7 +123,7 @@ addOrChangeAnswer(alternative) {
     this.page += 1;
     this.transition = true;
 
-    if(this.page+1 >= this.totalPages){
+    if (this.page + 1 >= this.totalPages) {
       this.forwardValue = 'Finish';
     }
     // console.log('next question');
@@ -151,13 +152,15 @@ addOrChangeAnswer(alternative) {
     // Route to the select-survey window
     this.postSurvey();
     this.router.navigate(['/choosesurvey']);
-    console.log("Routing to select-survey");
+    // console.log('Routing to select-survey');
     return;
   }
 
 // This method posts the survey to the database
   private postSurvey() {
-    this.surveyService.answerSurvey(this.answers, this.survey._id);
+    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper : boolean) => {
+      this.properSurvey = true;
+    });
   }
 
 }

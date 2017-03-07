@@ -1,3 +1,4 @@
-<p>
-  yes-no works!
-</p>
+<div class="yesnoContainer">
+  <div class="yesno-btn" ><input class="thumbsUp" [ngClass]="{ 'yesno-btn': true, 'active': (selectedAnswer == 0) }" type="image" src="../../assets/images/ThumbUp.svg" (click)="selectAnswer(0)"></div>
+  <div class="yesno-btn" ><input class="thumbsDown" [ngClass]="{ 'yesno-btn': true, 'active': (selectedAnswer == 1) }" type="image" src="../../assets/images/ThumbDown.svg" (click)="selectAnswer(1)"></div>
+</div>
