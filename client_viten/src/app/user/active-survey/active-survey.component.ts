@@ -92,13 +92,19 @@ export class ActiveSurveyComponent implements OnInit {
     }
   }
 
-// This method adds/changes an answer with which answer-alternative the user chose
+/**
+ * This method adds/changes an answer with which answer-alternative the user chose
+ * @param  {number[]} alternative a list of numbers to send to survey
+ */
 addOrChangeAnswer(alternative) {
   this.answers[this.page] = alternative;
   // console.log('answers updated! answer[] now looks like this: ', this.answers);
 }
 
-// This method handles the transition to the previous questions in the survey
+/**
+ * This method handles the transition to the previous questions in the survey
+ * @return {undefined} Returns nothing just to prevent overflow
+ */
   private previousQ() {
       if (this.page <= 0) {
         // console.log("this is the first question, can't go back further");
