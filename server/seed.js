@@ -77,8 +77,8 @@ module.exports = app => {
 
       let questionModes = ['binary', 'star', 'multi', 'smiley', 'text'];
       let questionAnswerRanges = [2, 5, 0, 3, 1];
-
-      for (let i = 0; i<4000; i++) {
+//changed from 4000 to 200
+      for (let i = 0; i<200; i++) {
         let numQuestions = getRandomInt(1,6);
         let questions = [];
         for (let qi = 0; qi<numQuestions; qi++) {
