@@ -15,13 +15,19 @@ export class SmileyComponent implements OnInit {
 
   ngOnInit() {}
 
-// This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
+  /**
+   * This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
+   * @param  {number[]} alt The output answer sent to active-survey-component
+   */
   addChange(alt) {
     console.log('Answer changed');
     this.answer.emit(alt);
   }
 
-  // This method selects the smiley and calls addChange()
+  /**
+   * This method selects the smiley and calls addChange()
+   * @param  {number[]} selectedSmile The selected answer ID
+   */
   selectSmile(selectedSmile) {
     this.selectedSmile = selectedSmile;
     this.addChange(this.selectedSmile);
