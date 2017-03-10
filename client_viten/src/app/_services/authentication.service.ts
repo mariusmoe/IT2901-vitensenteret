@@ -12,18 +12,6 @@ import { Observable } from 'rxjs/Observable';
 @Injectable()
 export class AuthenticationService {
 
-
-  private url = {
-    login: 'http://localhost:2000/api/auth/login',
-    allUsers: 'http://localhost:2000/api/auth/all_users',
-    delete: 'http://localhost:2000/api/auth/delete_account',
-    refer: 'http://localhost:2000/api/auth/get_referral_link/',
-    renewJWT: 'http://localhost:2000/api/auth/get_token/',
-    newUser: 'http://localhost:2000/api/auth/register'
-  };
-
-
-
   public token: string;
   private user: User;
   private jwtHelper: JwtHelper = new JwtHelper();
@@ -271,7 +259,7 @@ export class AuthenticationService {
       const headers = new Headers({'content-type': 'application/json'});
       const options = new RequestOptions({headers: headers});
       const data = { 'email': email, 'password': password, 'referral_string': link };
-      return this.http.post(this.url.newUser, JSON.stringify(data), options)
+      return this.http.post(environment.URL.newUser, JSON.stringify(data), options)
         .map(
           response => {
             const jsonResponse = response.json();
