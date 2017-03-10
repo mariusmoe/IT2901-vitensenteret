@@ -108,6 +108,8 @@ export const LANG_EN_TRANS = {
   'Download Raw Data': 'Download Raw Data',
   'Download as JSON': 'Download as JSON',
   'Total number of answers: n': 'Total number of answers: %0',
+  'No responses have been registered, so there is nothing to show here yet.':
+    'No responses have been registered, so there is nothing to show here yet.',
 
   // Admin settings component
   'Retype password': 'Retype password',
