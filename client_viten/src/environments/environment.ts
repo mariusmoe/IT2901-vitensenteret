@@ -16,6 +16,7 @@ export const environment = {
     newPassword: 'http://localhost:2000/api/auth/change_password/',
     survey: 'http://localhost:2000/api/survey',
     surveyAsJson: 'http://localhost:2000/api/survey/json',
-    surveyAsCSV: 'http://localhost:2000/api/survey/csv'
+    surveyAsCSV: 'http://localhost:2000/api/survey/csv',
+    newUser: 'http://localhost:2000/api/auth/register'
   }
 };
