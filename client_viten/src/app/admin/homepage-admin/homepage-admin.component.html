@@ -34,8 +34,8 @@
     </md-card>
     <div *ngIf="!survey || loadingSurvey" class="emptyArea">
       <md-progress-circle *ngIf="loadingSurvey" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-      <div *ngIf="!loadingSurvey">
-
+      <div *ngIf="!loadingSurvey" class="center">
+        {{'Select a survey from the left side menu' | translate }}
       </div>
   </div>
 </div>

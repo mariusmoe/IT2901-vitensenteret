@@ -61,6 +61,7 @@ export const LANG_NO_TRANS = {
   // Admin outlet component
   'Admin Home': 'Administrator Hjem',
   'Create New Survey': 'Lag ny undersøkelse',
+  'Select a survey from the left side menu': 'Velg en undersøkelse fra menyen til venstre',
 
   // Create survey component
   'Survey options': 'Innstillinger for undersøkelse',
