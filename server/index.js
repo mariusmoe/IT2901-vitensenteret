@@ -13,8 +13,7 @@ consign()
   .then('controllers')
   .then('router.js')
   .then('libs/boot.js')
-// seed.js used to be commented out 
-  .then("seed.js")
+  // .then("seed.js")
   .into(app);
 
   module.exports = app;

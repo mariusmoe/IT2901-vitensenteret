@@ -11,9 +11,11 @@
         <md-icon align="left" class="activeIcon" [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
       </md-card-title-group>
       <md-card-content>
-        <!-- GRAPHS GO HERE -->
-        <app-survey-retrieval [survey] = "survey" class="surveyRetrieval"></app-survey-retrieval>
-        <!-- END GRAPHS GO HERE -->
+        <app-survey-retrieval *ngIf="survey && survey.questionlist && survey.questionlist[0] && survey.questionlist[0].answer && survey.questionlist[0].answer.length > 0"
+        [survey] = "survey" class="surveyRetrieval"></app-survey-retrieval>
+        <div *ngIf="survey && survey.questionlist && survey.questionlist[0] && (!survey.questionlist[0].answer || survey.questionlist[0].answer.length === 0)">
+          {{   'No responses have been registered, so there is nothing to show here yet.' | translate }}
+        </div>
       </md-card-content>
       <md-card-actions align="right">
         <button md-raised-button color="primary" (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
@@ -32,8 +34,8 @@
     </md-card>
     <div *ngIf="!survey || loadingSurvey" class="emptyArea">
       <md-progress-circle *ngIf="loadingSurvey" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-      <div *ngIf="!loadingSurvey">
-
+      <div *ngIf="!loadingSurvey" class="center">
+        {{'Select a survey from the left side menu' | translate }}
       </div>
   </div>
 </div>
