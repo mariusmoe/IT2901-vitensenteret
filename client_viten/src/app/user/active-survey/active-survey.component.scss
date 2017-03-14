@@ -122,11 +122,11 @@
 // }
 
 .surveyQuestion{
-  // display: flex;
-  // align-items: center;
-  // flex-direction: column;
-  // text-align: center;
-  // margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 0 auto;
   height: 100vh;
   width: 100vw;
 }
@@ -150,16 +150,13 @@ h2 {
 
 .surveyDone{
   display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #606060;
-  font-size: 50px;
-  font-weight: bold;
-  height: 30vh;
-  width: 30vh;
-  border: solid;
-  border-radius: 20px;
+  text-align: center;
   margin: auto auto;
+  overflow: hidden;
+  font-weight: bold;
+    span{
+      width: inherit;
+    }
 }
 
 .surveyDone:hover{

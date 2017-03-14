@@ -21,7 +21,7 @@
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
       <!-- page: {{page}} -->
 
-      <div class="txt" *ngIf="!this.done"><h2>{{survey.questionlist[page].lang.no.txt}}</h2></div>
+      <div class="txt" *ngIf="!this.done"><span>{{survey.questionlist[page].lang.no.txt}}</span></div>
       <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()">{{survey.endMessage.no}}</div>
       <!-- REMOVED until further notice
       <h1>{{survey.questionlist[page].mode}}</h1> -->
