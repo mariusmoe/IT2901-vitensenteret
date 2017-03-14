@@ -14,10 +14,10 @@ const SurveySchema = new Schema({
   },
   comment: String,
 	date: Date,                // date created
-  activationDate: {
-    type: Date
+  activationDate: {          // date survey became active
+    type: Date,
     default: Date.now
-  },     // date survey became active
+  },
   deactivationDate: Date,   // date survey became deactivated
   active: Boolean,
   endMessage: {
@@ -27,8 +27,8 @@ const SurveySchema = new Schema({
 	questionlist: [{
     mode: {
       type: String,
-      enum: ['binary', 'star', 'multi', 'smiley', 'text'],
-      default: 'smily'
+      enum: ['binary', 'star', 'single', 'multi', 'smiley', 'text'],
+      default: 'smiley'
     },
     lang: {
       en: {

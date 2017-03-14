@@ -75,20 +75,19 @@ module.exports = app => {
       let today = new Date();
       let surveysPop = [];
 
-      let questionModes = ['binary', 'star', 'multi', 'smiley', 'text'];
+      let questionModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
       let questionAnswerRanges = [2, 5, 0, 3, 1];
-//changed from 4000 to 200
       for (let i = 0; i<200; i++) {
         let numQuestions = getRandomInt(1,6);
         let questions = [];
-        for (let qi = 0; qi<numQuestions; qi++) {
+        for (let qi = 0; qi < numQuestions; qi++) {
           let numAnswers = getRandomInt(40,100);
           let answers = [];
 
           let modeIndex = getRandomInt(0,5);
           let mode = questionModes[modeIndex];
           let alternatives;
-          if (mode === 'multi') {
+          if (mode === 'multi' || mode === 'single') {
             let numAlternatives = getRandomInt(2,6);
             alternatives = [];
             for (let ai = 0; ai<numAlternatives; ai++) {
@@ -97,13 +96,13 @@ module.exports = app => {
             }
             for (let answeri = 0; answeri < numAnswers; answeri++) {
               let currAnswer = getRandomInt(0, alternatives.length - 1);
-              answers.push(currAnswer);
+              //answers.push(currAnswer);
             }
 
           } else {
             for (let answeri = 0; answeri < numAnswers; answeri++) {
               let currAnswer = getRandomInt(0, questionAnswerRanges[modeIndex]);
-              answers.push(currAnswer);
+              //answers.push(currAnswer);
             }
           }
           questions.push({
@@ -113,8 +112,7 @@ module.exports = app => {
                 'txt': generateQuestion(),
                 'options': alternatives,
               }
-            },
-            'answer': answers
+            }
           })
         }
 
