@@ -1,10 +1,10 @@
 <div>
   <md-toolbar color="primary">
     <div class="flexchild">
-      <a routerLink="/admin" routerLinkActive="active"><app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true"></app-logo-component></a>
+      <app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true"></app-logo-component>
     </div>
     <div class="flexchild alignCenter">
-      <a routerLink="/admin" routerLinkActive="active"><app-logo-component logoVariant="text" color="primary" [useColorContrast]="true"></app-logo-component></a>
+      <app-logo-component logoVariant="text" color="primary" [useColorContrast]="true"></app-logo-component>
     </div>
     <div class="flexchild alignRight languageSelection">
       <button md-icon-button color="accent" (click)="translateService.use('en')" [ngClass]="{'active': translateService.getCurrentLang() === 'en'}">
@@ -24,7 +24,7 @@
         <span md-prefix><md-icon class="searchIcon">search</md-icon></span>
       </md-input-container>
     </div>
-    <h2 *ngIf="search && search.length > 0"> {{ 'Search results for search' | translate:[this.search] }}</h2>
+    <h2 *ngIf="search && search.length > 0" class="header"> {{ 'Search results for search' | translate:[this.search] }}</h2>
     <div class="search surveyParent" *ngIf="search && search.length > 0">
       <md-card class="survey"  *ngFor="let survey of allsurveys | adminSurveyPipe: search : 10">
         <md-card-title>
@@ -43,7 +43,7 @@
     </div>
 
 
-    <h2>{{ 'All Surveys' | translate }}</h2>
+    <h2 class="header">{{ 'All Surveys' | translate }}</h2>
     <div class="showresults surveyParent" >
       <!--TODO Button must route to a pop-up window-->
       <md-card class="survey" *ngFor="let survey of allsurveys | adminSurveyPipe: null : allsurveys.length ">

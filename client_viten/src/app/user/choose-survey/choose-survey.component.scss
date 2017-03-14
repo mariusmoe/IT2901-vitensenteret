@@ -11,7 +11,7 @@
 
 
 .flexchild {
-  flex: 1 1;
+  flex: 1 1 300px;
 }
 .alignCenter {
   text-align: center;
@@ -45,8 +45,14 @@
   }
 }
 
+.header {
+  display: block;
+  text-align: center;
+}
+
 .surveyParent {
-  display: flex;
+  justify-content: center;
+  display: inline-flex;
   flex-flow: row wrap;
 }
 md-card {
