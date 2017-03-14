@@ -1,5 +1,5 @@
 .active_survey_window{
-  background-color: white;
+  background-color: #959cc1;
   @keyframes fadeBetween {
     0% {background: rgba(#2e68be, 0.5);}
     15% {background: rgba(red, 0.5);}
@@ -10,7 +10,7 @@
     100% {background: rgba(blue, 0.5);}
 }
     // background-color: #2e68be;
-    animation: fadeBetween 35s infinite;
+    //animation: fadeBetween 35s infinite;
 
   // background: rgba(#2e68be, 0.8);
   .surveyView{
