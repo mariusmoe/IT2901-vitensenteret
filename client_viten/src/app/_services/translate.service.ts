@@ -46,7 +46,8 @@ export class TranslateService {
             translation = translation.replace(this.PLACEHOLDER.concat(<any>i), e);
         });
 
-        return 'T:' + translation;
+        return translation;
+        // return 'T:' + translation;
     }
 
     public instant(key: string, words?: string | string[]) { // add optional parameter
