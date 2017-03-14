@@ -126,6 +126,9 @@ addOrChangeAnswer(alternative) {
       this.answers[this.page] = -1;
       // console.log('answers updated! answer[] now looks like this: ', this.answers);
     }
+    if (this.totalPages === 1) {
+      this.endSurvey();
+    }
     if (this.forwardValue === 'Finish') {
       this.endSurvey();
     }

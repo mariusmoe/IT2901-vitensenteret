@@ -61,6 +61,7 @@ export const LANG_EN_TRANS = {
   // Admin outlet component
   'Admin Home': 'Admin Home',
   'Create New Survey': 'Create New Survey',
+  'Select a survey from the left side menu': 'Select a survey from the left side menu',
 
   // Create survey component
   'Survey options': 'Survey options',
