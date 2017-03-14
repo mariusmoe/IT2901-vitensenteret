@@ -59,6 +59,8 @@ let surveySchema = {
     "comment": { "type": "string" }, // ADMIN only comment. Not required. Any type of string allowed.
     "name": { "type": "string", "pattern": /\S/ },
     "date": { "type": "string", "format": "date-time" },
+    "activationDate": { "type": "string", "format": "date-time" },
+    "deactivationDate": { "type": "string", "format": "date-time" },
     "active": { "type": "boolean" },
     "questionlist": {
       // questionlist is an array of objects
@@ -77,7 +79,7 @@ let surveySchema = {
       "required": ["no"]
     }
   },
-  "required": ["name", "date", "active", "questionlist", "endMessage"],
+  "required": ["name", "date", "activationDate", "active", "questionlist", "endMessage"],
   "additionalProperties": false
 }
 

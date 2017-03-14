@@ -7,6 +7,8 @@ let val = require('../libs/validation.js');
 let validJsonObject = {
   "name": "måneraketten3",
   "date": "2012-04-23T18:25:43.511Z",
+  "activationDate": "2012-04-23T18:25:43.511Z",
+  "deactivationDate": "2012-04-23T18:25:43.511Z",
   "active": true,
   "questionlist": [{
     "mode": "smiley",
@@ -203,40 +205,137 @@ describe('Survey validation', () => {
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
 
+    done();
+  });
+
+
+  it('should not validate on missing or bad activationDate property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check emtpy string
+    clone.activationDate = "";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace
+    clone.activationDate = " "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace 2
+    clone.activationDate = "       "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace 3
+    clone.activationDate = "       \n"
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check non-date format
+    clone.activationDate = "someNonDateFormatString"
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check undefined
+    clone.activationDate = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check null
+    clone.activationDate = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.activationDate;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
 
     done();
   });
 
 
-    it('should not validate on missing or bad active property', (done) => {
+
+    it('should not validate on missing or bad deactivationDate property', (done) => {
       // make sure clone validates correctly.
       let IsItValid = val.surveyValidation(clone);
       expect(IsItValid).to.equal(true);
 
-      // check wrong type
-      clone.active = "Hello";
+      // check emtpy string
+      clone.deactivationDate = "";
       IsItValid = val.surveyValidation(clone);
       expect(IsItValid).to.equal(false);
 
+      // check whitespace
+      clone.deactivationDate = " "
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
+
+      // check whitespace 2
+      clone.deactivationDate = "       "
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
+
+      // check whitespace 3
+      clone.deactivationDate = "       \n"
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
+
+      // check non-date format
+      clone.deactivationDate = "someNonDateFormatString"
+      IsItValid = val.surveyValidation(clone);
+      expect(IsItValid).to.equal(false);
 
       // check undefined
-      clone.active = undefined;
+      clone.deactivationDate = undefined;
       IsItValid = val.surveyValidation(clone);
-      expect(IsItValid).to.equal(false);
+      expect(IsItValid).to.equal(true); // can be undefined
 
       // check null
-      clone.active = null;
+      clone.deactivationDate = null;
       IsItValid = val.surveyValidation(clone);
       expect(IsItValid).to.equal(false);
 
       // check nonexistant
-      delete clone.active;
-      IsItValid = val.surveyValidation(clone);
-      expect(IsItValid).to.equal(false);
-
+      delete clone.deactivationDate;
+      IsItValid = val.surveyValidation(clone); // can be non-existant
+      expect(IsItValid).to.equal(true);
 
       done();
     });
+
+  it('should not validate on missing or bad active property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check wrong type
+    clone.active = "Hello";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+
+    // check undefined
+    clone.active = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check null
+    clone.active = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.active;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+
+    done();
+  });
 
 
   it('should not validate on missing or bad questionlist property', (done) => {
