@@ -53,7 +53,7 @@ export class TranslateService {
     public instant(key: string, words?: string | string[]) { // add optional parameter
         const translation: string = this.translate(key);
 
-        if (!words) { return 'T:' + translation; }
+        if (!words) { return translation; } // return 'T:' + translation; }
         return this.replace(translation, words); // call replace function
     }
 }
