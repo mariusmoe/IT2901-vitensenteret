@@ -12,6 +12,7 @@ const SurveySchema = new Schema({
     type: String,
     required: true
   },
+  postKey: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey'},
   comment: String,
 	date: Date,                // date created
   activationDate: {          // date survey became active

@@ -110,7 +110,7 @@ module.exports = (app) => {
 
   surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
 
-  surveyRoutes.post('/:surveyId', requireAuth, SurveyController.linkPrePost);
+  // surveyRoutes.post('/linkPrePost', requireAuth, SurveyController.linkPrePost);
 
   surveyRoutes.delete('/:surveyId',
                       requireAuth,
