@@ -149,7 +149,6 @@ addOrChangeAnswer(alternative) {
  * This method ends the survey if the user clicks the END button or after x amount of seconds
  */
   endSurvey() {
-    console.log('ended survey: ', this.answers);
     this.postSurvey();
     this.answers = [];
     this.done = true;

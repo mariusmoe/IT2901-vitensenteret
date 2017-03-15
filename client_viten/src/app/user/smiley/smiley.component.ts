@@ -20,7 +20,6 @@ export class SmileyComponent implements OnInit {
    * @param  {number[]} alt The output answer sent to active-survey-component
    */
   addChange(alt) {
-    console.log('Answer changed');
     this.answer.emit(alt);
   }
 

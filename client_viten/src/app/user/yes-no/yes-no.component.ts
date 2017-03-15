@@ -30,7 +30,6 @@ export class YesNoComponent implements OnInit {
    * @param  {number[]} alt The selected answer ID
    */
   addChange(alt) {
-    console.log('Answer changed');
     this.answer.emit(alt);
   }
 
