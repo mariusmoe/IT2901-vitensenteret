@@ -15,7 +15,7 @@
     *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum)"
     [ngClass]="{'survey': true, 'active': survey._id == route.snapshot.params['surveyId']}"
     (click)="select(survey._id)">
-    <md-icon md-list-avatar [ngClass]="{active: survey.active, surveyActiveIcon: true}">question_answer</md-icon>
+    <md-icon md-list-avatar [ngClass]="{active: survey.active, surveyActiveIcon: true}">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
     <h4 md-line>{{survey.name}}</h4>
     <p md-line>{{formatDate(survey.date)}}</p>
     <p md-line *ngIf="survey.comment">{{survey.comment}}</p>
