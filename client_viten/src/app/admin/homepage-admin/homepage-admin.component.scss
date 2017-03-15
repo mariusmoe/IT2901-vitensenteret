@@ -1,21 +1,13 @@
 
 
-.flexParent {
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  align-items: stretch;
-}
-
-
 .rightSide {
-  flex: 3 3;
+  display: inline-block;
+  width: 75%;
 }
 
 .leftSide {
-  flex: 1 1;
-  min-width: 200px;
+  display: inline-block;
+  width: 25%;
 }
 
 .emptyArea {
