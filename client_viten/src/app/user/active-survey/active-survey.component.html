@@ -5,7 +5,7 @@
     active-survey works!
   </p>-->
   <!--Startbutton for an active survey   *ngIf="!started"   -->
-  <div class="startTextContainer">
+  <div class="startTextContainer" *ngIf="!started">
     <span class="startText"> Start Undersøkelse </span>
   </div>
   <div class="playbutton" [ngClass]="{'clicked': started}">
