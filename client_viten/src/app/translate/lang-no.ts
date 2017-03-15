@@ -88,6 +88,7 @@ export const LANG_NO_TRANS = {
   'Post results': 'Resultat',
   'Could not post your survey. Error:': 'Kunne ikke lagre undersøkelsen. Feilmelding:',
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
+  'Required question':'Påkrevd',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 totalt antall undersøkelser. Maksimum %1 er vist samtidig.',
@@ -112,6 +113,8 @@ export const LANG_NO_TRANS = {
   'Total number of answers: n': 'Totalt antall svar: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
+  'Active':'Aktiv',
+  'Inactive':'Innaktiv',
 
   // Admin settings component
   'Retype password': 'Skriv passordet igjen',

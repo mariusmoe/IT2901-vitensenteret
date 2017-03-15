@@ -1,21 +1,7 @@
 .active_survey_window{
-  background-color: white;
-  @keyframes fadeBetween {
-    0% {background: rgba(#2e68be, 0.5);}
-    15% {background: rgba(red, 0.5);}
-    30% {background: rgba(pink, 0.5);}
-    45% {background: rgba(brown, 0.5);}
-    60% {background: rgba(yellow, 0.5);}
-    75% {background: rgba(purple, 0.5);}
-    100% {background: rgba(blue, 0.5);}
-}
-    // background-color: #2e68be;
-    animation: fadeBetween 35s infinite;
-
-  // background: rgba(#2e68be, 0.8);
+  background-color: #959cc1;
   .surveyView{
     .playbutton{
-
       margin: auto auto;
       height: 60vh;
     }
@@ -33,22 +19,8 @@
   justify-content: center;
   height: 75vh;
 }
-/*The animation that triggers when starbutton is clicked*/
+/*No border around playbutton when clicked*/
 .playbutton.clicked{
-  // Removed click-animation for playbutton, became problematic. Implement if fixed transition
-  // .svgButton.clicked {
-  //   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-  //   -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
-  //   -webkit-animation-fill-mode: forwards;
-  //   animation-name: fadeStartButton;
-  //   animation-duration: 2s;
-  //
-  //   /* Standard syntax */
-  //   @keyframes fadeStartButton {
-  //     from {opacity: 1;}
-  //     to {opacity: 0; visibility: hidden;}
-  //   }
-  // }
   display: none;
 }
 // Styling the exit button
@@ -63,7 +35,6 @@
 .exitButton:hover{
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
-    // -webkit-animation-fill-mode: forwards;
     animation-iteration-count: infinite;
     animation-name: fadeExitButton;
     animation-duration: 2s;
@@ -74,7 +45,6 @@
       50% {opacity: 1}
       to {opacity: 0.4;}
     }
-  // opacity: 1;
 }
 
 // Styling for the playbutton
@@ -136,8 +106,6 @@
 /*This is the navigation pane that lets you navigate between questions*/
 .qnavigate {
   display: flex;
-  // flex-direction: row;
-  // flex-wrap: nowrap;
   justify-content: space-between;
   align-items: center;
   position: fixed;
@@ -154,26 +122,13 @@
     }
   }
 }
-// .qnavigate.clicked{
-//   -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
-//   -webkit-animation-duration: 1s; /* Safari 4.0 - 8.0 */
-//   -webkit-animation-fill-mode: forwards;
-//   animation-name: fadeStartButton;
-//   animation-duration: 2s;
-//
-//   /* Standard syntax */
-//   @keyframes fadeStartButton {
-//     from {opacity: 1;}
-//     to {opacity: 0; }
-//   }
-// }
 
 .surveyQuestion{
-  // display: flex;
-  // align-items: center;
-  // flex-direction: column;
-  // text-align: center;
-  // margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 0 auto;
   height: 100vh;
   width: 100vw;
 }
@@ -195,18 +150,22 @@ h2 {
   font-size: 10vh;
 }
 
+.questionTitle{
+  font-size: 2rem;
+}
+
 .surveyDone{
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-color: #606060;
-  font-size: 50px;
-  font-weight: bold;
-  height: 30vh;
-  width: 30vh;
-  border: solid;
-  border-radius: 20px;
-  margin: auto auto;
+  align-content: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+    span{
+      margin: auto auto;
+      font-weight: bold;
+      font-size: 10vh;
+    }
 }
 
 .surveyDone:hover{

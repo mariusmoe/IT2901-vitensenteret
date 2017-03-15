@@ -1,4 +1,7 @@
 @import '../../viten.themes.scss';
+@import '../../theme.colours.scss';
+
+
 .searchBox {
   padding-right: 8px;
   md-input-container {
@@ -33,4 +36,12 @@
 
 .loadingCircle {
   margin: 0 auto;
+}
+
+.greenactive {
+  border-left: 2px solid #A1E232;
+}
+
+.deactive {
+  border-left: 2px solid #f44336;
 }
