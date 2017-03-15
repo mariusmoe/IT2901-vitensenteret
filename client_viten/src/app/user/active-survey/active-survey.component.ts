@@ -3,6 +3,7 @@ import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
+import 'hammerjs';
 
 
 @Component({
@@ -29,8 +30,14 @@ export class ActiveSurveyComponent implements OnInit {
   private done = false;
   private answers = [];
 
+  listenTimer: string;
+  listenCounter = 0;
+
+  endTimer: string;
+  endCounter = 0;
+
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute) {
+    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer) {
 
   }
 
@@ -64,6 +71,9 @@ export class ActiveSurveyComponent implements OnInit {
    */
   private startSurvey() {
     this.started = true;
+    this.timer.newTimer('1sec', 1);
+    this.subscribeListenTimer();
+    this.subscribeEndTimer();
   }
 
 /**
@@ -152,6 +162,41 @@ addOrChangeAnswer(alternative) {
     }
   }
 
+/**
+ * These lets you
+ */
+ subscribeListenTimer() {
+  if (this.listenCounter) {
+    // Unsubscribe if timer Id is defined
+    this.timer.unsubscribe(this.listenTimer);
+    this.listenTimer = undefined;
+    } else {
+    // Subscribe if timer Id is undefined
+    this.listenTimer = this.timer.subscribe('1sec', e => this.listenCallback());
+    }
+  }
+ subscribeEndTimer() {
+  if (this.endCounter) {
+    // Unsubscribe if timer Id is defined
+    this.timer.unsubscribe(this.endTimer);
+    this.endTimer = undefined;
+    } else {
+    // Subscribe if timer Id is undefined
+    this.endTimer = this.timer.subscribe('1sec', e => this.endCallback());
+    }
+  }
+
+/**
+ * The timer-methods update the counters accordingly to realtime seconds
+ */
+ listenCallback() {
+   this.listenCounter++;
+   console.log('listencounter: ', this.listenCounter);
+  }
+  endCallback() {
+    this.endCounter++;
+    console.log('endcounter: ', this.endCounter);
+  }
 
 /**
  * This method ends the survey if the user clicks the END button or after x amount of seconds

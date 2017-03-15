@@ -7,6 +7,7 @@ import { AppRoutingModule } from './app.routing-module';
 import { MaterialModule } from '@angular/material';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SimpleTimer } from 'ng2-simple-timer';
+import 'hammerjs';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
