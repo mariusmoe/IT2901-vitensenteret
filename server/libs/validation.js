@@ -1,10 +1,12 @@
 const Validator = require('jsonschema').Validator;
 
-// validator
-let v = new Validator();
+// validators
+let surveyValidator = new Validator();
+let responseValidator = new Validator();
+
+// SURVEY VALIDATION
 
 // Refactored to make things sliiiightly easier to read.
-
 let languageSchema = {
   "id": "/language",
   "type": "object",
@@ -38,9 +40,8 @@ let questionSchema = {
   "id": "/question",
   "type": "object",
   "properties": {
-    "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
-    "mode": { "enum": [ "binary", "star", "multi", "smiley", "text" ] },
-    "answer": { "type": "array", "items": { "type": "integer", "minimum": 0, "required": true } }, // required here forces the integer type, else "undefined" would be allowed
+    "_id": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ }, // mongodb sends surveys back to client with this property. Not required.
+    "mode": { "enum": [ "binary", "star", "single", "multi", "smiley", "text" ] },
     "lang": {
       "$ref": "/language", // references the languageSchema above here
     },
@@ -54,7 +55,7 @@ let surveySchema = {
   // survey is of type object
   "type": "object",
   "properties": {
-    "_id": { "type": "string" }, // mongodb sends surveys back to client with this property. Not required.
+    "_id": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ }, // mongodb sends surveys back to client with this property. Not required.
     "__v": { "type": "integer" }, // mongodb sends surveys back to client with this property. Not required.
     "comment": { "type": "string" }, // ADMIN only comment. Not required. Any type of string allowed.
     "name": { "type": "string", "pattern": /\S/ },
@@ -85,12 +86,50 @@ let surveySchema = {
 
 // make sure our validator understands the reference
 // to the languageSchema and the questionSchema
-v.addSchema(questionSchema, "/question");
-v.addSchema(languageSchema, "/language");
+surveyValidator.addSchema(questionSchema, "/question");
+surveyValidator.addSchema(languageSchema, "/language");
+
+
+
+
+// RESPONSE VALIDATION
+
+let responseSchema = {
+  "type": "object",
+  "properties": {
+    "_id": { "type": "string" }, // mongodb sends responses back to client with this property. Not required.
+    "nickname": { "type": "string" },
+    "surveyId": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ },
+    "questionlist": {
+      "type": "array",
+      "items": {
+        "type": ["number", "string", "array"]
+      },
+      "minItems": 1,
+    }
+  },
+  "required": ["surveyId", "questionlist"],
+  "additionalProperties": false,
+}
+
+
+
+
 
 // export our surveyValidation function.
 exports.surveyValidation = function(receivedSurvey, debug) {
-  let validation = v.validate(receivedSurvey, surveySchema);
+  let validation = surveyValidator.validate(receivedSurvey, surveySchema);
+  // undo comment below to get full debug stack of the validation
+  if (debug) {
+    console.log(validation);
+  }
+  //
+  return validation.valid;
+}
+
+// export our responseValidation function.
+exports.responseValidation = function(receivedResponse, debug) {
+  let validation = responseValidator.validate(receivedResponse, responseSchema);
   // undo comment below to get full debug stack of the validation
   if (debug) {
     console.log(validation);
