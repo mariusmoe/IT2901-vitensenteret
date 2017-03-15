@@ -1,4 +1,7 @@
 @import '../../viten.themes.scss';
+@import '../../theme.colours.scss';
+
+
 .searchBox {
   padding-right: 8px;
   md-input-container {
@@ -33,4 +36,13 @@
 
 .loadingCircle {
   margin: 0 auto;
+}
+
+
+.surveyActiveIcon {
+   color: #f44336;
+   &.active {
+      color: #A1E232;
+  }
+
 }

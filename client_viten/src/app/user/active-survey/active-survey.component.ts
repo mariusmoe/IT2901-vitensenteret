@@ -76,7 +76,7 @@ export class ActiveSurveyComponent implements OnInit {
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
-          console.log("DEBUG: BAD surveyId param from router!");
+          console.log ('DEBUG: BAD surveyId param from router!');
           // TODO: Redirect to base create survey ?
           return;
         }
@@ -184,7 +184,7 @@ addOrChangeAnswer(alternative) {
  * This method posts the survey to the database
  */
   private postSurvey() {
-    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper : boolean) => {
+    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });
   }

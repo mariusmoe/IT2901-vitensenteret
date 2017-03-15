@@ -1,5 +1,5 @@
 .active_survey_window{
-  background-color: white;
+  background-color: #959cc1;
   @keyframes fadeBetween {
     0% {background: rgba(#2e68be, 0.5);}
     15% {background: rgba(red, 0.5);}
@@ -10,7 +10,7 @@
     100% {background: rgba(blue, 0.5);}
 }
     // background-color: #2e68be;
-    animation: fadeBetween 35s infinite;
+    //animation: fadeBetween 35s infinite;
 
   // background: rgba(#2e68be, 0.8);
   .surveyView{
@@ -122,11 +122,11 @@
 // }
 
 .surveyQuestion{
-  // display: flex;
-  // align-items: center;
-  // flex-direction: column;
-  // text-align: center;
-  // margin: 0 auto;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  text-align: center;
+  margin: 0 auto;
   height: 100vh;
   width: 100vw;
 }
@@ -148,18 +148,22 @@ h2 {
   font-size: 10vh;
 }
 
+.questionTitle{
+  font-size: 2rem;
+}
+
 .surveyDone{
   display: flex;
   justify-content: center;
-  align-items: center;
-  background-color: #606060;
-  font-size: 50px;
-  font-weight: bold;
-  height: 30vh;
-  width: 30vh;
-  border: solid;
-  border-radius: 20px;
-  margin: auto auto;
+  align-content: center;
+  height: 100vh;
+  width: 100vw;
+  overflow: hidden;
+    span{
+      margin: auto auto;
+      font-weight: bold;
+      font-size: 10vh;
+    }
 }
 
 .surveyDone:hover{
