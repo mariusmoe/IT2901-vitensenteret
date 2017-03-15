@@ -44,14 +44,4 @@ const SurveySchema = new Schema({
   }]
 });
 
-const responseSchema = new Schema({
-  nickname: String,
-  timestamp: Date,
-  surveyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey' , index: true},
-  questionlist: [{
-    type: Schema.Types.Mixed
-  }]
-});
-
 module.exports = mongoose.model('Survey', SurveySchema);
-module.exports = mongoose.model('Response', responseSchema);

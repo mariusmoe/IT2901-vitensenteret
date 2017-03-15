@@ -2,8 +2,8 @@
 
 const validator = require('validator'),
       status = require('../status'),
-      Survey = require('../models/survey'),
-      Response = require('../models/survey'),
+      Survey  = require('../models/survey'),
+      Response = require('../models/response'),
       jsonfile = require('jsonfile'),
       fs = require('fs'),
       config = require('config'),
@@ -70,8 +70,8 @@ exports.getOneSurvey = (req, res, next) => {
     // Need to send answers too
     Response.find({surveyId: surveyId}, (err, responses) => {
       if (err) { return next(err); }
-      return res.status(200).send(survey, responses);
-    })
+      return res.status(200).send({survey: survey, responses: responses});
+    });
   });
 }
 
@@ -272,13 +272,28 @@ exports.getSurveyAsCSV = (req, res, next) => {
       star: 5
     }
 
+    Response.find({surveyId: surveyId}, (err, responses) => {
+      if (err) { return next(err); }
       // for every question in the survey
-      for (let question of survey.questionlist){
+      survey.questionlist.forEach((question, i) => {
+        //for (let question of survey.questionlist){
+        //      enum: ['binary', 'star', 'single', 'multi', 'smiley', 'text'],
+        csv += String(i);
+        switch (question.mode) {
+          case 'multi':
+            console.log('Oranges are $0.59 a pound.');
+            break;
+          case 'text':
+            console.log('Apples are $0.58 a pound.');
+            break;
+          default:
+            console.log('Sorry, we are out of ' + expr + '.');
+        }
         // console.log(question);
         questionAnswar = question.answer;
         // Count the occurance of each element in the array
         let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
-            x => [x, questionAnswar.filter(y => y === x).length]
+          x => [x, questionAnswar.filter(y => y === x).length]
         ));
         // Add question to csv
         csv += question.lang.no.txt + '\n'
@@ -302,7 +317,13 @@ exports.getSurveyAsCSV = (req, res, next) => {
           csv += '\n'
 
         }
-      }
+        //}
+
+
+      })
+
+    });
+
       // Open a gate to the temp directory
       temp.open('myprefix', function(err, info) {
         if (!err) {
