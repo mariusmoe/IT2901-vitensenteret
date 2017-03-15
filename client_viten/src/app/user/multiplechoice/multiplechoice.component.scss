@@ -1,13 +1,21 @@
+//Most of this is moved to radio options. No use for this class now.
 .multiChoiceContainer{
+  //display : flex;
+  //flex-wrap : wrap;
+  //flex-direction: row;
+  //justify-content: flex-start;
+
+}
+
+.radioOptions{
   display : flex;
   flex-wrap : wrap;
-  flex-direction : row;
-  justify-content : flex-start;
-  align-items : stretch;
-  // align-content: center;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .radioOption {
-  display: flex;
-  justify-content: space-between;
+  transform: scale(2);
+  width: 8vw;
+  margin: 15%;
 }
