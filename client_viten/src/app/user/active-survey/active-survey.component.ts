@@ -2,6 +2,7 @@ import { Component, OnInit, trigger, state, transition, style, keyframes, animat
 import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
+import { SimpleTimer } from 'ng2-simple-timer';
 
 
 @Component({
@@ -58,10 +59,16 @@ export class ActiveSurveyComponent implements OnInit {
       return;
     }
   }
+  /**
+   * This method starts the survey as well as the inactivity timer
+   */
   private startSurvey() {
     this.started = true;
   }
 
+/**
+ * This method resets a survey
+ */
   private exitSurvey() {
     this.started = false;
     this.properSurvey = false;
@@ -144,6 +151,7 @@ addOrChangeAnswer(alternative) {
       this.transition = false;
     }
   }
+
 
 /**
  * This method ends the survey if the user clicks the END button or after x amount of seconds
