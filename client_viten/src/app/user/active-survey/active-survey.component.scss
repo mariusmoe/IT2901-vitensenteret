@@ -17,7 +17,7 @@
     .playbutton{
 
       margin: auto auto;
-      height: 80vh;
+      height: 60vh;
     }
     display: flex;
     height: 100vh;
@@ -31,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 90vh;
+  height: 80vh;
 }
 /*The animation that triggers when starbutton is clicked*/
 .playbutton.clicked{
@@ -79,8 +79,8 @@
 
 // Styling for the playbutton
 .svgButton{
-   width: 80vh;
-   height: 80vh;
+   width: 60vh;
+   height: 60vh;
 }
 .svgButton:focus {outline: none;}
 .qnavigateArea:focus {outline: none;}
@@ -99,6 +99,36 @@
   font-size: 5vw;
   font-weight: bold;
   color: black;
+}
+
+/* Styling for the container for the logos under the play button */
+.logoContainer{
+  display: flex;
+}
+
+/* Styling for the vitenlogo Container */
+.vitenContainer{
+  height: 10vh;
+  width: 50vw;
+}
+
+/* Styling for the robotlogo Container */
+.robotContainer{
+  height: 10vh;
+  width: 50vw;
+}
+
+/* Styling for the vitenlogo */
+.vitenlogo{
+  height: 10vh;
+  width: 8vw;
+}
+
+/* Styling for the robotlogo */
+.robotlogo{
+  height: 10vh;
+  width: 8vw;
+  float: right;
 }
 
 /*This is the navigation pane that lets you navigate between questions*/

@@ -11,6 +11,14 @@
   <div class="playbutton" [ngClass]="{'clicked': started}">
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
   </div>
+  <div class="logoContainer" *ngIf="!started">
+    <div class="vitenContainer">
+      <img class="vitenlogo" src="../../assets/images/vitenlogo.png" alt="Vitensenteret"/>
+    </div>
+    <div class="robotContainer">
+      <img class="robotlogo" src="../../assets/images/robotlogo.png" alt="Vitensenteret"/>
+    </div>
+  </div>
 
   <!--Test data
   <div>
