@@ -163,7 +163,7 @@ addOrChangeAnswer(alternative) {
   }
 
 /**
- * These lets you
+ * The subscribe-methods connects variables to timers. These handles connectivity to callback-methods
  */
  subscribeListenTimer() {
   if (this.listenCounter) {
@@ -197,6 +197,14 @@ addOrChangeAnswer(alternative) {
     this.endCounter++;
     console.log('endcounter: ', this.endCounter);
   }
+/**
+ * This method resets the idle-timers
+ * @return {[type]} [description]
+ */
+resetTimer() {
+  this.listenCounter = 0;
+  this.endCounter = 0;
+}
 
 /**
  * This method ends the survey if the user clicks the END button or after x amount of seconds
