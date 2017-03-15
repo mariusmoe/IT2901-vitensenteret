@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { QuestionObject } from '../../../_models/survey';
+import { Response } from '../../../_models/response';
 import { TranslateService } from '../../../_services/translate.service';
 
 @Component({
@@ -8,7 +9,9 @@ import { TranslateService } from '../../../_services/translate.service';
   styleUrls: ['./chart.component.scss']
 })
 export class BarChartComponent implements OnInit {
+  @Input() index: number;
   @Input() questionObject: QuestionObject;
+  @Input() responses: Response[];
   @ViewChild('canvas') canvas;
 
   barChartOptions: Object;
@@ -31,6 +34,7 @@ export class BarChartComponent implements OnInit {
               languageService.instant('3 Stars'), languageService.instant('4 Stars'),
               languageService.instant('5 Stars')
       ],
+      'single': undefined,
       'multi': undefined,
       'smiley': [languageService.instant('Sad'), languageService.instant('Neutral'),
                 languageService.instant('Happy') // TODO: VERIFY THE ORDER OF THESE!!!
@@ -40,14 +44,10 @@ export class BarChartComponent implements OnInit {
 
   ngOnInit() {
     // set up the bar chart
-    if (!this.questionObject) {
+    if (!this.questionObject || this.questionObject.mode === 'text') {
       return;
     }
-    if (this.questionObject.mode === 'text') {
-      return;
-    }
-
-    if (this.questionObject.mode === 'multi') {
+    if (this.questionObject.mode === 'multi' || this.questionObject.mode === 'single') {
       this.barChartLabels = this.questionObject.lang.no.options;
     } else {
       this.barChartLabels = this.chartLabels[this.questionObject.mode];
@@ -57,10 +57,14 @@ export class BarChartComponent implements OnInit {
     for (let i = 0; i < this.barChartLabels.length; i++) {
       this.barChartData[0]['data'][i] = 0;
     }
-    for (const answer of this.questionObject.answer) {
-      // console.log('adding following answer: ' + answer);
-      this.barChartData[0]['data'][answer] += 1;
-      this.barChartData[0]['fillColor'] = 'red';
+    for (const response of this.responses) {
+      if (this.questionObject.mode === 'multi') {
+        for (const option of response.questionlist[this.index]) {
+          this.barChartData[0]['data'][option] += 1;
+        }
+      } else {
+        this.barChartData[0]['data'][response.questionlist[this.index]] += 1;
+      }
     }
 
     // Set colours

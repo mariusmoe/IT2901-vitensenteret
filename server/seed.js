@@ -143,8 +143,8 @@ module.exports = app => {
 
                 for (let i = 0; i < numSelectedOptions; i++) {
                   let newOption = getRandomInt(0,remainingOptions.length-1);
-                  remainingOptions.pop(newOption);
-                  selectedOptions.push(newOption);
+                  selectedOptions.push(qo.lang.no.options.indexOf(remainingOptions[newOption]));
+                  remainingOptions.splice(newOption,1);
                 }
 
                 responsesPop[responsesPop.length - 1].questionlist.push(selectedOptions);

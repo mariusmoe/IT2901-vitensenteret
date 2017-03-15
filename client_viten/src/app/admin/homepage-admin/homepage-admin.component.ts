@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ViewChild, animate, state, style, transit
 import { SurveyService } from '../../_services/survey.service';
 import { TranslateService } from '../../_services/translate.service';
 import { Survey } from '../../_models/survey';
+import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { DatePipe } from '@angular/common';
@@ -22,6 +23,7 @@ declare const jsPDF: any;
 })
 export class HomepageAdminComponent implements OnInit, OnDestroy {
   survey: Survey = null;
+  responses: Response[] = null;
   loadingSurvey = false;
   @ViewChild('surveyDOM') surveyDOM;
   generatingPDF = false;
@@ -56,9 +58,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    */
   private getSurvey(surveyId: string) {
     this.loadingSurvey = true;
-    this.surveyService.getSurvey(surveyId).subscribe( (survey: Survey) => {
+    this.surveyService.getSurvey(surveyId).subscribe( (response) => {
       this.loadingSurvey = false;
-      this.survey = survey;
+      this.survey = <Survey>response.survey;
+      this.responses = <Response[]>response.responses;
     });
   }
 
@@ -120,7 +123,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
 
     rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
-    const answers = this.survey.questionlist[0].answer.length || 0;
+    const answers = 0; // TODO: FIX ME!
     rightAlignedText(25, 44, this.translateService.instant('Number of responses: n', answers.toString()));
 
     // Get our charts (canvases)
