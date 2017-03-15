@@ -40,7 +40,8 @@ const SurveySchema = new Schema({
         txt: String,
         options: [String]
       },
-    }
+    },
+    required: { type: Boolean, default: true }
   }]
 });
 

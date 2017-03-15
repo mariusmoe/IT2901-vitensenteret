@@ -12,6 +12,7 @@ let validJsonObject = {
   "active": true,
   "questionlist": [{
     "mode": "smiley",
+    "required": true,
     // no comment property here. Admin only. see its own test below.
     "lang": {
       "en": {
@@ -370,6 +371,34 @@ describe('Survey validation', () => {
     done();
   });
 
+
+  it('should not validate on missing or bad questionlist mode property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check invalid type
+    clone.questionlist[0].required = "tooth";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check null
+    clone.questionlist[0].required = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check undefined
+    clone.questionlist[0].required = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false); // the field is required to be present
+
+    // check nonexistant
+    delete clone.questionlist[0].required;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    done();
+  });
 
   it('should not validate on missing or bad questionlist mode property', (done) => {
     // make sure clone validates correctly.

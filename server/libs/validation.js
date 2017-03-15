@@ -45,8 +45,9 @@ let questionSchema = {
     "lang": {
       "$ref": "/language", // references the languageSchema above here
     },
+    "required": { "type": "boolean" }
   },
-  "required": ["mode", "lang"],
+  "required": ["mode", "lang", "required"],
   "additionalProperties": false,
 }
 

@@ -23,6 +23,7 @@ let validJsonObject = {
   "active": true,
   "questionlist": [{
     "mode": "smiley",
+    "required": true,
     // no comment property here. Admin only. see its own test below.
     "lang": {
       "en": {
