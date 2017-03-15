@@ -71,6 +71,10 @@
             <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@slideInOut]="">
               <md-card-title class="dragHandle">{{ 'Question' | translate }} {{i+1}}</md-card-title>
               <md-card-content>
+                <!--TODO: Make this button do stuff -->
+                <!--Checkbox making a question required-->
+                <md-checkbox class="required-checkbox">{{ 'Required question' | translate }}</md-checkbox>
+
                 <!-- QUESTION MODE -->
                 <div class="modeSelect">
                   <!-- no placeholder set; there will never be an opportunity for it to be empty -->
