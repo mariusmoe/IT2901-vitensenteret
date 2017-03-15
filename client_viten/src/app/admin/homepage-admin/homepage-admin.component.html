@@ -8,7 +8,7 @@
         <md-card-title>{{survey.name}}</md-card-title>
         <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
         <md-card-subtitle>{{ 'Total number of answers: n' | translate: [survey.questionlist[0].answer.length || 0] }}</md-card-subtitle>
-        <md-icon align="left" class="activeIcon" [ngClass]="{active: survey.active, surveyActiveIcon: true}">question_answer</md-icon>
+        <md-icon align="left" class="activeIcon" [ngClass]="{active: survey.active, surveyActiveIcon: true}">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
       </md-card-title-group>
       <md-card-content>
         <app-survey-retrieval *ngIf="survey && survey.questionlist && survey.questionlist[0] && survey.questionlist[0].answer && survey.questionlist[0].answer.length > 0"
