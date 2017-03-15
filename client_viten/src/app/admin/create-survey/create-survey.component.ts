@@ -37,7 +37,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   survey: Survey;
   maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
   isPatch = false;
-  allowedModes = ['binary', 'star', 'multi', 'smiley', 'text'];
+  allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
   allowedModesVerbose = {
    'binary': 'Yes/No',
    'star': '5 Stars',
@@ -98,6 +98,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       'name': '',
       'comment': '',
       'date': new Date().toISOString(),
+      'activationDate': new Date().toISOString(),
       'active': true,
       'questionlist': [],
       'endMessage': {
@@ -235,7 +236,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
    */
   addQuestion() {
     const qo: QuestionObject = {
-      mode: this.allowedModes[3], // default to smiley
+      mode: this.allowedModes[4], // default to smiley
+      required: true, // default to true
       lang: {
         // options are added here. They are removed again for non-multi
         // questions when you submit the survey.

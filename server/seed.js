@@ -1,6 +1,7 @@
 const mongoose = require('mongoose'),
       User = require('./models/user'),
       Survey = require('./models/survey');
+      Response = require('./models/response');
 
 // TODO only do this if in dev mode
 module.exports = app => {
@@ -73,40 +74,32 @@ module.exports = app => {
       }
 
       let today = new Date();
+      let numIterations = 200;
       let surveysPop = [];
 
       let questionModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
       let questionAnswerRanges = [2, 5, 0, 3, 1];
-      for (let i = 0; i<200; i++) {
+      for (let i = 0; i<numIterations; i++) {
         let numQuestions = getRandomInt(1,6);
         let questions = [];
         for (let qi = 0; qi < numQuestions; qi++) {
-          let numAnswers = getRandomInt(40,100);
-          let answers = [];
-
           let modeIndex = getRandomInt(0,5);
           let mode = questionModes[modeIndex];
-          let alternatives;
+          let alternatives = [];
           if (mode === 'multi' || mode === 'single') {
             let numAlternatives = getRandomInt(2,6);
-            alternatives = [];
             for (let ai = 0; ai<numAlternatives; ai++) {
               let alt = emotions[getRandomInt(0,emotions.length)];
               alternatives.push(alt);
             }
-            for (let answeri = 0; answeri < numAnswers; answeri++) {
-              let currAnswer = getRandomInt(0, alternatives.length - 1);
-              //answers.push(currAnswer);
-            }
-
           } else {
-            for (let answeri = 0; answeri < numAnswers; answeri++) {
-              let currAnswer = getRandomInt(0, questionAnswerRanges[modeIndex]);
-              //answers.push(currAnswer);
+            for (let i = 0; i < questionAnswerRanges[modeIndex]; i++) {
+              alternatives.push(i);
             }
           }
           questions.push({
             'mode': mode,
+            'required': true,
             'lang': {
               'no': {
                 'txt': generateQuestion(),
@@ -115,13 +108,12 @@ module.exports = app => {
             }
           })
         }
-
-
         let s = {
           name: funnify(),
           comment: funnify(),
           questionlist: questions,
           date: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
+          activationDate: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
           active: Math.random() < 0.5,
           endMessage: {
             no: funnify(),
@@ -129,8 +121,45 @@ module.exports = app => {
         };
         surveysPop.push(s);
       }
-      Survey.insertMany(surveysPop);
-      const time = (new Date().getTime() - today.getTime());
-      console.log('seed complete: ' + time + 'ms');
+
+      let nicknames = ['Bob', 'Dave', 'Pete', 'Brad', 'Charlie', 'Sharon', 'Camilla', 'Julietta'];
+      let responsesPop = [];
+      //.lean()
+      Survey.insertMany(surveysPop).then(function(surveys) {
+        delete surveysPop;
+        for (s of surveys) {
+          for (nick of nicknames) {
+            responsesPop.push({
+              nickname: nick,
+              timestamp: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
+              surveyId: s._id,
+              questionlist: []
+            });
+            for (qo of s.questionlist) {
+              if (qo.mode === 'multi') {
+                let numSelectedOptions = getRandomInt(1,qo.lang.no.options.length);
+                let selectedOptions = [];
+                let remainingOptions = qo.lang.no.options.concat([]);
+
+                for (let i = 0; i < numSelectedOptions; i++) {
+                  let newOption = getRandomInt(0,remainingOptions.length-1);
+                  selectedOptions.push(qo.lang.no.options.indexOf(remainingOptions[newOption]));
+                  remainingOptions.splice(newOption,1);
+                }
+
+                responsesPop[responsesPop.length - 1].questionlist.push(selectedOptions);
+              } else if (qo.mode === 'text') {
+                responsesPop[responsesPop.length - 1].questionlist.push(funnify());
+              } else {
+                responsesPop[responsesPop.length - 1].questionlist.push(getRandomInt(0,qo.lang.no.options.length - 1));
+              }
+            }
+          }
+        }
+        Response.insertMany(responsesPop).then(function() {
+          const time = (new Date().getTime() - today.getTime());
+          console.log('seed complete: ' + time + 'ms');
+        })
+      });
   });
 }
