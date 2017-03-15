@@ -15,28 +15,43 @@ chai.use(chaiHttp);
 var jwt = '';
 var surveyId = '';
 
-var validJsonObject = {
+let validJsonObject = {
   "name": "måneraketten3",
   "date": "2012-04-23T18:25:43.511Z",
+  "activationDate": "2012-04-23T18:25:43.511Z",
+  "deactivationDate": "2012-04-23T18:25:43.511Z",
   "active": true,
   "questionlist": [{
     "mode": "smiley",
-    "answer": [1,2,1,2,1,2,1,2],
+    // no comment property here. Admin only. see its own test below.
     "lang": {
       "en": {
-        "txt": "what do you think about mars?",
-        "options": ["AWSOME","coooool","blody iron planet"]
+          "txt": "what do you think about mars?",
+          "options": ["AWSOME","coooool","blody iron planet"]
       },
       "no": {
         "txt": "Hva synes du om Mars?",
         "options": ["UTROLIG","kuuuuul","teit jernplanet"]
       },
-    },
+    }
   }],
   "endMessage": {
     "no": "Takk for at du gjennomførte denne undersøkelsen!"
   }
 }
+
+let responsesToSurvey = [
+  {
+    "nickname": "Ruffsetufs",
+    "surveyId": null, // set manually below.
+    "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
+  },
+  {
+    "nickname": "Ruffsetufs",
+    "surveyId": null, // set manually below.
+    "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
+  }
+]
 
 describe('Survey API', () => {
 
@@ -45,10 +60,10 @@ describe('Survey API', () => {
     chai.request(server)
       .post('/api/auth/register_developer')
       .send({'email': 'test@test.no', 'password': 'test'})
-      .end(function(err, res){
+      .end((err, res) => {
         //res.should.have.status(200);
         done();
-      })
+      });
   });
 
 
@@ -57,7 +72,7 @@ describe('Survey API', () => {
         chai.request(server)
         .post('/api/auth/login')
         .send({'email': 'test@test.no', 'password': 'test'})
-        .end(function(err, res){
+        .end((err, res) => {
           jwt = res.body.token;   // Should be globaly avaliable before each test.
           res.should.have.status(200);
           done();
@@ -84,7 +99,24 @@ describe('Survey API', () => {
         // verify that the returned object is valid
         expect(val.surveyValidation(res.body)).to.equal(true);
         res.should.have.status(200);
-        done();
+
+        for (let response of responsesToSurvey) {
+          response["surveyId"] = surveyId;
+        }
+
+        chai.request(server)
+        .post('/api/survey/' + surveyId)
+        .set('Authorization', jwt)
+        .send(responsesToSurvey)
+        .end( (err, res) => {
+          // verify that the returned object is valid
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
+          res.should.have.status(200);
+          done();
+        });
       });
     });
 
@@ -163,34 +195,14 @@ describe('Survey API', () => {
       });
     });
 
-    // This test requires the DB to
-    /*
-    it('should return 200 given empty database /api/survey/ GET', (done) => {
-      chai.request(server)
-      .delete('/api/survey/' + surveyId)
-      .set('Authorization', jwt)
-      .end((err, res) => {
-        chai.request(server)
-        .get('/api/survey/')
-        .end((err, res) => {
-          res.body.should.have.property('message');
-          res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
-          res.body.should.have.property('status');
-          res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
-          res.should.have.status(200);
-          done();
-        });
-      });
-    }); */
-
-
     // GET: GET A SURVEY
     it('should retrieve the survey of the id given /api/survey/surveyId GET', (done) => {
     chai.request(server)
       .get('/api/survey/' + surveyId)
       .end((err, res) => {
         // verify that the returned object is valid
-        expect(val.surveyValidation(res.body)).to.equal(true);
+        expect(val.surveyValidation(res.body.survey)).to.equal(true);
+        expect(val.responseValidation(res.body.response)).to.equal(true);
         res.should.have.status(200);
         done();
       });
@@ -199,7 +211,7 @@ describe('Survey API', () => {
     // GET: GET SURVEY BAD
     it('should return 404 given surveyId not found in DB /api/survey/surveyId GET', (done) => {
       chai.request(server)
-        .get('/api/survey/' + 'aaaaaaaaaaaaaaaaaaaaaaaa') // send non-existent survey ID (24 chars)
+        .get('/api/survey/' + 'aaaaaaaaaaaaaaaaaaaaaaaa') // send non-existent (but valid) survey ID (24 chars)
         .send(validJsonObject)
         .end( (err, res) => {
           res.body.should.have.property('message');
@@ -436,8 +448,26 @@ describe('Survey API', () => {
         });
       });
     });
-  }); // end describe /api/survey/ DELETE
 
+    it('should return 200 given empty database /api/survey/ GET', (done) => {
+      chai.request(server)
+      .delete('/api/survey/' + surveyId)
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        chai.request(server)
+        .get('/api/survey/')
+        .end((err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
+          res.should.have.status(200);
+          done();
+        });
+      });
+    });
+
+  }); // end describe /api/survey/ DELETE
 
 
 });

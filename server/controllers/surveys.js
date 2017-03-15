@@ -148,7 +148,7 @@ exports.answerOneSurvey = (req, res, next) => {
   })
   newAnswer.save( (err, answer) => {
     if (err) { return next(err); }
-    return res.status(200).send( {message: 'SUCCESS', status: 2192})
+    return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
   });
 }
 
