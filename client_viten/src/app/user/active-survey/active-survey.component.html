@@ -5,6 +5,9 @@
     active-survey works!
   </p>-->
   <!--Startbutton for an active survey   *ngIf="!started"   -->
+  <div>
+    <span> Start Undersøkelse </span>
+  </div>
   <div class="playbutton" [ngClass]="{'clicked': started}">
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
   </div>
