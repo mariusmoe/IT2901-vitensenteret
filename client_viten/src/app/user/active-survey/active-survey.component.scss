@@ -31,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 80vh;
+  height: 75vh;
 }
 /*The animation that triggers when starbutton is clicked*/
 .playbutton.clicked{
@@ -108,27 +108,29 @@
 
 /* Styling for the vitenlogo Container */
 .vitenContainer{
-  height: 10vh;
+  height: 15vh;
   width: 50vw;
 }
 
 /* Styling for the robotlogo Container */
 .robotContainer{
-  height: 10vh;
+  height: 15vh;
   width: 50vw;
 }
 
 /* Styling for the vitenlogo */
 .vitenlogo{
-  height: 10vh;
-  width: 8vw;
+  height: 80px;
+  width: 80px;
+  margin: 0 0 0 30px;
 }
 
 /* Styling for the robotlogo */
 .robotlogo{
-  height: 10vh;
-  width: 8vw;
+  height: 80px;
+  width: 80px;
   float: right;
+  margin: 0 30px 0 0;
 }
 
 /*This is the navigation pane that lets you navigate between questions*/
