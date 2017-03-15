@@ -275,54 +275,81 @@ exports.getSurveyAsCSV = (req, res, next) => {
     Response.find({surveyId: surveyId}, (err, responses) => {
       if (err) { return next(err); }
       // for every question in the survey
+      csv += survey.name + '\n'
       survey.questionlist.forEach((question, i) => {
-        //for (let question of survey.questionlist){
-        //      enum: ['binary', 'star', 'single', 'multi', 'smiley', 'text'],
-        csv += String(i);
+        // Add question number for readability; Add question to csv
+        csv += String(i) + '. ' + question.lang.no.txt + '\n'
         switch (question.mode) {
           case 'multi':
-            console.log('Oranges are $0.59 a pound.');
+            question.lang.no.options.forEach( (x) =>{csv += x + ','});
+            csv += '\n'
+            question.lang.no.options.forEach( (x,y) => {
+              let totalResponse = 0;
+              responses.forEach((response) => {
+                response.questionlist[i].forEach((multiOption, n) => {
+                  if (response.questionlist[i][n] == y) {
+                    totalResponse++
+                  }
+                })
+              })
+              csv += totalResponse + ','
+            })
+            csv += '\n'
             break;
           case 'text':
-            console.log('Apples are $0.58 a pound.');
+            responses.forEach((response) => {
+              csv += response.questionlist[i] + '\n'
+            })
             break;
           default:
-            console.log('Sorry, we are out of ' + expr + '.');
+            question.lang.no.options.forEach( (x) =>{csv += x + ','});
+            csv += '\n'
+            question.lang.no.options.forEach( (x,y) => {
+              let totalResponse = 0;
+              responses.forEach((response) => {
+                if (response.questionlist[i] == y) {
+                  totalResponse++
+                }
+              })
+              csv += totalResponse + ','
+            })
+            csv += '\n'
+            break;
         }
-        // console.log(question);
-        questionAnswar = question.answer;
-        // Count the occurance of each element in the array
-        let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
-          x => [x, questionAnswar.filter(y => y === x).length]
-        ));
-        // Add question to csv
-        csv += question.lang.no.txt + '\n'
-        // Add all questions to csv
-        if ( question.mode === 'multi') {
-          // Add question text
-          question.lang.no.options.forEach( (x) =>{csv += x + ','});
-          csv += '\n'
-          // Add accumulated answars to csv
-          question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
-          csv += '\n'
-        } else {
-          // Create a list with length according to question mode
-          // This list is also numerated from 0 - length of questionmode - 1
-          let optionsList = Array.apply(null, Array(numOptions[question.mode])).map(function (x, i) { return i; });
-          // Add question text (in this case it is a number)
-          optionsList.forEach( (x) =>{csv += x + ','});
-          csv += '\n'
-          // Add accumulated answars to csv
-          optionsList.forEach( (x,y) => { csv += questionAnswarCount.get(y) + ',' })
-          csv += '\n'
-
-        }
+        // // console.log(question);
+        // questionAnswar = question.answer;
+        // // Count the occurance of each element in the array
+        // let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
+        //   x => [x, questionAnswar.filter(y => y === x).length]
+        // ));
+        //
+        //
+        // // Add all questions to csv
+        // if ( question.mode === 'multi') {
+        //   // Add question text
+        //   question.lang.no.options.forEach( (x) =>{csv += x + ','});
+        //   csv += '\n'
+        //   // Add accumulated answars to csv
+        //   question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
+        //   csv += '\n'
+        // } else {
+        //   // Create a list with length according to question mode
+        //   // This list is also numerated from 0 - length of questionmode - 1
+        //   let optionsList = Array.apply(null, Array(numOptions[question.mode])).map(function (x, i) { return i; });
+        //   // Add question text (in this case it is a number)
+        //   optionsList.forEach( (x) =>{csv += x + ','});
+        //   csv += '\n'
+        //   // Add accumulated answars to csv
+        //   optionsList.forEach( (x,y) => { csv += questionAnswarCount.get(y) + ',' })
+        //   csv += '\n'
+        //
+        // }
         //}
 
 
       })
 
-    });
+
 
       // Open a gate to the temp directory
       temp.open('myprefix', function(err, info) {
@@ -338,5 +365,6 @@ exports.getSurveyAsCSV = (req, res, next) => {
           });
         }
       });
+    });
   });
 }

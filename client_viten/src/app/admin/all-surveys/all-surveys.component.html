@@ -13,7 +13,7 @@
 <md-list class="list" *ngIf="!searchLoading">
   <md-list-item
     *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum)"
-    [ngClass]="{'survey': true, 'active': survey._id == route.snapshot.params['surveyId']}"
+    [ngClass]="{'survey': true, 'active': survey._id == route.snapshot.params['surveyId'], 'deactive': !survey.active, 'greenactive': survey.active}"
     (click)="select(survey._id)">
     <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
     <h4 md-line>{{survey.name}}</h4>
