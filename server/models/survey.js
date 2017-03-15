@@ -28,6 +28,7 @@ const SurveySchema = new Schema({
     mode: {
       type: String,
       enum: ['binary', 'star', 'single', 'multi', 'smiley', 'text'],
+      //  0 or 1 , 0 - 4, 0 - n, [0 - n], 0 - 2, text
       default: 'smiley'
     },
     lang: {
@@ -46,11 +47,9 @@ const SurveySchema = new Schema({
 const responseSchema = new Schema({
   nickname: String,
   timestamp: Date,
-  surveyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey' },
+  surveyId: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey' , index: true},
   questionlist: [{
-    answerText: String,
-    answerNumber: Number,
-    answerMultiple: [Number],
+    type: Schema.Types.Mixed
   }]
 });
 

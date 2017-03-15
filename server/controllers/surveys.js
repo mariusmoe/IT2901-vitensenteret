@@ -3,6 +3,7 @@
 const validator = require('validator'),
       status = require('../status'),
       Survey = require('../models/survey'),
+      Response = require('../models/survey'),
       jsonfile = require('jsonfile'),
       fs = require('fs'),
       config = require('config'),
@@ -66,7 +67,11 @@ exports.getOneSurvey = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-    return res.status(200).send(survey);
+    // Need to send answers too
+    Response.find({surveyId: surveyId}, (err, responses) => {
+      if (err) { return next(err); }
+      return res.status(200).send(survey, responses);
+    })
   });
 }
 
@@ -126,8 +131,9 @@ exports.deleteOneSurvey = (req, res, next) => {
 
 // POST
 exports.answerOneSurvey = (req, res, next) => {
-  const surveyId  = req.params.surveyId;
-  const answers   = req.body.answers;
+  const surveyId  = req.params.surveyId,
+        types      = req.body.types,
+        answers   = req.body.answers;
   // TODO: if answers object does not exist, stop here.
 
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
@@ -135,24 +141,19 @@ exports.answerOneSurvey = (req, res, next) => {
     // but we should check the validity of the id
     return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
   }
-  Survey.findById( surveyId, (err, survey) => {
-    if (!survey) {
-      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-    }
+  let newAnswer = new Response({
+    nickname: req.body.nickname,
+    surveyId: surveyId,
+    questionlist: answers
+  })
+  newAnswer.save( (err, answer) => {
     if (err) { return next(err); }
-    if (survey.questionlist.answer == undefined) { survey.questionlist.answer = []; }
-    survey.questionlist.forEach((question,i) => { question.answer.push(answers[i]) })
-    survey.save((err, survey) => {
-      if (err) {return next(err); }
-      return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
-    })
+    return res.status(200).send( {message: 'SUCCESS', status: 2192})
   });
 }
 
 
 // JSON
-
-
 exports.getAllSurveysAsJson = (req, res, next) => {
   Survey.find({}, (err, surveys) => {
     if (!surveys) {
