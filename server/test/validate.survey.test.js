@@ -13,7 +13,6 @@ let validJsonObject = {
   "questionlist": [{
     "mode": "smiley",
     // no comment property here. Admin only. see its own test below.
-    "answer": [1,3,3,3,3],
     "lang": {
       "en": {
           "txt": "what do you think about mars?",
@@ -259,7 +258,7 @@ describe('Survey validation', () => {
 
 
 
-    it('should not validate on missing or bad deactivationDate property', (done) => {
+    it('should not validate on bad deactivationDate property', (done) => {
       // make sure clone validates correctly.
       let IsItValid = val.surveyValidation(clone);
       expect(IsItValid).to.equal(true);
@@ -660,71 +659,6 @@ describe('Survey validation', () => {
 
     done();
   });
-
-  it('should not validate on missing or bad questionlist answer property', (done) => {
-    // make sure clone validates correctly.
-    let IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(true);
-
-
-    // check empty object
-    clone.questionlist[0].answer = {};
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
-
-    // check empty array
-    clone.questionlist[0].answer = [];
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(true); // this should be valid
-
-    // check undefined
-    clone.questionlist[0].answer = undefined;
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(true);
-
-    // check null
-    clone.questionlist[0].answer = null;
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
-
-    // check nonexistant
-    delete clone.questionlist[0].answer;
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(true);
-
-    done();
-  });
-
-
-  it('should not validate on missing or bad questionlist answer values', (done) => {
-    // make sure clone validates correctly.
-    let IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(true);
-
-    // check emtpy array
-    clone.questionlist[0].answer = [];
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(true); // this should be valid
-
-    // check non-integer value
-    clone.questionlist[0].answer[0] = 0.5;
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
-
-    // check undefined
-    clone.questionlist[0].answer[0] = undefined;
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
-
-    // check null
-    clone.questionlist[0].answer[0] = null;
-    IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
-
-    done();
-  });
-
-
 
   it('should not validate on missing or bad endMessage property', (done) => {
     // make sure clone validates correctly.
