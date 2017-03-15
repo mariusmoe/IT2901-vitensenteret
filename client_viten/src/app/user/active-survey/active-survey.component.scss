@@ -17,7 +17,7 @@
     .playbutton{
 
       margin: auto auto;
-      height: 100vh;
+      height: 80vh;
     }
     display: flex;
     height: 100vh;
@@ -31,7 +31,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh;
+  height: 90vh;
 }
 /*The animation that triggers when starbutton is clicked*/
 .playbutton.clicked{
@@ -85,6 +85,18 @@
 .svgButton:focus {outline: none;}
 .qnavigateArea:focus {outline: none;}
 .exitButton:focus {outline: none;}
+
+/* Styling for the container of the Start Survey text above the play button */
+.startTextContainer{
+  width: 100vw;
+  height: 10vh;
+  text-align: center;
+}
+
+/* Styling for of the Start Survey text above the play button */
+.startText{
+  font-size: 5vw;
+}
 
 /*This is the navigation pane that lets you navigate between questions*/
 .qnavigate {
