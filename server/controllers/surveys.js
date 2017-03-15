@@ -4,6 +4,7 @@ const validator = require('validator'),
       status = require('../status'),
       Survey  = require('../models/survey'),
       Response = require('../models/response'),
+      PrePost = require('../models/prepost'),
       jsonfile = require('jsonfile'),
       fs = require('fs'),
       config = require('config'),
@@ -33,6 +34,22 @@ exports.createSurvey = (req, res, next) => {
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
     return res.status(200).send( survey );
+  })
+}
+
+// POST
+exports.linkPrePost = (req, res, next) => {
+  const preKey  = req.body.preKey;
+  const postKey = req.body.postKey;
+
+  const newPrePost = new PrePost({
+    preKey: preKey,
+    postKey: postKey
+  });
+  newPrePost.save((err, prePost) => {
+    if (err) { return next(err); }
+    console.log(prePost);
+    res.status(200).send({message: 'SUCCESS', prePost: prePost})
   })
 }
 
