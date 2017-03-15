@@ -24,9 +24,7 @@ export class ActiveSurveyComponent implements OnInit {
   private survey: Survey;
   private page = 0;
   private totalPages = 0;
-  private nextPage = 0;
   private transition = false;
-  private forwardValue = 'Forward';
   private done = false;
   private answers = [];
 
@@ -47,12 +45,11 @@ export class ActiveSurveyComponent implements OnInit {
           // TODO: Redirect to base create survey ?
           return;
         }
-        // console.log(result);
+
         this.survey = result;
         this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {
-          // console.log(this.survey);
           this.properSurvey = true;
         } else {
           console.error('Survey is not active or something else is wrong!');
@@ -66,25 +63,21 @@ export class ActiveSurveyComponent implements OnInit {
   }
 
   private exitSurvey() {
-    this.forwardValue = 'Forward';
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
-    this.nextPage = 0;
     this.done = false;
     this.transition = false;
+
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
           console.log ('DEBUG: BAD surveyId param from router!');
-          // TODO: Redirect to base create survey ?
           return;
         }
         this.survey = result;
         this.totalPages = this.survey.questionlist.length;
-
         if (this.survey && this.survey.active) {
-          // console.log(this.survey);
           this.properSurvey = true;
         }
       });
@@ -98,7 +91,6 @@ export class ActiveSurveyComponent implements OnInit {
  */
 addOrChangeAnswer(alternative) {
   this.answers[this.page] = alternative;
-  // console.log('answers updated! answer[] now looks like this: ', this.answers);
 }
 
 /**
@@ -107,44 +99,30 @@ addOrChangeAnswer(alternative) {
  */
   private previousQ() {
       if (this.page <= 0) {
-        // console.log("this is the first question, can't go back further");
         return;
       }
-      this.forwardValue = 'Forward';
       this.page -= 1;
       this.transition = true;
-
-      // console.log('previous question');
     }
 
 /**
- * This method handles the transition to the next question in the survey
+ * This method handles the transition to the next question in the survey as well as handling whether its the last page.
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
+    // Handles an empty answer
     if (typeof this.answers[this.page] === 'undefined') {
       this.answers[this.page] = -1;
-      // console.log('answers updated! answer[] now looks like this: ', this.answers);
     }
-    if (this.totalPages === 1) {
-      this.endSurvey();
-    }
-    if (this.forwardValue === 'Finish') {
-      this.endSurvey();
-    }
+    // If current page is the last with questions, the next page should be the endSurvey page
     if (this.page + 1 >= this.totalPages) {
-      // console.log("this is the last question, can't advance further");
-      this.forwardValue = 'Finish';
+      this.endSurvey();
       return;
     }
-    this.forwardValue = 'Forward';
+    // Advances to the next page
     this.page += 1;
     this.transition = true;
 
-    if (this.page + 1 >= this.totalPages) {
-      this.forwardValue = 'Finish';
-    }
-    // console.log('next question');
   }
 
 /**
@@ -154,17 +132,14 @@ addOrChangeAnswer(alternative) {
   animEnd(event) {
     if (!event.fromState) {
       this.transition = false;
-      // console.log("Going to next page now!")
     }
-    // console.log('animEnd');
-    // console.log(event);
   }
 
 /**
  * This method ends the survey if the user clicks the END button or after x amount of seconds
  */
   endSurvey() {
-    console.log(this.answers);
+    console.log('ended survey: ', this.answers);
     this.postSurvey();
     this.answers = [];
     this.done = true;
@@ -174,10 +149,7 @@ addOrChangeAnswer(alternative) {
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    // Route to the select-survey window
-    // this.postSurvey();
     this.router.navigate(['/choosesurvey']);
-    // console.log('Routing to select-survey');
   }
 
 /**
