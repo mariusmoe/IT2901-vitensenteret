@@ -122,7 +122,17 @@ addOrChangeAnswer(alternative) {
     // Advances to the next page
     this.page += 1;
     this.transition = true;
+  }
 
+  /**
+   * This method checks if it should automatically advance to the next question.
+   * If it is the last question in the survye, it should not advance.
+   * @param  {}
+   */
+  autoAdvance() {
+    if (this.page + 1 !== this.totalPages) {
+      this.nextQ();
+    }
   }
 
 /**

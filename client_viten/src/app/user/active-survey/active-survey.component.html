@@ -20,11 +20,11 @@
 
       <!-- Childcomponents that handle each answer-type -->
       <div class="answerTypes">
-        <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-stars>
-        <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-smiley>
-        <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-multiplechoice>
-        <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-yes-no>
-        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-freetxt>
+        <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
+        <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
+        <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-multiplechoice>
+        <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
+        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-freetxt>
       </div>
 
     </div>
