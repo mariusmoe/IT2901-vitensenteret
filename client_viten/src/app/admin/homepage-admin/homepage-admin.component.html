@@ -16,6 +16,7 @@
         <div *ngIf="responses.length == 0">
           {{   'No responses have been registered, so there is nothing to show here yet.' | translate }}
         </div>
+        <!-- file_download // Icon for download -->
       </md-card-content>
       <md-card-actions align="right">
         <button md-raised-button color="primary" (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
@@ -26,6 +27,9 @@
         </button>
         <button md-raised-button color="primary" (click)="downloadAs('csv')" routerLinkActive="active">
           <md-icon>timeline</md-icon> {{ 'Download Raw Data' | translate }}
+        </button>
+        <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
+          <md-icon>local_post_office</md-icon> Add post
         </button>
         <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
           <md-icon>build</md-icon> {{ 'Edit' | translate }}

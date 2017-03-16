@@ -32,6 +32,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   startupLoading = true;
   englishEnabled = false;
   canPostSurvey = false;
+  isPrePost = false;
+  preSurvey: Survey;
 
   // SURVEY VARIABLES
   survey: Survey;
@@ -64,25 +66,57 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // If we have a router parameter, we should attempt to use that first.
     // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
+    // Safe checking of url if last part is prepost
+    const url = this.route.snapshot.url;
+    let prepost = false;
+    if (typeof url[2] !== 'undefined') {
+      prepost = true;
+    }
     if (param) {
       const sub = this.surveyService.getSurvey(param).subscribe(result => {
-        this.survey = result;
+
+        // If this survey is intended as a post to another; do the following
+        if (prepost) {
+          this.isPrePost = true;
+          console.log('PREPOST!');
+          this.preSurvey = result.survey;
+          // Set defaults seeing we had no router parameter
+          // Is there a more sexy way to do this?
+          this.survey = {
+            'name': '',
+            'postKey': '',
+            'comment': '',
+            'date': new Date().toISOString(),
+            'activationDate': new Date().toISOString(),
+            'active': true,
+            'questionlist': [],
+            'endMessage': {
+              'no': '',
+              'en': '', // do not remove. see submitSurvey for handling of english properties.
+            }
+          };
+          this.startupLoading = false;
+        } else {
+        // FIXME why do linter go ham here?
+        this.survey = result.survey;
         this.isPatch = true;
 
         // somewhat hacky way to determine english state.
-        if (this.survey.questionlist[0].lang.en
-          && this.survey.questionlist[0].lang.en.txt
-          && this.survey.questionlist[0].lang.en.txt.length > 0) {
-          this.englishEnabled = true;
-        }
+        // if (this.survey.questionlist[0].lang.en
+        //   && this.survey.questionlist[0].lang.en.txt
+        //   && this.survey.questionlist[0].lang.en.txt.length > 0) {
+        //   this.englishEnabled = true;
+        // }
+
         // Do not remove the following lines!
         this.setPushReadyStatus();
         this.startupLoading = false;
 
-        // unsubscribe! the service (and the subscription) is still there
-        // after this component gets destroyed. We have no futher need of it here,
-        // so might as well unsub now.
-        sub.unsubscribe();
+      }
+      // unsubscribe! the service (and the subscription) is still there
+      // after this component gets destroyed. We have no futher need of it here,
+      // so might as well unsub now.
+      sub.unsubscribe();
       },
       error => {
         // this.route.snapshot is the route for the SUBDOMAIN of /admin
@@ -91,11 +125,13 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         // fashion as to avoid issues should the routes be altered.
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
       });
+      // IMPORTANT notice this return!
       return;
     }
     // Set defaults seeing we had no router parameter
     this.survey = {
       'name': '',
+      'postKey': '',
       'comment': '',
       'date': new Date().toISOString(),
       'activationDate': new Date().toISOString(),
@@ -126,6 +162,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       if (this.englishEnabled) {                            // message en
         status = status && this.fieldValidate(this.survey.endMessage.en);
       }
+      console.log(this.survey.questionlist);
       // check each question
       for (const questionObject of this.survey.questionlist) {
         // the actual question
@@ -207,6 +244,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     };
     const success = (result) => {
       this.submitLoading = false;
+
       // this.route.snapshot is the route for the SUBDOMAIN of /admin
       // this.route.parent gives us the PARENT domain (ranging from '' to the parent
       // of this route). We want to return to the parent url in a programatic
@@ -218,13 +256,26 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       }
       this.router.navigate([this.route.parent.snapshot.url.join('/')]);
     };
-    // Send request to the server; either PATCH or POST.
-    if (this.isPatch) {
-      // console.log("PATCHING!")
-      this.surveyService.patchSurvey(clone._id, clone).subscribe(result => success(result), error => err(error));
+    if (this.isPrePost) {
+      // TODO PATCH pre-survey and post post survey FIXME
+      // Alternatively create a route that takes pre-survey._id and do all
+      // the work.
+      this.surveyService.postSurvey(clone).subscribe(result => {
+        // success(result)
+        this.preSurvey.postKey = result._id;
+        const preSurvey: Survey = JSON.parse(JSON.stringify(this.preSurvey));
+        this.surveyService.patchSurvey(preSurvey._id, preSurvey).subscribe(result => success(result), error => err(error));
+      }, error => err(error));
+      // this.preSurvey = original + preKey = result.survey._id // or something
     } else {
-      // console.log("POSTING!")
-      this.surveyService.postSurvey(clone).subscribe(result => success(result), error => err(error));
+      // Send request to the server; either PATCH or POST.
+      if (this.isPatch) {
+        // console.log("PATCHING!")
+        this.surveyService.patchSurvey(clone._id, clone).subscribe(result => success(result), error => err(error));
+      } else {
+        // console.log("POSTING!")
+        this.surveyService.postSurvey(clone).subscribe(result => success(result), error => err(error));
+      }
     }
   }
 
