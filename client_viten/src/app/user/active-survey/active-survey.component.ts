@@ -1,7 +1,9 @@
-import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, } from '@angular/core';
+import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, HostListener } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
+import { SimpleTimer } from 'ng2-simple-timer';
+
 
 
 @Component({
@@ -28,8 +30,33 @@ export class ActiveSurveyComponent implements OnInit {
   private done = false;
   private answers = [];
 
+  abortTimer: string;
+  abortCounter = 0;
+
+  /**
+   * Hostlistener that recognizes clicks on the screen to reset timer
+   * @param  {click'} 'document  [description]
+   * @param  {[type]} ['$event'] [description]
+   * @return {[type]}            [description]
+   */
+  @HostListener('document:click', ['$event'])
+  clickout(event) {
+    this.resetTimer();
+  }
+
+  /**
+   * Hostlistener that recognizes keypresses to reset timer
+   * @param  {keypress'} 'document  [description]
+   * @param  {[type]}    ['$event'] [description]
+   * @return {[type]}               [description]
+   */
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    this.resetTimer();
+  }
+
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute) {
+    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer) {
 
   }
 
@@ -57,16 +84,27 @@ export class ActiveSurveyComponent implements OnInit {
       return;
     }
   }
+  /**
+   * This method starts the survey as well as the inactivity timer
+   */
   private startSurvey() {
     this.started = true;
+    this.timer.newTimer('1sec', 1);
+    this.subscribeabortTimer();
   }
 
+/**
+ * This method resets a survey completely
+ */
   private exitSurvey() {
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
     this.done = false;
     this.transition = false;
+
+    this.subscribeabortTimer();
+    this.timer.delTimer('1sec');
 
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
@@ -125,7 +163,7 @@ addOrChangeAnswer(alternative) {
 
   /**
    * This method checks if it should automatically advance to the next question.
-   * If it is the last question in the survye, it should not advance.
+   * If it is the last question in the survey, it should not advance.
    * @param  {}
    */
   autoAdvance() {
@@ -145,12 +183,48 @@ addOrChangeAnswer(alternative) {
   }
 
 /**
- * This method ends the survey if the user clicks the END button or after x amount of seconds
+ * The subscribe-methods connects variables to timers. These handles connectivity to callback-methods
+ */
+ subscribeabortTimer() {
+  if (this.abortTimer) {
+    // Unsubscribe if timer Id is defined
+    this.timer.unsubscribe(this.abortTimer);
+    this.abortTimer = undefined;
+    } else {
+      // Subscribe if timer Id is undefined
+      this.abortTimer = this.timer.subscribe('1sec', e => this.listenCallback());
+    }
+  }
+
+
+/**
+ * The timer-methods update the counters accordingly to realtime seconds, and aborts survey if time has passed over threshold
+ */
+ listenCallback() {
+   this.abortCounter++;
+   if (this.abortCounter >= 60) {
+     this.exitSurvey();
+   } else if (this.done && this.abortCounter >= 5) {
+     this.exitSurvey();
+   }
+  }
+
+/**
+ * This method resets the idle-timers
+ * @return {[type]} [description]
+ */
+resetTimer() {
+  this.abortCounter = 0;
+}
+
+/**
+ * This method finishes the survey if the user clicks the END button
  */
   endSurvey() {
     this.postSurvey();
     this.answers = [];
     this.done = true;
+    this.resetTimer();
   }
 
 /**
