@@ -27,6 +27,7 @@ export const LANG_NO_TRANS = {
   'Copy': 'Kopier',
   'Okay': 'Ok',
   'Success': 'Suksess',
+  'Download': 'Last ned',
 
   // Roles
   'admin': 'Superadmin',
@@ -62,6 +63,7 @@ export const LANG_NO_TRANS = {
   'Admin Home': 'Administrator Hjem',
   'Create New Survey': 'Lag ny undersøkelse',
   'Select a survey from the left side menu': 'Velg en undersøkelse fra menyen til venstre',
+  'Did not answer': 'Svarte ikke',
 
   // Create survey component
   'Survey options': 'Innstillinger for undersøkelse',

@@ -27,6 +27,7 @@ export const LANG_EN_TRANS = {
   'Copy': 'Copy',
   'Okay': 'Okay',
   'Success': 'Success',
+  'Download': 'Download',
 
   // roles
   'admin': 'Admin',
@@ -62,6 +63,7 @@ export const LANG_EN_TRANS = {
   'Admin Home': 'Admin Home',
   'Create New Survey': 'Create New Survey',
   'Select a survey from the left side menu': 'Select a survey from the left side menu',
+  'Did not answer': 'Did not answer',
 
   // Create survey component
   'Survey options': 'Survey options',

@@ -45,8 +45,7 @@ export class ActiveSurveyComponent implements OnInit {
           // TODO: Redirect to base create survey ?
           return;
         }
-
-        this.survey = result;
+        this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {

@@ -1,28 +1,44 @@
-<div class="chartWrapper">
-  <div class="questionHeader">
-    <!-- If English language is selected AND an english question txt is defined
-         then show that. Else show norwegian.
-    -->
-    <h1>{{ (languageService.getCurrentLang() === 'en' && questionObject.lang.en && questionObject.lang.en.txt) ?
-            questionObject.lang.en.txt : questionObject.lang.no.txt}}</h1>
-  </div>
+<div>
+  <div class="chartWrapper">
+    <div class="questionHeader">
+      <!-- If English language is selected AND an english question txt is defined
+           then show that. Else show norwegian.
+      -->
+      <h1>{{ (languageService.getCurrentLang() === 'en' && questionObject.lang.en && questionObject.lang.en.txt) ?
+              questionObject.lang.en.txt : questionObject.lang.no.txt}}</h1>
+    </div>
 
-  <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
-    <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
-    <canvas baseChart #canvas class="surveyQuestionChart"
-            [datasets]="barChartData"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [colors]="barChartColours"
-            [chartType]="chartType">
-    </canvas>
-  </div>
-  <div class="actions">
-    <md-select [(ngModel)]="chartType" (change)="setChartOptions()" class="select">
-      <md-option *ngFor="let t of chartTypes; let i = index;" [value]="t">
-        {{ chartTypesVerbose[i] | translate }}
-      </md-option>
-    </md-select>
-    <button md-raised-button color="accent" (click)="downloadAsPng()"><md-icon>insert_chart</md-icon> {{ 'Download as PNG' | translate }}</button>
+    <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
+      <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
+      <canvas baseChart #canvas class="surveyQuestionChart"
+              [datasets]="barChartData"
+              [labels]="barChartLabels"
+              [options]="barChartOptions"
+              [colors]="barChartColours"
+              [chartType]="chartType">
+      </canvas>
+    </div>
+    <div class="actions">
+      <md-select [(ngModel)]="chartType" (change)="setChartOptions()" class="select">
+        <md-option *ngFor="let t of chartTypes; let i = index;" [value]="t">
+          {{ chartTypesVerbose[i] | translate }}
+        </md-option>
+      </md-select>
+      <button md-raised-button color="accent" (click)="downloadAsPng()"><md-icon>insert_chart</md-icon> {{ 'Download as PNG' | translate }}</button>
+    </div>
+    <div class="tble">
+      <table>
+        <tr *ngFor="let label of barChartLabels; let i = index;">
+          <td>{{label}}</td>
+          <td>{{(barChartData[0].data[i]/responses.length)*100}} %</td>
+          <td>{{barChartData[0].data[i]}}</td>
+        </tr>
+        <tr>
+          <td>{{'Did not answer' | translate}} </td>
+          <td>{{(responses.length - total) / (responses.length)*100}} %</td>
+          <td>{{(responses.length - total)}}</td>
+        </tr>
+      </table>
+    </div>
   </div>
 </div>
