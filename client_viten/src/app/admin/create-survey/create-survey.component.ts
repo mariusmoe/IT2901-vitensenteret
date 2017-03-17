@@ -34,6 +34,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   canPostSurvey = false;
   isPost = false;
   preSurvey: Survey;
+  lockdown = false;
 
   // SURVEY VARIABLES
   survey: Survey;
@@ -65,30 +66,14 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       isPost = true;
     }
 
-    const setStartupDefaults = () => {
-      this.survey = {
-        'name': '',
-        'comment': '',
-        'date': new Date().toISOString(),
-        'activationDate': new Date().toISOString(),
-        'deactivationDate': undefined,
-        'active': true,
-        'isPost': isPost,
-        'questionlist': [],
-        'endMessage': {
-          'no': '',
-          'en': '', // do not remove. see submitSurvey for handling of english properties.
-        }
-      };
-    };
-
-
     if (param) {
       // Fetch data if editing a survey or adding a post to a survey
       const sub = this.surveyService.getSurvey(param).subscribe(result => {
         if (isPost) {
           this.isPost = true;
+          this.lockdown = true;
           this.preSurvey = result.survey;
+          this.survey = this.preSurvey; // Initiate the survey with an exact duplicate.
           // remove options-properties of non-multi questions
           for (const qo of this.preSurvey.questionlist) {
             if (qo.mode !== 'multi' && qo.mode !== 'single') {
@@ -106,10 +91,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
                 delete qo.lang.en;
               }
           }
-          setStartupDefaults();
         } else {
           this.survey = result.survey;
           this.isPatch = true;
+          this.lockdown = true;
 
           // somewhat hacky way to determine english state.
           if (this.survey.questionlist[0].lang.en
@@ -139,7 +124,20 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     }
     // Set defaults seeing we had no router parameter
     // Do not remove the following lines!
-    setStartupDefaults();
+    this.survey = {
+      'name': '',
+      'comment': '',
+      'date': new Date().toISOString(),
+      'activationDate': new Date().toISOString(),
+      'deactivationDate': undefined,
+      'active': true,
+      'isPost': isPost,
+      'questionlist': [],
+      'endMessage': {
+        'no': '',
+        'en': '', // do not remove. see submitSurvey for handling of english properties.
+      }
+    };
     this.setPushReadyStatus();
     this.startupLoading = false;
   }
@@ -211,7 +209,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // if (!this.canPostSurvey) { return; }
     const clone: Survey = JSON.parse(JSON.stringify(this.survey));
     this.submitLoading = true;
-    console.log(clone);
 
     // remove options-properties of non-multi questions
     for (const qo of clone.questionlist) {
@@ -327,6 +324,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       data: {
         questionObject: qo,
         englishEnabled: this.englishEnabled,
+        lockdown: this.lockdown,
       }
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
@@ -365,10 +363,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()'>
         <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])">{{ 'This field is required.' | translate }}</md-hint>
       </md-input-container>
-      <button md-icon-button color="warn" [disabled]="i < 2" class="alignRight"
+      <button md-icon-button color="warn" [disabled]="(i < 2) || data.lockdown" class="alignRight"
       (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
     </div>
-    <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
+    <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6 || data.lockdown"
     (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
   </md-dialog-content>
   <md-dialog-actions align="center">
