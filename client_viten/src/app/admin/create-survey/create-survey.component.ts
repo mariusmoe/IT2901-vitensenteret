@@ -68,57 +68,71 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
     // Safe checking of url if last part is prepost
-    const url = this.route.snapshot.url;
     let prepost = false;
-    if (typeof url[2] !== 'undefined') {
+    if (typeof this.route.snapshot.url[2] !== 'undefined') {
       prepost = true;
     }
-    if (param) {
-      const sub = this.surveyService.getSurvey(param).subscribe(result => {
 
-        // If this survey is intended as a post to another; do the following
+    const setStartupDefaults = () => {
+      this.survey = {
+        'name': '',
+        'comment': '',
+        'date': new Date().toISOString(),
+        'activationDate': new Date().toISOString(),
+        'deactivationDate': undefined,
+        'active': true,
+        'questionlist': [],
+        'endMessage': {
+          'no': '',
+          'en': '', // do not remove. see submitSurvey for handling of english properties.
+        }
+      };
+    };
+
+
+    if (param) {
+      // Fetch data if editing a survey or adding a prepost to a survey
+      const sub = this.surveyService.getSurvey(param).subscribe(result => {
         if (prepost) {
           this.isPrePost = true;
-          console.log('PREPOST!');
           this.preSurvey = result.survey;
-          // Set defaults seeing we had no router parameter
-          // Is there a more sexy way to do this?
-          this.survey = {
-            'name': '',
-            'postKey': '',
-            'comment': '',
-            'date': new Date().toISOString(),
-            'activationDate': new Date().toISOString(),
-            'active': true,
-            'questionlist': [],
-            'endMessage': {
-              'no': '',
-              'en': '', // do not remove. see submitSurvey for handling of english properties.
+          // remove options-properties of non-multi questions
+          for (const qo of this.preSurvey.questionlist) {
+            if (qo.mode !== 'multi' && qo.mode !== 'single') {
+              delete qo.lang.no.options;
+              delete qo.lang.en.options;
             }
-          };
-          this.startupLoading = false;
+          }
+          // somewhat hacky way to determine english state.
+          // If English state is not found, then delete any properties not needed.
+          if (!this.preSurvey.questionlist[0].lang.en
+            || !this.preSurvey.questionlist[0].lang.en.txt
+            || !(this.preSurvey.questionlist[0].lang.en.txt.length > 0)) {
+              delete this.preSurvey.endMessage.en;
+              for (const qo of this.preSurvey.questionlist) {
+                delete qo.lang.en;
+              }
+          }
+          setStartupDefaults();
         } else {
-        this.survey = result.survey;
-        this.isPatch = true;
+          this.survey = result.survey;
+          this.isPatch = true;
 
-        // somewhat hacky way to determine english state.
-        // if (this.survey.questionlist[0].lang.en
-        //   && this.survey.questionlist[0].lang.en.txt
-        //   && this.survey.questionlist[0].lang.en.txt.length > 0) {
-        //   this.englishEnabled = true;
-        // }
+          // somewhat hacky way to determine english state.
+          if (this.survey.questionlist[0].lang.en
+            && this.survey.questionlist[0].lang.en.txt
+            && this.survey.questionlist[0].lang.en.txt.length > 0) {
+            this.englishEnabled = true;
+          }
+        }
 
         // Do not remove the following lines!
         this.setPushReadyStatus();
         this.startupLoading = false;
-
-      }
-      // unsubscribe! the service (and the subscription) is still there
-      // after this component gets destroyed. We have no futher need of it here,
-      // so might as well unsub now.
-      sub.unsubscribe();
+        sub.unsubscribe();
       },
       error => {
+        sub.unsubscribe();
         // this.route.snapshot is the route for the SUBDOMAIN of /admin
         // this.route.parent gives us the PARENT domain (ranging from '' to the parent
         // of this route). We want to return to the parent url in a programatic
@@ -126,22 +140,14 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
       });
       // IMPORTANT notice this return!
+      // This stops the init to continue, seeing as the code below is only to be run
+      // when there is NO parameter to the url.
       return;
     }
     // Set defaults seeing we had no router parameter
-    this.survey = {
-      'name': '',
-      'postKey': '',
-      'comment': '',
-      'date': new Date().toISOString(),
-      'activationDate': new Date().toISOString(),
-      'active': true,
-      'questionlist': [],
-      'endMessage': {
-        'no': '',
-        'en': '', // do not remove. see submitSurvey for handling of english properties.
-      }
-    };
+    // Do not remove the following lines!
+    setStartupDefaults();
+    this.setPushReadyStatus();
     this.startupLoading = false;
   }
 
@@ -214,29 +220,29 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     this.submitLoading = true;
 
     // remove options-properties of non-multi questions
-    // TODO make this work for 'single'
     for (const qo of clone.questionlist) {
       if (qo.mode !== 'multi' && qo.mode !== 'single') {
         delete qo.lang.no.options;
         delete qo.lang.en.options;
       }
     }
-    // remove english fields from our submitted survey if it is not enabled
+
     if (!this.englishEnabled) {
+      // remove english fields from our submitted survey if it is not enabled
       delete clone.endMessage.en;
       for (const qo of clone.questionlist) {
         delete qo.lang.en;
       }
     }
 
-    // console.log(clone);
     // Execute the following when we've gotten a response from the server
     const err = (error) => {
       this.submitLoading = false;
+      const body = error.json();
       const config: MdDialogConfig = {
         data: {
-          status: error.status,
-          message: error.message, // TODO: FIXME! no message for unauthorized!
+          status: body.status,
+          message: body.message,
         }
       };
       // this dialog is purely to inform the user.
@@ -256,6 +262,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       }
       this.router.navigate([this.route.parent.snapshot.url.join('/')]);
     };
+
+    // Check prepost conditions first
     if (this.isPrePost) {
       // TODO PATCH pre-survey and post post survey FIXME
       // Alternatively create a route that takes pre-survey._id and do all
@@ -263,10 +271,11 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       this.surveyService.postSurvey(clone).subscribe(result => {
         // success(result)
         this.preSurvey.postKey = result._id;
-        const preSurvey: Survey = JSON.parse(JSON.stringify(this.preSurvey));
-        this.surveyService.patchSurvey(preSurvey._id, preSurvey).subscribe(result2 => success(result2), error => err(error));
+        this.surveyService.patchSurvey(this.preSurvey._id, this.preSurvey).subscribe(result2 => success(result2), error => err(error));
       }, error => err(error));
       // this.preSurvey = original + preKey = result.survey._id // or something
+
+
     } else {
       // Send request to the server; either PATCH or POST.
       if (this.isPatch) {

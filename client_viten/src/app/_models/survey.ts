@@ -22,7 +22,7 @@ export interface QuestionObject {
 export interface Survey {
   _id?: string;
   name: string;
-  postKey: string;
+  postKey?: string;
   comment?: string;
   date: string;
   activationDate: string;
