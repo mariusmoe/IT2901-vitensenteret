@@ -73,6 +73,7 @@ export class ActiveSurveyComponent implements OnInit {
           return;
         }
         this.survey = result.survey;
+        console.log(this.survey);
         this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {
@@ -112,7 +113,7 @@ export class ActiveSurveyComponent implements OnInit {
           console.log ('DEBUG: BAD surveyId param from router!');
           return;
         }
-        this.survey = result;
+        this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
         if (this.survey && this.survey.active) {
           this.properSurvey = true;
@@ -238,6 +239,7 @@ resetTimer() {
  * This method posts the survey to the database
  */
   private postSurvey() {
+    console.log(this.answers);
     this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });
