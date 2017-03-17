@@ -215,6 +215,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     this.submitLoading = true;
 
     // remove options-properties of non-multi questions
+    // TODO make this work for 'single'
     for (const qo of clone.questionlist) {
       if (qo.mode !== 'multi') {
         delete qo.lang.no.options;
@@ -264,7 +265,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         // success(result)
         this.preSurvey.postKey = result._id;
         const preSurvey: Survey = JSON.parse(JSON.stringify(this.preSurvey));
-        this.surveyService.patchSurvey(preSurvey._id, preSurvey).subscribe(result => success(result), error => err(error));
+        this.surveyService.patchSurvey(preSurvey._id, preSurvey).subscribe(result2 => success(result2), error => err(error));
       }, error => err(error));
       // this.preSurvey = original + preKey = result.survey._id // or something
     } else {
