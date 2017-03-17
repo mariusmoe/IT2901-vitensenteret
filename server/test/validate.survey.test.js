@@ -46,6 +46,8 @@ describe('Survey validation', () => {
     done();
   });
 
+
+
   it('should not validate a fully valid survey json object with additional properties', (done) => {
     // make sure clone validates correctly.
     let IsItValid = val.surveyValidation(clone);
@@ -85,6 +87,34 @@ describe('Survey validation', () => {
     clone.questionlist[0].lang.en.additionalProperty = {};
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
+
+    done();
+  });
+
+  it('should validate postkey property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // add prepost key
+    clone.postKey = 'aaaaaaaaaaaaaaaaaaaaaaaa';
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // test bad key format
+    clone.postKey = 'aaaaaaaaaaaaaaaaaaaaaaaz'; // only a-f works
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // test bad key type
+    clone.postKey = [];
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // test undefined
+    clone.postKey = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
 
     done();
   });

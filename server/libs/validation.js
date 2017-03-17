@@ -57,6 +57,7 @@ let surveySchema = {
   "type": "object",
   "properties": {
     "_id": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ }, // mongodb sends surveys back to client with this property. Not required.
+    "postKey": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ }, // ID of a post survey should one be created for this survey. Not required.
     "__v": { "type": "integer" }, // mongodb sends surveys back to client with this property. Not required.
     "comment": { "type": "string" }, // ADMIN only comment. Not required. Any type of string allowed.
     "name": { "type": "string", "pattern": /\S/ },

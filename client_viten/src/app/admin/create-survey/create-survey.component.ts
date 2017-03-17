@@ -43,6 +43,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   allowedModesVerbose = {
    'binary': 'Yes/No',
    'star': '5 Stars',
+   'single': 'Single Choice',
    'multi': 'Multiple Choice',
    'smiley': 'Smiley',
    'text': 'Free Text'
@@ -97,7 +98,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           };
           this.startupLoading = false;
         } else {
-        // FIXME why do linter go ham here?
         this.survey = result.survey;
         this.isPatch = true;
 
@@ -162,7 +162,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       if (this.englishEnabled) {                            // message en
         status = status && this.fieldValidate(this.survey.endMessage.en);
       }
-      console.log(this.survey.questionlist);
       // check each question
       for (const questionObject of this.survey.questionlist) {
         // the actual question
@@ -170,8 +169,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         if (this.englishEnabled) {
           status = status && this.fieldValidate(questionObject.lang.en.txt);
         }
-        // and the options, if multi is selected
-        if (questionObject.mode === 'multi') {
+        // and the options, if multi or single is selected
+        if (questionObject.mode === 'multi' || questionObject.mode === 'single') {
           // ..if more than 2 options are added
           if (questionObject.lang.no.options.length < 2) {
             status = false;
@@ -217,7 +216,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // remove options-properties of non-multi questions
     // TODO make this work for 'single'
     for (const qo of clone.questionlist) {
-      if (qo.mode !== 'multi') {
+      if (qo.mode !== 'multi' && qo.mode !== 'single') {
         delete qo.lang.no.options;
         delete qo.lang.en.options;
       }
@@ -291,7 +290,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       mode: this.allowedModes[4], // default to smiley
       required: true, // default to true
       lang: {
-        // options are added here. They are removed again for non-multi
+        // options are added here. They are removed again for non-multi & non-single
         // questions when you submit the survey.
         no: { txt: '', options: [] },
         en: { txt: '', options: [] },

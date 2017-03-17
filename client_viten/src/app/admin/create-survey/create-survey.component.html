@@ -87,8 +87,8 @@
                     this span displays EITHER 'No alternatives need to be set.'
                     OR Alternatives: x/max(x,2)
                   -->
-                  <span class="desc" [class.invalid]="(questionObject.mode == 'multi' && questionObject.lang.no.options.length < 2)">
-                    {{ questionObject.mode == 'multi' ? ( 'Alternatives: n/m' | translate:[questionObject.lang.no.options.length,
+                  <span class="desc" [class.invalid]="((questionObject.mode == 'multi' || questionObject.mode == 'single') && questionObject.lang.no.options.length < 2)">
+                    {{ (questionObject.mode == 'multi' || questionObject.mode == 'single') ? ( 'Alternatives: n/m' | translate:[questionObject.lang.no.options.length,
                         (questionObject.lang.no.options.length > 2 ? questionObject.lang.no.options.length : 2)] )
                       : ( 'No alternatives need to be set.' | translate )
                   }}</span>
@@ -113,9 +113,9 @@
                 [mdTooltip]="'Deletes this particular question! Careful!' | translate" tooltip-position="above">
                   <md-icon>delete</md-icon>
                 </button>
-                <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
+                <!-- QUESTION OPTIONS: multi or single (the others has no options to be set) -->
                 <button md-raised-button color="primary"
-                *ngIf="questionObject.mode === 'multi'"
+                *ngIf="questionObject.mode === 'multi' || questionObject.mode === 'single'"
                 (click)="setAlternatives(questionObject)">
                 <md-icon>create</md-icon> {{ 'Set Alternatives' | translate }}</button>
                 <!-- the order of these two buttons are reversed in the css! -->

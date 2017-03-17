@@ -28,6 +28,8 @@ export const LANG_EN_TRANS = {
   'Okay': 'Okay',
   'Success': 'Success',
   'Download': 'Download',
+  'Active': 'Active',
+  'Inactive': 'Inactive',
 
   // roles
   'admin': 'Admin',
@@ -43,6 +45,7 @@ export const LANG_EN_TRANS = {
   // Survey Question modes
   'Yes/No': 'Yes/No',
   '5 Stars': '5 Stars',
+  'Single Choice': 'Single Choice',
   'Multiple Choice': 'Multiple Choice',
   'Smiley': 'Smiley',
   'Free Text': 'Free Text',
@@ -89,7 +92,7 @@ export const LANG_EN_TRANS = {
   'Post results': 'Post results',
   'Could not post your survey. Error:': 'Could not post your survey. The server replied:',
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
-  'Required question':'Required question',
+  'Required question': 'Required question',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
@@ -114,8 +117,7 @@ export const LANG_EN_TRANS = {
   'Total number of answers: n': 'Total number of answers: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'No responses have been registered, so there is nothing to show here yet.',
-  'Active':'Active',
-  'Inactive':'Inactive',
+
 
   // Admin settings component
   'Retype password': 'Retype password',
