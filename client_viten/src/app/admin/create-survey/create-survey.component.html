@@ -24,12 +24,11 @@
             </md-input-container>
           </div>
 
+          <!-- SURVEY DATE -->
+          
+          <!-- SURVEY ACTIVE STATE -->
+          <md-checkbox [(ngModel)]="survey.active">{{ 'Active status' | translate }}</md-checkbox>
 
-
-          <div>
-            <!-- SURVEY ACTIVE STATE -->
-            <md-checkbox [(ngModel)]="survey.active">{{ 'Active status' | translate }}</md-checkbox>
-          </div>
           <div>
             <!-- USE ENGLISH? -->
             <md-checkbox [(ngModel)]='englishEnabled' (change)="setPushReadyStatus()"

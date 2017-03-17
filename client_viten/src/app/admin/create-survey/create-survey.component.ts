@@ -6,7 +6,6 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TranslateService } from '../../_services/translate.service';
 
-
 @Component({
   selector: 'app-create-survey',
   templateUrl: './create-survey.component.html',
@@ -33,14 +32,16 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   englishEnabled = false;
   canPostSurvey = false;
   isPost = false;
-  preSurvey: Survey;
   lockdown = false;
 
   // SURVEY VARIABLES
   survey: Survey;
+  preSurvey: Survey;
   maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
   isPatch = false;
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
+
+
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
@@ -73,7 +74,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           this.isPost = true;
           this.lockdown = true;
           this.preSurvey = result.survey;
-          this.survey = this.preSurvey; // Initiate the survey with an exact duplicate.
+          this.survey = JSON.parse(JSON.stringify(this.preSurvey)); // Initiate the survey with an exact duplicate.
+          this.survey.isPost = true;
+          delete this.survey._id;
           // remove options-properties of non-multi questions
           for (const qo of this.preSurvey.questionlist) {
             if (qo.mode !== 'multi' && qo.mode !== 'single') {
@@ -128,10 +131,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       'name': '',
       'comment': '',
       'date': new Date().toISOString(),
-      'activationDate': new Date().toISOString(),
+      'activationDate': new Date().toISOString(), // intentionally not iso string
       'deactivationDate': undefined,
       'active': true,
-      'isPost': isPost,
+      'isPost': false,
       'questionlist': [],
       'endMessage': {
         'no': '',
@@ -146,57 +149,58 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       this.dragulaService.destroy('questionsBag');
   }
 
-    /**
-     * setSaveReadyStatus()
-     *
-     * Checks every part of the survey and returns true if the survey is valid
-     */
-    setPushReadyStatus() {
-      // note: comment is NOT required, and is thusly not listed here.
-      let status = this.fieldValidate(this.survey.name)     // name
-        && this.survey.questionlist.length > 0              // at least one question
-        && this.fieldValidate(this.survey.endMessage.no);   // message no
-      if (this.englishEnabled) {                            // message en
-        status = status && this.fieldValidate(this.survey.endMessage.en);
+
+  /**
+   * setSaveReadyStatus()
+   *
+   * Checks every part of the survey and returns true if the survey is valid
+   */
+  setPushReadyStatus() {
+    // note: comment is NOT required, and is thusly not listed here.
+    let status = this.fieldValidate(this.survey.name)     // name
+      && this.survey.questionlist.length > 0              // at least one question
+      && this.fieldValidate(this.survey.endMessage.no);   // message no
+    if (this.englishEnabled) {                            // message en
+      status = status && this.fieldValidate(this.survey.endMessage.en);
+    }
+    // check each question
+    for (const questionObject of this.survey.questionlist) {
+      // the actual question
+      status = status && this.fieldValidate(questionObject.lang.no.txt);
+      if (this.englishEnabled) {
+        status = status && this.fieldValidate(questionObject.lang.en.txt);
       }
-      // check each question
-      for (const questionObject of this.survey.questionlist) {
-        // the actual question
-        status = status && this.fieldValidate(questionObject.lang.no.txt);
-        if (this.englishEnabled) {
-          status = status && this.fieldValidate(questionObject.lang.en.txt);
+      // and the options, if multi or single is selected
+      if (questionObject.mode === 'multi' || questionObject.mode === 'single') {
+        // ..if more than 2 options are added
+        if (questionObject.lang.no.options.length < 2) {
+          status = false;
+          break;
         }
-        // and the options, if multi or single is selected
-        if (questionObject.mode === 'multi' || questionObject.mode === 'single') {
-          // ..if more than 2 options are added
-          if (questionObject.lang.no.options.length < 2) {
-            status = false;
-            break;
-          }
-          // and if each option is valid
-          for (const o of questionObject.lang.no.options) {
+        // and if each option is valid
+        for (const o of questionObject.lang.no.options) {
+          status = (status && o.length > 0 && this.fieldValidate(o));
+        }
+        if (this.englishEnabled) {
+          for (const o of questionObject.lang.en.options) {
             status = (status && o.length > 0 && this.fieldValidate(o));
           }
-          if (this.englishEnabled) {
-            for (const o of questionObject.lang.en.options) {
-              status = (status && o.length > 0 && this.fieldValidate(o));
-            }
-          }
         }
       }
-      // and finally set the status
-      this.canPostSurvey = status;
     }
+    // and finally set the status
+    this.canPostSurvey = status;
+  }
 
-    /**
-     * notWhitespace(s: string)
-     *
-     * @param {string} s a string to check
-     * returns true if the input string is not just whitespace
-     */
-    fieldValidate(s: string) {
-      return s && s.length > 0 && (/\S/.test(s));
-    }
+  /**
+   * notWhitespace(s: string)
+   *
+   * @param {string} s a string to check
+   * returns true if the input string is not just whitespace
+   */
+  fieldValidate(s: string) {
+    return s && s.length > 0 && (/\S/.test(s));
+  }
 
 
 
