@@ -21,15 +21,18 @@
         <!-- file_download // Icon for download -->
       </md-card-content>
       <md-card-actions align="right">
-        <button md-raised-button color="primary" (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
-          <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
-        </button>
-        <button md-raised-button color="primary" (click)="downloadAs('json')" routerLinkActive="active">
-          <md-icon>file_download</md-icon> {{ 'Download as JSON' | translate }}
-        </button>
-        <button md-raised-button color="primary" (click)="downloadAs('csv')" routerLinkActive="active">
-          <md-icon>timeline</md-icon> {{ 'Download Raw Data' | translate }}
-        </button>
+        <button md-button [mdMenuTriggerFor]="menu"><md-icon>file_download</md-icon>{{'Download' | translate}}</button>
+        <md-menu #menu="mdMenu">
+          <button md-menu-item  (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
+            <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
+          </button>
+          <button md-menu-item (click)="downloadAs('json')" routerLinkActive="active">
+            <md-icon>file_download</md-icon> {{ 'Download as JSON' | translate }}
+          </button>
+          <button md-menu-item (click)="downloadAs('csv')" routerLinkActive="active">
+            <md-icon>timeline</md-icon> {{ 'Download Raw Data' | translate }}
+          </button>
+        </md-menu>
         <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
           <md-icon>local_post_office</md-icon> Add post
         </button>

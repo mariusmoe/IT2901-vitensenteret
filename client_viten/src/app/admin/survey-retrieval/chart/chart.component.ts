@@ -18,6 +18,7 @@ export class BarChartComponent implements OnInit {
   barChartLabels: string[];
   barChartData: Object[];
   barChartColours: Object[] = [];
+  total: number;
 
   chartType = 'bar';
   chartTypes = ['bar', 'doughnut', 'pie', 'line', 'polarArea' ];
@@ -66,6 +67,8 @@ export class BarChartComponent implements OnInit {
         this.barChartData[0]['data'][response.questionlist[this.index]] += 1;
       }
     }
+    // Count the total number of responses that; not including "did not answer"
+    this.total = this.barChartData[0]['data'].reduce((a, b) => a + b, 0);
 
     // Set colours
     const colourChoices = ['#fa7337', '#6ecdb4', '#c8dc32', '#b44682', '#7378cd', '#5a96d7', '#a0968c', '#c8c8c8'];
