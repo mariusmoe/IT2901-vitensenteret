@@ -166,5 +166,5 @@ module.exports = app => {
   };
 
 
-  Response.remove({}).then(Survey.remove({})).then(() => { executeSeeds() });
+  Response.remove({}, success => {}).then(Survey.remove({}, success => {})).then(() => { executeSeeds() });
 }
