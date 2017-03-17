@@ -38,11 +38,10 @@
   margin: 0 auto;
 }
 
+.greenactive {
+  border-left: 2px solid #A1E232;
+}
 
-.surveyActiveIcon {
-   color: #f44336;
-   &.active {
-      color: #A1E232;
-  }
-
+.deactive {
+  border-left: 2px solid #f44336;
 }

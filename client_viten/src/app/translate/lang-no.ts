@@ -113,6 +113,8 @@ export const LANG_NO_TRANS = {
   'Total number of answers: n': 'Totalt antall svar: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
+  'Active':'Aktiv',
+  'Inactive':'Innaktiv',
 
   // Admin settings component
   'Retype password': 'Skriv passordet igjen',
