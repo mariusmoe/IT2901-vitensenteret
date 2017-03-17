@@ -43,6 +43,7 @@ import { TranslateService } from './_services/translate.service';
 import { TranslatePipe } from './_pipes/translate';
 import { DatePipe } from '@angular/common';
 import { LogoComponentComponent } from './logo-component/logo-component.component';
+import { SinglechoiceComponent } from './user/singlechoice/singlechoice.component';
 
 @NgModule({
   declarations: [
@@ -72,7 +73,8 @@ import { LogoComponentComponent } from './logo-component/logo-component.componen
     AdminSurveysPipe,
     TranslatePipe,
     MultiplechoiceComponent,
-    LogoComponentComponent
+    LogoComponentComponent,
+    SinglechoiceComponent
 
   ],
   imports: [

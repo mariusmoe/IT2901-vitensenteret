@@ -8,9 +8,18 @@ const mongoose = require('mongoose'),
 
 // IF THIS CHANGES, DO UPDATE libs/validation.js!!
 const SurveySchema = new Schema({
-  name: String,
+  name: {
+    type: String,
+    required: true
+  },
+  postKey: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey'},
   comment: String,
-	date: Date,
+	date: Date,                // date created
+  activationDate: {          // date survey became active
+    type: Date,
+    default: Date.now
+  },
+  deactivationDate: Date,   // date survey became deactivated
   active: Boolean,
   endMessage: {
     en: String,
@@ -19,8 +28,9 @@ const SurveySchema = new Schema({
 	questionlist: [{
     mode: {
       type: String,
-      enum: ['binary', 'star', 'multi', 'smiley', 'text'],
-      default: 'smily'
+      enum: ['binary', 'star', 'single', 'multi', 'smiley', 'text'],
+      //  0 or 1 , 0 - 4, 0 - n, [0 - n], 0 - 2, text
+      default: 'smiley'
     },
     lang: {
       en: {
@@ -32,9 +42,8 @@ const SurveySchema = new Schema({
         options: [String]
       },
     },
-		answer: [Number]
+    required: { type: Boolean, default: true }
   }]
 });
-
 
 module.exports = mongoose.model('Survey', SurveySchema);

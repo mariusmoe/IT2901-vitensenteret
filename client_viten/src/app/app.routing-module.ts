@@ -23,6 +23,8 @@ const appRoutes: Routes = [
       { path: 'settings', component: AdminSettingsComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey/:surveyId', component: CreateSurveyComponent, canActivate: [AuthGuard] },
+      { path: 'editsurvey/:surveyId/prepost', component: CreateSurveyComponent, canActivate: [AuthGuard] },
+
       // these two placed further down due to priority issues
       { path: ':surveyId', component: HomepageAdminComponent, canActivate: [AuthGuard] },
       { path: '', component: HomepageAdminComponent, pathMatch: 'full', canActivate: [AuthGuard]   },
