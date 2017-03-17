@@ -9,6 +9,11 @@
         <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
         <md-card-subtitle>{{ 'Total number of answers: n' | translate: [responses ? responses.length : 0] }}</md-card-subtitle>
         <md-icon align="left" class="activeIcon" [color]="survey.active ? 'primary' : ''">question_answer</md-icon>
+        <div class="active-status">
+          <md-icon align="left" class="activeIcon" [ngClass]="{active: survey.active, surveyActiveIcon: true}">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
+          <md-card-subtitle class="visibility-text" *ngIf="survey.active">{{'Active' | translate}}</md-card-subtitle>
+          <md-card-subtitle class="visibility-text" *ngIf="!survey.active">{{'Inactive' | translate}}</md-card-subtitle>
+        </div>
       </md-card-title-group>
       <md-card-content>
         <app-survey-retrieval *ngIf="responses && responses.length > 0"
