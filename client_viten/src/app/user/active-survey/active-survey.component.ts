@@ -238,6 +238,7 @@ resetTimer() {
  * This method posts the survey to the database
  */
   private postSurvey() {
+    console.log(this.answers);
     this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });

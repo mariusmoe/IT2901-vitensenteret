@@ -18,12 +18,12 @@ export class SurveyService {
 
   /**
    * answer one survey
-   * @param  {Array<number>}       answers  List of answers, each number
+   * @param  {Array<any>}       answers  List of answers, each element is an answer
    *                                        represents one answer.
    * @param  {String}              idString identifier for a survey
    * @return {Observable<boolean>}          Observable boolean, true if successful
    */
-  answerSurvey(answers: Array<number>, idString: String): Observable<boolean> {
+  answerSurvey(answers: Array<any>, idString: String): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
