@@ -1,13 +1,9 @@
 .multiChoiceContainer{
   display : flex;
   flex-wrap : wrap;
-  flex-direction : row;
-  justify-content : flex-start;
-  align-items : stretch;
-  // align-content: center;
-}
-
-.radioOption {
-  display: flex;
-  justify-content: space-between;
+  flex-direction: row;
+  align-items: center;
+  transform: scale(2);
+  width: 10vw;
+  margin-top:65%;
 }
