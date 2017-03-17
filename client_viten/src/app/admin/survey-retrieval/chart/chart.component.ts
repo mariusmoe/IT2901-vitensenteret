@@ -12,6 +12,7 @@ export class BarChartComponent implements OnInit {
   @Input() index: number;
   @Input() questionObject: QuestionObject;
   @Input() responses: Response[];
+  @Input() postResponses: Response[];
   @ViewChild('canvas') canvas;
 
   barChartOptions: Object;
@@ -55,6 +56,11 @@ export class BarChartComponent implements OnInit {
     }
 
     this.barChartData = [{ 'data': new Array(this.barChartLabels.length) }];
+    if (this.postResponses && this.postResponses.length > 0) {
+      this.barChartData.push({ 'data': new Array(this.barChartLabels.length) });
+    }
+
+
     for (let i = 0; i < this.barChartLabels.length; i++) {
       this.barChartData[0]['data'][i] = 0;
     }
@@ -67,19 +73,38 @@ export class BarChartComponent implements OnInit {
         this.barChartData[0]['data'][response.questionlist[this.index]] += 1;
       }
     }
+    if (this.postResponses && this.postResponses.length > 0) {
+      for (let i = 0; i < this.barChartLabels.length; i++) {
+        this.barChartData[1]['data'][i] = 0;
+      }
+      for (const response of this.postResponses) {
+        if (this.questionObject.mode === 'multi') {
+          for (const option of response.questionlist[this.index]) {
+            this.barChartData[1]['data'][option] += 1;
+          }
+        } else {
+          this.barChartData[1]['data'][response.questionlist[this.index]] += 1;
+        }
+      }
+    }
     // Count the total number of responses that; not including "did not answer"
     this.total = this.barChartData[0]['data'].reduce((a, b) => a + b, 0);
 
     // Set colours
     const colourChoices = ['#fa7337', '#6ecdb4', '#c8dc32', '#b44682', '#7378cd', '#5a96d7', '#a0968c', '#c8c8c8'];
     // initialize our variable holder. We need each of the properties we want to adjust in here
-    this.barChartColours = [{backgroundColor: [], pointBackgroundColor: [], borderColor: [], pointBorderColor: [] }];
+    const chartColourInit = {backgroundColor: [], pointBackgroundColor: [], borderColor: [], pointBorderColor: [] };
+    this.barChartColours = [chartColourInit, chartColourInit]; // two lists. pre and post.
     for (const colour of colourChoices) {
       // follows the static order above. Expansion opportunity; Filter out the theme colours and adjust order accordingly
       this.barChartColours[0]['backgroundColor'].push(this.hexConverter(colour, 0.65));
       this.barChartColours[0]['pointBackgroundColor'].push(this.hexConverter(colour, 0.65));
       this.barChartColours[0]['borderColor'].push(this.hexConverter(colour, 1));
       this.barChartColours[0]['pointBorderColor'].push(this.hexConverter(colour, 1));
+      this.barChartColours[1]['backgroundColor'].push(this.hexConverter(colour, 0.75));
+      this.barChartColours[1]['pointBackgroundColor'].push(this.hexConverter(colour, 0.75));
+      this.barChartColours[1]['borderColor'].push(this.hexConverter(colour, 1));
+      this.barChartColours[1]['pointBorderColor'].push(this.hexConverter(colour, 1));
     }
     // Angular 2 charts properties:
     // backgroundColor, borderColor, pointBackgroundColor,

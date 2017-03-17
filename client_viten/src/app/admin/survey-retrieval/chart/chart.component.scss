@@ -49,8 +49,13 @@ td, th {
     padding: 8px;
 }
 
-tr:nth-child(even) {
+tr {
+  &.labels th {
+    text-align: center;
+  }
+  &:nth-child(even) {
     background-color: #eee;
+  }
 }
 
 

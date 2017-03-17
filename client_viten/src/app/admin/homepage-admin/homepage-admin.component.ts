@@ -23,8 +23,11 @@ declare const jsPDF: any;
 })
 export class HomepageAdminComponent implements OnInit, OnDestroy {
   survey: Survey = null;
+  postSurvey: Survey = null;
   responses: Response[] = null;
+  postResponses: Response[] = null;
   loadingSurvey = false;
+  loadingPostSurvey = false;
   @ViewChild('surveyDOM') surveyDOM;
   generatingPDF = false;
 
@@ -62,6 +65,14 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       this.loadingSurvey = false;
       this.survey = <Survey>response.survey;
       this.responses = <Response[]>response.responses;
+      if (this.survey.postKey && this.survey.postKey.length > 0) {
+        this.loadingPostSurvey = true;
+        this.surveyService.getSurvey(this.survey.postKey).subscribe( (postResponse) => {
+          this.postSurvey = <Survey>postResponse.survey;
+          this.postResponses = <Response[]>postResponse.responses;
+          this.loadingPostSurvey = false;
+        });
+      }
     });
   }
 

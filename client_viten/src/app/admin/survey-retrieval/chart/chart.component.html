@@ -27,12 +27,33 @@
       </md-select>
       <button md-raised-button color="accent" (click)="downloadAsPng()"><md-icon>insert_chart</md-icon> {{ 'Download as PNG' | translate }}</button>
     </div>
-    <div class="tble">
+    <div *ngIf="!postResponses || postResponses.length == 0">
       <table>
         <tr *ngFor="let label of barChartLabels; let i = index;">
           <td>{{label}}</td>
-          <td>{{(barChartData[0].data[i]/responses.length)*100}} %</td>
           <td>{{barChartData[0].data[i]}}</td>
+          <td>{{(barChartData[0].data[i]/responses.length)*100}} %</td>
+        </tr>
+        <tr *ngIf="!questionObject.required">
+          <td>{{'Did not answer' | translate}}</td>
+          <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total)) / (responses.length)*100}} %</td>
+          <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total))}}</td>
+        </tr>
+      </table>
+    </div>
+    <div *ngIf="postResponses && postResponses.length > 0">
+      <table>
+        <tr class="labels">
+          <th></th>
+          <th colspan="2">PRE</th>
+          <th colspan="2">POST</th>
+        </tr>
+        <tr *ngFor="let label of barChartLabels; let i = index;">
+          <td>{{label}}</td>
+          <td>{{barChartData[0].data[i]}}</td>
+          <td>{{(barChartData[0].data[i]/responses.length)*100}} %</td>
+          <td>{{barChartData[1].data[i]}}</td>
+          <td>{{(barChartData[1].data[i]/postResponses.length)*100}} %</td>
         </tr>
         <tr *ngIf="!questionObject.required">
           <td>{{'Did not answer' | translate}}</td>

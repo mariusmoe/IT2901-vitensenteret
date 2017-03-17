@@ -7,7 +7,15 @@
   flex-wrap: nowrap;
   align-items: stretch;
 }
-
+.flexchild {
+  flex: 1 1;
+}
+.alignCenter {
+  text-align: center;
+}
+.alignRight {
+  text-align: right;
+}
 
 .rightSide {
   display: inline-block;
