@@ -55,14 +55,12 @@ export class SurveyService {
    * getSurvey(idString: String)
    *
    * @param {string} idString the id of the survey one wants to get
-   * @returns {Observable<Survey>} returns an observable holding the requested survey
+   * @returns {Observable<any>} returns an observable holding the requested survey and responses
    */
-   getSurvey(idString: String): Observable<Survey> {
+   getSurvey(idString: String): Observable<any> {
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
-       const s: Survey = response.json();
-
-       return s;
+       return response.json();
      },
      error => {
        return error.json();

@@ -89,4 +89,10 @@ module.exports = {
     message: "Request successful, but no surveys exist.",
     code: 1015
   },
+
+  // SURVEY RESPONSES CODES
+  SURVEY_RESPONSE_SUCCESS: {
+    message: "The response has been registered successfully.",
+    code: 1016,
+  },
 }
