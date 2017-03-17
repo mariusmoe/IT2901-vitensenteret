@@ -44,6 +44,7 @@ export const LANG_EN_TRANS = {
   // Survey Question modes
   'Yes/No': 'Yes/No',
   '5 Stars': '5 Stars',
+  'Single Choice': 'Single Choice',
   'Multiple Choice': 'Multiple Choice',
   'Smiley': 'Smiley',
   'Free Text': 'Free Text',
