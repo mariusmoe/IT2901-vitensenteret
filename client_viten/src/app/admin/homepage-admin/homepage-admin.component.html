@@ -21,7 +21,7 @@
         <!-- file_download // Icon for download -->
       </md-card-content>
       <md-card-actions align="right">
-        <button md-button [mdMenuTriggerFor]="menu"><md-icon>file_download</md-icon>{{'Download' | translate}}</button>
+        <button md-raised-button color="primary" [mdMenuTriggerFor]="menu"><md-icon>file_download</md-icon>{{'Download' | translate}}</button>
         <md-menu #menu="mdMenu">
           <button md-menu-item  (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
             <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
@@ -33,8 +33,13 @@
             <md-icon>timeline</md-icon> {{ 'Download Raw Data' | translate }}
           </button>
         </md-menu>
-        <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
-          <md-icon>local_post_office</md-icon> Add post
+
+        <!-- display ADD post survey if there is no post survey, else display edit post survey  -->
+        <button *ngIf="!survey.postKey || !(survey.postKey.length > 0)" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
+          <md-icon>local_post_office</md-icon> {{ 'Create post-survey' | translate }}
+        </button>
+        <button *ngIf="survey.postKey && survey.postKey.length > 0" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey.postKey}}" routerLinkActive="active">
+          <md-icon>local_post_office</md-icon> {{ 'Edit post-survey' | translate }}
         </button>
         <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
           <md-icon>build</md-icon> {{ 'Edit' | translate }}

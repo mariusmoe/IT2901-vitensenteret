@@ -80,7 +80,7 @@
                   <!-- no placeholder set; there will never be an opportunity for it to be empty -->
                   <md-select [(ngModel)]="questionObject.mode" (change)='setPushReadyStatus()'>
                     <md-option *ngFor="let m of allowedModes" [value]="m">
-                      {{ allowedModesVerbose[m] | translate }}
+                      {{ m | translate }}
                     </md-option>
                   </md-select>
                   <!--

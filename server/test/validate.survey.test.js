@@ -10,6 +10,7 @@ let validJsonObject = {
   "activationDate": "2012-04-23T18:25:43.511Z",
   "deactivationDate": "2012-04-23T18:25:43.511Z",
   "active": true,
+  "isPost": false,
   "questionlist": [{
     "mode": "smiley",
     "required": true,
@@ -367,6 +368,36 @@ describe('Survey validation', () => {
     done();
   });
 
+
+  it('should not validate on missing or bad isPost property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check wrong type
+    clone.isPost = "Hello";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+
+    // check undefined
+    clone.isPost = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check null
+    clone.isPost = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.isPost;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+
+    done();
+  });
 
   it('should not validate on missing or bad questionlist property', (done) => {
     // make sure clone validates correctly.

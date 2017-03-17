@@ -43,12 +43,12 @@ export const LANG_NO_TRANS = {
   'This field is required.': 'Dette feltet er påkrevd.',
 
   // Survey Question modes
-  'Yes/No': 'Ja/Nei',
-  '5 Stars': '5 stjerner',
-  'Single Choice': 'Enkelt valg',
-  'Multiple Choice': 'Flervalgs',
-  'Smiley': 'Smiley',
-  'Free Text': 'Tekst',
+  'binary': 'Ja/Nei',
+  'star': '5 stjerner',
+  'single': 'Enkelt valg',
+  'multi': 'Flervalgs',
+  'smiley': 'Smiley',
+  'text': 'Tekst',
 
   // Survey Question mode labels
   'Yes': 'Yes',
@@ -57,7 +57,7 @@ export const LANG_NO_TRANS = {
   '2 Stars': '2 Stjerner',
   '3 Stars': '3 Stjerner',
   '4 Stars': '4 Stjerner',
-  // '5 Stars': '5 Stars', already defined above.
+  '5 Stars': '5 Stars',
   'Sad': 'Trist',
   'Neutral': 'Nøytral',
   'Happy': 'Glad',
@@ -118,6 +118,9 @@ export const LANG_NO_TRANS = {
   'Total number of answers: n': 'Totalt antall svar: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
+  'Create post-survey': 'Lag post-undersøkelse',
+  'Edit post-survey': 'Endre post-undersøkelse',
+
 
   // Admin settings component
   'Retype password': 'Skriv passordet igjen',

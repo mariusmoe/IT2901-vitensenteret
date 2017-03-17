@@ -43,12 +43,12 @@ export const LANG_EN_TRANS = {
   'This field is required.': 'This field is required.',
 
   // Survey Question modes
-  'Yes/No': 'Yes/No',
-  '5 Stars': '5 Stars',
-  'Single Choice': 'Single Choice',
-  'Multiple Choice': 'Multiple Choice',
-  'Smiley': 'Smiley',
-  'Free Text': 'Free Text',
+  'binary': 'Yes/No',
+  'star': '5 Stars',
+  'single': 'Single Choice',
+  'multi': 'Multiple Choice',
+  'smiley': 'Smiley',
+  'text': 'Free Text',
 
   // Survey Question mode labels
   'Yes': 'Yes',
@@ -57,7 +57,7 @@ export const LANG_EN_TRANS = {
   '2 Stars': '2 Stars',
   '3 Stars': '3 Stars',
   '4 Stars': '4 Stars',
-  // '5 Stars': '5 Stars', already defined above.
+  '5 Stars': '5 Stars',
   'Sad': 'Sad',
   'Neutral': 'Neutral',
   'Happy': 'Happy',
@@ -117,7 +117,8 @@ export const LANG_EN_TRANS = {
   'Total number of answers: n': 'Total number of answers: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'No responses have been registered, so there is nothing to show here yet.',
-
+  'Create post-survey': 'Create post-survey',
+  'Edit post-survey': 'Edit post-survey',
 
   // Admin settings component
   'Retype password': 'Retype password',

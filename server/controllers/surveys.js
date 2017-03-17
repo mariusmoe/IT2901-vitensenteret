@@ -24,7 +24,7 @@ exports.createSurvey = (req, res, next) => {
   if (Object.keys(receivedSurvey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
   }
-  if (!val.surveyValidation(receivedSurvey)){
+  if (!val.surveyValidation(receivedSurvey, true)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
@@ -69,7 +69,7 @@ exports.createSurvey = (req, res, next) => {
 
 // GET
 exports.getAllSurveys = (req, res, next) => {
-  Survey.find( {}, { 'name': true, 'active': true, 'date': true, 'comment': true }, (err, surveys) => {
+  Survey.find( {}, { 'name': true, 'active': true, 'date': true, 'comment': true, 'isPost': true }, (err, surveys) => {
     if (!surveys || surveys.length === 0) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
@@ -122,7 +122,7 @@ exports.patchOneSurvey = (req, res, next) => {
   if (Object.keys(survey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
   }
-  if (!val.surveyValidation(survey)){
+  if (!val.surveyValidation(survey, true)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
   // Set ID

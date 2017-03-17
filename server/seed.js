@@ -5,6 +5,7 @@ const mongoose = require('mongoose'),
 
 // TODO only do this if in dev mode
 module.exports = app => {
+  if (process.env.NODE_ENV === 'test') { return; }
 
   function executeSeeds() {
 
@@ -90,9 +91,13 @@ module.exports = app => {
         let alternatives = [];
         if (mode === 'multi' || mode === 'single') {
           let numAlternatives = getRandomInt(2,6);
+          let remainingAlternatives = emotions.concat([]);
+
           for (let ai = 0; ai<numAlternatives; ai++) {
-            let alt = emotions[getRandomInt(0,emotions.length)];
+            let newAlternative = getRandomInt(0,remainingAlternatives.length);
+            let alt = remainingAlternatives[newAlternative];
             alternatives.push(alt);
+            remainingAlternatives.splice(newAlternative, 1);
           }
         } else {
           for (let i = 0; i < questionAnswerRanges[modeIndex]; i++) {
@@ -116,6 +121,7 @@ module.exports = app => {
         questionlist: questions,
         date: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
         activationDate: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
+        isPost: false,
         active: Math.random() < 0.5,
         endMessage: {
           no: funnify(),

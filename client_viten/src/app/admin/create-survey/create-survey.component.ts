@@ -32,7 +32,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   startupLoading = true;
   englishEnabled = false;
   canPostSurvey = false;
-  isPrePost = false;
+  isPost = false;
   preSurvey: Survey;
 
   // SURVEY VARIABLES
@@ -40,14 +40,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
   isPatch = false;
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
-  allowedModesVerbose = {
-   'binary': 'Yes/No',
-   'star': '5 Stars',
-   'single': 'Single Choice',
-   'multi': 'Multiple Choice',
-   'smiley': 'Smiley',
-   'text': 'Free Text'
- };
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
@@ -68,9 +60,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
     // Safe checking of url if last part is prepost
-    let prepost = false;
+    let isPost = false;
     if (typeof this.route.snapshot.url[2] !== 'undefined') {
-      prepost = true;
+      isPost = true;
     }
 
     const setStartupDefaults = () => {
@@ -81,6 +73,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         'activationDate': new Date().toISOString(),
         'deactivationDate': undefined,
         'active': true,
+        'isPost': isPost,
         'questionlist': [],
         'endMessage': {
           'no': '',
@@ -91,10 +84,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
 
     if (param) {
-      // Fetch data if editing a survey or adding a prepost to a survey
+      // Fetch data if editing a survey or adding a post to a survey
       const sub = this.surveyService.getSurvey(param).subscribe(result => {
-        if (prepost) {
-          this.isPrePost = true;
+        if (isPost) {
+          this.isPost = true;
           this.preSurvey = result.survey;
           // remove options-properties of non-multi questions
           for (const qo of this.preSurvey.questionlist) {
@@ -218,6 +211,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // if (!this.canPostSurvey) { return; }
     const clone: Survey = JSON.parse(JSON.stringify(this.survey));
     this.submitLoading = true;
+    console.log(clone);
 
     // remove options-properties of non-multi questions
     for (const qo of clone.questionlist) {
@@ -257,17 +251,17 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // fashion as to avoid issues should the route name be altered.
       if (this.isPatch) {
         // We append /:surveyId at the end to bring the user back to the survey he or she just edited.
-        this.router.navigate([this.route.parent.snapshot.url.join('/') + '/' + this.survey._id]);
-        return;
+        // so long as this isn't a post-survey..
+        if (!this.survey.isPost) {
+          this.router.navigate([this.route.parent.snapshot.url.join('/') + '/' + this.survey._id]);
+          return;
+        }
       }
       this.router.navigate([this.route.parent.snapshot.url.join('/')]);
     };
 
     // Check prepost conditions first
-    if (this.isPrePost) {
-      // TODO PATCH pre-survey and post post survey FIXME
-      // Alternatively create a route that takes pre-survey._id and do all
-      // the work.
+    if (this.isPost) {
       this.surveyService.postSurvey(clone).subscribe(result => {
         // success(result)
         this.preSurvey.postKey = result._id;
