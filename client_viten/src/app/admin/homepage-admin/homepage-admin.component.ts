@@ -142,8 +142,15 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
 
     rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
-    const answers = this.responses.length;
-    rightAlignedText(25, 44, this.translateService.instant('Number of responses: n', answers.toString()));
+    const responses = this.responses.length;
+    const postResponses = this.responses.length;
+    if (this.postSurvey) {
+      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n, m',
+        [responses.toString(), postResponses.toString()]));
+    } else {
+      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n',
+        responses.toString()));
+    }
 
     // Get our charts (canvases)
     const canvases = this.surveyDOM.nativeElement.querySelectorAll('canvas.surveyQuestionChart');
@@ -160,22 +167,26 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     // Declare variables that are used to handle positioning of our charts
     let pageNr = 1;           // page number (starting at 1)
     let baseOffset = 65;      // The fixed base offset from the top of the page
-    const chartHeight = 80;   // The drawn chart's height in the PDF
-    const tableOffset = 10;
+    const chartHeight = 70;   // The drawn chart's height in the PDF
+    const tableOffset = 5;
+    const itemWidth = chartHeight * 2; // this has to be a constant ratio
+    let counter = 0;
     canvases.forEach((canvas, i) => {
-      if (i > 0) {
+      if (i === 1 || counter === 2) {
         pageNr += 1;
+        counter = 0;
         pdf.addPage();
-        baseOffset = 30; // Base page offset is 20, plus 10
+        baseOffset = 18;
       }
+      const chartPos = counter === 0 ? baseOffset : (pdf.internal.pageSize.height / 2);
       // Draw our white background on the dummy canvas
       dummyCanvasContext.fillRect(0, 0, dummyCanvas.width, dummyCanvas.height);
       // Draw the chart from the real canvas onto our dummy canvas, centered in the dummy canvas
       dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
       dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
       // Add the chart with white background into our PDF at the right position
-      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.6), 'JPEG', 25,
-                   baseOffset, 160, chartHeight);
+      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.8), 'JPEG',
+        (pdf.internal.pageSize.width - itemWidth) / 2, chartPos, itemWidth, chartHeight);
 
       // Modify our table slightly, as to make it pretty for the PDF.
       // This circumvents the fact that the autoTableHtmlToJson does not deal with
@@ -183,7 +194,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       const tableClone = tables[i].cloneNode(true); // true => copy children.
       const prepostRow = tableClone.querySelector('tr.prepost');
       const prepostRowHeaders = tableClone.querySelectorAll('tr.prepost th');
-      if (prepostRowHeaders) {
+      if (prepostRowHeaders && prepostRowHeaders.length > 0) {
         const preObject = prepostRowHeaders[0].cloneNode();
         // prepostRowHeaders: empty, PRE, POST
         prepostRow.insertBefore(preObject, prepostRowHeaders[2]);
@@ -194,16 +205,23 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
       // Append our clone to the pdf
       const res = pdf.autoTableHtmlToJson(tableClone);
-      const localOffset = baseOffset + chartHeight + tableOffset;
-      pdf.autoTable(res.columns, res.data, {startY: localOffset} );
+      const tablePos = counter === 0 ? (baseOffset + chartHeight + tableOffset) :
+        (pdf.internal.pageSize.height / 2) + chartHeight + tableOffset;
+      pdf.autoTable(res.columns, res.data, {
+        startY: tablePos,
+        margin: {horizontal: (pdf.internal.pageSize.width - itemWidth) / 2},
+        styles: {fontSize: 7 },
+        tableWidth: itemWidth
+      });
       // <-- END TABLE
+      counter++;
     });
 
     // Add page count to the bottom of the page
     pdf.setFontSize(8);
     for (let i = 1; i <= pageNr; i++) {
       pdf.setPage(i); // Set the current page to write on first, then add page count to each page
-      rightAlignedText(25, pdf.internal.pageSize.height - 20, i + '/' + pageNr);
+      rightAlignedText(20, pdf.internal.pageSize.height - 18, i + '/' + pageNr);
     }
 
     // save our doc with a OS-friendly filename that is related to the survey at hand

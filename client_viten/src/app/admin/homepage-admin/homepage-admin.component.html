@@ -37,7 +37,11 @@
         <md-card-title-group>
           <md-card-title>{{survey.name}}</md-card-title>
           <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
-          <md-card-subtitle>{{ 'Total number of answers: n' | translate: [responses ? responses.length : 0] }}</md-card-subtitle>
+          <md-card-subtitle>{{
+            (postSurvey && postResponses)
+            ? ('Number of responses: n, m' | translate: [responses ? responses.length : 0, postResponses ? postResponses.length : 0])
+            : ('Number of responses: n' | translate: [responses ? responses.length : 0])
+          }}</md-card-subtitle>
           <md-icon align="left" class="activeIcon"
           [ngClass]="{active: survey.active, surveyActiveIcon: true}"
           [mdTooltip]="(survey.active ? 'Active' : 'Inactive') | translate" tooltip-position="above">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>

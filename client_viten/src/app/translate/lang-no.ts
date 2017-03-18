@@ -54,6 +54,10 @@ export const LANG_NO_TRANS = {
   'smiley': 'Smiley',
   'text': 'Tekst',
 
+    // Survey response numbers
+  'Number of responses: n': 'Antall svar: %0',
+  'Number of responses: n, m': 'Antall svar: %0, %1',
+
   // Survey Question mode labels
   'Yes': 'Yes',
   'No': 'No',
@@ -119,7 +123,6 @@ export const LANG_NO_TRANS = {
   'Download as PDF': 'Last ned som PDF',
   'Download Raw Data': 'Last ned rådata',
   'Download as JSON': 'Last ned som JSON',
-  'Total number of answers: n': 'Totalt antall svar: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
   'Create post-survey': 'Lag post-undersøkelse',
@@ -175,7 +178,6 @@ export const LANG_NO_TRANS = {
   // PDF download lines
   'Date created: d': 'Dato laget: %0',
   'Date printed: d': 'Dato printet: %0',
-  'Number of responses: n': 'Antall svar: %0',
 
 
 

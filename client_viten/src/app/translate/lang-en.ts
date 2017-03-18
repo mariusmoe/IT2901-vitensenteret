@@ -54,6 +54,10 @@ export const LANG_EN_TRANS = {
   'smiley': 'Smiley',
   'text': 'Free Text',
 
+  // Survey response numbers
+  'Number of responses: n': 'Number of responses: %0',
+  'Number of responses: n, m': 'Number of responses: %0, %1',
+
   // Survey Question mode labels
   'Yes': 'Yes',
   'No': 'No',
@@ -118,7 +122,6 @@ export const LANG_EN_TRANS = {
   'Download as PDF': 'Download as PDF',
   'Download Raw Data': 'Download Raw Data',
   'Download as JSON': 'Download as JSON',
-  'Total number of answers: n': 'Total number of answers: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'No responses have been registered, so there is nothing to show here yet.',
   'Create post-survey': 'Create post-survey',
@@ -173,7 +176,6 @@ export const LANG_EN_TRANS = {
   // PDF download lines
   'Date created: d': 'Date created: %0',
   'Date printed: d': 'Date printed: %0',
-  'Number of responses: n': 'Number of responses: %0',
 
 
 
