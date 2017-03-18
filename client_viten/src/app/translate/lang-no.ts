@@ -169,6 +169,7 @@ export const LANG_NO_TRANS = {
   'All Surveys': 'Alle undersøkelsene',
   'Search results for search': 'Søkeresultatene for %0:',
   'Start': 'Start',
+  'Start POST': 'Start POST',
 
   // PDF download lines
   'Date created: d': 'Dato laget: %0',
