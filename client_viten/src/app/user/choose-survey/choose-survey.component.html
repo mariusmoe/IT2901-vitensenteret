@@ -1,12 +1,12 @@
 <div>
   <md-toolbar color="primary">
-    <div class="flexchild">
-      <app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true"></app-logo-component>
+    <div class="headerBox alignLeft">
+      <app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true" height="100%" width="64px"></app-logo-component>
     </div>
-    <div class="flexchild alignCenter">
-      <app-logo-component logoVariant="text" color="primary" [useColorContrast]="true"></app-logo-component>
+    <div class="headerBox alignCenter">
+      <app-logo-component logoVariant="text" color="primary" [useColorContrast]="true" height="100%" width="400px"></app-logo-component>
     </div>
-    <div class="flexchild alignRight languageSelection">
+    <div class="headerBox alignRight languageSelection">
       <button md-icon-button color="accent" (click)="translateService.use('en')" [ngClass]="{'active': translateService.getCurrentLang() === 'en'}">
         <input type="image" src="../../assets/images/FlaggUK.svg">
       </button>

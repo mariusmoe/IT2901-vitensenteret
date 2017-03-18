@@ -1,7 +1,7 @@
 <div class="svgContainer" [ngClass]="logoVariant">
-  <svg version="1.1" id="VitenLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
-  [ngClass]="[color, useColorContrast == true ? 'contrast' : '']"
-  [attr.viewBox]="viewBoxValues[logoVariant]" width="100%" height="100%" xml:space="preserve"> <!-- default: width="100px" height="100px" viewBox="0 0 100 100" -->
+  <svg version="1.1" id="VitenLogo" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xml:space="preserve"
+  [ngClass]="[color, useColorContrast == true ? 'contrast' : '']" [attr.viewBox]="viewBoxValues[logoVariant]"
+  [attr.width]="width" [attr.height]="height"> <!-- default: width="100px" height="100px" viewBox="0 0 100 100" -->
   <path fill-rule="evenodd" clip-rule="evenodd" d="M76.219,5c0.063,0.027,0.123,0.068,0.188,0.08
   c2.208,0.373,3.819,2.231,3.824,4.483c0.004,2.223-0.042,4.446-0.064,6.669c-0.019,1.81-0.031,3.62-0.05,5.429
   c-0.042,3.876-0.089,7.752-0.13,11.628c-0.041,3.833-0.074,7.667-0.113,11.5c-0.03,2.949-0.06,5.899-0.101,8.848
