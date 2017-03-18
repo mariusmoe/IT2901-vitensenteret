@@ -30,6 +30,9 @@ export const LANG_EN_TRANS = {
   'Download': 'Download',
   'Active': 'Active',
   'Inactive': 'Inactive',
+  'Option': 'Option',
+  'Percentage': 'Percentage',
+  'Responses': 'Responses',
 
   // roles
   'admin': 'Admin',

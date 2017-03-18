@@ -30,6 +30,9 @@ export const LANG_NO_TRANS = {
   'Active': 'Aktiv',
   'Inactive': 'Inaktiv',
   'Download': 'Last ned',
+  'Option': 'Valg',
+  'Percentage': 'Prosent',
+  'Responses': 'Svar',
 
   // Roles
   'admin': 'Superadmin',

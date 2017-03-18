@@ -29,6 +29,11 @@
     </div>
     <div *ngIf="!postResponses || postResponses.length == 0">
       <table>
+        <tr>
+          <th>{{'Option' | translate}}</th>
+          <th>{{'Percentage' | translate}}</th>
+          <th>{{'Responses' | translate}}</th>
+        </tr>
         <tr *ngFor="let label of barChartLabels; let i = index;">
           <td>{{label}}</td>
           <td>{{barChartData[0].data[i]}}</td>

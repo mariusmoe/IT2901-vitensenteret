@@ -50,14 +50,21 @@
 
 .date{
     display:inline-block;
+    margin-top: 5px;
+    margin-bottom: auto;
 }
 .chip {
   transform: scale(0.68);
-  // display:inline-block;
+  display:inline-block;
   float: right;
   margin-left:10px;
   color: white;
   .mat-accent {
     color: white;
   }
+}
+
+.inline {
+  display:inline-block;
+
 }

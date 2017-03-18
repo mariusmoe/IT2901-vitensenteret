@@ -10,6 +10,7 @@ import { DatePipe } from '@angular/common';
 //  import * as jsPDF from 'jspdf';
 declare const jsPDF: any;
 
+
 @Component({
   selector: 'app-homepage-admin',
   templateUrl: './homepage-admin.component.html',
@@ -139,6 +140,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     // Get our charts (canvases)
     const canvases = this.surveyDOM.nativeElement.querySelectorAll('canvas.surveyQuestionChart');
+    // Get a list withe all the tables
+    const tables = this.surveyDOM.nativeElement.querySelectorAll('table');
     // Set up a dummy canvas. This dummy canvas is used to set a white background
     // and to avoid other corruptions to / of the actual real canvases
     const dummyCanvas = document.createElement('canvas');
@@ -153,9 +156,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     let baseOffset = 55;      // The fixed base offset from the top of the page
     const offsetAmount = 85;  // Multiplied with offset to get the actual page offset
     const chartHeight = 80;   // The drawn chart's height in the PDF
-    for (const canvas of canvases) {
+    let tableOffset = 0;
+    canvases.forEach((canvas, i) => {
+      // for (const canvas of canvases)
       // Add another page if necessary
-      if ( ((offset * offsetAmount) + chartHeight + baseOffset) > (pdf.internal.pageSize.height - 20)) {
+      if ( ((offset * offsetAmount) + chartHeight + baseOffset + tableOffset) > (pdf.internal.pageSize.height - 20)) {
         pdf.addPage();
         pageNr++;
         offset = 0;
@@ -166,10 +171,34 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       // Draw the chart from the real canvas onto our dummy canvas, centered in the dummy canvas
       dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
       // Add the chart with white background into our PDF at the right position
-      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.6), 'JPEG', 25, baseOffset + (offset * offsetAmount), 160, chartHeight);
+      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.6), 'JPEG', 25,
+                   baseOffset + (offset * offsetAmount) + tableOffset, 160, chartHeight);
       // Update our positioning variables
       offset++;
-    }
+
+      // START TABLE -->
+      // Get rows and columns out of html object
+      const res = pdf.autoTableHtmlToJson(tables[i]);
+      // Offset for table
+      console.log(res.columns);
+      console.log(res.data);
+      // TODO calculate a more delicate offset value!
+      // TODO pagecount is all wring FIXME
+      if ( ((offset * offsetAmount) + chartHeight + baseOffset + tableOffset +
+          (12 * res.data.length)) > (pdf.internal.pageSize.height - 20)) {
+        pdf.addPage();
+        pageNr++;
+        offset = 0;
+        baseOffset = 20; // Base page offset is 20
+      }
+      const localOffset = baseOffset + (offset * offsetAmount) + tableOffset;
+      // Add table to pdf
+      pdf.autoTable(res.columns, res.data, {startY: localOffset} );
+      tableOffset += 12 * res.data.length;
+      // <-- END TABLE
+
+
+    });
     // Add page count to the bottom of the page
     pdf.setFontSize(8);
     for (let i = 1; i <= pageNr; i++) {

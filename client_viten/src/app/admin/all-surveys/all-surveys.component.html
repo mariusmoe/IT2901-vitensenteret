@@ -19,9 +19,11 @@
     <h4 md-line>{{survey.name}}</h4>
     <div md-line>
       <div class="date">{{formatDate(survey.date)}}</div>
-      <md-chip-list class="chip" *ngIf="survey.postKey">
-        <md-chip color="accent" selected="true">PRE - POST</md-chip>
-      </md-chip-list>
+      <div class="inline chip" *ngIf="survey.postKey">
+        <md-chip-list *ngIf="survey.postKey.length > 1">
+          <md-chip color="accent" selected="true">PRE - POST</md-chip>
+        </md-chip-list>
+      </div>
     </div>
     <p md-line *ngIf="survey.comment">{{survey.comment}}</p>
     <!-- <p md-line>ID: {{survey._id}}</p> -->
