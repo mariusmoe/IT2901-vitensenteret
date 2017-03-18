@@ -5,12 +5,10 @@ import { SurveyList } from '../_models/survey_list';
 })
 @Injectable()
 export class AdminSurveysPipe implements PipeTransform {
-    transform(items: SurveyList[], query: string, maxResults: number, showPosts: boolean, onlyActive: boolean): SurveyList[] {
+    transform(items: SurveyList[], query: string, maxResults: number, onlyActive: boolean): SurveyList[] {
       let array = items;
-      if (showPosts || onlyActive) {
-        array = array.filter(s => {
-          return ((onlyActive && s.active) || !onlyActive) && ((s.isPost && showPosts) || !s.isPost);
-        });
+      if (onlyActive) {
+        array = array.filter(s => { return (onlyActive && s.active); } );
       }
       if (query && query.length > 0) {
         const queryWords = query.toLowerCase().split(/[ ]+/);

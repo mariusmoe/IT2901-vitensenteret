@@ -26,7 +26,7 @@
     </div>
     <h2 *ngIf="search && search.length > 0" class="header"> {{ 'Search results for search' | translate:[this.search] }}</h2>
     <div class="search surveyParent" *ngIf="search && search.length > 0">
-      <md-card class="survey"  *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: search : 10 : false : true">
+      <md-card class="survey"  *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: search : 10 : true">
         <md-card-title>
           {{survey.name}}
         </md-card-title>
@@ -48,7 +48,7 @@
     <h2 class="header">{{ 'All Surveys' | translate }}</h2>
     <div class="showresults surveyParent" >
       <!--TODO Button must route to a pop-up window-->
-      <md-card class="survey" *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: null : this.surveyService.surveyList.length : false : true">
+      <md-card class="survey" *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: null : this.surveyService.surveyList.length : true">
         <md-card-title>
           {{survey.name}}
         </md-card-title>

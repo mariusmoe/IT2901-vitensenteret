@@ -12,7 +12,7 @@
 
 <md-list class="list" *ngIf="!searchLoading">
   <md-list-item
-    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum : true)"
+    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum : false )"
     [ngClass]="{'survey': true, 'selected': survey._id == route.snapshot.params['surveyId'],  'active': survey.active}"
     (click)="select(survey._id)"> <!-- the pipe has "true" at the end as we want to NOT show post-surveys -->
     <!-- <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon> -->
