@@ -12,10 +12,10 @@
     <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
       <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
       <canvas baseChart #canvas class="surveyQuestionChart"
-              [datasets]="barChartData"
-              [labels]="barChartLabels"
-              [options]="barChartOptions"
-              [colors]="barChartColours"
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+              [colors]="chartColours"
               [chartType]="chartType">
       </canvas>
     </div>
@@ -41,12 +41,12 @@
         <th *ngIf="postResponses && postResponses.length > 0">{{'Responses' | translate}}</th>
         <th *ngIf="postResponses && postResponses.length > 0">{{'Percentage' | translate}}</th>
       </tr>
-      <tr *ngFor="let label of barChartLabels; let i = index;">
+      <tr *ngFor="let label of chartLabels; let i = index;">
         <td class="option">{{label}}</td>
-        <td>{{barChartData[0].data[i]}}</td>
-        <td>{{((barChartData[0].data[i]/responses.length)*100).toFixed(2)}} %</td>
-        <td *ngIf="postResponses && postResponses.length > 0">{{barChartData[1].data[i]}}</td>
-        <td *ngIf="postResponses && postResponses.length > 0">{{((barChartData[1].data[i]/postResponses.length)*100).toFixed(2)}} %</td>
+        <td>{{chartData[0].data[i]}}</td>
+        <td>{{((chartData[0].data[i]/responses.length)*100).toFixed(2)}} %</td>
+        <td *ngIf="postResponses && postResponses.length > 0">{{chartData[1].data[i]}}</td>
+        <td *ngIf="postResponses && postResponses.length > 0">{{((chartData[1].data[i]/postResponses.length)*100).toFixed(2)}} %</td>
       </tr>
       <tr *ngIf="!questionObject.required">
         <td class="option">{{'Did not answer' | translate}}</td>
