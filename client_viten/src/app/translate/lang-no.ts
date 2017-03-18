@@ -44,6 +44,7 @@ export const LANG_NO_TRANS = {
 
   // Forms
   'This field is required.': 'Dette feltet er påkrevd.',
+  'This field is a duplicate.': 'Dette feltet er et duplikat.',
 
   // Survey Question modes
   'binary': 'Ja/Nei',

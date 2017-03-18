@@ -44,6 +44,7 @@ export const LANG_EN_TRANS = {
 
   // Forms
   'This field is required.': 'This field is required.',
+  'This field is a duplicate.': 'This field is a duplicate.',
 
   // Survey Question modes
   'binary': 'Yes/No',
