@@ -63,12 +63,16 @@
   text-align: center;
 }
 
+md-card {
+  position: relative;
+}
+
 .chip {
   display: inline-block;
   transform: scale(0.68);
-  position: relative;
-  top: -12px;
-  left: -25px;
+  position: absolute;
+  top: 70px;
+  right: -10px;
   color: white;
   md-chip {
     outline: none;
