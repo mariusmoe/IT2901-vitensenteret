@@ -361,12 +361,18 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       <md-input-container>
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'Norwegian' | translate }})"
         [(ngModel)]="qoEditObj.lang.no.options[i]" required (change)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])">{{ 'This field is required.' | translate }}</md-hint>
+        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])
+          || fieldCheckDup(qoEditObj.lang.no.options[i], qoEditObj.lang.no.options)"
+          >{{ !fieldValidate(qoEditObj.lang.no.options[i]) ? ('This field is required.' | translate)
+            : ('This field is a duplicate.' | translate) }}</md-hint>
       </md-input-container>
       <md-input-container *ngIf="data.englishEnabled">
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'English' | translate }})"
         [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])">{{ 'This field is required.' | translate }}</md-hint>
+        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])
+          || fieldCheckDup(qoEditObj.lang.en.options[i], qoEditObj.lang.en.options)"
+          >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
+            : ('This field is a duplicate.' | translate) }}</md-hint>
       </md-input-container>
       <button md-icon-button color="warn" [disabled]="(i < 2) || data.lockdown" class="alignRight"
       (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
@@ -434,24 +440,35 @@ export class SurveyAlternativesDialog {
   setSaveReadyStatus() {
     let status = true;
     for (const o of this.qoEditObj.lang.no.options) {
-      status = (status && o.length > 0 && this.fieldValidate(o));
+      status = (status && this.fieldValidate(o) && !this.fieldCheckDup(o, this.qoEditObj.lang.no.options) );
     }
     if (this.data.englishEnabled) {
       for (const o of this.qoEditObj.lang.en.options) {
-        status = (status && o.length > 0 && this.fieldValidate(o));
+        status = (status && this.fieldValidate(o) && !this.fieldCheckDup(o, this.qoEditObj.lang.en.options) );
       }
     }
     this.canSave = status;
   }
 
   /**
-   * notWhitespace(s: string)
+   * fieldValidate(s: string)
    *
-   * @param {string} s a string to check
-   * returns true if the input string is not just whitespace
+   * @param  {string}  s the string to validate
+   * @return {boolean}   whether the string was valid
    */
-  fieldValidate(s: string) {
+  fieldValidate(s: string): boolean {
     return s && s.length > 0 && (/\S/.test(s));
+  }
+
+  /**
+   * fieldCheckDup(s: string)
+   *
+   * @param  {string}   match the string to check
+   * @param  {string[]} array the array to check in
+   * @return {boolean}        whether there are duplicates if the string in the array
+   */
+  fieldCheckDup(match: string, array: string[]): boolean {
+    return array.filter(s => s === match).length > 1;
   }
 
 
