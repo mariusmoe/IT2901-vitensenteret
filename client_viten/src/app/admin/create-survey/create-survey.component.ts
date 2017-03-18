@@ -76,6 +76,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           this.preSurvey = result.survey;
           this.survey = JSON.parse(JSON.stringify(this.preSurvey)); // Initiate the survey with an exact duplicate.
           this.survey.isPost = true;
+          this.survey.name = 'POST: ' + this.survey.name;
           delete this.survey._id;
           // remove options-properties of non-multi questions
           for (const qo of this.preSurvey.questionlist) {
