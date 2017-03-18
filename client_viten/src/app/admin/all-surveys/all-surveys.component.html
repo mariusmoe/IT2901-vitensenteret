@@ -30,6 +30,8 @@
   </md-list-item>
 </md-list>
 
+<button md-raised-button class="loadMoreButton" color="primary" (click)="loadMore()">Load more</button>
+
 <!-- loading circle -->
 <md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
 <span class="listComment"  *ngIf="!loading">{{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length, searchResultNum] }}</span>

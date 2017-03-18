@@ -59,4 +59,11 @@ export class AllSurveysComponent implements OnInit {
     formatDate(dateString: string) {
       return new Date(dateString).toLocaleDateString();
     }
+
+    /**
+     * Load more surveys in menu on the left
+     */
+    loadMore() {
+      this.searchResultNum += 20;
+    }
 }
