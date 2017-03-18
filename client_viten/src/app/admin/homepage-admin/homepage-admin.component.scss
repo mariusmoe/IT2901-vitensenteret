@@ -58,8 +58,22 @@
   }
 
 }
-
 .visibility-text {
   margin: 0px;
   text-align: center;
+}
+
+.chip {
+  display: inline-block;
+  transform: scale(0.68);
+  position: relative;
+  top: -12px;
+  left: -25px;
+  color: white;
+  md-chip {
+    outline: none;
+  }
+  .mat-accent {
+    color: white;
+  }
 }

@@ -41,22 +41,27 @@ table {
     margin-top: 30px;
     max-height: 150px;
     overflow-y: scroll;
+    td, th {
+      border: 1px solid #ddd;
+      text-align: left;
+      padding: 8px;
+    }
+    td {
+      text-align: right;
+      &.option {
+        text-align: left;
+      }
+    }
+    tr {
+      &.labels th {
+        text-align: center;
+      }
+      &:nth-child(even) {
+        background-color: #eee;
+      }
+    }
 }
 
-td, th {
-    border: 1px solid #ddd;
-    text-align: left;
-    padding: 8px;
-}
-
-tr {
-  &.labels th {
-    text-align: center;
-  }
-  &:nth-child(even) {
-    background-color: #eee;
-  }
-}
 
 
 // .tble {

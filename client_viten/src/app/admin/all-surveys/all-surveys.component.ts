@@ -21,6 +21,7 @@ export class AllSurveysComponent implements OnInit {
     searchFormControl = new FormControl();
     searchLoading = false;
     searchResultNum = 20;
+    loadMoreValue = 20;
 
     constructor(
       private router: Router,
@@ -64,6 +65,6 @@ export class AllSurveysComponent implements OnInit {
      * Load more surveys in menu on the left
      */
     loadMore() {
-      this.searchResultNum += 20;
+      this.searchResultNum += this.loadMoreValue;
     }
 }

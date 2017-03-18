@@ -19,9 +19,9 @@
     <h4 md-line>{{survey.name}}</h4>
     <div md-line>
       <div class="date">{{formatDate(survey.date)}}</div>
-      <div class="inline chip" *ngIf="survey.postKey">
+      <div class="chip" *ngIf="survey.postKey">
         <md-chip-list *ngIf="survey.postKey.length > 1">
-          <md-chip color="accent" selected="true">PRE - POST</md-chip>
+          <md-chip color="accent" selected="true" disabled="true">PRE - POST</md-chip>
         </md-chip-list>
       </div>
     </div>
@@ -30,8 +30,13 @@
   </md-list-item>
 </md-list>
 
-<button md-raised-button class="loadMoreButton" color="primary" (click)="loadMore()">Load more</button>
-
 <!-- loading circle -->
 <md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-<span class="listComment"  *ngIf="!loading">{{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length, searchResultNum] }}</span>
+<span class="listComment"  *ngIf="!loading">
+  {{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length,
+  searchResultNum > surveyService.surveyList.length ? surveyService.surveyList.length : searchResultNum] }}
+</span>
+
+<!-- More button -->
+<button md-raised-button *ngIf="surveyService.surveyList.length > searchResultNum"
+  class="loadMoreButton" color="primary" (click)="loadMore()">Load more</button>

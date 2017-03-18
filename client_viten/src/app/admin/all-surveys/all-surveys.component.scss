@@ -53,23 +53,27 @@
     margin-top: 5px;
     margin-bottom: auto;
 }
-.chip {
-  transform: scale(0.68);
-  display:inline-block;
-  float: right;
-  margin-left:10px;
-  color: white;
-  .mat-accent {
-    color: white;
+md-list-item {
+  position: relative;
+  .chip {
+    transform: scale(0.68);
+    display:inline-block;
+    position: absolute;
+    right: -6px;
+    top: 5px;
+    outline: none;
+    .mat-accent {
+      color: white;
+    }
   }
 }
 
 .inline {
   display:inline-block;
-
 }
 
 .loadMoreButton {
   display: block;
   margin: auto;
+  margin-top: 10px;
 }

@@ -27,45 +27,32 @@
       </md-select>
       <button md-raised-button color="accent" (click)="downloadAsPng()"><md-icon>insert_chart</md-icon> {{ 'Download as PNG' | translate }}</button>
     </div>
-    <div *ngIf="!postResponses || postResponses.length == 0">
-      <table>
-        <tr>
-          <th>{{'Option' | translate}}</th>
-          <th>{{'Percentage' | translate}}</th>
-          <th>{{'Responses' | translate}}</th>
-        </tr>
-        <tr *ngFor="let label of barChartLabels; let i = index;">
-          <td>{{label}}</td>
-          <td>{{barChartData[0].data[i]}}</td>
-          <td>{{(barChartData[0].data[i]/responses.length)*100}} %</td>
-        </tr>
-        <tr *ngIf="!questionObject.required">
-          <td>{{'Did not answer' | translate}}</td>
-          <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total)) / (responses.length)*100}} %</td>
-          <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total))}}</td>
-        </tr>
-      </table>
-    </div>
-    <div *ngIf="postResponses && postResponses.length > 0">
-      <table>
-        <tr class="labels">
-          <th></th>
-          <th colspan="2">PRE</th>
-          <th colspan="2">POST</th>
-        </tr>
-        <tr *ngFor="let label of barChartLabels; let i = index;">
-          <td>{{label}}</td>
-          <td>{{barChartData[0].data[i]}}</td>
-          <td>{{(barChartData[0].data[i]/responses.length)*100}} %</td>
-          <td>{{barChartData[1].data[i]}}</td>
-          <td>{{(barChartData[1].data[i]/postResponses.length)*100}} %</td>
-        </tr>
-        <tr *ngIf="!questionObject.required">
-          <td>{{'Did not answer' | translate}}</td>
-          <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total)) / (responses.length)*100}} %</td>
-          <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total))}}</td>
-        </tr>
-      </table>
-    </div>
+    <table class="chartData">
+      <!-- DO NOT REMOVE PREPOST CLASS! IMPORTANT IN THE PDF GENERATION!! -->
+      <tr class="labels prepost" *ngIf="postResponses && postResponses.length > 0">
+        <th></th>
+        <th colspan="2">PRE</th>
+        <th colspan="2">POST</th>
+      </tr>
+      <tr class="labels">
+        <th>{{'Option' | translate}}</th>
+        <th>{{'Responses' | translate}}</th>
+        <th>{{'Percentage' | translate}}</th>
+        <th *ngIf="postResponses && postResponses.length > 0">{{'Responses' | translate}}</th>
+        <th *ngIf="postResponses && postResponses.length > 0">{{'Percentage' | translate}}</th>
+      </tr>
+      <tr *ngFor="let label of barChartLabels; let i = index;">
+        <td class="option">{{label}}</td>
+        <td>{{barChartData[0].data[i]}}</td>
+        <td>{{((barChartData[0].data[i]/responses.length)*100).toFixed(2)}} %</td>
+        <td *ngIf="postResponses && postResponses.length > 0">{{barChartData[1].data[i]}}</td>
+        <td *ngIf="postResponses && postResponses.length > 0">{{((barChartData[1].data[i]/postResponses.length)*100).toFixed(2)}} %</td>
+      </tr>
+      <tr *ngIf="!questionObject.required">
+        <td class="option">{{'Did not answer' | translate}}</td>
+        <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total))}}</td>
+        <td>{{((responses.length - (questionObject.mode === 'multi' ? total : total)) / (responses.length)*100).toFixed(2)}} %</td>
+      </tr>
+    </table>
   </div>
 </div>
