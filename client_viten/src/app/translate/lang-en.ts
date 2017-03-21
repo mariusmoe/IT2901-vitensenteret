@@ -130,6 +130,8 @@ export const LANG_EN_TRANS = {
   // Admin settings component
   'Retype password': 'Retype password',
   'Minimum 4 characters': 'Minimum 4 characters',
+  'Minimum 4 numbers': 'Minimum 4 numbers',
+  'Password changed': 'Password changed',
   'Admin settings': 'Admin settings',
   'Change password': 'Change password',
   'Change email': 'Change email',
