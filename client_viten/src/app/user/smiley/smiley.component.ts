@@ -1,15 +1,33 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, trigger, transition, style, animate, state, keyframes } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
 
 @Component({
   selector: 'app-smiley',
   templateUrl: './smiley.component.html',
-  styleUrls: ['./smiley.component.scss']
+  styleUrls: ['./smiley.component.scss'],
+  animations: [
+  trigger('jumpOut', [
+    state('inactive', style({opacity: 0.5})),
+    state('active', style({opacity: 1})),
+    transition('inactive => active', animate('500ms', keyframes([
+      style({opacity: 0.5, transform: 'scale(1,1)', offset: 0}),
+      style({opacity: 0.8, transform: 'scale(1.4,1.2)', offset: 0.25}),
+      style({opacity: 1, transform: 'scale(0.9,0.9)', offset: 0.8}),
+      style({opacity: 1, transform: 'scale(1,1)', offset: 1.0})
+    ]))),
+    transition('active => inactive', animate('500ms'))
+  ])
+]
 })
 export class SmileyComponent implements OnInit {
   @Input() questionObject: QuestionObject;
   @Output() answer = new EventEmitter();
   selectedSmile: number;
+
+  // Animation variables
+  smileyActiveOne = 'inactive';
+  smileyActiveTwo = 'inactive';
+  smileyActiveThree = 'inactive';
 
   constructor() {  }
 
@@ -19,8 +37,16 @@ export class SmileyComponent implements OnInit {
    * This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
    * @param  {number[]} alt The output answer sent to active-survey-component
    */
-  addChange(alt) {
-    this.answer.emit(alt);
+  addChange() {
+    this.answer.emit(this.selectedSmile);
+  }
+
+  animationEnd(event) {
+    console.log(event);
+
+    if (event.fromState === 'inactive') {
+      this.addChange();
+    }
   }
 
   /**
@@ -28,7 +54,23 @@ export class SmileyComponent implements OnInit {
    * @param  {number[]} selectedSmile The selected answer ID
    */
   selectSmile(selectedSmile) {
+
+    // Animation triggers
+    if (selectedSmile === 0) {
+      this.smileyActiveOne = 'active';
+      this.smileyActiveTwo = 'inactive';
+      this.smileyActiveThree = 'inactive';
+    }else if (selectedSmile === 1) {
+      this.smileyActiveOne = 'inactive';
+      this.smileyActiveTwo = 'active';
+      this.smileyActiveThree = 'inactive';
+    }else if (selectedSmile === 2) {
+      this.smileyActiveOne = 'inactive';
+      this.smileyActiveTwo = 'inactive';
+      this.smileyActiveThree = 'active';
+    }
+
     this.selectedSmile = selectedSmile;
-    this.addChange(this.selectedSmile);
+    // this.addChange(this.selectedSmile);
   }
 }

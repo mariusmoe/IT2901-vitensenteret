@@ -12,12 +12,14 @@
   height: 30vh;
   width: 30vh;
   outline: none;
-  background: url(../../assets/images/EmptyStar.svg) no-repeat center center;
+  //background: url(../../assets/images/EmptyStar.svg) no-repeat center center;
   &.active {
-    background-image: url(../../assets/images/Star.svg);
-    animation: grow-shake 0.75s 1;
+    //background-image: url(../../assets/images/Star.svg);
+    //animation: grow-shake 0.75s 1;
   }
 }
+
+.star-input:focus{outline: none;}
 
 
 @keyframes grow-shake {
