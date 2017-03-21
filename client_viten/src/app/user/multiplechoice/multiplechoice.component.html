@@ -2,9 +2,4 @@
   <md-checkbox *ngFor="let option of options; let i = index;" [(ngModel)]="checkModels[i]" (change) = "updateAnswers()">
     {{option}}
   </md-checkbox>
-  <!-- <md-checkbox class = "radioOptions" [(ngModel)] = "selectedOption">
-   <md-checkbox class = "radioOption" *ngFor = "let option of options" [value] = "option" (change) = "updateAnswers(this.questionObject.lang.no.options.indexOf(option))">
-     {{option}}
-   </md-checkbox>
- </md-checkbox> -->
 </div>

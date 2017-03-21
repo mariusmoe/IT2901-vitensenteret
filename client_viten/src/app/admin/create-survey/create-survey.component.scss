@@ -18,6 +18,10 @@ md-card {
   md-input-container {
     width: 100%;
   }
+  md-input-container.small {
+    width: initial;
+    margin-right: 20px;
+  }
 
   &.questionObject {
     flex: 1 1 250px;

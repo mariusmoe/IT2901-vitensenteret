@@ -37,20 +37,20 @@
       <div class="answerTypes">
         <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
         <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
-        <app-singleChoice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-singleChoice>
+        <app-single-choice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-single-choice>
         <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event);'></app-multiplechoice>
         <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
-        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-freetxt>
+        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-freetxt>
       </div>
 
     </div>
 
     <!-- The navigate area at the footer of the browser -->
     <div class="qnavigate" *ngIf="!this.done">
-      <div class="qnavigateArea"><input class="qnavigateArea" type="image" id="previousQButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition">
+      <div class="qnavigateArea"><input class="qnavigateArea" type="image" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition">
       </div>
       <h3>{{page+1}}/{{totalPages}}</h3>
-      <div class="qnavigateArea alignRight"><input class="qnavigateArea alignRight" type="image" id="nextQButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
+      <div class="qnavigateArea alignRight"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
       </div>
     </div>
 

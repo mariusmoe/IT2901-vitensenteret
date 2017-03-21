@@ -10,7 +10,9 @@ import { TranslateService } from '../../_services/translate.service';
 })
 export class SurveyRetrievalComponent implements OnInit {
   @Input() survey: Survey;
+  @Input() postSurvey: Survey;
   @Input() responses: Response[];
+  @Input() postResponses: Response[];
 
   chartsToDisplay = [];
 

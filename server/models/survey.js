@@ -12,6 +12,7 @@ const SurveySchema = new Schema({
     type: String,
     required: true
   },
+  isPost: Boolean,
   postKey: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey'},
   comment: String,
 	date: Date,                // date created

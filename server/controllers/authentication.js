@@ -5,6 +5,7 @@ const jwt = require('jsonwebtoken'),
       validator = require('validator'),
       config = require('config'),
       User = require('../models/user'),
+      Escape = require('../models/escape'),
       status = require('../status'),
       Referral = require('../models/referral');
 
@@ -27,6 +28,61 @@ function getSecureRandomBytes() {
 function generateToken(user) {
   return jwt.sign(user, config.secret, {
     expiresIn: 10080 // in seconds
+  });
+}
+
+
+// Patch
+/**
+ * Add or change choosesurvey password
+ */
+exports.patchOneEscape = (req, res, next) => {
+  const password = req.body.password;
+  if (!password) {
+    return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
+  }
+  Escape.findOne({}, (err, escape) => {
+    if (err) {return next(err); }
+    if (!escape) {
+      const newEscape = new Escape({
+        password: password
+      });
+        newEscape.save((err, escape) => {
+          if (err) {return next(err); }
+          return  res.status(200).send({message: 'SUCCESS - new password saved', status: 45678} )
+        });
+    } else {
+      escape.password = password;
+      escape.save((err, escape) => {
+        if (err) {return next(err); }
+        return res.status(200).send({message: 'SUCCESS - password saved', status: 45678} )
+      });
+    }
+  })
+}
+
+// POST
+/**
+ * Check if choosesurvey password is correct
+ */
+exports.checkOneEscape = (req, res, next) => {
+  const password = req.body.password;
+  if (!password) {
+    return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
+  }
+  Escape.findOne({}, (err, escape) => {
+    if (err) { return next(err); }
+    if (!escape) {
+      return res.status(401).send({message: false, error: 'ERROR'});
+    }
+    escape.comparePassword(password, function(err, isMatch) {
+      if (err) { return done(err); }
+      if (isMatch) {
+        return res.status(200).send({message: true});
+      } else {
+        return res.status(401).send({message: false});
+      }
+    });
   });
 }
 

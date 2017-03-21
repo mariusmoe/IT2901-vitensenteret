@@ -3,6 +3,7 @@ import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
+import { LocalStorageModule } from 'angular-2-local-storage';
 import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 
@@ -100,6 +101,7 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
+    localStorage.clear();
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
