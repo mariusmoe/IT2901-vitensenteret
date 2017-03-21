@@ -17,16 +17,9 @@
       <button md-icon-button color="accent" (click)="switchtono()">
         <input type="image" src="../../assets/images/FlagNorge.svg">
       </button>
-
-
-      <!--TODO need clickevent to load the specified language. The commented code under is not in use but is showing how div above shold look-->
-      <!--
-      <button md-icon-button color="accent" (click)="translateService.use('no')" [ngClass]="{'active': translateService.getCurrentLang() === 'no'}">
-        <input type="image" src="../../assets/images/FlagNorge.svg">
-      </button>
-      -->
     </div>
   </div>
+
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
@@ -47,8 +40,6 @@
     <!--This is the view for each survey-question -->
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
 
-      <!--TODO this.language does not append the index named 'page'. -->
-      <!-- this.survey.questionlist[page].lang.en.txt -->
       <!-- Either displays the title of a question or shows the endMessage if the survey is done -->
       <div *ngIf="enenable" class="languageSelection">
         <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.en.txt}}</span></div>

@@ -185,13 +185,8 @@ h2 {
 //languageSelection
 
 .languageSelection {
-  button {
-    input {
-      opacity: 0.5;
-    }
-    &.active input {
-      opacity: 1;
-    }
+  button.clicked {
+    opacity: 0.5;
   }
-  text-align: right;
+  //text-align: right;
 }

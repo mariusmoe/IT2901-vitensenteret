@@ -30,8 +30,6 @@ export class ActiveSurveyComponent implements OnInit {
   private done = false;
   private answers = [];
   private englishEnabled: boolean;
-  private languageselector = true;
-  private language: string;
   private enenable: boolean;
   private noenable: boolean;
   abortTimer: string;
@@ -89,8 +87,6 @@ export class ActiveSurveyComponent implements OnInit {
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
           console.log('This survey have english ');
-          console.log(this.survey.questionlist.length + '');
-          console.log(this.survey.questionlist[0].lang.en.txt);
         }
 
 
@@ -126,7 +122,6 @@ export class ActiveSurveyComponent implements OnInit {
     this.subscribeabortTimer();
     this.timer.delTimer('1sec');
 
-    this.language = this.survey.questionlist[this.page].lang.no.txt;
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
@@ -267,7 +262,7 @@ resetTimer() {
 
   // changelanguage
   private switchtono() {
-    if(this.enenable) {
+    if (this.enenable) {
       console.log('change to no');
       this.noenable = true;
       this.enenable = false;
