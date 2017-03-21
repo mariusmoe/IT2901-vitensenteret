@@ -236,9 +236,7 @@ resetTimer() {
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    // this.router.navigate(['/choosesurvey']);
     let dialogRef = this.dialog.open(QuitsurveyPromptComponent);
-    
   }
 
 /**
