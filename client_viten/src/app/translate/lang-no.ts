@@ -132,6 +132,8 @@ export const LANG_NO_TRANS = {
   // Admin settings component
   'Retype password': 'Skriv passordet igjen',
   'Minimum 4 characters': 'Minimum 4 tegn',
+  'Minimum 4 numbers': 'Minimum 4 tall',
+  'Password changed': 'Passord endret',
   'Admin settings': 'Admininstillinger',
   'Change password': 'Bytt passord',
   'Change email': 'Bytt epostkonto',

@@ -16,6 +16,38 @@ export class SurveyService {
 
   }
 
+  checkChoosesurvey(password: string): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.post(environment.URL.checkChoosesurvey, {password: password}, options)
+    .map( response => {
+      console.log(response);
+      return true;
+    },
+    error => {
+      console.error(error.json());
+      return false;
+    });
+  }
+
+changeChoosesurvey(password: string): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.patch(environment.URL.checkChoosesurvey, {password: password}, options)
+    .map( response => {
+      console.log(response);
+      return true;
+    },
+    error => {
+      console.error(error.json());
+      return false;
+    });
+  }
+
   /**
    * answer one survey
    * @param  {Array<any>}       answers  List of answers, each element is an answer

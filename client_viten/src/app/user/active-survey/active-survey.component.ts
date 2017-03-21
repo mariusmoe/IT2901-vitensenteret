@@ -112,7 +112,7 @@ export class ActiveSurveyComponent implements OnInit {
           console.log ('DEBUG: BAD surveyId param from router!');
           return;
         }
-        this.survey = result;
+        this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
         if (this.survey && this.survey.active) {
           this.properSurvey = true;

@@ -471,5 +471,28 @@ describe('Survey API', () => {
 
   }); // end describe /api/survey/ DELETE
 
+  describe('/api/survey/escape',() => {
+    it('should return 200 when adding new password - /api/survey/escape PATCH', (done) => {
+      chai.request(server)
+        .patch('/api/survey/escape')
+        .send({password: 'test'}) // send our modified object
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.should.have.status(200);
+          done();
+        });
+    });
+    it('should return 200 when check the password - /api/survey/escape POST', (done) => {
+      chai.request(server)
+        .post('/api/survey/escape')
+        .send({password: 'test'}) // send our modified object
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(true);
+          res.should.have.status(200);
+          done();
+        });
+    });
+  });
 
 });
