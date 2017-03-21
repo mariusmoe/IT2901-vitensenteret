@@ -1,6 +1,17 @@
-.freetxtBox{
+.freetxtContainer {
   width: 35vw;
   height: 20vh;
   background-color:white;
-  overflow: auto;
+  overflow: scroll;
+}
+
+input {
+  resize: none;
+  border: none;
+  height: auto;
+}
+
+md-card-content {
+  padding: 0;
+  height: auto;
 }
