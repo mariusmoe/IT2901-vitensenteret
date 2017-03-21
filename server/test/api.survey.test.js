@@ -21,6 +21,7 @@ let validJsonObject = {
   "activationDate": "2012-04-23T18:25:43.511Z",
   "deactivationDate": "2012-04-23T18:25:43.511Z",
   "active": true,
+  "isPost": false,
   "questionlist": [{
     "mode": "smiley",
     "required": true,

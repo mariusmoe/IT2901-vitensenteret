@@ -30,6 +30,9 @@ export const LANG_EN_TRANS = {
   'Download': 'Download',
   'Active': 'Active',
   'Inactive': 'Inactive',
+  'Option': 'Option',
+  'Percentage': 'Percentage',
+  'Responses': 'Responses',
 
   // roles
   'admin': 'Admin',
@@ -41,14 +44,19 @@ export const LANG_EN_TRANS = {
 
   // Forms
   'This field is required.': 'This field is required.',
+  'This field is a duplicate.': 'This field is a duplicate.',
 
   // Survey Question modes
-  'Yes/No': 'Yes/No',
-  '5 Stars': '5 Stars',
-  'Single Choice': 'Single Choice',
-  'Multiple Choice': 'Multiple Choice',
-  'Smiley': 'Smiley',
-  'Free Text': 'Free Text',
+  'binary': 'Yes/No',
+  'star': '5 Stars',
+  'single': 'Single Choice',
+  'multi': 'Multiple Choice',
+  'smiley': 'Smiley',
+  'text': 'Free Text',
+
+  // Survey response numbers
+  'Number of responses: n': 'Number of responses: %0',
+  'Number of responses: n, m': 'Number of responses: %0, %1',
 
   // Survey Question mode labels
   'Yes': 'Yes',
@@ -57,7 +65,7 @@ export const LANG_EN_TRANS = {
   '2 Stars': '2 Stars',
   '3 Stars': '3 Stars',
   '4 Stars': '4 Stars',
-  // '5 Stars': '5 Stars', already defined above.
+  '5 Stars': '5 Stars',
   'Sad': 'Sad',
   'Neutral': 'Neutral',
   'Happy': 'Happy',
@@ -114,10 +122,10 @@ export const LANG_EN_TRANS = {
   'Download as PDF': 'Download as PDF',
   'Download Raw Data': 'Download Raw Data',
   'Download as JSON': 'Download as JSON',
-  'Total number of answers: n': 'Total number of answers: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'No responses have been registered, so there is nothing to show here yet.',
-
+  'Create post-survey': 'Create post-survey',
+  'Edit post-survey': 'Edit post-survey',
 
   // Admin settings component
   'Retype password': 'Retype password',
@@ -163,11 +171,11 @@ export const LANG_EN_TRANS = {
   'All Surveys': 'All Surveys',
   'Search results for search': 'Search results for %0:',
   'Start': 'Start',
+  'Start POST': 'Start POST',
 
   // PDF download lines
   'Date created: d': 'Date created: %0',
   'Date printed: d': 'Date printed: %0',
-  'Number of responses: n': 'Number of responses: %0',
 
 
 

@@ -12,12 +12,19 @@
 
 <md-list class="list" *ngIf="!searchLoading">
   <md-list-item
-    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum)"
+    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum : false )"
     [ngClass]="{'survey': true, 'selected': survey._id == route.snapshot.params['surveyId'],  'active': survey.active}"
-    (click)="select(survey._id)">
+    (click)="select(survey._id)"> <!-- the pipe has "true" at the end as we want to NOT show post-surveys -->
     <!-- <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon> -->
     <h4 md-line>{{survey.name}}</h4>
-    <p md-line>{{formatDate(survey.date)}}</p>
+    <div md-line>
+      <div class="date">{{formatDate(survey.date)}}</div>
+      <div class="chip" *ngIf="survey.postKey">
+        <md-chip-list *ngIf="survey.postKey.length > 1">
+          <md-chip color="accent" selected="true" disabled="true">PRE - POST</md-chip>
+        </md-chip-list>
+      </div>
+    </div>
     <p md-line *ngIf="survey.comment">{{survey.comment}}</p>
     <!-- <p md-line>ID: {{survey._id}}</p> -->
   </md-list-item>
@@ -25,4 +32,11 @@
 
 <!-- loading circle -->
 <md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
-<span class="listComment"  *ngIf="!loading">{{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length, searchResultNum] }}</span>
+<span class="listComment"  *ngIf="!loading">
+  {{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length,
+  searchResultNum > surveyService.surveyList.length ? surveyService.surveyList.length : searchResultNum] }}
+</span>
+
+<!-- More button -->
+<button md-raised-button *ngIf="surveyService.surveyList.length > searchResultNum"
+  class="loadMoreButton" color="primary" (click)="loadMore()">Load more</button>

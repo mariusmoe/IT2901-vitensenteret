@@ -9,6 +9,8 @@ export class LogoComponentComponent implements OnInit {
   @Input() logoVariant = 'icon'; // 'icon' or 'full' or 'text', see ngOnInit for default
   @Input() color: string; // primary or accent
   @Input() useColorContrast: boolean; // use the CONTRAST colour of the selected colour
+  @Input() width: string;
+  @Input() height: string;
 
   viewBoxValues = {
     'icon': '10 -5 100 80',

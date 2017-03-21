@@ -3,7 +3,7 @@ import { SurveyList } from '../../_models/survey_list';
 import { SurveyService } from '../../_services/survey.service';
 import { FormControl } from '@angular/forms';
 import { TranslateService } from '../../_services/translate.service';
-
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-choose-survey',
@@ -12,10 +12,9 @@ import { TranslateService } from '../../_services/translate.service';
 })
 export class ChooseSurveyComponent implements OnInit, OnDestroy {
 
-  allsurveys: SurveyList[];
   searchFormControl = new FormControl();
 
-
+  surveySub: Subscription;
   loaded = false;
   search = '';
   search_result = false;
@@ -23,30 +22,23 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
 
 
 
-  constructor(private surveyService: SurveyService, private translateService: TranslateService) {
-    this.allsurveys = [];
+  constructor(public surveyService: SurveyService, public translateService: TranslateService) {
+
   }
 
   ngOnInit() {
-    // Loads all active surveys from the local database to list
-    this.surveyService.getAllSurveys().subscribe( (surveys) => {
-      for (const survey of surveys) {
-        if (!survey.active) { continue; }
-        this.allsurveys.push(survey);
-      }
-
-      // subscribe to the search form for searching
-      this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
-        this.search = searchQuery;
-      });
+    // Loads all active surveys
+    this.surveySub = this.surveyService.getAllSurveys().subscribe( (surveys) => {
       this.loaded = true;
     });
-
-
-
-}
+    // subscribe to the search form for searching
+    this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
+      this.search = searchQuery;
+    });
+  }
 
   ngOnDestroy() {
+    this.surveySub.unsubscribe();
   }
 
 
