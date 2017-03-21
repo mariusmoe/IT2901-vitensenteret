@@ -3,6 +3,8 @@ import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
+import { MdDialog } from '@angular/material';
+import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 
 
 
@@ -56,7 +58,7 @@ export class ActiveSurveyComponent implements OnInit {
   }
 
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer) {
+    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer, public dialog: MdDialog) {
 
   }
 
@@ -232,7 +234,9 @@ resetTimer() {
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    this.router.navigate(['/choosesurvey']);
+    // this.router.navigate(['/choosesurvey']);
+    let dialogRef = this.dialog.open(QuitsurveyPromptComponent);
+
   }
 
 /**
