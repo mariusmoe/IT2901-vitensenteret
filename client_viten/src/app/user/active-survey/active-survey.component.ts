@@ -238,7 +238,7 @@ resetTimer() {
   quitSurvey() {
     // this.router.navigate(['/choosesurvey']);
     let dialogRef = this.dialog.open(QuitsurveyPromptComponent);
-
+    
   }
 
 /**

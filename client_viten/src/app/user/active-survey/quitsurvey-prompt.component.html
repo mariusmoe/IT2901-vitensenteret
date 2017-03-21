@@ -1,10 +1,11 @@
 <h1 md-dialog-title>Skriv inn kode for å avslutte undersøkelsen.</h1>
 <div class="quitSurvey-code">
   <md-input-container>
-    <input mdInput type="tel" placeholder="Kode" value="">
+    <input #code mdInput type="tel" placeholder="Kode" value="">
   </md-input-container>
+  <p *ngIf="hasError == 'true'"> Hello</p>
 </div>
 <div class="prompt-buttons">
-  <button class="cancel" md-button (click)="dialogRef.close('cancel')"> Avbryt </button>
-  <button class="submit" md-button (click)="dialogRef.close('submit')"> OK </button>
+  <button class="cancel" md-button (click)="dialogRef.close()"> Avbryt </button>
+  <button class="submit" md-button (click)="quitSurvey(code.value)"> OK </button>
 </div>
