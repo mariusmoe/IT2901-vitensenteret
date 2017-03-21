@@ -11,6 +11,7 @@ import { MdDialogRef } from '@angular/material';
 export class QuitsurveyPromptComponent {
 
   private errorStr = "Feil kode";
+  private badRequest = "Have you remembered to set a exit code?";
   private hasError = false;
 
   constructor(private surveyService: SurveyService, public dialogRef: MdDialogRef<QuitsurveyPromptComponent>, private router: Router) {}
@@ -31,7 +32,7 @@ export class QuitsurveyPromptComponent {
         error => {
           sub.unsubscribe();
           this.hasError = true;
-          console.log(error);
+          console.log(this.badRequest);
         }
       );
   }
