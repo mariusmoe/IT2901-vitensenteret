@@ -94,6 +94,13 @@ module.exports = (app) => {
   //
   //
 
+
+  // Add or update password
+  surveyRoutes.patch('/escape', AuthenticationController.patchOneEscape);
+
+  //Check if password is correct
+  surveyRoutes.post('/escape', AuthenticationController.checkOneEscape);
+
   // retrive all surveys as a json object
   surveyRoutes.get('/json', SurveyController.getAllSurveysAsJson);
 
@@ -116,6 +123,7 @@ module.exports = (app) => {
                       requireAuth,
                       AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
                       SurveyController.deleteOneSurvey);
+
 
   surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
 

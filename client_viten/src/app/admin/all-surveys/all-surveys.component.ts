@@ -21,6 +21,7 @@ export class AllSurveysComponent implements OnInit {
     searchFormControl = new FormControl();
     searchLoading = false;
     searchResultNum = 20;
+    loadMoreValue = 20;
 
     constructor(
       private router: Router,
@@ -58,5 +59,12 @@ export class AllSurveysComponent implements OnInit {
 
     formatDate(dateString: string) {
       return new Date(dateString).toLocaleDateString();
+    }
+
+    /**
+     * Load more surveys in menu on the left
+     */
+    loadMore() {
+      this.searchResultNum += this.loadMoreValue;
     }
 }

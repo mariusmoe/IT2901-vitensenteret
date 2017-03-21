@@ -2,17 +2,7 @@
 
 
 .svgContainer {
-  display: block;
-  &.full {
-    display: block;
-  }
-  &.icon {
-    display: inline-block;
-    #VitenLogo {
-      max-height: 64px;
-      max-width: 85px;
-    }
-  }
+  display: inline-block;
 }
 
 @mixin logoColor($color) {
