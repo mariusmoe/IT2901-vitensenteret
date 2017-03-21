@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
+import { LocalStorageModule } from 'angular-2-local-storage';
 
 @Component({
   selector: 'app-freetxt',
@@ -9,14 +10,18 @@ import { QuestionObject } from '../../_models/survey';
 export class FreetxtComponent implements OnInit {
   @Input() questionObject: QuestionObject;
   @Output() answer = new EventEmitter();
-  public textValue = '';
-  option;
-  writtenAnswer;
+  public textValue;
+  key;
+  savedTxt;
 
   constructor() { }
 
   ngOnInit() {
-    this.option = this.questionObject.lang.no.txt;
+    this.key = this.questionObject.lang.no.txt;
+    this.savedTxt = this.textValue;
+    if (localStorage.getItem(this.key) !== undefined) {
+      this.textValue = localStorage.getItem(this.key);
+    }
   }
 
   /**
@@ -32,8 +37,8 @@ export class FreetxtComponent implements OnInit {
  * @param  {number[]} userChoice An output number that shows which answer was chosen by a user
  */
   updateAnswers() {
-    this.writtenAnswer = this.textValue;
-    this.answer.emit(this.writtenAnswer);
+    this.answer.emit(this.textValue);
+    localStorage.setItem(this.key, this.textValue);
   }
 
 }
