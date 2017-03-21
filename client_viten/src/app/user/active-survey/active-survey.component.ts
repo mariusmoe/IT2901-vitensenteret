@@ -29,7 +29,9 @@ export class ActiveSurveyComponent implements OnInit {
   private transition = false;
   private done = false;
   private answers = [];
-
+  private englishEnabled: boolean;
+  private languageselector = true;
+  private language: string;
   abortTimer: string;
   abortCounter = 0;
 
@@ -76,6 +78,25 @@ export class ActiveSurveyComponent implements OnInit {
         console.log(this.survey);
         this.totalPages = this.survey.questionlist.length;
 
+        // Sets the language to no as standard when it is created
+        this.language = this.survey.questionlist[this.page].lang.no.txt;
+        // somewhat hacky way to determine english state.
+        if (this.survey.questionlist[0].lang.en
+          && this.survey.questionlist[0].lang.en.txt
+          && this.survey.questionlist[0].lang.en.txt.length > 0) {
+          this.englishEnabled = true;
+          console.log('This survey have english ');
+          console.log(this.survey.questionlist.length + '');
+          console.log(this.survey.questionlist[0].lang.en.txt);
+
+          for (let i = 0; i <= this.survey.questionlist.length; i++) {
+        // this.survey.questionlist[i].lang.en = this.survey.questionlist[i].lang.no;
+            }
+
+        }
+
+
+
         if (this.survey && this.survey.active) {
           this.properSurvey = true;
         } else {
@@ -107,6 +128,7 @@ export class ActiveSurveyComponent implements OnInit {
     this.subscribeabortTimer();
     this.timer.delTimer('1sec');
 
+    this.language = this.survey.questionlist[this.page].lang.no.txt;
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
@@ -245,4 +267,16 @@ resetTimer() {
     });
   }
 
+  // changelanguage
+  private switchtono() {
+    this.language = this.survey.questionlist[this.page].lang.no.txt;
+    console.log('change to no');
+    this.languageselector = true;
+
+  }
+  private switchtoen() {
+      this.language = this.survey.questionlist[this.page].lang.en.txt;
+      console.log('change to en');
+      this.languageselector = false;
+  }
 }

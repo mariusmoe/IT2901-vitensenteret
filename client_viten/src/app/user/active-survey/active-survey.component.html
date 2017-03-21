@@ -8,6 +8,24 @@
   <!--Startbutton for an active survey   *ngIf="!started"   -->
   <div class="startTextContainer" *ngIf="!started">
     <span class="startText"> Start Undersøkelse </span>
+
+    <div *ngIf="englishEnabled" class="languageSelection">
+      <!--TODO need clickevent to load the speified language-->
+      <button md-icon-button color="accent" (click)="switchtoen()">
+        <input type="image" src="../../assets/images/FlaggUK.svg">
+      </button>
+      <button md-icon-button color="accent" (click)="switchtono()">
+        <input type="image" src="../../assets/images/FlagNorge.svg">
+      </button>
+
+
+      <!--TODO need clickevent to load the specified language. The commented code under is not in use but is showing how div above shold look-->
+      <!--
+      <button md-icon-button color="accent" (click)="translateService.use('no')" [ngClass]="{'active': translateService.getCurrentLang() === 'no'}">
+        <input type="image" src="../../assets/images/FlagNorge.svg">
+      </button>
+      -->
+    </div>
   </div>
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
@@ -30,7 +48,7 @@
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
 
       <!-- Either displays the title of a question or shows the endMessage if the survey is done -->
-      <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{survey.questionlist[page].lang.no.txt}}</span></div>
+      <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.language}}</span></div>
       <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
 
       <!-- Childcomponents that handle each answer-type -->
