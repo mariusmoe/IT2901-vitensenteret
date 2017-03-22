@@ -78,7 +78,6 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     MultiplechoiceComponent,
     LogoComponentComponent,
     SinglechoiceComponent,
-    NicknameComponent
     NicknameComponent,
     QuitsurveyPromptComponent
 
