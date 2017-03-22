@@ -59,7 +59,7 @@
         <app-single-choice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-single-choice>
         <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event);'></app-multiplechoice>
         <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
-        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-freetxt>
+        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-freetxt>
       </div>
 
     </div>

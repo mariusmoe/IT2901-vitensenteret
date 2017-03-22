@@ -12,15 +12,12 @@ export class FreetxtComponent implements OnInit {
   public textValue;
   key;
   savedTxt;
+  @Input() currentAnswer: string;
 
   constructor() { }
 
   ngOnInit() {
-    this.key = this.questionObject.lang.no.txt;
-    this.savedTxt = this.textValue;
-    if (localStorage.getItem(this.key) !== undefined) {
-      this.textValue = localStorage.getItem(this.key);
-    }
+    this.textValue = this.currentAnswer;
   }
 
   /**
