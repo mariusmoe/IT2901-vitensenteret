@@ -22,24 +22,22 @@ import { LocalStorageModule } from 'angular-2-local-storage';
 })
 
 export class ActiveSurveyComponent implements OnInit {
-  @Input() alternative: number;
-  private properSurvey = false;
-  private started = false;
+  @Input() alternative: number; // The answer- \input recieved from child components.
+  private properSurvey = false; // If the survey is valid, posting it to the database is possible.
+  private started = false; // If a survey is started, this is true.
   private survey: Survey;
   private response: Response;
   private page = 0;
   private totalPages = 0;
-  private transition = false;
-  private done = false;
-  private answers = [];
+  private transition = false; // If true, animation between pages are triggerd
+  private done = false; // if true it takes you to the endMessage-screen
+  private answers = []; // This is the list of answers in a survey
 
-  // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
-  postDone;
-  // Only initialized if pre-post. Is true when the user is on the nickname page. Required in order to avoid conflict with child components
-  nicknamePage;
+  postDone; // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
+  nicknamePage; // Only initialized if pre-post. Is true when the user is on the nickname page.
 
-  abortTimer: string;
-  abortCounter = 0;
+  abortTimer: string; // The ID for the timer
+  abortCounter = 0; // The actual timer, updates in the listenCallback() function
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
