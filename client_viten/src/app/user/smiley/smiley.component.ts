@@ -8,12 +8,12 @@ import { QuestionObject } from '../../_models/survey';
   animations: [
   trigger('jumpOut', [
     state('inactive', style({opacity: 0.5})),
-    state('active', style({opacity: 1})),
+    state('active', style({opacity: 1, transform: 'scale(1.1,1.1)'})),
     transition('inactive => active', animate('500ms', keyframes([
       style({opacity: 0.5, transform: 'scale(1,1)', offset: 0}),
       style({opacity: 0.8, transform: 'scale(1.4,1.2)', offset: 0.25}),
       style({opacity: 1, transform: 'scale(0.9,0.9)', offset: 0.8}),
-      style({opacity: 1, transform: 'scale(1,1)', offset: 1.0})
+      style({opacity: 1, transform: 'scale(1.1,1.1)', offset: 1.0})
     ]))),
     transition('active => inactive', animate('500ms'))
   ])
@@ -23,6 +23,7 @@ export class SmileyComponent implements OnInit {
   @Input() questionObject: QuestionObject;
   @Output() answer = new EventEmitter();
   selectedSmile: number;
+  @Input() currentAnswer: number;
 
   // Animation variables
   smileyActiveOne = 'inactive';
@@ -31,7 +32,15 @@ export class SmileyComponent implements OnInit {
 
   constructor() {  }
 
-  ngOnInit() {}
+  ngOnInit() {
+    if (this.currentAnswer === 0) {
+      this.smileyActiveOne = 'active';
+    } else if (this.currentAnswer === 1) {
+      this.smileyActiveTwo = 'active';
+    } else if (this.currentAnswer === 2) {
+      this.smileyActiveThree = 'active';
+    }
+  }
 
   /**
    * This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
@@ -42,8 +51,6 @@ export class SmileyComponent implements OnInit {
   }
 
   animationEnd(event) {
-    console.log(event);
-
     if (event.fromState === 'inactive') {
       this.addChange();
     }

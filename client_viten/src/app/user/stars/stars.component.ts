@@ -31,6 +31,7 @@ export class StarsComponent implements OnInit {
   @Output() answer = new EventEmitter();
   selectedStar: number;
   private starList = [0, 1, 2, 3, 4];
+  @Input() currentAnswer: number;
 
   starActiveOne = 'inactive';
   starActiveTwo = 'inactive';
@@ -42,6 +43,27 @@ export class StarsComponent implements OnInit {
   }
 
   ngOnInit() {
+    if (this.currentAnswer === 0) {
+      this.starActiveOne = 'active';
+    } else if (this.currentAnswer === 1) {
+      this.starActiveOne = 'active';
+      this.starActiveTwo = 'active';
+    } else if (this.currentAnswer === 2) {
+      this.starActiveOne = 'active';
+      this.starActiveTwo = 'active';
+      this.starActiveThree = 'active';
+    } else if (this.currentAnswer === 3) {
+      this.starActiveOne = 'active';
+      this.starActiveTwo = 'active';
+      this.starActiveThree = 'active';
+      this.starActiveFour = 'active';
+    } else if (this.currentAnswer === 4) {
+      this.starActiveOne = 'active';
+      this.starActiveTwo = 'active';
+      this.starActiveThree = 'active';
+      this.starActiveFour = 'active';
+      this.starActiveFive = 'active';
+    }
   }
 
   /**
@@ -53,8 +75,6 @@ export class StarsComponent implements OnInit {
   }
 
   animationEnd(event) {
-    console.log(event);
-
     if (event.fromState === 'inactive') {
       this.addChange();
     }
