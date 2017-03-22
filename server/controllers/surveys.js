@@ -2,7 +2,8 @@
 
 const validator = require('validator'),
       status = require('../status'),
-      Survey = require('../models/survey'),
+      Survey  = require('../models/survey'),
+      Response = require('../models/response'),
       jsonfile = require('jsonfile'),
       fs = require('fs'),
       config = require('config'),
@@ -35,10 +36,40 @@ exports.createSurvey = (req, res, next) => {
   })
 }
 
+// POST
+// exports.linkPrePost = (req, res, next) => {
+//   const preKey  = req.body.preKey;
+//   const postKey = req.body.postKey;
+//   PrePost.find({preKey: preKey},  (err, existingPreKey) => {
+//     if (err) { return next(err); }
+//     PrePost.find({postKey: postKey},  (err, existingPostKey) => {
+//     if (err) { return next(err); }
+//     if (existingPreKey.length >= 1 || existingPostKey.length >= 1) {
+//       return res.status(400).send({message: 'FAILURE - Already exists'})
+//     }
+//     const newPrePost = new PrePost({
+//       preKey: preKey,
+//       postKey: postKey
+//     });
+//     newPrePost.save((err, prePost) => {
+//       if (err) { return next(err); }
+//       console.log(prePost);
+//       return res.status(200).send({message: 'SUCCESS', prePost: prePost})
+//     })
+//   })
+// })
+//
+// }
+
+// GET
+// exports.getPrePost = (req, res, next) => {
+//
+// }
+
 
 // GET
 exports.getAllSurveys = (req, res, next) => {
-  Survey.find( {}, { 'name': true, 'active': true, 'date': true, 'comment': true }, (err, surveys) => {
+  Survey.find( { 'isPost': false }, { 'name': true, 'active': true, 'date': true, 'comment': true, 'postKey': true }, (err, surveys) => {
     if (!surveys || surveys.length === 0) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
@@ -66,7 +97,11 @@ exports.getOneSurvey = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-    return res.status(200).send(survey);
+    // Need to send answers too
+    Response.find({surveyId: surveyId}, (err, responses) => {
+      if (err) { return next(err); }
+      return res.status(200).send({survey: survey, responses: responses});
+    });
   });
 }
 
@@ -126,8 +161,9 @@ exports.deleteOneSurvey = (req, res, next) => {
 
 // POST
 exports.answerOneSurvey = (req, res, next) => {
-  const surveyId  = req.params.surveyId;
-  const answers   = req.body.answers;
+  const surveyId  = req.params.surveyId,
+        types      = req.body.types,
+        answers   = req.body.answers;
   // TODO: if answers object does not exist, stop here.
 
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
@@ -135,24 +171,19 @@ exports.answerOneSurvey = (req, res, next) => {
     // but we should check the validity of the id
     return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
   }
-  Survey.findById( surveyId, (err, survey) => {
-    if (!survey) {
-      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-    }
+  let newAnswer = new Response({
+    nickname: req.body.nickname,
+    surveyId: surveyId,
+    questionlist: answers
+  })
+  newAnswer.save( (err, answer) => {
     if (err) { return next(err); }
-    if (survey.questionlist.answer == undefined) { survey.questionlist.answer = []; }
-    survey.questionlist.forEach((question,i) => { question.answer.push(answers[i]) })
-    survey.save((err, survey) => {
-      if (err) {return next(err); }
-      return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
-    })
+    return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
   });
 }
 
 
 // JSON
-
-
 exports.getAllSurveysAsJson = (req, res, next) => {
   Survey.find({}, (err, surveys) => {
     if (!surveys) {
@@ -271,37 +302,85 @@ exports.getSurveyAsCSV = (req, res, next) => {
       star: 5
     }
 
+    Response.find({surveyId: surveyId}, (err, responses) => {
+      if (err) { return next(err); }
       // for every question in the survey
-      for (let question of survey.questionlist){
-        // console.log(question);
-        questionAnswar = question.answer;
-        // Count the occurance of each element in the array
-        let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
-            x => [x, questionAnswar.filter(y => y === x).length]
-        ));
-        // Add question to csv
-        csv += question.lang.no.txt + '\n'
-        // Add all questions to csv
-        if ( question.mode === 'multi') {
-          // Add question text
-          question.lang.no.options.forEach( (x) =>{csv += x + ','});
-          csv += '\n'
-          // Add accumulated answars to csv
-          question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
-          csv += '\n'
-        } else {
-          // Create a list with length according to question mode
-          // This list is also numerated from 0 - length of questionmode - 1
-          let optionsList = Array.apply(null, Array(numOptions[question.mode])).map(function (x, i) { return i; });
-          // Add question text (in this case it is a number)
-          optionsList.forEach( (x) =>{csv += x + ','});
-          csv += '\n'
-          // Add accumulated answars to csv
-          optionsList.forEach( (x,y) => { csv += questionAnswarCount.get(y) + ',' })
-          csv += '\n'
-
+      csv += survey.name + '\n'
+      survey.questionlist.forEach((question, i) => {
+        // Add question number for readability; Add question to csv
+        csv += String(i) + '. ' + question.lang.no.txt + '\n'
+        switch (question.mode) {
+          case 'multi':
+            question.lang.no.options.forEach( (x) =>{csv += x + ','});
+            csv += '\n'
+            question.lang.no.options.forEach( (x,y) => {
+              let totalResponse = 0;
+              responses.forEach((response) => {
+                response.questionlist[i].forEach((multiOption, n) => {
+                  if (response.questionlist[i][n] == y) {
+                    totalResponse++
+                  }
+                })
+              })
+              csv += totalResponse + ','
+            })
+            csv += '\n'
+            break;
+          case 'text':
+            responses.forEach((response) => {
+              csv += response.questionlist[i] + '\n'
+            })
+            break;
+          default:
+            question.lang.no.options.forEach( (x) =>{csv += x + ','});
+            csv += '\n'
+            question.lang.no.options.forEach( (x,y) => {
+              let totalResponse = 0;
+              responses.forEach((response) => {
+                if (response.questionlist[i] == y) {
+                  totalResponse++
+                }
+              })
+              csv += totalResponse + ','
+            })
+            csv += '\n'
+            break;
         }
-      }
+        // // console.log(question);
+        // questionAnswar = question.answer;
+        // // Count the occurance of each element in the array
+        // let questionAnswarCount = new Map([...new Set(questionAnswar)].map(
+        //   x => [x, questionAnswar.filter(y => y === x).length]
+        // ));
+        //
+        //
+        // // Add all questions to csv
+        // if ( question.mode === 'multi') {
+        //   // Add question text
+        //   question.lang.no.options.forEach( (x) =>{csv += x + ','});
+        //   csv += '\n'
+        //   // Add accumulated answars to csv
+        //   question.lang.no.options.forEach( (x,y) => { csv += questionAnswarCount.get(y+1) + ',' })
+        //   csv += '\n'
+        // } else {
+        //   // Create a list with length according to question mode
+        //   // This list is also numerated from 0 - length of questionmode - 1
+        //   let optionsList = Array.apply(null, Array(numOptions[question.mode])).map(function (x, i) { return i; });
+        //   // Add question text (in this case it is a number)
+        //   optionsList.forEach( (x) =>{csv += x + ','});
+        //   csv += '\n'
+        //   // Add accumulated answars to csv
+        //   optionsList.forEach( (x,y) => { csv += questionAnswarCount.get(y) + ',' })
+        //   csv += '\n'
+        //
+        // }
+        //}
+
+
+      })
+
+
+
       // Open a gate to the temp directory
       temp.open('myprefix', function(err, info) {
         if (!err) {
@@ -316,5 +395,6 @@ exports.getSurveyAsCSV = (req, res, next) => {
           });
         }
       });
+    });
   });
 }

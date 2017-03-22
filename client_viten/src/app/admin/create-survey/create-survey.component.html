@@ -12,32 +12,27 @@
           <div>
             <md-input-container>
               <!-- SURVEY NAME -->
-              <input mdInput type="text" placeholder="{{ 'Title' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.name" required (change)="setPushReadyStatus()">
+              <input mdInput type="text" placeholder="{{ 'Title' | translate }}" ng-pattern="stringPattern"
+              [(ngModel)]="survey.name" required (change)="setPushReadyStatus()" [disabled]="lockdown">
               <md-hint *ngIf="!fieldValidate(survey.name)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
             </md-input-container>
 
             <md-input-container>
               <!-- SURVEY COMMENT (not required) -->
-              <input mdInput type="text" placeholder="{{ 'Admin-only Comment' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.comment">
+              <input mdInput type="text" placeholder="{{ 'Admin-only Comment' | translate }}" ng-pattern="stringPattern"
+              [(ngModel)]="survey.comment" [disabled]="lockdown">
             </md-input-container>
           </div>
 
           <!-- SURVEY DATE -->
-          <!-- <md-input-container>
-            <input mdInput class="form-control" type="date" placeholder="Date" [(ngModel)]="survey.date" required>
-            <md-hint *ngIf="false">
-              <span class="red">This field is required</span>
-            </md-hint>
-          </md-input-container> -->
+          
+          <!-- SURVEY ACTIVE STATE -->
+          <md-checkbox [(ngModel)]="survey.active">{{ 'Active status' | translate }}</md-checkbox>
 
-
-          <div>
-            <!-- SURVEY ACTIVE STATE -->
-            <md-checkbox [(ngModel)]="survey.active">{{ 'Active status' | translate }}</md-checkbox>
-          </div>
           <div>
             <!-- USE ENGLISH? -->
-            <md-checkbox [(ngModel)]='englishEnabled' (change)="setPushReadyStatus()">{{ 'Enable English for this survey?' | translate }}</md-checkbox>
+            <md-checkbox [(ngModel)]='englishEnabled' (change)="setPushReadyStatus()"
+            [disabled]="lockdown">{{ 'Enable English for this survey?' | translate }}</md-checkbox>
           </div>
         </md-card-content>
       </md-card>
@@ -69,22 +64,25 @@
           <div class="flexParent" [dragula]="'questionsBag'" [dragulaModel]="survey.questionlist">
             <!-- QUESTIONOBJECT -->
             <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@slideInOut]="">
-              <md-card-title class="dragHandle">{{ 'Question' | translate }} {{i+1}}</md-card-title>
+              <md-card-title [ngClass]="{'dragHandle': !lockdown }">{{ 'Question' | translate }} {{i+1}}</md-card-title>
               <md-card-content>
+                <!--Checkbox making a question required-->
+                <md-checkbox class="required-checkbox" [(ngModel)]="questionObject.required" [disabled]="lockdown">{{ 'Required question' | translate }}</md-checkbox>
+
                 <!-- QUESTION MODE -->
                 <div class="modeSelect">
                   <!-- no placeholder set; there will never be an opportunity for it to be empty -->
-                  <md-select [(ngModel)]="questionObject.mode" (change)='setPushReadyStatus()'>
+                  <md-select [(ngModel)]="questionObject.mode" (change)='setPushReadyStatus()' [disabled]="lockdown">
                     <md-option *ngFor="let m of allowedModes" [value]="m">
-                      {{ allowedModesVerbose[m] | translate }}
+                      {{ m | translate }}
                     </md-option>
                   </md-select>
                   <!--
                     this span displays EITHER 'No alternatives need to be set.'
                     OR Alternatives: x/max(x,2)
                   -->
-                  <span class="desc" [class.invalid]="(questionObject.mode == 'multi' && questionObject.lang.no.options.length < 2)">
-                    {{ questionObject.mode == 'multi' ? ( 'Alternatives: n/m' | translate:[questionObject.lang.no.options.length,
+                  <span class="desc" [class.invalid]="((questionObject.mode == 'multi' || questionObject.mode == 'single') && questionObject.lang.no.options.length < 2)">
+                    {{ (questionObject.mode == 'multi' || questionObject.mode == 'single') ? ( 'Alternatives: n/m' | translate:[questionObject.lang.no.options.length,
                         (questionObject.lang.no.options.length > 2 ? questionObject.lang.no.options.length : 2)] )
                       : ( 'No alternatives need to be set.' | translate )
                   }}</span>
@@ -105,13 +103,13 @@
               </md-card-content>
               <md-card-actions class="actionsBox">
                 <!-- delete question button -->
-                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)"
+                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)" [disabled]="lockdown"
                 [mdTooltip]="'Deletes this particular question! Careful!' | translate" tooltip-position="above">
                   <md-icon>delete</md-icon>
                 </button>
-                <!-- QUESTION OPTIONS: multi (the others has no options to be set) -->
+                <!-- QUESTION OPTIONS: multi or single (the others has no options to be set) -->
                 <button md-raised-button color="primary"
-                *ngIf="questionObject.mode === 'multi'"
+                *ngIf="questionObject.mode === 'multi' || questionObject.mode === 'single'"
                 (click)="setAlternatives(questionObject)">
                 <md-icon>create</md-icon> {{ 'Set Alternatives' | translate }}</button>
                 <!-- the order of these two buttons are reversed in the css! -->
@@ -120,7 +118,7 @@
           </div>
         </md-card-content>
         <md-card-actions>
-          <button md-raised-button class="btn btn-success" color="primary" (click)="addQuestion()">
+          <button md-raised-button class="btn btn-success" color="primary" (click)="addQuestion()" [disabled]="lockdown">
             <md-icon>add_box</md-icon> {{ 'Add a question' | translate }}
           </button>
         </md-card-actions>

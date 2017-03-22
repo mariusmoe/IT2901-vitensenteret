@@ -1,22 +1,23 @@
-import {Injectable, Pipe, PipeTransform } from '@angular/core';
+import { Injectable, Pipe, PipeTransform } from '@angular/core';
 import { SurveyList } from '../_models/survey_list';
 @Pipe({
     name: 'adminSurveyPipe'
 })
 @Injectable()
 export class AdminSurveysPipe implements PipeTransform {
-    transform(items: SurveyList[], query: string, maxResults: number): SurveyList[] {
-      let array: SurveyList[];
+    transform(items: SurveyList[], query: string, maxResults: number, onlyActive: boolean): SurveyList[] {
+      let array = items;
+      if (onlyActive) {
+        array = array.filter(s => { return (onlyActive && s.active); } );
+      }
       if (query && query.length > 0) {
         const queryWords = query.toLowerCase().split(/[ ]+/);
-        array = items.filter(item => {
+        array = array.filter(item => {
           return queryWords.every(s => {
             return item.name.toLowerCase().indexOf(s) >= 0 ||
               item.comment.toLowerCase().indexOf(s) >= 0;
           });
         });
-      } else {
-        array = items;
       }
       return array
         .sort((s1, s2) => {

@@ -1,5 +1,5 @@
 <div class="container">
-  <div *ngFor="let qo of chartsToDisplay">
+  <div *ngFor="let qo of chartsToDisplay; let i = index">
     <div *ngIf="qo.mode === 'text'" class="noChartDisplayed">
       <!-- If English language is selected AND an english question txt is defined
            then show that. Else show norwegian.
@@ -12,6 +12,6 @@
         {{ 'Text based question. Download raw data to extract this.' | translate }}
       </p>
     </div>
-    <app-chart *ngIf="qo.mode !== 'text'" [questionObject] = "qo"></app-chart>
+    <app-chart *ngIf="qo.mode !== 'text'" [questionObject] = "qo" [responses] = "responses" [postResponses]="postResponses" [index] = "i"></app-chart>
   </div>
 </div>

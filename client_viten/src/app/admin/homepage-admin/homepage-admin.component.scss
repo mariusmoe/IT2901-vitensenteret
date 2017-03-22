@@ -7,15 +7,24 @@
   flex-wrap: nowrap;
   align-items: stretch;
 }
-
+.flexchild {
+  flex: 1 1;
+}
+.alignCenter {
+  text-align: center;
+}
+.alignRight {
+  text-align: right;
+}
 
 .rightSide {
-  flex: 3 3;
+  display: inline-block;
+  width: 75%;
 }
 
 .leftSide {
-  flex: 1 1;
-  min-width: 200px;
+  display: inline-block;
+  width: 25%;
 }
 
 .emptyArea {
@@ -40,4 +49,35 @@
   margin-top: 150px;
   width: 50%;
   padding: 10px;
+}
+
+.surveyActiveIcon {
+   color: #f44336;
+   &.active {
+      color: #A1E232;
+  }
+
+}
+.visibility-text {
+  margin: 0px;
+  text-align: center;
+}
+
+md-card {
+  position: relative;
+}
+
+.chip {
+  display: inline-block;
+  transform: scale(0.68);
+  position: absolute;
+  top: 70px;
+  right: -10px;
+  color: white;
+  md-chip {
+    outline: none;
+  }
+  .mat-accent {
+    color: white;
+  }
 }

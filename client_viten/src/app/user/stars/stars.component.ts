@@ -23,7 +23,6 @@ export class StarsComponent implements OnInit {
    * @param  {number[]} alt The output answer sent to active-survey-component
    */
   private addChange(alt) {
-    console.log('Answer changed');
     this.answer.emit(alt);
   }
 

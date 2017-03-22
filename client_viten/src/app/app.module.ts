@@ -6,6 +6,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AppRoutingModule } from './app.routing-module';
 import { MaterialModule } from '@angular/material';
 import { ChartsModule } from 'ng2-charts/ng2-charts';
+import { SimpleTimer } from 'ng2-simple-timer';
+import { HostListener } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
@@ -31,6 +33,8 @@ import { FreetxtComponent } from './user/freetxt/freetxt.component';
 import { YesNoComponent } from './user/yes-no/yes-no.component';
 import { MultiplechoiceComponent } from './user/multiplechoice/multiplechoice.component';
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
+import { LocalStorageModule } from 'angular-2-local-storage';
+
 
 import { ClipboardModule } from 'ngx-clipboard';
 import { DragulaModule } from 'ng2-dragula';
@@ -41,6 +45,7 @@ import { TranslateService } from './_services/translate.service';
 import { TranslatePipe } from './_pipes/translate';
 import { DatePipe } from '@angular/common';
 import { LogoComponentComponent } from './logo-component/logo-component.component';
+import { SinglechoiceComponent } from './user/singlechoice/singlechoice.component';
 
 @NgModule({
   declarations: [
@@ -70,7 +75,8 @@ import { LogoComponentComponent } from './logo-component/logo-component.componen
     AdminSurveysPipe,
     TranslatePipe,
     MultiplechoiceComponent,
-    LogoComponentComponent
+    LogoComponentComponent,
+    SinglechoiceComponent
 
   ],
   imports: [
@@ -82,7 +88,11 @@ import { LogoComponentComponent } from './logo-component/logo-component.componen
     ChartsModule,
     ClipboardModule,
     DragulaModule,
-    MaterialModule.forRoot()
+    MaterialModule.forRoot(),
+    LocalStorageModule.withConfig({
+            prefix: 'vitensurvey',
+            storageType: 'localStorage'
+        })
   ],
   entryComponents: [
     SurveyAlternativesDialog,
@@ -98,6 +108,7 @@ import { LogoComponentComponent } from './logo-component/logo-component.componen
     SurveyService,
     TRANSLATION_PROVIDERS,
     TranslateService,
+    SimpleTimer,
     DatePipe
   ],
   bootstrap: [AppComponent]

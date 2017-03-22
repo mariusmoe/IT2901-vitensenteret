@@ -16,14 +16,46 @@ export class SurveyService {
 
   }
 
+  checkChoosesurvey(password: string): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.post(environment.URL.checkChoosesurvey, {password: password}, options)
+    .map( response => {
+      console.log(response);
+      return true;
+    },
+    error => {
+      console.error(error.json());
+      return false;
+    });
+  }
+
+changeChoosesurvey(password: string): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.patch(environment.URL.checkChoosesurvey, {password: password}, options)
+    .map( response => {
+      console.log(response);
+      return true;
+    },
+    error => {
+      console.error(error.json());
+      return false;
+    });
+  }
+
   /**
    * answer one survey
-   * @param  {Array<number>}       answers  List of answers, each number
+   * @param  {Array<any>}       answers  List of answers, each element is an answer
    *                                        represents one answer.
    * @param  {String}              idString identifier for a survey
    * @return {Observable<boolean>}          Observable boolean, true if successful
    */
-  answerSurvey(answers: Array<number>, idString: String): Observable<boolean> {
+  answerSurvey(answers: Array<any>, idString: String): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
@@ -55,14 +87,12 @@ export class SurveyService {
    * getSurvey(idString: String)
    *
    * @param {string} idString the id of the survey one wants to get
-   * @returns {Observable<Survey>} returns an observable holding the requested survey
+   * @returns {Observable<any>} returns an observable holding the requested survey and responses
    */
-   getSurvey(idString: String): Observable<Survey> {
+   getSurvey(idString: String): Observable<any> {
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
-       const s: Survey = response.json();
-
-       return s;
+       return response.json();
      },
      error => {
        return error.json();

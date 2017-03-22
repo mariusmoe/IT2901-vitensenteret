@@ -15,5 +15,43 @@
   background: url(../../assets/images/EmptyStar.svg) no-repeat center center;
   &.active {
     background-image: url(../../assets/images/Star.svg);
+    animation: grow-shake 0.75s 1;
+  }
+}
+
+
+@keyframes grow-shake {
+  0% {
+    transform: rotate(5deg) scale(1,1);
+  }
+  10% {
+    transform: rotate(-5deg) scale(0.975,1.025);
+  }
+  20% {
+    transform: rotate(5deg) scale(0.95,1.05);
+  }
+  30% {
+    transform: rotate(-5deg) scale(0.9,1.1);
+  }
+  40% {
+    transform: rotate(5deg) scale(0.85,1.15);
+  }
+  50%{
+    transform: rotate(-5deg) scale(0.8,1.2);
+  }
+  60% {
+    transform: rotate(5deg) scale(0.9,1.1);
+  }
+  70% {
+    transform: rotate(-5deg) scale(0.95,1.05);
+  }
+  80% {
+    transform: rotate(5deg) scale(1.1,0.9);
+  }
+  90% {
+    transform: rotate(-5deg) scale(1.05,0.95);
+  }
+  100%{
+    transform: rotate(0deg) scale(1,1);
   }
 }

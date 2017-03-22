@@ -34,3 +34,53 @@
 .select {
   width: 180px;
 }
+
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 30px;
+    max-height: 150px;
+    overflow-y: scroll;
+    td, th {
+      border: 1px solid #ddd;
+      text-align: left;
+      padding: 8px;
+    }
+    td {
+      text-align: right;
+      &.option {
+        text-align: left;
+      }
+    }
+    tr {
+      &.labels th {
+        text-align: center;
+      }
+      &:nth-child(even) {
+        background-color: #eee;
+      }
+    }
+}
+
+
+
+// .tble {
+//   border-collapse: collapse;
+//   max-height: 150px;
+//   overflow-y: scroll;
+//   width: 100%;
+//   .odd {
+//     background: rgba(0, 0, 0, 0.1);
+//   }
+//   td, th {
+//       border: 1px solid #dddddd;
+//       text-align: left;
+//       padding: 8px;
+//   }
+//   tr.odd, tr.even {
+//     &:hover {
+//       background: rgba(0, 0, 0, 0.2);
+//       cursor: pointer;
+//     }
+//   }
+// }

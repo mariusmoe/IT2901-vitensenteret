@@ -1,7 +1,10 @@
-import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, } from '@angular/core';
+import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, HostListener } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
+import { SimpleTimer } from 'ng2-simple-timer';
+import { LocalStorageModule } from 'angular-2-local-storage';
+
 
 
 @Component({
@@ -24,14 +27,37 @@ export class ActiveSurveyComponent implements OnInit {
   private survey: Survey;
   private page = 0;
   private totalPages = 0;
-  private nextPage = 0;
   private transition = false;
-  private forwardValue = 'Forward';
   private done = false;
   private answers = [];
 
+  abortTimer: string;
+  abortCounter = 0;
+
+  /**
+   * Hostlistener that recognizes clicks on the screen to reset timer
+   * @param  {click'} 'document  [description]
+   * @param  {[type]} ['$event'] [description]
+   * @return {[type]}            [description]
+   */
+  @HostListener('document:click', ['$event'])
+  clickout(event) {
+    this.resetTimer();
+  }
+
+  /**
+   * Hostlistener that recognizes keypresses to reset timer
+   * @param  {keypress'} 'document  [description]
+   * @param  {[type]}    ['$event'] [description]
+   * @return {[type]}               [description]
+   */
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    this.resetTimer();
+  }
+
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute) {
+    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer) {
 
   }
 
@@ -47,12 +73,11 @@ export class ActiveSurveyComponent implements OnInit {
           // TODO: Redirect to base create survey ?
           return;
         }
-        // console.log(result);
-        this.survey = result;
+        this.survey = result.survey;
+        console.log(this.survey);
         this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {
-          // console.log(this.survey);
           this.properSurvey = true;
         } else {
           console.error('Survey is not active or something else is wrong!');
@@ -61,30 +86,38 @@ export class ActiveSurveyComponent implements OnInit {
       return;
     }
   }
+  /**
+   * This method starts the survey as well as the inactivity timer
+   */
   private startSurvey() {
     this.started = true;
+    this.timer.newTimer('1sec', 1);
+    this.subscribeabortTimer();
   }
 
+/**
+ * This method resets a survey completely
+ */
   private exitSurvey() {
-    this.forwardValue = 'Forward';
+    localStorage.clear();
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
-    this.nextPage = 0;
     this.done = false;
     this.transition = false;
+
+    this.subscribeabortTimer();
+    this.timer.delTimer('1sec');
+
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
-          console.log("DEBUG: BAD surveyId param from router!");
-          // TODO: Redirect to base create survey ?
+          console.log ('DEBUG: BAD surveyId param from router!');
           return;
         }
-        this.survey = result;
+        this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
-
         if (this.survey && this.survey.active) {
-          // console.log(this.survey);
           this.properSurvey = true;
         }
       });
@@ -98,7 +131,6 @@ export class ActiveSurveyComponent implements OnInit {
  */
 addOrChangeAnswer(alternative) {
   this.answers[this.page] = alternative;
-  // console.log('answers updated! answer[] now looks like this: ', this.answers);
 }
 
 /**
@@ -107,44 +139,40 @@ addOrChangeAnswer(alternative) {
  */
   private previousQ() {
       if (this.page <= 0) {
-        // console.log("this is the first question, can't go back further");
         return;
       }
-      this.forwardValue = 'Forward';
       this.page -= 1;
       this.transition = true;
-
-      // console.log('previous question');
     }
 
 /**
- * This method handles the transition to the next question in the survey
+ * This method handles the transition to the next question in the survey as well as handling whether its the last page.
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
+    // Handles an empty answer
     if (typeof this.answers[this.page] === 'undefined') {
       this.answers[this.page] = -1;
-      // console.log('answers updated! answer[] now looks like this: ', this.answers);
     }
-    if (this.totalPages === 1) {
-      this.endSurvey();
-    }
-    if (this.forwardValue === 'Finish') {
-      this.endSurvey();
-    }
+    // If current page is the last with questions, the next page should be the endSurvey page
     if (this.page + 1 >= this.totalPages) {
-      // console.log("this is the last question, can't advance further");
-      this.forwardValue = 'Finish';
+      this.endSurvey();
       return;
     }
-    this.forwardValue = 'Forward';
+    // Advances to the next page
     this.page += 1;
     this.transition = true;
+  }
 
-    if (this.page + 1 >= this.totalPages) {
-      this.forwardValue = 'Finish';
+  /**
+   * This method checks if it should automatically advance to the next question.
+   * If it is the last question in the survey, it should not advance.
+   * @param  {}
+   */
+  autoAdvance() {
+    if (this.page + 1 !== this.totalPages) {
+      this.nextQ();
     }
-    // console.log('next question');
   }
 
 /**
@@ -154,37 +182,67 @@ addOrChangeAnswer(alternative) {
   animEnd(event) {
     if (!event.fromState) {
       this.transition = false;
-      // console.log("Going to next page now!")
     }
-    // console.log('animEnd');
-    // console.log(event);
   }
 
 /**
- * This method ends the survey if the user clicks the END button or after x amount of seconds
+ * The subscribe-methods connects variables to timers. These handles connectivity to callback-methods
+ */
+ subscribeabortTimer() {
+  if (this.abortTimer) {
+    // Unsubscribe if timer Id is defined
+    this.timer.unsubscribe(this.abortTimer);
+    this.abortTimer = undefined;
+    } else {
+      // Subscribe if timer Id is undefined
+      this.abortTimer = this.timer.subscribe('1sec', e => this.listenCallback());
+    }
+  }
+
+
+/**
+ * The timer-methods update the counters accordingly to realtime seconds, and aborts survey if time has passed over threshold
+ */
+ listenCallback() {
+   this.abortCounter++;
+   if (this.abortCounter >= 60) {
+     this.exitSurvey();
+   } else if (this.done && this.abortCounter >= 5) {
+     this.exitSurvey();
+   }
+  }
+
+/**
+ * This method resets the idle-timers
+ * @return {[type]} [description]
+ */
+resetTimer() {
+  this.abortCounter = 0;
+}
+
+/**
+ * This method finishes the survey if the user clicks the END button
  */
   endSurvey() {
-    console.log(this.answers);
     this.postSurvey();
     this.answers = [];
     this.done = true;
+    this.resetTimer();
   }
 
 /**
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    // Route to the select-survey window
-    // this.postSurvey();
     this.router.navigate(['/choosesurvey']);
-    // console.log('Routing to select-survey');
   }
 
 /**
  * This method posts the survey to the database
  */
   private postSurvey() {
-    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper : boolean) => {
+    console.log(this.answers);
+    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });
   }

@@ -9,6 +9,9 @@
   fill: map-get(map-get(nth($vitenPrimary,1), "contrast"), nth($vitenPrimary, 2));
 }
 
+.headerBox {
+  flex: 1 1;
+}
 
 .flexchild {
   flex: 1 1 300px;
@@ -18,6 +21,9 @@
 }
 .alignRight {
   text-align: right;
+}
+.alignLeft {
+  text-align: left;
 }
 
 .languageSelection {
@@ -31,6 +37,10 @@
   }
 }
 
+.iconBox {
+  display: inline-block;
+}
+
 .searchIcon {
   width: 1em;
   height: 1em;
@@ -40,8 +50,7 @@
 .wrapper {
   padding: 1vh;
   .searchbar {
-    position: relative;
-    padding-left:40%;
+    text-align: center;
   }
 }
 
@@ -62,4 +71,7 @@ md-card {
     max-width: 250px;
     min-width: 250px;
   }
+}
+
+.buttonAlignRight {
 }

@@ -9,27 +9,28 @@ import { QuestionObject } from '../../_models/survey';
 export class MultiplechoiceComponent implements OnInit {
   @Input() questionObject: QuestionObject;
   @Output() answer = new EventEmitter();
-  selectedOption;
   options;
+  answerList = [];
+  checkModels = [];
 
   constructor() { }
 
   ngOnInit() {
     this.options = this.questionObject.lang.no.options;
+    this.options.forEach(o => this.checkModels.push(false) );
   }
+
 /**
- * This posts to the answer-list in active-survey component
- * @param  {number[]} alt The output answer sent to active-survey-component
- */
-  postAnswer(alt) {
-    this.answer.emit(alt);
-  }
-/**
- * This updates the local variable that posts to the active-survey component
+ * This updates the variables that posts to the active-survey component
  * @param  {number[]} userChoice An output number that shows which answer was chosen by a user
  */
-  updateAnswers(userChoice) {
-    this.selectedOption = userChoice;
-    this.postAnswer(this.selectedOption);
+  updateAnswers() {
+    this.answerList = [];
+    this.checkModels.forEach((c, i) => {
+      if (c) {
+        this.answerList.push(i);
+      }
+    });
+    this.answer.emit(this.answerList);
   }
 }

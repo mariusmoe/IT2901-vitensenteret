@@ -4,6 +4,7 @@ import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthenticationService } from '../../_services/authentication.service';
+import { SurveyService } from '../../_services/survey.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdSnackBar } from '@angular/material';
 
@@ -29,6 +30,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private service: AuthenticationService,
+    private surveyService: SurveyService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
     public languageService: TranslateService) {
@@ -51,6 +53,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   setSelectedLanguage() {
     this.languageService.use(this.selectedLanguage);
+  }
+
+  changeExitSurveyPassword(password: string) {
+    this.surveyService.changeChoosesurvey(password)
+      .subscribe(result => {
+        this.openSnackBar(this.languageService.instant('Password changed'), 'SUCCESS');
+      },
+      error => {
+        this.openSnackBar(this.languageService.instant('Could not change your password'), 'FAILURE');
+        console.error(error);
+    });
   }
 
   changeEmail(newEmail: string) {

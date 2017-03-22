@@ -6,13 +6,18 @@
   height: 15vh;
   justify-content: space-between;
 }
-.smile {
+
+.smiley{
   height: 30vh;
   width: 30vh;
+}
+
+.smile {
   opacity: 0.5;
 
   &.active{
     opacity: 1;
+    animation: jump-out 0.75s 1;
   }
 }
 
@@ -20,3 +25,15 @@
 .angrySmiley:focus{outline: none;}
 .normalSmiley:focus{outline: none;}
 .smilingSmiley:focus{outline: none;}
+
+@keyframes jump-out {
+  0% {
+    transform: scale(1,1);
+  }
+  25% {
+    transform: scale(1.4,1.2);
+  }
+  100% {
+    transform: scale(1,1);
+  }
+}

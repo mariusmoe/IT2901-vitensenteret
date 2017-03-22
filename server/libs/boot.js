@@ -1,5 +1,7 @@
 const mongoose = require('mongoose'),
-      config = require('config');
+      config = require('config'),
+      https = require('https'),
+      fs = require('fs');
 // Use a different Promise provider then mongooses mpromise (its depricated)
 
 module.exports = app => {
@@ -11,11 +13,28 @@ module.exports = app => {
       console.log("ERROR can't connect to mongoDB. Did you forgot to run mongod?");
     }
   }).then( () => {
-    // Start to listen on port specified in the config file
-    app.listen(app.get("port"), () =>{
-      if(config.util.getEnv('NODE_ENV') !== 'test') {
+    // console.log(config.util.getEnv('NODE_ENV'));
+    if(config.util.getEnv('NODE_ENV') == 'prod') {
+      var options = {
+        // ca: [fs.readFileSync(PATH_TO_BUNDLE_CERT_1), fs.readFileSync(PATH_TO_BUNDLE_CERT_2)],
+        cert: fs.readFileSync('/etc/letsencrypt/live/example.com/fullchain.pem'),
+        key: fs.readFileSync('/etc/letsencrypt/live/example.com/privkey.pem')
+      };
+
+      var server = https.createServer(options, app);
+
+      server.listen(app.get("port"), () => {
+        if(config.util.getEnv('NODE_ENV') !== 'test') {
           console.log(`Vitensenteret running on - Port ${app.get("port")}...`);
         };
-    });
+      });
+    } else {
+      // Start to listen on port specified in the config file
+      app.listen(app.get("port"), () =>{
+        if(config.util.getEnv('NODE_ENV') !== 'test') {
+          console.log(`Vitensenteret running on - Port ${app.get("port")}...`);
+        };
+      });
+    }
   })
 };

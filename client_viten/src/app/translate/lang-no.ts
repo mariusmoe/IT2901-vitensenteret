@@ -27,6 +27,12 @@ export const LANG_NO_TRANS = {
   'Copy': 'Kopier',
   'Okay': 'Ok',
   'Success': 'Suksess',
+  'Active': 'Aktiv',
+  'Inactive': 'Inaktiv',
+  'Download': 'Last ned',
+  'Option': 'Valg',
+  'Percentage': 'Prosent',
+  'Responses': 'Svar',
 
   // Roles
   'admin': 'Superadmin',
@@ -38,13 +44,19 @@ export const LANG_NO_TRANS = {
 
   // Forms
   'This field is required.': 'Dette feltet er påkrevd.',
+  'This field is a duplicate.': 'Dette feltet er et duplikat.',
 
   // Survey Question modes
-  'Yes/No': 'Ja/Nei',
-  '5 Stars': '5 stjerner',
-  'Multiple Choice': 'Flervalgs',
-  'Smiley': 'Smiley',
-  'Free Text': 'Tekst',
+  'binary': 'Ja/Nei',
+  'star': '5 stjerner',
+  'single': 'Enkelt valg',
+  'multi': 'Flervalgs',
+  'smiley': 'Smiley',
+  'text': 'Tekst',
+
+    // Survey response numbers
+  'Number of responses: n': 'Antall svar: %0',
+  'Number of responses: n, m': 'Antall svar: %0, %1',
 
   // Survey Question mode labels
   'Yes': 'Yes',
@@ -53,7 +65,7 @@ export const LANG_NO_TRANS = {
   '2 Stars': '2 Stjerner',
   '3 Stars': '3 Stjerner',
   '4 Stars': '4 Stjerner',
-  // '5 Stars': '5 Stars', already defined above.
+  '5 Stars': '5 Stars',
   'Sad': 'Trist',
   'Neutral': 'Nøytral',
   'Happy': 'Glad',
@@ -62,6 +74,7 @@ export const LANG_NO_TRANS = {
   'Admin Home': 'Administrator Hjem',
   'Create New Survey': 'Lag ny undersøkelse',
   'Select a survey from the left side menu': 'Velg en undersøkelse fra menyen til venstre',
+  'Did not answer': 'Svarte ikke',
 
   // Create survey component
   'Survey options': 'Innstillinger for undersøkelse',
@@ -88,6 +101,7 @@ export const LANG_NO_TRANS = {
   'Post results': 'Resultat',
   'Could not post your survey. Error:': 'Kunne ikke lagre undersøkelsen. Feilmelding:',
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
+  'Required question': 'Må besvares',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 totalt antall undersøkelser. Maksimum %1 er vist samtidig.',
@@ -109,13 +123,17 @@ export const LANG_NO_TRANS = {
   'Download as PDF': 'Last ned som PDF',
   'Download Raw Data': 'Last ned rådata',
   'Download as JSON': 'Last ned som JSON',
-  'Total number of answers: n': 'Totalt antall svar: %0',
   'No responses have been registered, so there is nothing to show here yet.':
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
+  'Create post-survey': 'Lag post-undersøkelse',
+  'Edit post-survey': 'Endre post-undersøkelse',
+
 
   // Admin settings component
   'Retype password': 'Skriv passordet igjen',
   'Minimum 4 characters': 'Minimum 4 tegn',
+  'Minimum 4 numbers': 'Minimum 4 tall',
+  'Password changed': 'Passord endret',
   'Admin settings': 'Admininstillinger',
   'Change password': 'Bytt passord',
   'Change email': 'Bytt epostkonto',
@@ -157,11 +175,11 @@ export const LANG_NO_TRANS = {
   'All Surveys': 'Alle undersøkelsene',
   'Search results for search': 'Søkeresultatene for %0:',
   'Start': 'Start',
+  'Start POST': 'Start POST',
 
   // PDF download lines
   'Date created: d': 'Dato laget: %0',
   'Date printed: d': 'Dato printet: %0',
-  'Number of responses: n': 'Antall svar: %0',
 
 
 

@@ -6,6 +6,11 @@
   height: 35vh;
   justify-content: space-between;
 }
+.yesno-box {
+  height: 30vh;
+  width: 30vh;
+}
+
 .yesno-btn {
   height: 30vh;
   width: 30vh;
@@ -13,6 +18,7 @@
 
   &.active{
     opacity: 1;
+    animation: jump-rotate 0.75s 1;
   }
 }
 
@@ -27,3 +33,18 @@
 
 .thumbsUp:focus{outline: none;}
 .thumbsDown:focus{outline: none;}
+
+@keyframes jump-rotate {
+  0% {
+    transform: scale(1,1);
+  }
+  50% {
+    transform: scale(1.4,1.4) rotate(15deg);
+  }
+  75% {
+    transform: scale(0.9,0.9) rotate(-5deg);
+  }
+  100% {
+    transform: scale(1,1);
+  }
+}

@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Survey } from '../../_models/survey';
+import { Response } from '../../_models/response';
 import { TranslateService } from '../../_services/translate.service';
 
 @Component({
@@ -9,6 +10,9 @@ import { TranslateService } from '../../_services/translate.service';
 })
 export class SurveyRetrievalComponent implements OnInit {
   @Input() survey: Survey;
+  @Input() postSurvey: Survey;
+  @Input() responses: Response[];
+  @Input() postResponses: Response[];
 
   chartsToDisplay = [];
 

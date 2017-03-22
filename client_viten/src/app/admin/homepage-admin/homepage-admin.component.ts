@@ -2,12 +2,14 @@ import { Component, OnInit, OnDestroy, ViewChild, animate, state, style, transit
 import { SurveyService } from '../../_services/survey.service';
 import { TranslateService } from '../../_services/translate.service';
 import { Survey } from '../../_models/survey';
+import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { DatePipe } from '@angular/common';
 
 //  import * as jsPDF from 'jspdf';
 declare const jsPDF: any;
+
 
 @Component({
   selector: 'app-homepage-admin',
@@ -22,7 +24,11 @@ declare const jsPDF: any;
 })
 export class HomepageAdminComponent implements OnInit, OnDestroy {
   survey: Survey = null;
+  postSurvey: Survey = null;
+  responses: Response[] = null;
+  postResponses: Response[] = null;
   loadingSurvey = false;
+  loadingPostSurvey = false;
   @ViewChild('surveyDOM') surveyDOM;
   generatingPDF = false;
 
@@ -55,10 +61,26 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    * @param  {string} surveyId the id of the survey to load
    */
   private getSurvey(surveyId: string) {
+    // reset vars first.
+    this.survey = undefined;
+    this.responses = undefined;
+    this.postSurvey = undefined;
+    this.postResponses = undefined;
+
     this.loadingSurvey = true;
-    this.surveyService.getSurvey(surveyId).subscribe( (survey: Survey) => {
+    this.surveyService.getSurvey(surveyId).subscribe( (response) => {
+      this.responses = <Response[]>response.responses;
+      this.survey = <Survey>response.survey;
+
+      if (this.survey.postKey && this.survey.postKey.length > 0) {
+        this.loadingPostSurvey = true;
+        this.surveyService.getSurvey(this.survey.postKey).subscribe( (postResponse) => {
+          this.postResponses = <Response[]>postResponse.responses;
+          this.postSurvey = <Survey>postResponse.survey;
+          this.loadingPostSurvey = false;
+        });
+      }
       this.loadingSurvey = false;
-      this.survey = survey;
     });
   }
 
@@ -120,11 +142,20 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
 
     rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
-    const answers = this.survey.questionlist[0].answer.length || 0;
-    rightAlignedText(25, 44, this.translateService.instant('Number of responses: n', answers.toString()));
+    const responses = this.responses.length;
+    const postResponses = this.responses.length;
+    if (this.postSurvey) {
+      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n, m',
+        [responses.toString(), postResponses.toString()]));
+    } else {
+      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n',
+        responses.toString()));
+    }
 
     // Get our charts (canvases)
     const canvases = this.surveyDOM.nativeElement.querySelectorAll('canvas.surveyQuestionChart');
+    // Get a list withe all the tables
+    const tables = this.surveyDOM.nativeElement.querySelectorAll('table.chartData');
     // Set up a dummy canvas. This dummy canvas is used to set a white background
     // and to avoid other corruptions to / of the actual real canvases
     const dummyCanvas = document.createElement('canvas');
@@ -135,32 +166,62 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     // Declare variables that are used to handle positioning of our charts
     let pageNr = 1;           // page number (starting at 1)
-    let offset = 0;           // the offsetMultiplier for each chart
-    let baseOffset = 55;      // The fixed base offset from the top of the page
-    const offsetAmount = 85;  // Multiplied with offset to get the actual page offset
-    const chartHeight = 80;   // The drawn chart's height in the PDF
-    for (const canvas of canvases) {
-      // Add another page if necessary
-      if ( ((offset * offsetAmount) + chartHeight + baseOffset) > (pdf.internal.pageSize.height - 20)) {
+    let baseOffset = 65;      // The fixed base offset from the top of the page
+    const chartHeight = 70;   // The drawn chart's height in the PDF
+    const tableOffset = 5;
+    const itemWidth = chartHeight * 2; // this has to be a constant ratio
+    let counter = 0;
+    canvases.forEach((canvas, i) => {
+      if (i === 1 || counter === 2) {
+        pageNr += 1;
+        counter = 0;
         pdf.addPage();
-        pageNr++;
-        offset = 0;
-        baseOffset = 20; // Base page offset is 20
+        baseOffset = 18;
       }
+      const chartPos = counter === 0 ? baseOffset : (pdf.internal.pageSize.height / 2);
       // Draw our white background on the dummy canvas
       dummyCanvasContext.fillRect(0, 0, dummyCanvas.width, dummyCanvas.height);
       // Draw the chart from the real canvas onto our dummy canvas, centered in the dummy canvas
       dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
+      dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
       // Add the chart with white background into our PDF at the right position
-      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.6), 'JPEG', 25, baseOffset + (offset * offsetAmount), 160, chartHeight);
-      // Update our positioning variables
-      offset++;
-    }
+      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.8), 'JPEG',
+        (pdf.internal.pageSize.width - itemWidth) / 2, chartPos, itemWidth, chartHeight);
+
+      // Modify our table slightly, as to make it pretty for the PDF.
+      // This circumvents the fact that the autoTableHtmlToJson does not deal with
+      // html cell attribute colspan.
+      const tableClone = tables[i].cloneNode(true); // true => copy children.
+      const prepostRow = tableClone.querySelector('tr.prepost');
+      const prepostRowHeaders = tableClone.querySelectorAll('tr.prepost th');
+      if (prepostRowHeaders && prepostRowHeaders.length > 0) {
+        const preObject = prepostRowHeaders[0].cloneNode();
+        // prepostRowHeaders: empty, PRE, POST
+        prepostRow.insertBefore(preObject, prepostRowHeaders[2]);
+        prepostRow.appendChild(preObject.cloneNode());
+        // should now be: empty, PRE, empty, POST, empty
+      }
+      // End of circumventing the colspan issue here.
+
+      // Append our clone to the pdf
+      const res = pdf.autoTableHtmlToJson(tableClone);
+      const tablePos = counter === 0 ? (baseOffset + chartHeight + tableOffset) :
+        (pdf.internal.pageSize.height / 2) + chartHeight + tableOffset;
+      pdf.autoTable(res.columns, res.data, {
+        startY: tablePos,
+        margin: {horizontal: (pdf.internal.pageSize.width - itemWidth) / 2},
+        styles: {fontSize: 7 },
+        tableWidth: itemWidth
+      });
+      // <-- END TABLE
+      counter++;
+    });
+
     // Add page count to the bottom of the page
     pdf.setFontSize(8);
     for (let i = 1; i <= pageNr; i++) {
       pdf.setPage(i); // Set the current page to write on first, then add page count to each page
-      rightAlignedText(25, pdf.internal.pageSize.height - 20, i + '/' + pageNr);
+      rightAlignedText(20, pdf.internal.pageSize.height - 18, i + '/' + pageNr);
     }
 
     // save our doc with a OS-friendly filename that is related to the survey at hand

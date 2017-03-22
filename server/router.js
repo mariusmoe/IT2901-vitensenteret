@@ -94,6 +94,13 @@ module.exports = (app) => {
   //
   //
 
+
+  // Add or update password
+  surveyRoutes.patch('/escape', AuthenticationController.patchOneEscape);
+
+  //Check if password is correct
+  surveyRoutes.post('/escape', AuthenticationController.checkOneEscape);
+
   // retrive all surveys as a json object
   surveyRoutes.get('/json', SurveyController.getAllSurveysAsJson);
 
@@ -110,10 +117,13 @@ module.exports = (app) => {
 
   surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
 
+  // surveyRoutes.post('/linkPrePost', requireAuth, SurveyController.linkPrePost);
+
   surveyRoutes.delete('/:surveyId',
                       requireAuth,
                       AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
                       SurveyController.deleteOneSurvey);
+
 
   surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
 

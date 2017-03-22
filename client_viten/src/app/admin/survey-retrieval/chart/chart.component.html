@@ -1,28 +1,58 @@
-<div class="chartWrapper">
-  <div class="questionHeader">
-    <!-- If English language is selected AND an english question txt is defined
-         then show that. Else show norwegian.
-    -->
-    <h1>{{ (languageService.getCurrentLang() === 'en' && questionObject.lang.en && questionObject.lang.en.txt) ?
-            questionObject.lang.en.txt : questionObject.lang.no.txt}}</h1>
-  </div>
+<div>
+  <div class="chartWrapper">
+    <div class="questionHeader">
+      <!-- If English language is selected AND an english question txt is defined
+           then show that. Else show norwegian.
+      -->
+      <span>{{ questionObject.mode | translate }}</span>
+      <h1>{{ (languageService.getCurrentLang() === 'en' && questionObject.lang.en && questionObject.lang.en.txt) ?
+              questionObject.lang.en.txt : questionObject.lang.no.txt}}</h1>
+    </div>
 
-  <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
-    <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
-    <canvas baseChart #canvas class="surveyQuestionChart"
-            [datasets]="barChartData"
-            [labels]="barChartLabels"
-            [options]="barChartOptions"
-            [colors]="barChartColours"
-            [chartType]="chartType">
-    </canvas>
-  </div>
-  <div class="actions">
-    <md-select [(ngModel)]="chartType" (change)="setChartOptions()" class="select">
-      <md-option *ngFor="let t of chartTypes; let i = index;" [value]="t">
-        {{ chartTypesVerbose[i] | translate }}
-      </md-option>
-    </md-select>
-    <button md-raised-button color="accent" (click)="downloadAsPng()"><md-icon>insert_chart</md-icon> {{ 'Download as PNG' | translate }}</button>
+    <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
+      <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
+      <canvas baseChart #canvas class="surveyQuestionChart"
+              [datasets]="chartData"
+              [labels]="chartLabels"
+              [options]="chartOptions"
+              [colors]="chartColours"
+              [chartType]="chartType">
+      </canvas>
+    </div>
+    <div class="actions">
+      <md-select [(ngModel)]="chartType" (change)="setChartOptions()" class="select">
+        <md-option *ngFor="let t of chartTypes; let i = index;" [value]="t">
+          {{ chartTypesVerbose[i] | translate }}
+        </md-option>
+      </md-select>
+      <button md-raised-button color="accent" (click)="downloadAsPng()"><md-icon>insert_chart</md-icon> {{ 'Download as PNG' | translate }}</button>
+    </div>
+    <table class="chartData">
+      <!-- DO NOT REMOVE PREPOST CLASS! IMPORTANT IN THE PDF GENERATION!! -->
+      <tr class="labels prepost" *ngIf="postResponses && postResponses.length > 0">
+        <th></th>
+        <th colspan="2">PRE</th>
+        <th colspan="2">POST</th>
+      </tr>
+      <tr class="labels">
+        <th>{{'Option' | translate}}</th>
+        <th>{{'Responses' | translate}}</th>
+        <th>{{'Percentage' | translate}}</th>
+        <th *ngIf="postResponses && postResponses.length > 0">{{'Responses' | translate}}</th>
+        <th *ngIf="postResponses && postResponses.length > 0">{{'Percentage' | translate}}</th>
+      </tr>
+      <tr *ngFor="let label of chartLabels; let i = index;">
+        <td class="option">{{label}}</td>
+        <td>{{chartData[0].data[i]}}</td>
+        <td>{{((chartData[0].data[i]/responses.length)*100).toFixed(2)}} %</td>
+        <td *ngIf="postResponses && postResponses.length > 0">{{chartData[1].data[i]}}</td>
+        <td *ngIf="postResponses && postResponses.length > 0">{{((chartData[1].data[i]/postResponses.length)*100).toFixed(2)}} %</td>
+      </tr>
+      <tr *ngIf="!questionObject.required">
+        <td class="option">{{'Did not answer' | translate}}</td>
+        <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total))}}</td>
+        <td>{{((responses.length - (questionObject.mode === 'multi' ? total : total)) / (responses.length)*100).toFixed(2)}} %</td>
+      </tr>
+    </table>
   </div>
 </div>
