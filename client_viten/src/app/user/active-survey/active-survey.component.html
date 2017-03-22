@@ -12,14 +12,15 @@
 
   <!-- The languageSelection buttons that shows when there exist alternative languages -->
   <!-- TODO translateservice in click do not work -->
-  <div class="languageSelection" [hidden]="!englishEnabled" >
-    <button md-icon-button color="accent" (click)="switchtoen(); translateService.use('en')" >
+  <!-- <div class="languageSelection" [hidden]="!englishEnabled" > -->
+    <div class="languageSelection " *ngIf="englishEnabled && !started" >
+    <button md-icon-button color="accent" (click)="switchtoen();" >
       <input type="image" src="../../assets/images/FlaggUK.svg">
     </button>
-    <button md-icon-button color="accent" (click)="switchtono(); translateService.use('no')">
+    <button md-icon-button color="accent" (click)="switchtono();">
       <input type="image" src="../../assets/images/FlagNorge.svg">
     </button>
-      </div>
+    </div>
 
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
@@ -42,11 +43,11 @@
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
 
       <!-- Either displays the title of a question or shows the endMessage if the survey is done -->
-      <div *ngIf="enenable" class="languageSelection">
+      <div *ngIf="enenable">
         <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.en.txt}}</span></div>
         <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.en}}</span></div>
       </div>
-      <div *ngIf="noenable" class="languageSelection">
+      <div *ngIf="noenable">
         <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.no.txt}}</span></div>
         <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
       </div>
