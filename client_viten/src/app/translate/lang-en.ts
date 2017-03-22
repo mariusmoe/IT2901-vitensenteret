@@ -25,6 +25,7 @@ export const LANG_EN_TRANS = {
   'Role': 'Role',
   'Language': 'Language',
   'Copy': 'Copy',
+  'CopyLabel': 'Copy',
   'Okay': 'Okay',
   'Success': 'Success',
   'Download': 'Download',
@@ -126,6 +127,7 @@ export const LANG_EN_TRANS = {
     'No responses have been registered, so there is nothing to show here yet.',
   'Create post-survey': 'Create post-survey',
   'Edit post-survey': 'Edit post-survey',
+  'Copy with responses': 'Copy with responses',
 
   // Admin settings component
   'Retype password': 'Retype password',

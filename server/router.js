@@ -108,6 +108,7 @@ module.exports = (app) => {
 
   surveyRoutes.get('/csv/:surveyId',requireAuth, SurveyController.getSurveyAsCSV);
 
+  surveyRoutes.post('/copy/:surveyId', requireAuth, SurveyController.copySurvey);
 
   surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 

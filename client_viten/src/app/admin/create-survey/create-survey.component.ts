@@ -61,51 +61,54 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // If we have a router parameter, we should attempt to use that first.
     // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
+
     // Safe checking of url if last part is prepost
-    let isPost = false;
     if (typeof this.route.snapshot.url[2] !== 'undefined') {
-      isPost = true;
+      this.isPost = true;
     }
 
-    if (param) {
-      // Fetch data if editing a survey or adding a post to a survey
-      const sub = this.surveyService.getSurvey(param).subscribe(result => {
-        if (isPost) {
-          this.isPost = true;
+    if (!param) {
+      // Set defaults seeing we had no router parameter
+      // Do not remove the following lines!
+      this.survey = {
+        'name': '',
+        'comment': '',
+        'date': new Date().toISOString(),
+        'activationDate': new Date().toISOString(), // intentionally not iso string
+        'deactivationDate': undefined,
+        'active': true,
+        'isPost': false,
+        'questionlist': [],
+        'endMessage': {
+          'no': '',
+          'en': '', // do not remove. see submitSurvey for handling of english properties.
+        }
+      };
+      this.setPushReadyStatus();
+      this.startupLoading = false;
+      return;
+    }
+
+    // Fetch data if editing a survey or adding a post to a survey
+    const sub = this.surveyService.getSurvey(param).subscribe(
+      result => {
+        if (this.isPost) {
           this.lockdown = true;
-          this.preSurvey = result.survey;
-          this.survey = JSON.parse(JSON.stringify(this.preSurvey)); // Initiate the survey with an exact duplicate.
-          this.survey.isPost = true;
+          this.setupInitialSurveyStateFrom(result.survey);
           this.survey.name = 'POST: ' + this.survey.name;
-          delete this.survey._id;
-          // remove options-properties of non-multi questions
-          for (const qo of this.preSurvey.questionlist) {
-            if (qo.mode !== 'multi' && qo.mode !== 'single') {
-              delete qo.lang.no.options;
-              delete qo.lang.en.options;
-            }
-          }
-          // somewhat hacky way to determine english state.
-          // If English state is not found, then delete any properties not needed.
-          if (!this.preSurvey.questionlist[0].lang.en
-            || !this.preSurvey.questionlist[0].lang.en.txt
-            || !(this.preSurvey.questionlist[0].lang.en.txt.length > 0)) {
-              delete this.preSurvey.endMessage.en;
-              for (const qo of this.preSurvey.questionlist) {
-                delete qo.lang.en;
-              }
-          }
+
+          this.preSurvey = result.survey;
         } else {
           this.survey = result.survey;
           this.isPatch = true;
           this.lockdown = true;
+        }
 
-          // somewhat hacky way to determine english state.
-          if (this.survey.questionlist[0].lang.en
-            && this.survey.questionlist[0].lang.en.txt
-            && this.survey.questionlist[0].lang.en.txt.length > 0) {
-            this.englishEnabled = true;
-          }
+        // somewhat hacky way to determine english state.
+        if (this.survey.questionlist[0].lang.en
+          && this.survey.questionlist[0].lang.en.txt
+          && this.survey.questionlist[0].lang.en.txt.length > 0) {
+          this.englishEnabled = true;
         }
 
         // Do not remove the following lines!
@@ -121,35 +124,21 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         // fashion as to avoid issues should the routes be altered.
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
       });
-      // IMPORTANT notice this return!
-      // This stops the init to continue, seeing as the code below is only to be run
-      // when there is NO parameter to the url.
-      return;
-    }
-    // Set defaults seeing we had no router parameter
-    // Do not remove the following lines!
-    this.survey = {
-      'name': '',
-      'comment': '',
-      'date': new Date().toISOString(),
-      'activationDate': new Date().toISOString(), // intentionally not iso string
-      'deactivationDate': undefined,
-      'active': true,
-      'isPost': false,
-      'questionlist': [],
-      'endMessage': {
-        'no': '',
-        'en': '', // do not remove. see submitSurvey for handling of english properties.
-      }
-    };
-    this.setPushReadyStatus();
-    this.startupLoading = false;
   }
 
   ngOnDestroy() {
       this.dragulaService.destroy('questionsBag');
   }
 
+  /**
+   * setupInitialSurveyStateFrom(survey: Survey)
+   * Initiates state
+   * @param  {Survey} survey the survey reference to copy
+   */
+  private setupInitialSurveyStateFrom(survey: Survey) {
+    this.survey = JSON.parse(JSON.stringify(survey)); // Initiate the survey with an exact duplicate.
+    delete this.survey._id;
+  }
 
   /**
    * setSaveReadyStatus()
