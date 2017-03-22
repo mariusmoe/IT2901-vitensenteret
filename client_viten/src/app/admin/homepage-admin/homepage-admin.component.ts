@@ -230,4 +230,18 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     // update our component with our new status
     this.generatingPDF = false;
   }
+
+
+  copySurvey(includeResponses: boolean) {
+    this.surveyService.copySurvey(this.survey._id, includeResponses).subscribe(survey => {
+      // force redraw by doing 2 redirects
+      this.router.navigate([this.route.parent.snapshot.url.join('/')]).then((success) => {
+        this.router.navigate([this.route.parent.snapshot.url.join('/'), survey._id]);
+      });
+    },
+    error => {
+      // TODO: add informational box to user explaining why it failed.
+    });
+  }
+
 }

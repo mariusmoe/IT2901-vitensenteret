@@ -1,0 +1,22 @@
+
+input[type=number], input[type=tel] {
+    -webkit-text-security: disc;
+}
+
+.quitSurvey-code{
+  text-align: center;
+}
+
+.prompt-buttons{
+  color: white;
+}
+
+.cancel{
+  float: left;
+  background-color: #FF5722;
+}
+
+.submit{
+  float: right;
+  background-color: #42A5F5;
+}

@@ -6,12 +6,25 @@
     active-survey works!
   </p>-->
   <!--Startbutton for an active survey   *ngIf="!started"   -->
-  <div class="startTextContainer" *ngIf="!started">
-    <span class="startText"> Start Undersøkelse </span>
-  </div>
+
+  <!-- The languageSelection buttons that shows when there exist alternative languages -->
+  <!-- TODO translateservice in click do not work -->
+  <!-- <div class="languageSelection" [hidden]="!englishEnabled" > -->
+    <div class="languageSelection " *ngIf="englishEnabled && !started" >
+      <button md-icon-button color="accent" (click)="switchtoen();" >
+        <input type="image" src="../../assets/images/FlaggUK.svg">
+      </button>
+      <button md-icon-button color="accent" (click)="switchtono();">
+        <input type="image" src="../../assets/images/FlagNorge.svg">
+      </button>
+    </div>
+
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
+  </div>
+  <div class="startTextContainer" *ngIf="!started">
+    <div class="startText"> Start Undersøkelse </div>
   </div>
   <div class="logoContainer" *ngIf="!started">
     <div class="vitenContainer">
@@ -30,27 +43,33 @@
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
 
       <!-- Either displays the title of a question or shows the endMessage if the survey is done -->
-      <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{survey.questionlist[page].lang.no.txt}}</span></div>
-      <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
+      <div *ngIf="enenable">
+        <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.en.txt}}</span></div>
+        <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.en}}</span></div>
+      </div>
+      <div *ngIf="noenable">
+        <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.no.txt}}</span></div>
+        <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
+      </div>
 
       <!-- Childcomponents that handle each answer-type -->
       <div class="answerTypes">
-        <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
-        <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
+        <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
+        <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
         <app-single-choice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-single-choice>
         <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event);'></app-multiplechoice>
-        <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
-        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-freetxt>
+        <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
+        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-freetxt>
       </div>
 
     </div>
 
     <!-- The navigate area at the footer of the browser -->
     <div class="qnavigate" *ngIf="!this.done">
-      <div class="qnavigateArea"><input class="qnavigateArea" type="image" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition">
+      <div class="qnavigateArea"><input type='image' [hidden]="this.page === 0" class="qnavigateArea" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition" />
       </div>
       <h3>{{page+1}}/{{totalPages}}</h3>
-      <div class="qnavigateArea alignRight"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
+      <div class="qnavigateArea"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
       </div>
     </div>
 

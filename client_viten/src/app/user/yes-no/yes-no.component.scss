@@ -14,11 +14,11 @@
 .yesno-btn {
   height: 30vh;
   width: 30vh;
-  opacity: 0.5;
+  //opacity: 0.5;
 
   &.active{
-    opacity: 1;
-    animation: jump-rotate 0.75s 1;
+    //opacity: 1;
+    //animation: jump-rotate 0.75s 1;
   }
 }
 
