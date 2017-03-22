@@ -1,5 +1,6 @@
 import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, HostListener } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
+import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
@@ -25,11 +26,15 @@ export class ActiveSurveyComponent implements OnInit {
   private properSurvey = false;
   private started = false;
   private survey: Survey;
+  private response: Response;
   private page = 0;
   private totalPages = 0;
   private transition = false;
   private done = false;
   private answers = [];
+
+  postDone;
+  postNick;
 
   abortTimer: string;
   abortCounter = 0;
@@ -74,7 +79,9 @@ export class ActiveSurveyComponent implements OnInit {
           return;
         }
         this.survey = result.survey;
-        console.log(this.survey);
+        this.response = <Response> {
+          nickname: '',
+        };
         this.totalPages = this.survey.questionlist.length;
 
         if (this.survey && this.survey.active) {
@@ -91,6 +98,7 @@ export class ActiveSurveyComponent implements OnInit {
    */
   private startSurvey() {
     this.started = true;
+    this.postDone = false;
     this.timer.newTimer('1sec', 1);
     this.subscribeabortTimer();
   }
@@ -129,21 +137,30 @@ export class ActiveSurveyComponent implements OnInit {
  * This method adds/changes an answer with which answer-alternative the user chose
  * @param  {number[]} alternative a list of numbers to send to survey
  */
-addOrChangeAnswer(alternative) {
-  this.answers[this.page] = alternative;
-}
+   addOrChangeAnswer(alternative) {
+     this.answers[this.page] = alternative;
+   }
+   /**
+    * Updates the nickname in Response
+    * @param  {[type]} nickname [description]
+    * @return {[type]}          [description]
+    */
+   checkNick(nickname) {
+     this.response.nickname = nickname;
+     console.log('Nickname is: ', this.response.nickname);
+   }
 
 /**
  * This method handles the transition to the previous questions in the survey
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
-      if (this.page <= 0) {
-        return;
-      }
-      this.page -= 1;
-      this.transition = true;
+    if (this.page <= 0) {
+      return;
     }
+    this.page -= 1;
+    this.transition = true;
+  }
 
 /**
  * This method handles the transition to the next question in the survey as well as handling whether its the last page.
@@ -224,10 +241,22 @@ resetTimer() {
  * This method finishes the survey if the user clicks the END button
  */
   endSurvey() {
-    this.postSurvey();
-    this.answers = [];
-    this.done = true;
-    this.resetTimer();
+    if (!this.survey.isPost || this.postDone) {
+      this.postSurvey();
+      this.answers = [];
+      this.done = true;
+      this.resetTimer();
+      return;
+    }
+    this.endPost();
+  }
+
+  /**
+   * This method navigates to the nickname component based on whether it is a pre-post survey or not
+   */
+  endPost() {
+    this.postNick = true;
+    console.log('endPost');
   }
 
 /**
