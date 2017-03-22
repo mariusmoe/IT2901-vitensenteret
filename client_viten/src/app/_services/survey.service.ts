@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Survey } from '../_models/survey';
+import * as ResponseModel from '../_models/response';
 import { SurveyList } from '../_models/index';
 import { environment } from '../../environments/environment';
 
@@ -55,12 +56,13 @@ changeChoosesurvey(password: string): Observable<boolean> {
    * @param  {String}              idString identifier for a survey
    * @return {Observable<boolean>}          Observable boolean, true if successful
    */
-  answerSurvey(answers: Array<any>, idString: String): Observable<boolean> {
+  answerSurvey(response: ResponseModel): Observable<boolean> {
+    // TODO: FIX ME!!! CONVERT TO NEW SYSTEM (PRE POST)
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    return this.http.post(environment.URL.survey + '/' + idString, {answers}, options)
+    return this.http.post(environment.URL.survey + '/' + ResponseModel., {answers}, options)
     .map( response => {
       console.log(response);
       return true;

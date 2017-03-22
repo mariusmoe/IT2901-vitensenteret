@@ -33,8 +33,10 @@ export class ActiveSurveyComponent implements OnInit {
   private done = false;
   private answers = [];
 
+  // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
   postDone;
-  postNick;
+  // Only initialized if pre-post
+  nicknamePage;
 
   abortTimer: string;
   abortCounter = 0;
@@ -80,7 +82,7 @@ export class ActiveSurveyComponent implements OnInit {
         }
         this.survey = result.survey;
         this.response = <Response> {
-          nickname: '',
+            nickname: '',
         };
         this.totalPages = this.survey.questionlist.length;
 
@@ -97,8 +99,11 @@ export class ActiveSurveyComponent implements OnInit {
    * This method starts the survey as well as the inactivity timer
    */
   private startSurvey() {
+    console.log('Check for empty nickname: ', this.response.nickname);
     this.started = true;
-    this.postDone = false;
+    if (this.survey.isPost || this.survey.postKey !== undefined) {
+      this.postDone = false;
+    }
     this.timer.newTimer('1sec', 1);
     this.subscribeabortTimer();
   }
@@ -113,6 +118,9 @@ export class ActiveSurveyComponent implements OnInit {
     this.page = 0;
     this.done = false;
     this.transition = false;
+    this.nicknamePage = undefined;
+    this.postDone = undefined;
+    this.response.nickname = undefined;
 
     this.subscribeabortTimer();
     this.timer.delTimer('1sec');
@@ -241,7 +249,9 @@ resetTimer() {
  * This method finishes the survey if the user clicks the END button
  */
   endSurvey() {
-    if (!this.survey.isPost || this.postDone) {
+    if (!this.survey.isPost || this.postDone || this.response.nickname !== '') {
+      console.log('entered quit-condition');
+      this.postDone = true;
       this.postSurvey();
       this.answers = [];
       this.done = true;
@@ -252,11 +262,11 @@ resetTimer() {
   }
 
   /**
-   * This method navigates to the nickname component based on whether it is a pre-post survey or not
+   * This method navigates to the nickname component
    */
   endPost() {
-    this.postNick = true;
-    console.log('endPost');
+    this.nicknamePage = true;
+    console.log('endPost and totalPages: ', this.totalPages);
   }
 
 /**
@@ -271,6 +281,12 @@ resetTimer() {
  */
   private postSurvey() {
     console.log(this.answers);
+    if (this.survey.isPost || this.survey.postKey !== undefined) {
+      console.log('pre-post posted to survey');
+      this.surveyService.answerSurvey(this.answers, this.survey._id, this.response.nickname).subscribe((proper: boolean) => {
+        this.properSurvey = true;
+      });
+    }
     this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });
