@@ -31,5 +31,6 @@ export const environment = {
       surveyAsCSV: 'https://vitensurvey.party:2000/api/survey/csv',
       newUser: 'https://vitensurvey.party:2000/api/auth/register',
       checkChoosesurvey: 'https://vitensurvey.party:2000/api/survey/escape',
+      surveyCopy:   'http://95.85.63.98:2000/api/survey/copy',
     }
 };

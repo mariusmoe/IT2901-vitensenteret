@@ -7,17 +7,14 @@
   justify-content: space-between;
 }
 
-.smiley{
+.smile {
   height: 30vh;
   width: 30vh;
-}
-
-.smile {
-  opacity: 0.5;
+  //opacity: 0.5;
 
   &.active{
-    opacity: 1;
-    animation: jump-out 0.75s 1;
+    //opacity: 1;
+    //animation: jump-out 0.75s 1;
   }
 }
 

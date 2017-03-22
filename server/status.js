@@ -76,14 +76,22 @@ module.exports = {
     code: 1014,
   },
   SURVEY_BAD_ID: {
-    message: 'The id provided for the survey is malformed.',
+    message: 'The id provided for the survey is malformed',
     code: 2021
+  },
+  SURVEY_COPY_FAILED: {
+    message: 'The copy failed at copying the survey',
+    code: 2022
+  },
+  SURVEY_COPY_FAILED_RESPONSES: {
+    message: 'The copy failed at copying responses',
+    code: 2023
   },
 
   // ROUTER CODES
   ROUTE_INVALID: {
     message: "The requested route does not exist. Did you forget a param?",
-    code: 2022
+    code: 2024
   },
   ROUTE_SURVEYS_VALID_NO_SURVEYS: {
     message: "Request successful, but no surveys exist.",

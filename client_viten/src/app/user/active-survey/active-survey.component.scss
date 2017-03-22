@@ -1,13 +1,13 @@
 .active_survey_window{
   background-color: #F5F5F5;
   .surveyView{
+    display: flex;
     .playbutton{
       margin: auto auto;
       height: 60vh;
     }
-    display: flex;
     height: 100vh;
-    width: 100%;
+    width: 100vw;
   }
 }
 
@@ -63,8 +63,34 @@
   text-align: center;
 }
 
+//languageSelection
+.languageSelection {
+  position:fixed;
+  top:10px;
+  left:90%;
+
+  /*
+  button {
+    input {
+      opacity: 0.5;
+    }
+    & active.input {
+      opacity: 1;
+    }
+  }
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  height: 5vh;
+  width: 5vh;
+  opacity: 0;
+  cursor: default;
+  */
+}
+
 /* Styling for of the Start Survey text above the play button */
 .startText{
+  font-family: 'Baloo Bhaina', cursive;
   font-size: 50px;
   font-size: 5vw;
   font-weight: bold;
@@ -115,8 +141,9 @@
 
   .qnavigateArea{
     padding: 0 5px 0 5px;
-    height: inherit;
-    margin-bottom: 10px;
+    height: 15vh;
+    width: 15vw;
+    // margin-bottom: 10px;
     &.alignRight{
       text-align: right;
     }
@@ -150,9 +177,13 @@ h1 {
 h2 {
   font-size: 10vh;
 }
+h3 {
+  text-align: center;
+}
 
 .questionTitle{
-  font-size: 2rem;
+  font-family: 'Baloo Bhaina', cursive;
+  font-size: 3vh;
 }
 
 .surveyDone{
@@ -185,6 +216,6 @@ h2 {
 
 #qButton{
   max-width: 100%;
-  height: 10vh;
-  width: 20vw;
+  height: inherit;
+  width: inherit;
 }
