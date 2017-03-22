@@ -47,3 +47,33 @@
 .deactive {
   border-left: 2px solid #f44336;
 }
+
+.date{
+    display:inline-block;
+    margin-top: 5px;
+    margin-bottom: auto;
+}
+md-list-item {
+  position: relative;
+  .chip {
+    transform: scale(0.68);
+    display:inline-block;
+    position: absolute;
+    right: -6px;
+    top: 5px;
+    outline: none;
+    .mat-accent {
+      color: white;
+    }
+  }
+}
+
+.inline {
+  display:inline-block;
+}
+
+.loadMoreButton {
+  display: block;
+  margin: auto;
+  margin-top: 10px;
+}

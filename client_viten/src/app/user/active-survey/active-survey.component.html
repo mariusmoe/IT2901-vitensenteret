@@ -47,10 +47,10 @@
 
     <!-- The navigate area at the footer of the browser -->
     <div class="qnavigate" *ngIf="!this.done">
-      <div class="qnavigateArea"><input class="qnavigateArea" type="image" id="previousQButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition">
+      <div class="qnavigateArea"><input type='image' [hidden]="this.page === 0" class="qnavigateArea" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition" />
       </div>
       <h3>{{page+1}}/{{totalPages}}</h3>
-      <div class="qnavigateArea alignRight"><input class="qnavigateArea alignRight" type="image" id="nextQButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
+      <div class="qnavigateArea"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
       </div>
     </div>
 

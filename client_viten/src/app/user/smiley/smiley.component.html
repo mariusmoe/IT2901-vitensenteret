@@ -6,6 +6,3 @@
   <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 1) }" type="image" src="../../assets/images/Smangry.svg" (click)="selectSmile(1)" [@jumpOut]="smileyActiveTwo" (@jumpOut.done)="animationEnd($event)"></div>
   <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 2) }" type="image" src="../../assets/images/Smiley.svg" (click)="selectSmile(2)" [@jumpOut]="smileyActiveThree" (@jumpOut.done)="animationEnd($event)"></div>
 </div>
-<!-- <p>
-  {{questionObject.lang.no.txt}}
-</p> -->

@@ -3,44 +3,78 @@
     <app-all-surveys></app-all-surveys>
   </div>
   <div class="rightSide" #surveyDOM>
-    <md-card *ngIf="survey && !loadingSurvey" class="selectedSurveyArea" [@fadeIn]="">
-      <md-card-title-group>
-        <md-card-title>{{survey.name}}</md-card-title>
-        <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
-        <md-card-subtitle>{{ 'Total number of answers: n' | translate: [responses ? responses.length : 0] }}</md-card-subtitle>
-        <md-icon align="left" class="activeIcon"
-        [ngClass]="{active: survey.active, surveyActiveIcon: true}"
-        [mdTooltip]="(survey.active ? 'Active' : 'Inactive') | translate" tooltip-position="above">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
-      </md-card-title-group>
-      <md-card-content>
-        <app-survey-retrieval *ngIf="responses && responses.length > 0"
-        [survey] = "survey" [responses] = "responses" class="surveyRetrieval"></app-survey-retrieval>
-        <div *ngIf="responses.length == 0">
-          {{   'No responses have been registered, so there is nothing to show here yet.' | translate }}
+    <md-menu #downloadMenu="mdMenu">
+      <button md-menu-item  (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
+        <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
+      </button>
+      <button md-menu-item (click)="downloadAs('json')" routerLinkActive="active">
+        <md-icon>file_download</md-icon> {{ 'Download as JSON' | translate }}
+      </button>
+      <button md-menu-item (click)="downloadAs('csv')" routerLinkActive="active">
+        <md-icon>timeline</md-icon> {{ 'Download Raw Data' | translate }}
+      </button>
+    </md-menu>
+    <div *ngIf="survey && responses && !loadingSurvey && !loadingPostSurvey" class="selectedSurveyArea" [@fadeIn]="">
+      <md-toolbar style = "background: none !important;">
+        <div class="flexchild"></div>
+        <div class="flexchild alignCenter"></div>
+        <div class="flexchild alignRight">
+          <button md-raised-button color="primary" [mdMenuTriggerFor]="downloadMenu" [disabled] = "(responses ? responses.length : 0) == 0"
+            ><md-icon>file_download</md-icon>{{'Download' | translate}}</button>
+          <!-- display ADD post survey if there is no post survey, else display edit post survey  -->
+          <button *ngIf="!survey.postKey || !(survey.postKey.length > 0)" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
+            <md-icon>local_post_office</md-icon> {{ 'Create post-survey' | translate }}
+          </button>
+          <button *ngIf="survey.postKey && survey.postKey.length > 0" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey.postKey}}" routerLinkActive="active">
+            <md-icon>local_post_office</md-icon> {{ 'Edit post-survey' | translate }}
+          </button>
+          <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
+            <md-icon>build</md-icon> {{ 'Edit' | translate }}
+          </button>
         </div>
-        <!-- file_download // Icon for download -->
-      </md-card-content>
-      <md-card-actions align="right">
-        <button md-button [mdMenuTriggerFor]="menu"><md-icon>file_download</md-icon>{{'Download' | translate}}</button>
-        <md-menu #menu="mdMenu">
-          <button md-menu-item  (click)="downloadAsPDF()" routerLinkActive="active" [disabled]="generatingPDF">
-            <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
+      </md-toolbar>
+      <md-card>
+        <md-card-title-group>
+          <md-card-title>{{survey.name}}</md-card-title>
+          <md-card-subtitle>{{survey.comment}}</md-card-subtitle>
+          <md-card-subtitle>{{
+            (postSurvey && postResponses)
+            ? ('Number of responses: n, m' | translate: [responses ? responses.length : 0, postResponses ? postResponses.length : 0])
+            : ('Number of responses: n' | translate: [responses ? responses.length : 0])
+          }}</md-card-subtitle>
+          <md-icon align="left" class="activeIcon"
+          [ngClass]="{active: survey.active, surveyActiveIcon: true}"
+          [mdTooltip]="(survey.active ? 'Active' : 'Inactive') | translate" tooltip-position="above">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
+        </md-card-title-group>
+        <md-card-content>
+          <div *ngIf="survey.postKey && survey.postKey.length > 1" class="chip">
+            <md-chip-list>
+              <md-chip color="accent" selected="true" disabled="true">PRE - POST</md-chip>
+            </md-chip-list>
+          </div>
+          <app-survey-retrieval *ngIf="responses && responses.length > 0"
+          [survey] = "survey" [responses] = "responses" [postSurvey] = "postSurvey" [postResponses] = "postResponses" class="surveyRetrieval"></app-survey-retrieval>
+          <div *ngIf="responses.length == 0">
+            {{   'No responses have been registered, so there is nothing to show here yet.' | translate }}
+          </div>
+          <!-- file_download // Icon for download -->
+        </md-card-content>
+        <md-card-actions align="right">
+          <button md-raised-button color="primary" [mdMenuTriggerFor]="downloadMenu" [disabled] = "(responses ? responses.length : 0) == 0"
+            ><md-icon>file_download</md-icon>{{'Download' | translate}}</button>
+          <!-- display ADD post survey if there is no post survey, else display edit post survey  -->
+          <button *ngIf="!survey.postKey || !(survey.postKey.length > 0)" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
+            <md-icon>local_post_office</md-icon> {{ 'Create post-survey' | translate }}
           </button>
-          <button md-menu-item (click)="downloadAs('json')" routerLinkActive="active">
-            <md-icon>file_download</md-icon> {{ 'Download as JSON' | translate }}
+          <button *ngIf="survey.postKey && survey.postKey.length > 0" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey.postKey}}" routerLinkActive="active">
+            <md-icon>local_post_office</md-icon> {{ 'Edit post-survey' | translate }}
           </button>
-          <button md-menu-item (click)="downloadAs('csv')" routerLinkActive="active">
-            <md-icon>timeline</md-icon> {{ 'Download Raw Data' | translate }}
+          <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
+            <md-icon>build</md-icon> {{ 'Edit' | translate }}
           </button>
-        </md-menu>
-        <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
-          <md-icon>local_post_office</md-icon> Add post
-        </button>
-        <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-          <md-icon>build</md-icon> {{ 'Edit' | translate }}
-        </button>
-      </md-card-actions>
-    </md-card>
+        </md-card-actions>
+      </md-card>
+    </div>
     <div *ngIf="!survey || loadingSurvey" class="emptyArea">
       <md-progress-circle *ngIf="loadingSurvey" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
       <div *ngIf="!loadingSurvey" class="center">
