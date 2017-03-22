@@ -63,6 +63,32 @@
   text-align: center;
 }
 
+//languageSelection
+.languageSelection {
+  position: fixed;
+  top:10px;
+  left:90%;
+  /*
+  button {
+    input {
+      opacity: 0.5;
+    }
+    & active.input {
+      opacity: 1;
+    }
+  }
+  position: fixed;
+  top: 5px;
+  left: 5px;
+  height: 5vh;
+  width: 5vh;
+  opacity: 0;
+  cursor: default;
+  */
+
+
+}
+
 /* Styling for of the Start Survey text above the play button */
 .startText{
   font-size: 50px;
@@ -180,13 +206,4 @@ h2 {
   width: 5vh;
   opacity: 0;
   cursor: default;
-}
-
-//languageSelection
-
-.languageSelection {
-  button.clicked {
-    opacity: 0.5;
-  }
-  //text-align: right;
 }

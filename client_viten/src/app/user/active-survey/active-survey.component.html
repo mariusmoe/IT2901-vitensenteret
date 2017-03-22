@@ -7,18 +7,19 @@
   </p>-->
   <!--Startbutton for an active survey   *ngIf="!started"   -->
   <div class="startTextContainer" *ngIf="!started">
-    <span class="startText"> Start Undersøkelse </span>
-
-    <div *ngIf="englishEnabled" class="languageSelection">
-      <!--TODO need clickevent to load the speified language-->
-      <button md-icon-button color="accent" (click)="switchtoen()">
-        <input type="image" src="../../assets/images/FlaggUK.svg">
-      </button>
-      <button md-icon-button color="accent" (click)="switchtono()">
-        <input type="image" src="../../assets/images/FlagNorge.svg">
-      </button>
-    </div>
+    <div class="startText"> Start Undersøkelse </div>
   </div>
+
+  <!-- The languageSelection buttons that shows when there exist alternative languages -->
+  <!-- TODO translateservice in click do not work -->
+  <div class="languageSelection" [hidden]="!englishEnabled" >
+    <button md-icon-button color="accent" (click)="switchtoen(); translateService.use('en')" >
+      <input type="image" src="../../assets/images/FlaggUK.svg">
+    </button>
+    <button md-icon-button color="accent" (click)="switchtono(); translateService.use('no')">
+      <input type="image" src="../../assets/images/FlagNorge.svg">
+    </button>
+      </div>
 
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">

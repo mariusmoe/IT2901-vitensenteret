@@ -260,7 +260,10 @@ resetTimer() {
     });
   }
 
-  // changelanguage
+  /**
+  * This method changes the language from eng to no
+  * The mothod should not be visible if there is no alternative languages in the survey
+  */
   private switchtono() {
     if (this.enenable) {
       console.log('change to no');
@@ -269,6 +272,10 @@ resetTimer() {
     }
 
   }
+    /**
+    * This method changes the language from no to eng
+    * The mothod should not be visible if there is no alternative languages in the survey
+    */
   private switchtoen() {
       console.log('change to en');
       if (this.noenable) {
