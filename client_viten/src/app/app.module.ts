@@ -33,6 +33,8 @@ import { FreetxtComponent } from './user/freetxt/freetxt.component';
 import { YesNoComponent } from './user/yes-no/yes-no.component';
 import { MultiplechoiceComponent } from './user/multiplechoice/multiplechoice.component';
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
+import { LocalStorageModule } from 'angular-2-local-storage';
+
 
 import { ClipboardModule } from 'ngx-clipboard';
 import { DragulaModule } from 'ng2-dragula';
@@ -44,6 +46,7 @@ import { TranslatePipe } from './_pipes/translate';
 import { DatePipe } from '@angular/common';
 import { LogoComponentComponent } from './logo-component/logo-component.component';
 import { SinglechoiceComponent } from './user/singlechoice/singlechoice.component';
+import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-prompt.component';
 
 @NgModule({
   declarations: [
@@ -74,7 +77,8 @@ import { SinglechoiceComponent } from './user/singlechoice/singlechoice.componen
     TranslatePipe,
     MultiplechoiceComponent,
     LogoComponentComponent,
-    SinglechoiceComponent
+    SinglechoiceComponent,
+    QuitsurveyPromptComponent
 
   ],
   imports: [
@@ -86,7 +90,11 @@ import { SinglechoiceComponent } from './user/singlechoice/singlechoice.componen
     ChartsModule,
     ClipboardModule,
     DragulaModule,
-    MaterialModule.forRoot()
+    MaterialModule.forRoot(),
+    LocalStorageModule.withConfig({
+            prefix: 'vitensurvey',
+            storageType: 'localStorage'
+        })
   ],
   entryComponents: [
     SurveyAlternativesDialog,
@@ -94,7 +102,8 @@ import { SinglechoiceComponent } from './user/singlechoice/singlechoice.componen
     ReferDialog,
     SurveyAlternativesDialog,
     SurveyPublishDialog,
-    CredentialDialog
+    CredentialDialog,
+    QuitsurveyPromptComponent
   ],
   providers: [
     AuthGuard,

@@ -12,6 +12,6 @@
         {{ 'Text based question. Download raw data to extract this.' | translate }}
       </p>
     </div>
-    <app-chart *ngIf="qo.mode !== 'text'" [questionObject] = "qo" [responses] = "responses" [index] = "i"></app-chart>
+    <app-chart *ngIf="qo.mode !== 'text'" [questionObject] = "qo" [responses] = "responses" [postResponses]="postResponses" [index] = "i"></app-chart>
   </div>
 </div>

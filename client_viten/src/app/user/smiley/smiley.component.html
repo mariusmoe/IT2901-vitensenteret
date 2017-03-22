@@ -2,10 +2,7 @@
   <!-- <div class="smiley" ><input class="angrySmiley" type="image" src="../../assets/images/Angry.svg" (click)="addChange(0)"></div>
   <div class="smiley" ><input class="normalSmiley" type="image" src="../../assets/images/Smangry.svg" (click)="addChange(1)"></div>
   <div class="smiley" ><input class="smilingSmiley" type="image" src="../../assets/images/Smiley.svg" (click)="addChange(2)"></div> -->
-  <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 0) }" type="image" src="../../assets/images/Angry.svg" (click)="selectSmile(0)"></div>
-  <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 1) }" type="image" src="../../assets/images/Smangry.svg" (click)="selectSmile(1)"></div>
-  <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 2) }" type="image" src="../../assets/images/Smiley.svg" (click)="selectSmile(2)"></div>
+  <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 0) }" type="image" src="../../assets/images/Angry.svg" (click)="selectSmile(0)" [@jumpOut]="smileyActiveOne" (@jumpOut.done)="animationEnd($event)"></div>
+  <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 1) }" type="image" src="../../assets/images/Smangry.svg" (click)="selectSmile(1)" [@jumpOut]="smileyActiveTwo" (@jumpOut.done)="animationEnd($event)"></div>
+  <div class="smiley" ><input [ngClass]="{ 'smile': true, 'active': (selectedSmile == 2) }" type="image" src="../../assets/images/Smiley.svg" (click)="selectSmile(2)" [@jumpOut]="smileyActiveThree" (@jumpOut.done)="animationEnd($event)"></div>
 </div>
-<!-- <p>
-  {{questionObject.lang.no.txt}}
-</p> -->

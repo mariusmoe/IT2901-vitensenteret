@@ -87,6 +87,57 @@
             {{ 'Request member' | translate }}
           </button>
         </md-card-actions>
+        <br>
+
+
+          <md-card-title>{{ 'Password' | translate }} to exit survey</md-card-title>
+          <md-card-content>
+            <md-input-container>
+              <input mdInput
+                autocomplete="new-password"
+                type="number"
+                pattern="[0-9]+"
+                inputmode="numeric"
+                placeholder="{{ 'Minimum 4 numbers' | translate }}"
+                #newEscapePassword>
+                <md-hint align="end">{{newEscapePassword.value.length}} / 4++</md-hint>
+            </md-input-container>
+            <br>
+            <p>{{ 'Retype password' | translate }}</p>
+            <md-input-container>
+              <input mdInput
+                [disabled]='newEscapePassword.value.length <= 3 || newEscapePassword.value== "" '
+                type="number"
+                pattern="[0-9]+"
+                inputmode="numeric"
+                placeholder="{{ 'Minimum 4 numbers' | translate }}"
+                #newEscapePassword2>
+                <md-hint align="end">
+                  {{newEscapePassword2.value.length}} / 4++</md-hint>
+            </md-input-container>
+            <md-icon class="done" *ngIf="newEscapePassword.value == newEscapePassword2.value && !newEscapePassword.value == '' ">done all</md-icon>
+          </md-card-content>
+          <md-card-actions>
+            <button md-raised-button
+              #passwordShangeButton
+              color="primary"
+              minlength="3"
+              md-visible="true"
+              [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value == newEscapePassword2.value) || newEscapePassword.value== '') ?
+                ('You need to write the same password twice' | translate ) : '' "
+              mdTooltipPosition="below"
+              [disabled]='newEscapePassword.value.length <= 3 || !(newEscapePassword.value == newEscapePassword2.value) || newEscapePassword.value== "" '
+              (click)="changeExitSurveyPassword(newEscapePassword.value); newEscapePassword.value = ''; newEscapePassword2.value = ''">
+              <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value == newEscapePassword2.value) || newEscapePassword.value== '') ?
+              ('You need to write the same password twice' | translate ) : '' "
+              mdTooltipPosition="below">
+                {{ 'Change password' | translate }}
+              </div>
+            </button>
+          </md-card-actions>
+
+
+
       </md-card>
       <md-card>
         <md-card-title>{{ 'Delete account' | translate }}</md-card-title>
@@ -109,6 +160,10 @@
         <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
       </md-card-content>
     </md-card>
+
+
+
+
     </div>
   </md-tab>
 </md-tab-group>

@@ -17,6 +17,7 @@ export const environment = {
     survey: 'http://localhost:2000/api/survey',
     surveyAsJson: 'http://localhost:2000/api/survey/json',
     surveyAsCSV: 'http://localhost:2000/api/survey/csv',
-    newUser: 'http://localhost:2000/api/auth/register'
+    newUser: 'http://localhost:2000/api/auth/register',
+    checkChoosesurvey: 'http://localhost:2000/api/survey/escape'
   }
 };

@@ -1,12 +1,12 @@
 <div>
   <md-toolbar color="primary">
-    <div class="flexchild">
-      <app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true"></app-logo-component>
+    <div class="headerBox alignLeft">
+      <app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true" height="100%" width="64px"></app-logo-component>
     </div>
-    <div class="flexchild alignCenter">
-      <app-logo-component logoVariant="text" color="primary" [useColorContrast]="true"></app-logo-component>
+    <div class="headerBox alignCenter">
+      <app-logo-component logoVariant="text" color="primary" [useColorContrast]="true" height="100%" width="400px"></app-logo-component>
     </div>
-    <div class="flexchild alignRight languageSelection">
+    <div class="headerBox alignRight languageSelection">
       <button md-icon-button color="accent" (click)="translateService.use('en')" [ngClass]="{'active': translateService.getCurrentLang() === 'en'}">
         <input type="image" src="../../assets/images/FlaggUK.svg">
       </button>
@@ -26,7 +26,7 @@
     </div>
     <h2 *ngIf="search && search.length > 0" class="header"> {{ 'Search results for search' | translate:[this.search] }}</h2>
     <div class="search surveyParent" *ngIf="search && search.length > 0">
-      <md-card class="survey"  *ngFor="let survey of allsurveys | adminSurveyPipe: search : 10">
+      <md-card class="survey"  *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: search : 10 : true">
         <md-card-title>
           {{survey.name}}
         </md-card-title>
@@ -37,7 +37,9 @@
           {{survey.comment}}
         </md-card-content>
         <md-card-actions>
-          <button md-raised-button color="primary" id="surveyicons" routerLink="/survey/{{survey._id}}" routerLinkActive="active">{{ 'Start' | translate }}</button>
+          <button md-raised-button color="primary" routerLink="/survey/{{survey._id}}" routerLinkActive="active">{{ 'Start' | translate }}</button>
+          <button md-raised-button color="primary" *ngIf="survey.postKey && survey.postKey.length > 0" class="buttonAlignRight"
+            routerLink="/survey/{{survey.postKey}}" routerLinkActive="active">{{ 'Start POST' | translate }}</button>
         </md-card-actions>
       </md-card>
     </div>
@@ -46,7 +48,7 @@
     <h2 class="header">{{ 'All Surveys' | translate }}</h2>
     <div class="showresults surveyParent" >
       <!--TODO Button must route to a pop-up window-->
-      <md-card class="survey" *ngFor="let survey of allsurveys | adminSurveyPipe: null : allsurveys.length ">
+      <md-card class="survey" *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: null : this.surveyService.surveyList.length : true">
         <md-card-title>
           {{survey.name}}
         </md-card-title>
@@ -57,7 +59,9 @@
           {{survey.comment}}
         </md-card-content>
         <md-card-actions>
-          <button md-raised-button color="primary" id="surveyicons"  routerLink="/survey/{{survey._id}}" routerLinkActive="active">{{ 'Start' | translate }}</button>
+          <button md-raised-button color="primary" routerLink="/survey/{{survey._id}}" routerLinkActive="active">{{ 'Start' | translate }}</button>
+          <button md-raised-button color="primary" *ngIf="survey.postKey && survey.postKey.length > 0" class="buttonAlignRight"
+            routerLink="/survey/{{survey.postKey}}" routerLinkActive="active">{{ 'Start POST' | translate }}</button>
         </md-card-actions>
       </md-card>
     </div>

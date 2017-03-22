@@ -2,9 +2,9 @@ import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
 
 @Component({
-  selector: 'app-singleChoice',
-  templateUrl: './singleChoice.component.html',
-  styleUrls: ['./singleChoice.component.scss']
+  selector: 'app-single-choice',
+  templateUrl: './singlechoice.component.html',
+  styleUrls: ['./singlechoice.component.scss']
 })
 export class SinglechoiceComponent implements OnInit {
   @Input() questionObject: QuestionObject;
