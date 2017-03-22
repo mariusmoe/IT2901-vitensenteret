@@ -11,12 +11,14 @@
   <!-- TODO translateservice in click do not work -->
   <!-- <div class="languageSelection" [hidden]="!englishEnabled" > -->
     <div class="languageSelection " *ngIf="englishEnabled && !started" >
-      <button md-icon-button color="accent" (click)="switchtoen();" >
-        <input type="image" src="../../assets/images/FlaggUK.svg">
-      </button>
-      <button md-icon-button color="accent" (click)="switchtono();">
-        <input type="image" src="../../assets/images/FlagNorge.svg">
-      </button>
+    <button md-icon-button color="accent" (click)="switchtoen();" >
+      <input type="image" src="../../assets/images/FlaggUK.svg">
+    </button>
+    <div class= "divider"></div>
+    <button md-icon-button color="accent" (click)="switchtono();">
+      <input type="image" src="../../assets/images/FlagNorge.svg">
+    </button>
+
     </div>
 
   <!-- The playbutton at the start of every survey -->
