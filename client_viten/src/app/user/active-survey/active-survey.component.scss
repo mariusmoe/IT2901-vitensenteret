@@ -66,26 +66,17 @@
 //languageSelection
 .languageSelection {
   position:fixed;
-  top:10px;
-  left:90%;
-
-  /*
-  button {
-    input {
-      opacity: 0.5;
-    }
-    & active.input {
-      opacity: 1;
-    }
+  top:2%;
+  left:83%;
+  button{
+    height:10vh;
+    width: 10vh;
   }
-  position: fixed;
-  top: 5px;
-  left: 5px;
-  height: 5vh;
-  width: 5vh;
-  opacity: 0;
-  cursor: default;
-  */
+  .divider{
+    width:10px;
+    height:auto;
+    display:inline-block;
+}
 }
 
 /* Styling for of the Start Survey text above the play button */
