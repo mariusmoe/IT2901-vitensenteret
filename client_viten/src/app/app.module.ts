@@ -33,7 +33,6 @@ import { FreetxtComponent } from './user/freetxt/freetxt.component';
 import { YesNoComponent } from './user/yes-no/yes-no.component';
 import { MultiplechoiceComponent } from './user/multiplechoice/multiplechoice.component';
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
-import { LocalStorageModule } from 'angular-2-local-storage';
 
 
 import { ClipboardModule } from 'ngx-clipboard';
@@ -90,11 +89,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     ChartsModule,
     ClipboardModule,
     DragulaModule,
-    MaterialModule.forRoot(),
-    LocalStorageModule.withConfig({
-            prefix: 'vitensurvey',
-            storageType: 'localStorage'
-        })
+    MaterialModule.forRoot()
   ],
   entryComponents: [
     SurveyAlternativesDialog,
