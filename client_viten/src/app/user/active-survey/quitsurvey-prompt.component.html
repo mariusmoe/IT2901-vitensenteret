@@ -2,7 +2,7 @@
   <h1 md-dialog-title>Skriv inn kode for å avslutte undersøkelsen.</h1>
   <div class="quitSurvey-code">
     <md-input-container>
-      <input #code mdInput type="tel" placeholder="Kode" value="">
+      <input #code mdInput type="tel" placeholder="Kode" value="" autocomplete="off">
     </md-input-container>
     <p *ngIf="hasError == 'true'"> Hello</p>
   </div>
