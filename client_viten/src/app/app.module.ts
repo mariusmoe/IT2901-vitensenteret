@@ -46,6 +46,7 @@ import { TranslatePipe } from './_pipes/translate';
 import { DatePipe } from '@angular/common';
 import { LogoComponentComponent } from './logo-component/logo-component.component';
 import { SinglechoiceComponent } from './user/singlechoice/singlechoice.component';
+import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-prompt.component';
 
 @NgModule({
   declarations: [
@@ -76,7 +77,8 @@ import { SinglechoiceComponent } from './user/singlechoice/singlechoice.componen
     TranslatePipe,
     MultiplechoiceComponent,
     LogoComponentComponent,
-    SinglechoiceComponent
+    SinglechoiceComponent,
+    QuitsurveyPromptComponent
 
   ],
   imports: [
@@ -100,7 +102,8 @@ import { SinglechoiceComponent } from './user/singlechoice/singlechoice.componen
     ReferDialog,
     SurveyAlternativesDialog,
     SurveyPublishDialog,
-    CredentialDialog
+    CredentialDialog,
+    QuitsurveyPromptComponent
   ],
   providers: [
     AuthGuard,
