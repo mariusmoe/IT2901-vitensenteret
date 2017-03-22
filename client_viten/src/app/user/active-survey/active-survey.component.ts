@@ -35,7 +35,7 @@ export class ActiveSurveyComponent implements OnInit {
 
   // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
   postDone;
-  // Only initialized if pre-post
+  // Only initialized if pre-post. Is true when the user is on the nickname page. Required in order to avoid conflict with child components
   nicknamePage;
 
   abortTimer: string;
