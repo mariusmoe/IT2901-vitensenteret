@@ -107,6 +107,7 @@ export class ActiveSurveyComponent implements OnInit {
     this.page = 0;
     this.done = false;
     this.transition = false;
+    this.answers = [];
 
     this.subscribeabortTimer();
     this.timer.delTimer('1sec');
