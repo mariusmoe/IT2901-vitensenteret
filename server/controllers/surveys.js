@@ -133,7 +133,7 @@ exports.copySurvey = (req, res, next) => {
       // save the copy
       copy.save( (err2, surveyCopy) => {
         if (!surveyCopy) {
-          return res.status(400).send({ message: status.SURVEY_COPY_FAILED.message, status: status.SURVEY_COPY_FAILED.code });
+          return res.status(500).send({ message: status.SURVEY_COPY_FAILED.message, status: status.SURVEY_COPY_FAILED.code });
         }
         callback(survey, surveyCopy);
       });
@@ -146,7 +146,7 @@ exports.copySurvey = (req, res, next) => {
         next(err);
       }
       if (!responses) {
-        return res.status(400).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
+        return res.status(500).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
       }
 
       const copy = responses.slice();
@@ -160,7 +160,7 @@ exports.copySurvey = (req, res, next) => {
           next(err);
         }
         if (!responsesCopy) {
-          return res.status(400).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
+          return res.status(500).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
         }
         callback(responses, responsesCopy);
       })
