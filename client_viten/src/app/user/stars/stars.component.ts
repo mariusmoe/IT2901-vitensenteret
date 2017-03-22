@@ -75,7 +75,7 @@ export class StarsComponent implements OnInit {
   }
 
   animationEnd(event) {
-    if (event.fromState === 'inactive') {
+    if (event.fromState === 'inactive' || event.fromState === 'active') {
       this.addChange();
     }
   }
