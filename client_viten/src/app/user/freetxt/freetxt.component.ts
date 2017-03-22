@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
-import { LocalStorageModule } from 'angular-2-local-storage';
 
 @Component({
   selector: 'app-freetxt',
@@ -38,7 +37,6 @@ export class FreetxtComponent implements OnInit {
  */
   updateAnswers() {
     this.answer.emit(this.textValue);
-    localStorage.setItem(this.key, this.textValue);
   }
 
 }
