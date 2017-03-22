@@ -1,9 +1,16 @@
-.multiChoiceContainer{
-  display : flex;
-  flex-wrap : wrap;
+.multiChoiceContainer {
+  display: flex;
+  flex-wrap: nowrap;
   flex-direction: row;
   align-items: center;
-  transform: scale(2);
-  width: 10vw;
-  margin-top:65%;
+  transform: scale(1.5);
+  display: inline-block;
+
+  .region {
+    text-align: left;
+    md-checkbox {
+      padding: 0.5em;
+      display: block;
+    }
+  }
 }
