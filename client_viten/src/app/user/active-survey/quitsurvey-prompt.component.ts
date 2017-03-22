@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { Router } from '@angular/router';
 import { SurveyService } from '../../_services/survey.service';
 import { MdDialogRef } from '@angular/material';
@@ -94,6 +94,28 @@ export class QuitsurveyPromptComponent {
    */
   resetTimer() {
     this.abortCounter = 0;
+  }
+
+  /**
+   * Hostlistener that recognizes clicks on the screen to reset timer
+   * @param  {click'} 'document  [description]
+   * @param  {[type]} ['$event'] [description]
+   * @return {[type]}            [description]
+   */
+  @HostListener('document:click', ['$event'])
+  clickout(event) {
+    this.resetTimer();
+  }
+
+  /**
+   * Hostlistener that recognizes keypresses to reset timer
+   * @param  {keypress'} 'document  [description]
+   * @param  {[type]}    ['$event'] [description]
+   * @return {[type]}               [description]
+   */
+  @HostListener('document:keypress', ['$event'])
+  handleKeyboardEvent(event: KeyboardEvent) {
+    this.resetTimer();
   }
 
 

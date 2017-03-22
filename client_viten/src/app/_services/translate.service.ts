@@ -46,14 +46,14 @@ export class TranslateService {
             translation = translation.replace(this.PLACEHOLDER.concat(<any>i), e);
         });
 
-        return translation;
+        return 'T:' + translation;
         // return 'T:' + translation;
     }
 
     public instant(key: string, words?: string | string[]) { // add optional parameter
         const translation: string = this.translate(key);
 
-        if (!words) { return translation; } // return 'T:' + translation; }
+        if (!words) { return 'T:' + translation; } // return 'T:' + translation; }
         return this.replace(translation, words); // call replace function
     }
 }

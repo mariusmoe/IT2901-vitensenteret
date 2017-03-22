@@ -25,6 +25,7 @@ export const LANG_NO_TRANS = {
   'Role': 'Kontotype',
   'Language': 'Språk',
   'Copy': 'Kopier',
+  'CopyLabel': 'Kopi',
   'Okay': 'Ok',
   'Success': 'Suksess',
   'Active': 'Aktiv',
@@ -127,6 +128,7 @@ export const LANG_NO_TRANS = {
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
   'Create post-survey': 'Lag post-undersøkelse',
   'Edit post-survey': 'Endre post-undersøkelse',
+  'Copy with responses': 'Kopier med svarene',
 
 
   // Admin settings component

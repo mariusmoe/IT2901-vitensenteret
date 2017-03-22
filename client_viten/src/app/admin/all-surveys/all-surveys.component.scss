@@ -56,12 +56,16 @@
 md-list-item {
   position: relative;
   .chip {
+    pointer-events: none;
+    display: inline-block;
     transform: scale(0.68);
-    display:inline-block;
     position: absolute;
     right: -6px;
     top: 5px;
-    outline: none;
+    color: white;
+    md-chip {
+      outline: none;
+    }
     .mat-accent {
       color: white;
     }

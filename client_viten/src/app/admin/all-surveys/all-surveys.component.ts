@@ -1,6 +1,4 @@
-import 'rxjs/add/operator/switchMap';
-
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SurveyList } from '../../_models/index';
 import { SurveyService } from '../../_services/survey.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
@@ -15,13 +13,15 @@ import 'rxjs/add/operator/debounceTime';
   templateUrl: './all-surveys.component.html',
   styleUrls: ['./all-surveys.component.scss']
 })
-export class AllSurveysComponent implements OnInit {
+export class AllSurveysComponent implements OnInit, OnDestroy {
     loading = false;
     searchInput = '';
     searchFormControl = new FormControl();
     searchLoading = false;
     searchResultNum = 20;
     loadMoreValue = 20;
+
+    searchSubscription: Subscription;
 
     constructor(
       private router: Router,
@@ -32,9 +32,12 @@ export class AllSurveysComponent implements OnInit {
       }
 
     ngOnInit() {
-      this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
+      this.searchSubscription = this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
         this.searchInput = searchQuery;
       });
+    }
+    ngOnDestroy() {
+      this.searchSubscription.unsubscribe();
     }
 
     /**
