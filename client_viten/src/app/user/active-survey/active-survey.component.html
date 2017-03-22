@@ -6,25 +6,25 @@
     active-survey works!
   </p>-->
   <!--Startbutton for an active survey   *ngIf="!started"   -->
-  <div class="startTextContainer" *ngIf="!started">
-    <div class="startText"> Start Undersøkelse </div>
-  </div>
 
   <!-- The languageSelection buttons that shows when there exist alternative languages -->
   <!-- TODO translateservice in click do not work -->
   <!-- <div class="languageSelection" [hidden]="!englishEnabled" > -->
     <div class="languageSelection " *ngIf="englishEnabled && !started" >
-    <button md-icon-button color="accent" (click)="switchtoen();" >
-      <input type="image" src="../../assets/images/FlaggUK.svg">
-    </button>
-    <button md-icon-button color="accent" (click)="switchtono();">
-      <input type="image" src="../../assets/images/FlagNorge.svg">
-    </button>
+      <button md-icon-button color="accent" (click)="switchtoen();" >
+        <input type="image" src="../../assets/images/FlaggUK.svg">
+      </button>
+      <button md-icon-button color="accent" (click)="switchtono();">
+        <input type="image" src="../../assets/images/FlagNorge.svg">
+      </button>
     </div>
 
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
+  </div>
+  <div class="startTextContainer" *ngIf="!started">
+    <div class="startText"> Start Undersøkelse </div>
   </div>
   <div class="logoContainer" *ngIf="!started">
     <div class="vitenContainer">
