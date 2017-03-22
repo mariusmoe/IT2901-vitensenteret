@@ -45,6 +45,7 @@ import { TranslatePipe } from './_pipes/translate';
 import { DatePipe } from '@angular/common';
 import { LogoComponentComponent } from './logo-component/logo-component.component';
 import { SinglechoiceComponent } from './user/singlechoice/singlechoice.component';
+import { NicknameComponent } from './user/nickname/nickname.component';
 import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-prompt.component';
 
 @NgModule({
@@ -77,6 +78,8 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     MultiplechoiceComponent,
     LogoComponentComponent,
     SinglechoiceComponent,
+    NicknameComponent
+    NicknameComponent,
     QuitsurveyPromptComponent
 
   ],

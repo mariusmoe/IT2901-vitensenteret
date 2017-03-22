@@ -1,5 +1,6 @@
 import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, HostListener } from '@angular/core';
 import { SurveyService } from '../../_services/survey.service';
+import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
@@ -22,20 +23,24 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 })
 
 export class ActiveSurveyComponent implements OnInit {
-  @Input() alternative: number;
-  private properSurvey = false;
-  private started = false;
+  @Input() alternative: number; // The answer- \input recieved from child components.
+  private properSurvey = false; // If the survey is valid, posting it to the database is possible.
+  private started = false; // If a survey is started, this is true.
   private survey: Survey;
+  private response: Response;
   private page = 0;
   private totalPages = 0;
-  private transition = false;
-  private done = false;
-  private answers = [];
+  private transition = false; // If true, animation between pages are triggerd
+  private done = false; // if true it takes you to the endMessage-screen
   private englishEnabled: boolean;
   private enenable: boolean;
   private noenable: boolean;
-  abortTimer: string;
-  abortCounter = 0;
+
+  postDone; // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
+  nicknamePage; // Only initialized if pre-post. Is true when the user is on the nickname page.
+
+  abortTimer: string; // The ID for the timer
+  abortCounter = 0; // The actual timer, updates in the listenCallback() function
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
@@ -77,7 +82,11 @@ export class ActiveSurveyComponent implements OnInit {
           return;
         }
         this.survey = result.survey;
-        console.log(this.survey);
+        this.response = <Response> {
+            nickname: '',
+            questionlist: [],
+            surveyId: this.survey._id,
+        };
         this.totalPages = this.survey.questionlist.length;
 
         // Sets the language to no as standard when it is created
@@ -106,7 +115,11 @@ export class ActiveSurveyComponent implements OnInit {
    * This method starts the survey as well as the inactivity timer
    */
   private startSurvey() {
+    console.log('Check for empty nickname: ', this.response.nickname);
     this.started = true;
+    if (this.survey.isPost || this.survey.postKey !== undefined) {
+      this.postDone = false;
+    }
     this.timer.newTimer('1sec', 1);
     this.subscribeabortTimer();
   }
@@ -120,7 +133,9 @@ export class ActiveSurveyComponent implements OnInit {
     this.page = 0;
     this.done = false;
     this.transition = false;
-    this.answers = [];
+    this.nicknamePage = undefined;
+    this.postDone = undefined;
+    this.response.nickname = undefined;
 
     this.subscribeabortTimer();
     this.timer.delTimer('1sec');
@@ -148,18 +163,27 @@ export class ActiveSurveyComponent implements OnInit {
 addOrChangeAnswer(alternative: any) {
   this.answers[this.page] = alternative;
 }
+   /**
+    * Updates the nickname in Response
+    * @param  {[type]} nickname [description]
+    * @return {[type]}          [description]
+    */
+   checkNick(nickname) {
+     this.response.nickname = nickname;
+     console.log('Nickname is: ', this.response.nickname);
+   }
 
 /**
  * This method handles the transition to the previous questions in the survey
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
-      if (this.page <= 0) {
-        return;
-      }
-      this.page -= 1;
-      this.transition = true;
+    if (this.page <= 0) {
+      return;
     }
+    this.page -= 1;
+    this.transition = true;
+  }
 
 /**
  * This method handles the transition to the next question in the survey as well as handling whether its the last page.
@@ -167,8 +191,8 @@ addOrChangeAnswer(alternative: any) {
  */
   private nextQ() {
     // Handles an empty answer
-    if (typeof this.answers[this.page] === 'undefined') {
-      this.answers[this.page] = -1;
+    if (typeof this.response.questionlist[this.page] === 'undefined') {
+      this.response.questionlist[this.page] = -1;
     }
     // If current page is the last with questions, the next page should be the endSurvey page
     if (this.page + 1 >= this.totalPages) {
@@ -240,10 +264,24 @@ resetTimer() {
  * This method finishes the survey if the user clicks the END button
  */
   endSurvey() {
-    this.postSurvey();
-    this.answers = [];
-    this.done = true;
-    this.resetTimer();
+    if (!this.survey.isPost || this.postDone || this.response.nickname !== '') {
+      console.log('entered quit-condition');
+      this.postDone = true;
+      this.postSurvey();
+      this.response.questionlist = [];
+      this.done = true;
+      this.resetTimer();
+      return;
+    }
+    this.endPost();
+  }
+
+  /**
+   * This method navigates to the nickname component
+   */
+  endPost() {
+    this.nicknamePage = true;
+    console.log('endPost and totalPages: ', this.totalPages);
   }
 
 /**
@@ -257,8 +295,11 @@ resetTimer() {
  * This method posts the survey to the database
  */
   private postSurvey() {
-    console.log(this.answers);
-    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper: boolean) => {
+    const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
+    if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
+      delete responseClone.nickname;
+    }
+    this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });
   }
