@@ -3,6 +3,7 @@ import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angul
 import { Observable } from 'rxjs/Observable';
 import { Survey } from '../_models/survey';
 import { SurveyList } from '../_models/index';
+import { TranslateService } from './translate.service';
 import { environment } from '../../environments/environment';
 
 
@@ -12,7 +13,7 @@ export class SurveyService {
 
   surveyList: SurveyList[] = [];
 
-  constructor(private http: Http) {
+  constructor(private http: Http, private translateService: TranslateService) {
 
   }
 
@@ -92,7 +93,9 @@ changeChoosesurvey(password: string): Observable<boolean> {
    getSurvey(idString: String): Observable<any> {
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
-       return response.json();
+       const json = response.json();
+       const survey = this.correctSurveyValidity(json.survey);
+       return { survey: survey, responses: json.responses };
      },
      error => {
        return error.json();
@@ -117,8 +120,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
 
     return this.http.post(environment.URL.survey, survey, options)
     .map( response => {
-      const s: Survey = response.json();
-      return s;
+      return this.correctSurveyValidity(response.json());
     },
     error => {
       return error.json();
@@ -142,7 +144,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
     return this.http.patch(environment.URL.survey + '/' + surveyId, survey, options)
       .map( response => {
         const jsonResponse = response.json();
-        return jsonResponse.survey;
+        return this.correctSurveyValidity(jsonResponse.survey);
       },
       error => {
         return error.json();
@@ -172,7 +174,32 @@ changeChoosesurvey(password: string): Observable<boolean> {
       });
   }
 
+  /**
+   * copySurvey(surveyId: string, includeResponses: boolean)
+   *
+   * @param  {string}        surveyId         the id of the survey one wants to copy
+   * @param  {boolean}       includeResponses whether to also copy responses
+   * @return Observable<any>                  the copied survey object
+   */
+  copySurvey(surveyId: string, includeResponses: boolean): Observable<any> {
+    const token = this.getToken();
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${token}`);
 
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    const copyLabel = this.translateService.instant('CopyLabel');
+
+    return this.http.post(environment.URL.surveyCopy + '/' + surveyId,
+      { includeResponses: includeResponses, copyLabel: copyLabel }, options)
+    .map( response => {
+      return this.correctSurveyValidity(response.json());
+    },
+    error => {
+      return error.json();
+    });
+  }
 
 
   /**
@@ -229,6 +256,34 @@ changeChoosesurvey(password: string): Observable<boolean> {
           return error;
         }
       );
+  }
+
+
+  /**
+   * correctSurveyValidity(survey: Survey)
+   * Removes the fields that should not be present
+   * @param  {Survey} survey the survey reference to modify
+   * @return {Survey} the survey
+   */
+  private correctSurveyValidity(survey: Survey): Survey {
+    // remove options-properties of non-multi questions
+    for (const qo of survey.questionlist) {
+      if (qo.mode !== 'multi' && qo.mode !== 'single') {
+        delete qo.lang.no.options;
+        delete qo.lang.en.options;
+      }
+    }
+    // somewhat hacky way to determine english state.
+    // If English state is not found, then delete any properties not needed.
+    if (!survey.questionlist[0].lang.en
+      || !survey.questionlist[0].lang.en.txt
+      || !(survey.questionlist[0].lang.en.txt.length > 0)) {
+        delete survey.endMessage.en;
+        for (const qo of survey.questionlist) {
+          delete qo.lang.en;
+        }
+    }
+    return survey;
   }
 
 }

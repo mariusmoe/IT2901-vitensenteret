@@ -10,6 +10,7 @@ const validator = require('validator'),
       json2csv = require('json2csv'),
       temp = require('temp'),
       util = require('util'),
+      mongoose = require('mongoose'),
       val = require('../libs/validation.js');
 
 // Automatically track and cleanup files at exit
@@ -105,7 +106,100 @@ exports.getOneSurvey = (req, res, next) => {
   });
 }
 
+exports.copySurvey = (req, res, next) => {
+  const surveyId = req.params.surveyId;
+  const includeResponses = req.body.includeResponses;
+  const copyLabel = req.body.copyLabel;
 
+  // ROUTER checks for existence of surveyId. no need to have a check here as well.
+  if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
+    // but we should check the validity of the id
+    return res.status(400).send({ message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code });
+  }
+
+  const doSurveyCopy = (id, callback, postKey) => {
+    Survey.findById( id, (err, survey) => {
+      if (!survey) {
+        return res.status(404).send({ message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code });
+      }
+
+      const copyObject = survey.toObject();
+      copyObject.name = (copyLabel ? copyLabel : '') + ' ' + copyObject.name;
+      copyObject.date = new Date().toISOString();
+      delete copyObject._id;
+      delete copyObject.__v;
+      const copy = new Survey(copyObject);
+
+      // save the copy
+      copy.save( (err2, surveyCopy) => {
+        if (!surveyCopy) {
+          return res.status(400).send({ message: status.SURVEY_COPY_FAILED.message, status: status.SURVEY_COPY_FAILED.code });
+        }
+        callback(survey, surveyCopy);
+      });
+    });
+  }
+
+  const doResponseCopy = (id, postSurveyCopyId, callback) => {
+    Response.find( { surveyId: id }, { _id: false, }, (err, responses) => {
+      if (err) {
+        next(err);
+      }
+      if (!responses) {
+        return res.status(400).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
+      }
+
+      const copy = responses.slice();
+      copy.forEach(response => {
+        response.surveyId = postSurveyCopyId;
+        response.timestamp = new Date().toISOString();
+        delete response._id;
+      });
+      Response.insertMany(copy, (err, responsesCopy) => {
+        if (err) {
+          next(err);
+        }
+        if (!responsesCopy) {
+          return res.status(400).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
+        }
+        callback(responses, responsesCopy);
+      })
+    });
+  }
+
+  // First we deal with the surveys. The responses are dealt with below.
+  doSurveyCopy(surveyId, (origSurvey, newSurvey) => {
+    // we might also need to copy a post survey
+    if (origSurvey.postKey) {
+      doSurveyCopy(origSurvey.postKey, (origPostSurvey, newPostSurvey) => {
+        // update the copied PRE survey with the new key to the POST survey
+        newSurvey.postKey = newPostSurvey._id;
+        newSurvey.save( (err, savedCopyOfOriginalSurvey) => {
+          if (!includeResponses) {
+            return res.status(200).send(newSurvey);
+          } else {
+            // copy responses (pre, then post)
+            doResponseCopy(surveyId, savedCopyOfOriginalSurvey._id, (responsesCopy) => {
+              doResponseCopy(origSurvey.postKey, newPostSurvey._id, (responsesCopy) => {
+                return res.status(200).send(newSurvey);
+              });
+            });
+          }
+        });
+      });
+    } else {
+      // if there were not post survey to bother about...
+      if (!includeResponses) {
+        return res.status(200).send(newSurvey);
+      } else {
+        // copy responses
+        doResponseCopy(surveyId, newSurvey, (responsesCopy) => {
+          return res.status(200).send(newSurvey);
+        });
+      }
+    }
+  });
+}
 
 // PATCH
 exports.patchOneSurvey = (req, res, next) => {
@@ -191,25 +285,27 @@ exports.getAllSurveysAsJson = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-      let data = JSON.stringify(surveys, null, 2);
+    let data = JSON.stringify(surveys, null, 2);
 
-        // Open a gate to the temp directory
-        temp.open('json', function(err, info) {
-          if (!err) {
-            fs.write(info.fd, data , function(err){
-              if (err) {console.error(err);}
-            });
-            // close file system operation (it is now safe to read from file)
-            fs.close(info.fd, function(err) {
-              res.setHeader('content-type', 'application/json')
-              res.download(info.path, 'data.json', function(err){
-                if (err) {console.error(err);}
-              })
-            });
-          }
+    // Open a gate to the temp directory
+    temp.open('json', function(err, info) {
+      if (!err) {
+        fs.write(info.fd, data , function(err){
+          if (err) {console.error(err);}
         });
-      });
-  }
+        // close file system operation (it is now safe to read from file)
+        fs.close(info.fd, function(err) {
+          res.setHeader('content-type', 'application/json')
+          res.download(info.path, 'data.json', function(err){
+            if (err) {console.error(err);}
+          })
+        });
+      }
+    });
+  });
+}
+
+
 
 exports.getSurveyAsJson = (req, res, next) => {
   const surveyId = req.params.surveyId
@@ -245,7 +341,6 @@ exports.getSurveyAsJson = (req, res, next) => {
         });
       }
     });
-
 
 
 
