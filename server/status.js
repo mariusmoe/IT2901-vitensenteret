@@ -63,7 +63,7 @@ module.exports = {
     message: 'Survey could not be found',
     code: 2019
   },
-  SURVEY_OBJECT_MISSING: { // used when a survey is supposedly being TO the server
+  SURVEY_OBJECT_MISSING: { // used when a survey is supposedly being sent TO the server
     message: 'Could not find a survey',
     code: 2020
   },
@@ -95,4 +95,12 @@ module.exports = {
     message: "The response has been registered successfully.",
     code: 1016,
   },
+  SURVEY_RESPONSE_UNPROCESSABLE: {
+    message: 'Response could not be processed. Check validity.',
+    code: 2023
+  },
+  SURVEY_RESPONSE_OBJECT_MISSING: {
+    message: 'Could not find a response.',
+    code: 2024
+  }
 }

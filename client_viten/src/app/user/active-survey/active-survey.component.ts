@@ -31,7 +31,6 @@ export class ActiveSurveyComponent implements OnInit {
   private totalPages = 0;
   private transition = false;
   private done = false;
-  private answers = [];
 
   // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
   postDone;
@@ -83,6 +82,8 @@ export class ActiveSurveyComponent implements OnInit {
         this.survey = result.survey;
         this.response = <Response> {
             nickname: '',
+            questionlist: [],
+            surveyId: this.survey._id,
         };
         this.totalPages = this.survey.questionlist.length;
 
@@ -146,7 +147,7 @@ export class ActiveSurveyComponent implements OnInit {
  * @param  {number[]} alternative a list of numbers to send to survey
  */
    addOrChangeAnswer(alternative) {
-     this.answers[this.page] = alternative;
+     this.response.questionlist[this.page] = alternative;
    }
    /**
     * Updates the nickname in Response
@@ -176,8 +177,8 @@ export class ActiveSurveyComponent implements OnInit {
  */
   private nextQ() {
     // Handles an empty answer
-    if (typeof this.answers[this.page] === 'undefined') {
-      this.answers[this.page] = -1;
+    if (typeof this.response.questionlist[this.page] === 'undefined') {
+      this.response.questionlist[this.page] = -1;
     }
     // If current page is the last with questions, the next page should be the endSurvey page
     if (this.page + 1 >= this.totalPages) {
@@ -253,7 +254,7 @@ resetTimer() {
       console.log('entered quit-condition');
       this.postDone = true;
       this.postSurvey();
-      this.answers = [];
+      this.response.questionlist = [];
       this.done = true;
       this.resetTimer();
       return;
@@ -280,16 +281,12 @@ resetTimer() {
  * This method posts the survey to the database
  */
   private postSurvey() {
-    console.log(this.answers);
-    if (this.survey.isPost || this.survey.postKey !== undefined) {
-      console.log('pre-post posted to survey');
-      this.surveyService.answerSurvey(this.answers, this.survey._id, this.response.nickname).subscribe((proper: boolean) => {
-        this.properSurvey = true;
-      });
+    const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
+    if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
+      delete responseClone.nickname;
     }
-    this.surveyService.answerSurvey(this.answers, this.survey._id).subscribe((proper: boolean) => {
+    this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });
   }
-
 }
