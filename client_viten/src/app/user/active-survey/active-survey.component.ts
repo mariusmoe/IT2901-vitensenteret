@@ -32,7 +32,9 @@ export class ActiveSurveyComponent implements OnInit {
   private transition = false;
   private done = false;
   private answers = [];
-
+  private englishEnabled: boolean;
+  private enenable: boolean;
+  private noenable: boolean;
   abortTimer: string;
   abortCounter = 0;
 
@@ -78,6 +80,19 @@ export class ActiveSurveyComponent implements OnInit {
         this.survey = result.survey;
         console.log(this.survey);
         this.totalPages = this.survey.questionlist.length;
+
+        // Sets the language to no as standard when it is created
+        // this.language = this.survey.questionlist[this.page].lang.no.txt;
+        this.noenable = true;
+        // somewhat hacky way to determine english state.
+        if (this.survey.questionlist[0].lang.en
+          && this.survey.questionlist[0].lang.en.txt
+          && this.survey.questionlist[0].lang.en.txt.length > 0) {
+          this.englishEnabled = true;
+          console.log('This survey have english ');
+        }
+
+
 
         if (this.survey && this.survey.active) {
           this.properSurvey = true;
@@ -250,4 +265,27 @@ resetTimer() {
     });
   }
 
+  /**
+  * This method changes the language from eng to no
+  * The mothod should not be visible if there is no alternative languages in the survey
+  */
+  private switchtono() {
+    if (this.enenable) {
+      console.log('change to no');
+      this.noenable = true;
+      this.enenable = false;
+    }
+
+  }
+    /**
+    * This method changes the language from no to eng
+    * The mothod should not be visible if there is no alternative languages in the survey
+    */
+  private switchtoen() {
+      console.log('change to en');
+      if (this.noenable) {
+        this.enenable = true;
+        this.noenable = false;
+      }
+  }
 }
