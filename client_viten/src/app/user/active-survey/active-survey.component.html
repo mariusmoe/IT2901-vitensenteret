@@ -47,11 +47,12 @@
     </div>
 
     <!-- The navigate area at the footer of the browser -->
-    <div class="qnavigate" *ngIf="!this.done">
+    <div class="qnavigate" *ngIf="!this.done && !this.nicknamePage">
       <div class="qnavigateArea"><input type='image' [hidden]="this.page === 0" class="qnavigateArea" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition" />
       </div>
       <h3>{{page+1}}/{{totalPages}}</h3>
       <div class="qnavigateArea"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
+        <!-- This arrow is only visible within the nickname component, as it directs the user from that very component to the endMessage screen -->
       <div class="qnavigateArea" *ngIf="this.nicknamePage && this.survey.isPost"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="endSurvey()">
       </div>
     </div>
