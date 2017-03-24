@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, URLSearchParams, Response, RequestOptions } from '@angular/http';
+import { Http, Headers, URLSearchParams, RequestOptions } from '@angular/http';
 import { Observable } from 'rxjs/Observable';
 import { Survey } from '../_models/survey';
+import { Response } from '../_models/response';
 import { SurveyList } from '../_models/index';
 import { TranslateService } from './translate.service';
 import { environment } from '../../environments/environment';
@@ -50,20 +51,18 @@ changeChoosesurvey(password: string): Observable<boolean> {
   }
 
   /**
-   * answer one survey
-   * @param  {Array<any>}       answers  List of answers, each element is an answer
-   *                                        represents one answer.
-   * @param  {String}              idString identifier for a survey
-   * @return {Observable<boolean>}          Observable boolean, true if successful
+   * postSurveyResponse(response: Response)
+   * @param  {Response}          response The response to post, containing all required fields
+   * @return Observable<boolean>          success state of the response
    */
-  answerSurvey(answers: Array<any>, idString: String): Observable<boolean> {
+  postSurveyResponse(response: Response): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    return this.http.post(environment.URL.survey + '/' + idString, {answers}, options)
-    .map( response => {
-      console.log(response);
+    return this.http.post(environment.URL.survey + '/' + response.surveyId, response, options)
+    .map( success => {
+      console.log(success);
       return true;
     },
     error => {
