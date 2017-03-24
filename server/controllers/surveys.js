@@ -266,7 +266,7 @@ exports.answerOneSurvey = (req, res, next) => {
   if (!responseObject) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_OBJECT_MISSING.message, status: status.SURVEY_RESPONSE_OBJECT_MISSING.code });
   }
-  if (!val.responseValidation(responseObject)) {
+  if (!val.responseValidation(responseObject, true)) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
 
