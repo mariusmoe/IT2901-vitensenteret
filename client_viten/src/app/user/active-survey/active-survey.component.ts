@@ -18,6 +18,10 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
       state('void', style({'opacity': 0})),
       transition(':enter', animate('0.5s ease-in-out', style({'opacity': 1}))),
       transition(':leave', animate('0.5s ease-in-out', style({'opacity': 0})))
+    ]),
+    trigger('selectLang', [
+      state('true', style({opacity: 1})),
+      state('false', style({opacity: 0.5})),
     ])
   ]
 })
@@ -74,6 +78,10 @@ export class ActiveSurveyComponent implements OnInit {
    * Take the URL and get the survey from url-Param
    */
   ngOnInit() {
+    // Sets default language to Norwegian at startup
+    this.switchtono();
+
+
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
@@ -136,6 +144,8 @@ export class ActiveSurveyComponent implements OnInit {
     this.nicknamePage = undefined;
     this.postDone = undefined;
     this.response.nickname = undefined;
+
+    this.response.questionlist = [];
 
     this.subscribeabortTimer();
     this.timer.delTimer('1sec');
@@ -309,22 +319,15 @@ resetTimer() {
   * The mothod should not be visible if there is no alternative languages in the survey
   */
   private switchtono() {
-    if (this.enenable) {
-      console.log('change to no');
-      this.noenable = true;
-      this.enenable = false;
-    }
-
+    this.noenable = true;
+    this.enenable = false;
   }
     /**
     * This method changes the language from no to eng
     * The mothod should not be visible if there is no alternative languages in the survey
     */
   private switchtoen() {
-      console.log('change to en');
-      if (this.noenable) {
-        this.enenable = true;
-        this.noenable = false;
-      }
+    this.enenable = true;
+    this.noenable = false;
   }
 }

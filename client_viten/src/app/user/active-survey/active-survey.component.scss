@@ -211,3 +211,10 @@ h3 {
   height: inherit;
   width: inherit;
 }
+
+.flag {
+  height: 10vw;
+  width: 10vw;
+}
+
+.flag:focus{outline: none;}
