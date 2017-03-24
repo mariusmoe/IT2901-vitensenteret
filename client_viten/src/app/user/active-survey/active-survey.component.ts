@@ -9,8 +9,6 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 
 
-
-
 @Component({
   selector: 'active-survey',
   templateUrl: './active-survey.component.html',
@@ -98,8 +96,6 @@ export class ActiveSurveyComponent implements OnInit {
   ngOnInit() {
     // Sets default language to Norwegian at startup
     this.switchtono();
-
-
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {

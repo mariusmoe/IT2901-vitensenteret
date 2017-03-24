@@ -182,6 +182,9 @@ export const LANG_EN_TRANS = {
   'Date created: d': 'Date created: %0',
   'Date printed: d': 'Date printed: %0',
 
+  // Nickname component
+  'Name': 'What is your name?',
+
 
 
 };

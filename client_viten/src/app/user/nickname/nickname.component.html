@@ -1,6 +1,6 @@
 <md-card>
   <md-card-content>
-    <h2>T:Hva heter du?</h2>
+    <h2>{{ Name | translate}}</h2>
     <input type='text' class="freetxtBox" [(ngModel)] = "textValue" #textBox maxlength="100" name="" placeholder="Max 100" (change) = "updateAnswers()">
   </md-card-content>
 </md-card>
