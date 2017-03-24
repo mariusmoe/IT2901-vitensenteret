@@ -11,12 +11,14 @@
   <!-- TODO translateservice in click do not work -->
   <!-- <div class="languageSelection" [hidden]="!englishEnabled" > -->
     <div class="languageSelection " *ngIf="englishEnabled && !started" >
-      <button md-icon-button color="accent" (click)="switchtoen();" >
-        <input type="image" src="../../assets/images/FlaggUK.svg">
-      </button>
-      <button md-icon-button color="accent" (click)="switchtono();">
-        <input type="image" src="../../assets/images/FlagNorge.svg">
-      </button>
+    <div color="accent" (click)="switchtoen();" [@selectLang]="enenable">
+      <input class="flag" type="image" src="../../assets/images/FlaggUK.svg">
+    </div>
+    <div class= "divider"></div>
+    <div color="accent" (click)="switchtono();" [@selectLang]="noenable">
+      <input class="flag" type="image" src="../../assets/images/FlagNorge.svg">
+    </div>
+
     </div>
 
   <!-- The playbutton at the start of every survey -->
@@ -45,31 +47,34 @@
       <!-- Either displays the title of a question or shows the endMessage if the survey is done -->
       <div *ngIf="enenable">
         <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.en.txt}}</span></div>
-        <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.en}}</span></div>
+        <div class="surveyDone" *ngIf="this.done && this.postDone" (click)="exitSurvey()"><span>{{survey.endMessage.en}}</span></div>
       </div>
       <div *ngIf="noenable">
         <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.no.txt}}</span></div>
-        <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
+        <div class="surveyDone" *ngIf="this.done && this.postDone" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
       </div>
 
       <!-- Childcomponents that handle each answer-type -->
       <div class="answerTypes">
-        <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
-        <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
-        <app-single-choice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-single-choice>
-        <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event);'></app-multiplechoice>
-        <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done" [questionObject] = survey.questionlist[page] [currentAnswer] = answers[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
-        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done" [questionObject] = survey.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-freetxt>
+        <app-nickname *ngIf = "(this.survey.isPost || !this.survey.postKey!==undefined) && this.nicknamePage && !this.postDone" [questionObject] = survey.questionlist[page] (answer) = 'checkNick($event)'></app-nickname>
+        <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
+        <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
+        <app-single-choice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-single-choice>
+        <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event);'></app-multiplechoice>
+        <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
+        <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-freetxt>
       </div>
 
     </div>
 
     <!-- The navigate area at the footer of the browser -->
-    <div class="qnavigate" *ngIf="!this.done">
+    <div class="qnavigate" *ngIf="!this.done && !this.nicknamePage">
       <div class="qnavigateArea"><input type='image' [hidden]="this.page === 0" class="qnavigateArea" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition" />
       </div>
       <h3>{{page+1}}/{{totalPages}}</h3>
       <div class="qnavigateArea"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
+        <!-- This arrow is only visible within the nickname component, as it directs the user from that very component to the endMessage screen -->
+      <div class="qnavigateArea" *ngIf="this.nicknamePage && this.survey.isPost"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="endSurvey()">
       </div>
     </div>
 

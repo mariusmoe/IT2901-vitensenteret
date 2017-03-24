@@ -1,7 +1,9 @@
-.freetxtContainer {
-  width: 35vw;
-  height: 20vh;
-  background-color:white;
+.freetxtBox {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 2vw;
+  width: 75vw;
+  height: 45vh;
+  background-color: white;
   overflow: scroll;
 }
 
@@ -15,3 +17,6 @@ md-card-content {
   padding: 0;
   height: auto;
 }
+
+
+.freetxtBox:focus{outline: none;}
