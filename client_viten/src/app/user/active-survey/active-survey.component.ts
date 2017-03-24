@@ -142,6 +142,7 @@ export class ActiveSurveyComponent implements OnInit {
    * This method starts the survey as well as the inactivity timer
    */
   private startSurvey() {
+    console.log('survey started');
     this.started = true;
     if (this.survey.isPost || this.survey.postKey !== undefined) {
       this.postDone = false;
@@ -154,6 +155,7 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
+    console.log('survey is done');
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
@@ -205,6 +207,7 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
+    console.log('previous question');
     if (this.page <= 0) {
       return;
     }
@@ -222,6 +225,7 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
+    console.log('next question');
     // Handles an empty answer
     if (typeof this.response.questionlist[this.page] === 'undefined') {
       this.response.questionlist[this.page] = -1;
@@ -302,6 +306,7 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
+    console.log('trying to end survey');
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
       this.transition = true;
       this.postSurvey();
