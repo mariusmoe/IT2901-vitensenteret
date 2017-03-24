@@ -11,11 +11,11 @@
   <!-- TODO translateservice in click do not work -->
   <!-- <div class="languageSelection" [hidden]="!englishEnabled" > -->
     <div class="languageSelection " *ngIf="englishEnabled && !started" >
-    <button md-icon-button color="accent" (click)="switchtoen();" >
+    <button md-icon-button color="accent" (click)="switchtoen(); translateService.use('en')"  [ngClass]="{'active': translateService.getCurrentLang() === 'en'}">
       <input type="image" src="../../assets/images/FlaggUK.svg">
     </button>
     <div class= "divider"></div>
-    <button md-icon-button color="accent" (click)="switchtono();">
+    <button md-icon-button color="accent" (click)="switchtono(); translateService.use('no')"  [ngClass]="{'active': translateService.getCurrentLang() === 'no'}">
       <input type="image" src="../../assets/images/FlagNorge.svg">
     </button>
 
@@ -26,7 +26,7 @@
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
   </div>
   <div class="startTextContainer" *ngIf="!started">
-    <div class="startText"> Start Undersøkelse </div>
+    <div class="startText">{{'Start survey' | translate:[this.startText]}} </div>
   </div>
   <div class="logoContainer" *ngIf="!started">
     <div class="vitenContainer">

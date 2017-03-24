@@ -5,6 +5,8 @@ import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
+import { TranslateService } from '../../_services/translate.service';
+
 
 
 
@@ -36,6 +38,7 @@ export class ActiveSurveyComponent implements OnInit {
   private noenable: boolean;
   abortTimer: string;
   abortCounter = 0;
+  public startText = 'Start survey';
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
@@ -60,8 +63,11 @@ export class ActiveSurveyComponent implements OnInit {
   }
 
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer, public dialog: MdDialog) {
-
+    private router: Router,
+    private route: ActivatedRoute,
+    private timer: SimpleTimer,
+    public dialog: MdDialog,
+    public translateService: TranslateService) {
   }
 
   /**
@@ -250,7 +256,7 @@ resetTimer() {
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    let dialogRef = this.dialog.open(QuitsurveyPromptComponent);
+    const dialogRef = this.dialog.open(QuitsurveyPromptComponent);
   }
 
 /**
