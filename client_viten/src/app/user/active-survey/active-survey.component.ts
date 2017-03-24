@@ -161,7 +161,7 @@ export class ActiveSurveyComponent implements OnInit {
  * @param  {any} alternative a list of numbers to send to survey
  */
 addOrChangeAnswer(alternative: any) {
-  this.answers[this.page] = alternative;
+  this.response.questionlist[this.page] = alternative;
 }
    /**
     * Updates the nickname in Response
@@ -288,7 +288,7 @@ resetTimer() {
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    let dialogRef = this.dialog.open(QuitsurveyPromptComponent);
+    const dialogRef = this.dialog.open(QuitsurveyPromptComponent);
   }
 
 /**
