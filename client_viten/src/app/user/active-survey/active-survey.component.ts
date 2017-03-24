@@ -6,6 +6,8 @@ import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
+import { TranslateService } from '../../_services/translate.service';
+
 
 
 
@@ -37,17 +39,18 @@ export class ActiveSurveyComponent implements OnInit {
   @Input() alternative: number; // The answer- \input recieved from child components.
   private properSurvey = false; // If the survey is valid, posting it to the database is possible.
   private started = false; // If a survey is started, this is true.
-  private survey: Survey;
-  private response: Response;
-  private page = 0;
-  private totalPages = 0;
+  private survey: Survey; // The survey-object which is used to access information about the survey
+  private response: Response; // The reposne-object that is used to control all user input
+  private page = 0; // The current page the user is on
+  private totalPages = 0; // The total amount of pages in the survey
   private transition = false; // If true, animation between pages are triggerd
-  private done = false; // if true it takes you to the endMessage-screen
   private englishEnabled: boolean;
   private enenable: boolean;
   private noenable: boolean;
 
-  postDone; // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
+  private done = false; // if true it takes you to the endMessage-screen
+  postDone; /* postDone is a boolean that tells if the pre-post has been handled.
+               Is only initialized if survey is pre/post. Set to true in html.*/
   nicknamePage; // Only initialized if pre-post. Is true when the user is on the nickname page.
 
   abortTimer: string; // The ID for the timer
@@ -56,6 +59,7 @@ export class ActiveSurveyComponent implements OnInit {
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
+
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
@@ -80,8 +84,11 @@ export class ActiveSurveyComponent implements OnInit {
   }
 
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer, public dialog: MdDialog) {
-
+    private router: Router,
+    private route: ActivatedRoute,
+    private timer: SimpleTimer,
+    public dialog: MdDialog,
+    public translateService: TranslateService) {
   }
 
   /**
@@ -102,7 +109,7 @@ export class ActiveSurveyComponent implements OnInit {
         }
         this.survey = result.survey;
         this.response = <Response> {
-            nickname: '',
+            nickname: undefined,
             questionlist: [],
             surveyId: this.survey._id,
         };
@@ -134,7 +141,6 @@ export class ActiveSurveyComponent implements OnInit {
    * This method starts the survey as well as the inactivity timer
    */
   private startSurvey() {
-    console.log('Check for empty nickname: ', this.response.nickname);
     this.started = true;
     if (this.survey.isPost || this.survey.postKey !== undefined) {
       this.postDone = false;
@@ -191,7 +197,6 @@ addOrChangeAnswer(alternative: any) {
     */
    checkNick(nickname) {
      this.response.nickname = nickname;
-     console.log('Nickname is: ', this.response.nickname);
    }
 
 /**
@@ -200,6 +205,11 @@ addOrChangeAnswer(alternative: any) {
  */
   private previousQ() {
     if (this.page <= 0) {
+      return;
+    }
+    if (this.nicknamePage) {
+      this.nicknamePage = false;
+      this.transition = true;
       return;
     }
     this.page -= 1;
@@ -217,7 +227,11 @@ addOrChangeAnswer(alternative: any) {
     }
     // If current page is the last with questions, the next page should be the endSurvey page
     if (this.page + 1 >= this.totalPages) {
+      if (this.survey.postKey || this.survey.isPost) {
+        this.nicknamePage = true;
+      }
       this.endSurvey();
+      this.transition = true;
       return;
     }
     // Advances to the next page
@@ -285,24 +299,18 @@ resetTimer() {
  * This method finishes the survey if the user clicks the END button
  */
   endSurvey() {
-    if (!this.survey.isPost || this.postDone || this.response.nickname !== '') {
-      console.log('entered quit-condition');
-      this.postDone = true;
+    // If it is the last page in the survey, it should end it.
+    if (!this.survey.isPost || this.postDone === true) {
+      this.transition = true;
       this.postSurvey();
       this.response.questionlist = [];
       this.done = true;
       this.resetTimer();
       return;
     }
-    this.endPost();
-  }
-
-  /**
-   * This method navigates to the nickname component
-   */
-  endPost() {
+    // Else it should navigate to the nickname component
     this.nicknamePage = true;
-    console.log('endPost and totalPages: ', this.totalPages);
+
   }
 
 /**
