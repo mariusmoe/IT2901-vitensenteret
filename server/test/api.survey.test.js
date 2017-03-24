@@ -102,23 +102,30 @@ describe('Survey API', () => {
         expect(val.surveyValidation(res.body)).to.equal(true);
         res.should.have.status(200);
 
+
+        let tasksCompleted = false;
         for (let response of responsesToSurvey) {
           response["surveyId"] = surveyId;
+          chai.request(server)
+          .post('/api/survey/' + surveyId)
+          .set('Authorization', jwt)
+          .send(response)
+          .end( (err, res) => {
+            // verify that the returned object is valid
+            res.body.should.have.property('message');
+            res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
+            res.body.should.have.property('status');
+            res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
+            res.should.have.status(200);
+            if (tasksCompleted) {
+              done();
+            } else {
+              tasksCompleted = true;
+            }
+          });
         }
 
-        chai.request(server)
-        .post('/api/survey/' + surveyId)
-        .set('Authorization', jwt)
-        .send(responsesToSurvey)
-        .end( (err, res) => {
-          // verify that the returned object is valid
-          res.body.should.have.property('message');
-          res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
-          res.body.should.have.property('status');
-          res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
-          res.should.have.status(200);
-          done();
-        });
+
       });
     });
 

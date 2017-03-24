@@ -12,12 +12,18 @@ export class MultiplechoiceComponent implements OnInit {
   options;
   answerList = [];
   checkModels = [];
+  @Input() currentAnswer = [];
 
   constructor() { }
 
   ngOnInit() {
     this.options = this.questionObject.lang.no.options;
     this.options.forEach(o => this.checkModels.push(false) );
+    if (this.currentAnswer) {
+      for (let i = 0; i < this.currentAnswer.length; i++) {
+        this.checkModels[this.currentAnswer[i]] = true;
+      }
+    }
   }
 
 /**

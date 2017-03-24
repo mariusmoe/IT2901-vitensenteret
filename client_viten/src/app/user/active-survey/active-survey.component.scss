@@ -65,27 +65,19 @@
 
 //languageSelection
 .languageSelection {
+  display: flex;
   position:fixed;
-  top:10px;
-  left:90%;
-
-  /*
-  button {
-    input {
-      opacity: 0.5;
-    }
-    & active.input {
-      opacity: 1;
-    }
+  top: 5%;
+  right: 5%;
+  button{
+    height:10vh;
+    width: 10vh;
   }
-  position: fixed;
-  top: 5px;
-  left: 5px;
-  height: 5vh;
-  width: 5vh;
-  opacity: 0;
-  cursor: default;
-  */
+  .divider{
+    width: 2vw;
+    height:auto;
+    display:inline-block;
+}
 }
 
 /* Styling for of the Start Survey text above the play button */
@@ -131,6 +123,7 @@
 
 /*This is the navigation pane that lets you navigate between questions*/
 .qnavigate {
+  font-family: 'Baloo Bhaina', cursive;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -219,3 +212,10 @@ h3 {
   height: inherit;
   width: inherit;
 }
+
+.flag {
+  height: 8vw;
+  width: 8vw;
+}
+
+.flag:focus{outline: none;}

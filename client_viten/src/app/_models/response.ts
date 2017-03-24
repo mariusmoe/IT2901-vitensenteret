@@ -5,7 +5,7 @@
 export interface Response {
   _id?: string;
   nickname: string;
-  timestamp: string;
+  timestamp?: string;
   surveyId: string;
   questionlist: any[];
 }

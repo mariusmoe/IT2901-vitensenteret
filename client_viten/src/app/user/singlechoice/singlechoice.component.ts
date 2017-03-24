@@ -9,13 +9,15 @@ import { QuestionObject } from '../../_models/survey';
 export class SinglechoiceComponent implements OnInit {
   @Input() questionObject: QuestionObject;
   @Output() answer = new EventEmitter();
-  selectedOption;
+  selectedOption: string;
   options;
+  @Input() currentAnswer: number;
 
   constructor() { }
 
   ngOnInit() {
     this.options = this.questionObject.lang.no.options;
+    this.selectedOption = this.options[this.currentAnswer];
   }
 /**
  * This posts to the answer-list in active-survey component
@@ -29,7 +31,6 @@ export class SinglechoiceComponent implements OnInit {
  * @param  {number[]} userChoice An output number that shows which answer was chosen by a user
  */
   updateAnswers(userChoice) {
-    this.selectedOption = userChoice;
-    this.postAnswer(this.selectedOption);
+    this.postAnswer(userChoice);
   }
 }

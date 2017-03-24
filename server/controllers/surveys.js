@@ -255,22 +255,23 @@ exports.deleteOneSurvey = (req, res, next) => {
 
 // POST
 exports.answerOneSurvey = (req, res, next) => {
-  const surveyId  = req.params.surveyId,
-        types      = req.body.types,
-        answers   = req.body.answers;
-  // TODO: if answers object does not exist, stop here.
+  const surveyId        = req.params.surveyId,
+        responseObject  = req.body;
 
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
   if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
     // but we should check the validity of the id
-    return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
+    return res.status(400).send({ message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code});
   }
-  let newAnswer = new Response({
-    nickname: req.body.nickname,
-    surveyId: surveyId,
-    questionlist: answers
-  })
-  newAnswer.save( (err, answer) => {
+  if (!responseObject) {
+    return res.status(400).send({ message: status.SURVEY_RESPONSE_OBJECT_MISSING.message, status: status.SURVEY_RESPONSE_OBJECT_MISSING.code });
+  }
+  if (!val.responseValidation(responseObject, true)) {
+    return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
+  }
+
+  let newResponse = new Response(responseObject);
+  newResponse.save( (err, answer) => {
     if (err) { return next(err); }
     return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
   });
