@@ -6,6 +6,8 @@ import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
+import { TranslateService } from '../../_services/translate.service';
+
 
 
 
@@ -20,8 +22,15 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
       transition(':leave', animate('0.5s ease-in-out', style({'opacity': 0})))
     ]),
     trigger('selectLang', [
-      state('true', style({opacity: 1})),
-      state('false', style({opacity: 0.5})),
+      state('active', style({opacity: 1, transform: 'scale(1.1)'})),
+      state('inactive', style({opacity: 0.5})),
+      transition('inactive => active', animate('200ms', keyframes([
+        style({opacity: 1, transform: 'scale(1.5)', ofset: 0.3}),
+        style({opacity: 1, transform: 'scale(1.5)', ofset: 0.5}),
+        style({opacity: 1, transform: 'scale(1.1)', ofset: 0.7}),
+        style({opacity: 1, transform: 'scale(1.1)', ofset: 1})
+      ]))),
+      transition('active => inactive', animate('50ms'))
     ])
   ]
 })
@@ -47,6 +56,11 @@ export class ActiveSurveyComponent implements OnInit {
   abortTimer: string; // The ID for the timer
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
 
+  // Animation variables
+  flagActiveEnglish = 'inactive';
+  flagActiveNorwegian = 'inactive';
+
+
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
    * @param  {click'} 'document  [description]
@@ -70,8 +84,11 @@ export class ActiveSurveyComponent implements OnInit {
   }
 
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer, public dialog: MdDialog) {
-
+    private router: Router,
+    private route: ActivatedRoute,
+    private timer: SimpleTimer,
+    public dialog: MdDialog,
+    public translateService: TranslateService) {
   }
 
   /**
@@ -323,6 +340,9 @@ resetTimer() {
   private switchtono() {
     this.noenable = true;
     this.enenable = false;
+    // Animation change
+    this.flagActiveEnglish = 'inactive';
+    this.flagActiveNorwegian = 'active';
   }
     /**
     * This method changes the language from no to eng
@@ -331,5 +351,8 @@ resetTimer() {
   private switchtoen() {
     this.enenable = true;
     this.noenable = false;
+    // Animation change
+    this.flagActiveEnglish = 'active';
+    this.flagActiveNorwegian = 'inactive';
   }
 }
