@@ -45,8 +45,7 @@ export class ActiveSurveyComponent implements OnInit {
   private totalPages = 0; // The total amount of pages in the survey
   private transition = false; // If true, animation between pages are triggerd
   private englishEnabled: boolean;
-  private enenable: boolean;
-  private noenable: boolean;
+  private Twolanguage: boolean;
 
   private done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
@@ -118,7 +117,7 @@ export class ActiveSurveyComponent implements OnInit {
 
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
-        this.noenable = true;
+        this.Twolanguage = true;
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
@@ -343,22 +342,20 @@ resetTimer() {
 
   /**
   * This method changes the language from eng to no
-  * The mothod should not be visible if there is no alternative languages in the survey
+  * The method should not be visible if there is no alternative languages in the survey
   */
   private switchtono() {
-    this.noenable = true;
-    this.enenable = false;
+    this.Twolanguage = true;
     // Animation change
     this.flagActiveEnglish = 'inactive';
     this.flagActiveNorwegian = 'active';
   }
     /**
     * This method changes the language from no to eng
-    * The mothod should not be visible if there is no alternative languages in the survey
+    * The method should not be visible if there is no alternative languages in the survey
     */
   private switchtoen() {
-    this.enenable = true;
-    this.noenable = false;
+    this.Twolanguage = !true;
     // Animation change
     this.flagActiveEnglish = 'active';
     this.flagActiveNorwegian = 'inactive';
