@@ -35,11 +35,15 @@ if(config.util.getEnv('NODE_ENV') !== 'test') {
 
   // Enable CORS from client-side
   app.use(function(req, res, next) {
-    let allowedOrigins = ['http://localhost:4200', 'http://localhost:4321',
-      'http://localhost:2000', 'http://www.vitensurvey.party:2000',
-      'http://http://95.85.63.98:2000','http://www.vitensurvey.party',
-      'http://vitensurvey.party', 'http://95.85.63.98'];
-    let origin = req.headers.origin;
+    let allowedOrigins = [
+      'http://localhost:4200', 'http://localhost:4321',
+            'http://localhost:2000', 'http://www.vitensurvey.party:2000',
+            'http://http://95.85.63.98:2000','http://www.vitensurvey.party',
+            'http://vitensurvey.party', 'http://95.85.63.98', 'https://vitensurvey.party:2000',
+            'https://www.vitensurvey.party:2000',  'https://vitensurvey.party',
+            'https://www.vitensurvey.party'];
+          let origin = req.headers.origin;
+
     if(allowedOrigins.indexOf(origin) > -1){
          res.setHeader('Access-Control-Allow-Origin', origin);
     }
