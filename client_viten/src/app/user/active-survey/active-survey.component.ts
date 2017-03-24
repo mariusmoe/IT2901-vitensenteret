@@ -55,6 +55,7 @@ export class ActiveSurveyComponent implements OnInit {
 
   abortTimer: string; // The ID for the timer
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
+  public startText = 'Start survey';
 
   // Animation variables
   flagActiveEnglish = 'inactive';
