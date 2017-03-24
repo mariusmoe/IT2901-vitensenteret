@@ -3,15 +3,38 @@
 
 
 .searchBox {
+
   padding-right: 8px;
+  display:flex;
+  height: 55px;
+  margin-top: 10px;
   md-input-container {
-    display: block;
+    //display: block;
   }
   .searchIcon {
     width: 1em;
     height: 1em;
     font-size: 1em;
   }
+}
+.search {
+  flex: 10 10;
+  margin-left: 4px;
+  display:inline-block;
+}
+md-list {
+  padding-top: 0px;
+}
+
+.addButton {
+  transform: scale(0.80);
+  flex: 1 1;
+  width: 40px;
+  max-width: 40px;
+  min-width: 40px;
+  display:inline-block;
+  margin-top: 6px;
+  margin-left: 4px;
 }
 
 .listComment {
