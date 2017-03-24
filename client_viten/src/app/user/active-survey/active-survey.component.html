@@ -52,7 +52,7 @@
       </div>
       <div *ngIf="noenable">
         <div class="txt" *ngIf="!this.done && !this.nicknamePage"><span class="questionTitle">{{this.survey.questionlist[page].lang.no.txt}}</span></div>
-        <div class="surveyDone" *ngIf="this.done && this.postDone" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
+        <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
       </div>
 
       <!-- Childcomponents that handle each answer-type -->
