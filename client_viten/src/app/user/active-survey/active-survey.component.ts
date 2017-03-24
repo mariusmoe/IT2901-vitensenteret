@@ -146,7 +146,7 @@ export class ActiveSurveyComponent implements OnInit {
     if (this.survey.isPost || this.survey.postKey !== undefined) {
       this.postDone = false;
     }
-    this.timer.newTimer('1sec', 1);
+    this.timer.newTimer('idleTimer', 1);
     this.subscribeabortTimer();
   }
 
@@ -166,7 +166,7 @@ export class ActiveSurveyComponent implements OnInit {
     this.response.questionlist = [];
 
     this.subscribeabortTimer();
-    this.timer.delTimer('1sec');
+    this.timer.delTimer('idleTimer');
 
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
@@ -228,7 +228,8 @@ addOrChangeAnswer(alternative: any) {
     }
     // If current page is the last with questions, the next page should be the endSurvey page
     if (this.page + 1 >= this.totalPages) {
-      if (this.survey.postKey || this.survey.isPost) {
+      if (this.survey.postKey !== undefined || this.survey.isPost) {
+        console.log('pre-survey is available');
         this.nicknamePage = true;
       }
       this.endSurvey();
@@ -271,7 +272,7 @@ addOrChangeAnswer(alternative: any) {
     this.abortTimer = undefined;
     } else {
       // Subscribe if timer Id is undefined
-      this.abortTimer = this.timer.subscribe('1sec', e => this.listenCallback());
+      this.abortTimer = this.timer.subscribe('idleTimer', e => this.listenCallback());
     }
   }
 
@@ -301,7 +302,7 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
-    if (!this.survey.isPost || this.postDone === true) {
+    if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
       this.transition = true;
       this.postSurvey();
       this.response.questionlist = [];
