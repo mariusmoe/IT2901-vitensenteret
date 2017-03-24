@@ -192,6 +192,7 @@ export class ActiveSurveyComponent implements OnInit {
  */
 addOrChangeAnswer(alternative: any) {
   this.response.questionlist[this.page] = alternative;
+  console.log(this.response.questionlist);
 }
    /**
     * Updates the nickname in Response
