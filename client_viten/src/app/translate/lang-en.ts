@@ -176,6 +176,7 @@ export const LANG_EN_TRANS = {
   'Search results for search': 'Search results for %0:',
   'Start': 'Start',
   'Start POST': 'Start POST',
+  'Start survey': 'Start survey',
 
   // PDF download lines
   'Date created: d': 'Date created: %0',
