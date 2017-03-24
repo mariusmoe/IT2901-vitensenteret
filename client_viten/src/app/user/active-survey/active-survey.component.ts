@@ -6,6 +6,8 @@ import { Survey, QuestionObject } from '../../_models/survey';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
+import { TranslateService } from '../../_services/translate.service';
+
 
 
 
@@ -46,7 +48,7 @@ export class ActiveSurveyComponent implements OnInit {
   private englishEnabled: boolean;
   private enenable: boolean;
   private noenable: boolean;
-
+   
   postDone; // postDone is a boolean that tells if the pre-post has been handled. Is only initialized if survey is pre/post
   nicknamePage; // Only initialized if pre-post. Is true when the user is on the nickname page.
 
@@ -56,6 +58,7 @@ export class ActiveSurveyComponent implements OnInit {
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
+
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
@@ -80,8 +83,11 @@ export class ActiveSurveyComponent implements OnInit {
   }
 
   constructor(private surveyService: SurveyService,
-    private router: Router, private route: ActivatedRoute, private timer: SimpleTimer, public dialog: MdDialog) {
-
+    private router: Router,
+    private route: ActivatedRoute,
+    private timer: SimpleTimer,
+    public dialog: MdDialog,
+    public translateService: TranslateService) {
   }
 
   /**
