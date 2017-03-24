@@ -128,9 +128,12 @@
   justify-content: space-between;
   align-items: center;
   position: fixed;
-  bottom: 0;
+  align-self: center;
+  margin: 0px;
+  bottom: 5%;
   height: 15vh;
-  width: 100%;
+  width: 96%;
+  left: 2%;
 
   .qnavigateArea{
     padding: 0 5px 0 5px;

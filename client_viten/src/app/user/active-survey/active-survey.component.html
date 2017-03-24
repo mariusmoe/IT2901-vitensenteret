@@ -22,7 +22,7 @@
 
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
-    <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
+    <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()" [@playGrow]="playButtonActive" (@playGrow.done)="playCycle()">
   </div>
   <div class="startTextContainer" *ngIf="!started">
     <div class="startText"> Start Undersøkelse </div>
@@ -71,11 +71,11 @@
       <div class="qnavigateArea"><input type='image' [hidden]="this.page === 0" class="qnavigateArea" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition" />
       </div>
       <h3>{{page+1}}/{{totalPages}}</h3>
-      <div class="qnavigateArea"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition">
+      <div class="qnavigateArea"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition" [@shakeArrow]="lastQuestionAnswered" (@shakeArrow.done)="animationEnd()">
+      </div>
         <!-- This arrow is only visible within the nickname component, as it directs the user from that very component to the endMessage screen -->
       <div class="qnavigateArea" *ngIf="this.nicknamePage && this.survey.isPost"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="endSurvey()">
       </div>
-    </div>
 
   </div>
 </div>
