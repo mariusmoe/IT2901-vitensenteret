@@ -44,14 +44,14 @@
       <tr *ngFor="let label of chartLabels; let i = index;">
         <td class="option">{{label}}</td>
         <td>{{chartData[0].data[i]}}</td>
-        <td>{{((chartData[0].data[i]/responses.length)*100).toFixed(2)}} %</td>
+        <td>{{((chartData[0].data[i]/responses.length)*100)}} %</td>
         <td *ngIf="postResponses && postResponses.length > 0">{{chartData[1].data[i]}}</td>
-        <td *ngIf="postResponses && postResponses.length > 0">{{((chartData[1].data[i]/postResponses.length)*100).toFixed(2)}} %</td>
+        <td *ngIf="postResponses && postResponses.length > 0">{{((chartData[1].data[i]/postResponses.length)*100)}} %</td>
       </tr>
       <tr *ngIf="!questionObject.required">
         <td class="option">{{'Did not answer' | translate}}</td>
         <td>{{(responses.length - (questionObject.mode === 'multi' ? total : total))}}</td>
-        <td>{{((responses.length - (questionObject.mode === 'multi' ? total : total)) / (responses.length)*100).toFixed(2)}} %</td>
+        <td>{{((responses.length - (questionObject.mode === 'multi' ? total : total)) / (responses.length)*100)}} %</td>
       </tr>
     </table>
   </div>
