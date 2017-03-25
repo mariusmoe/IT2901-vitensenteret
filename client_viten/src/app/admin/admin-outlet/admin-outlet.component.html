@@ -9,14 +9,22 @@
       ><app-logo-component logoVariant="text" color="primary" [useColorContrast]="true" height="100%" width="400px"></app-logo-component></a>
     </div>
     <div class="flexchild alignRight">
-      <button md-raised-button color="accent" routerLink="/admin/settings">
+      <button md-button [mdMenuTriggerFor]="menu">
         <md-icon>account_circle</md-icon>
-        {{ 'Settings' | translate }}
+        {{ 'User' | translate }}
       </button>
-      <button md-raised-button color="accent" (click)="logout()">
-        <md-icon>exit_to_app</md-icon>
-        {{ 'Log out' | translate }}
-      </button>
+      <md-menu #menu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
+        <button md-menu-item routerLink="/admin/settings">
+          <md-icon>settings</md-icon>
+          {{ 'Settings' | translate }}
+        </button>
+        <button md-menu-item (click)="logout()">
+          <md-icon>exit_to_app</md-icon>
+          {{ 'Log out' | translate }}
+        </button>
+      </md-menu>
+
+
     </div>
   </md-toolbar>
   <!-- <div class="navbar">

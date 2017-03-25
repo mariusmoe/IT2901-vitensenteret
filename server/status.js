@@ -87,11 +87,15 @@ module.exports = {
     message: 'The copy failed at copying responses',
     code: 2023
   },
+  SURVEY_DELETED: {
+    message: 'Survey has been deleted',
+    code: 2026
+  },
 
   // ROUTER CODES
   ROUTE_INVALID: {
     message: "The requested route does not exist. Did you forget a param?",
-    code: 2024
+    code: 2025
   },
   ROUTE_SURVEYS_VALID_NO_SURVEYS: {
     message: "Request successful, but no surveys exist.",
