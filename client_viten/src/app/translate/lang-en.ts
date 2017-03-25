@@ -34,6 +34,7 @@ export const LANG_EN_TRANS = {
   'Option': 'Option',
   'Percentage': 'Percentage',
   'Responses': 'Responses',
+  'User': 'User',
 
   // roles
   'admin': 'Admin',

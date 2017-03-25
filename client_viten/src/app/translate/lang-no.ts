@@ -34,6 +34,7 @@ export const LANG_NO_TRANS = {
   'Option': 'Valg',
   'Percentage': 'Prosent',
   'Responses': 'Svar',
+  'User': 'Bruker',
 
   // Roles
   'admin': 'Superadmin',
