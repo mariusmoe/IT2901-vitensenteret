@@ -5,7 +5,7 @@
   <div class="rightSide" #surveyDOM>
 
 
-    <md-menu #downloadMenu="mdMenu">
+    <md-menu #downloadMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
       <button md-menu-item  (click)="downloadAsPDF()" [disabled]="generatingPDF">
         <md-icon>picture_as_pdf</md-icon> {{ 'Download as PDF' | translate }}
       </button>
@@ -18,7 +18,7 @@
     </md-menu>
 
 
-    <md-menu #copyMenu="mdMenu">
+    <md-menu #copyMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
       <button md-menu-item  (click)="copySurvey()" [disabled]="generatingPDF">
         {{ 'Copy' | translate }}
       </button>
