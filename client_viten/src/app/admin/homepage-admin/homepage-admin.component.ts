@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy, ViewChild, animate, state, style, transition, trigger  } from '@angular/core';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { SurveyService } from '../../_services/survey.service';
 import { TranslateService } from '../../_services/translate.service';
 import { Survey } from '../../_models/survey';
@@ -34,10 +35,14 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
   private routerSub: Subscription;
 
+    public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
+
   constructor(private surveyService: SurveyService,
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
+    public dialog: MdDialog,
+    public snackBar: MdSnackBar,
     private translateService: TranslateService) {
   }
 
@@ -84,7 +89,40 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * Delete current survey
+   *
+   * Promts the user to delete the survey
+   */
+  deleteSurvey(surveyId: string) {
 
+      this.dialogRef = this.dialog.open(DeleteSurveyDialog, {
+        disableClose: false
+      });
+      this.dialogRef.afterClosed().subscribe(result => {
+        // console.log('result: ' + result);
+        if (result === 'yes') {
+          this.surveyService.deleteSurvey(surveyId).subscribe(
+            _result => {
+              // delete SUCCESS
+              this.openSnackBar(this.translateService.instant('Survey deleted'), 'SUCCESS');
+              this.router.navigate(['admin']);
+            },
+            error => {
+              console.error('Error deleting ' + surveyId);
+            }
+          );
+        }
+        this.dialogRef = null;
+      });
+  }
+
+
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 4000,
+    });
+  }
 
   /**
    * Downloads the raw data of the survey
@@ -244,4 +282,28 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     });
   }
 
+}
+
+
+
+/**
+ * DeleteSurveyDialog
+ *
+ * Holds dialog logic
+ */
+@Component({
+  selector: 'delete-survey-dialog',
+  template: `
+  <h1>{{ 'Are you sure you want to delete this survey?' | translate }}</h1>
+  <br>
+  <p>{{ 'The survey will be deleted! This action is permanent!' | translate }}</p>
+  <md-dialog-actions>
+    <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
+    <button md-raised-button color="primary"  md-dialog-close>{{ 'Cancel' | translate }}</button>
+  </md-dialog-actions>
+  `,
+  styleUrls: ['./homepage-admin.component.scss']
+})
+export class DeleteSurveyDialog {
+  constructor(public dialogRef: MdDialogRef<DeleteSurveyDialog>) { }
 }

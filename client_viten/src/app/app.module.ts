@@ -10,7 +10,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { HostListener } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
+import { HomepageAdminComponent, DeleteSurveyDialog } from './admin/homepage-admin/homepage-admin.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { AuthGuard } from './_guards/auth.guard';
@@ -79,7 +79,8 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     LogoComponentComponent,
     SinglechoiceComponent,
     NicknameComponent,
-    QuitsurveyPromptComponent
+    QuitsurveyPromptComponent,
+    DeleteSurveyDialog
 
   ],
   imports: [
@@ -100,7 +101,8 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     SurveyAlternativesDialog,
     SurveyPublishDialog,
     CredentialDialog,
-    QuitsurveyPromptComponent
+    QuitsurveyPromptComponent,
+    DeleteSurveyDialog
   ],
   providers: [
     AuthGuard,

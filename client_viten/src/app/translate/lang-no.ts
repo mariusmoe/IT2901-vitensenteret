@@ -130,6 +130,9 @@ export const LANG_NO_TRANS = {
   'Create post-survey': 'Lag post-undersøkelse',
   'Edit post-survey': 'Endre post-undersøkelse',
   'Copy with responses': 'Kopier med svarene',
+  'Survey deleted': 'Undersøkelse slettet',
+  'Are you sure you want to delete this survey?': 'Er du sikker på at du vil slette denne undersøkelsen?',
+  'The survey will be deleted! This action is permanent!': 'Undersøkelsen vil bli slettet! Denne handlingen er permanent!',
 
 
   // Admin settings component
