@@ -9,6 +9,9 @@ let should = chai.should();
 let expect = chai.expect;
 chai.use(chaiHttp);
 
+let mongoose = require('mongoose');
+let Survey  = require('../models/survey');
+let Response  = require('../models/response');
 
 // testing variables
 
@@ -88,13 +91,17 @@ describe('Survey API', () => {
 
   // BEFORE
   before( (done) => {
-    chai.request(server)
-      .post('/api/auth/register_developer')
-      .send({'email': 'test@test.no', 'password': 'test'})
-      .end((err, res) => {
-        //res.should.have.status(200);
-        done();
+    Survey.remove({}, () => {
+      Response.remove({}, () => {
+        chai.request(server)
+          .post('/api/auth/register_developer')
+          .send({'email': 'test@test.no', 'password': 'test'})
+          .end((err, res) => {
+            //res.should.have.status(200);
+            done();
+          });
       });
+    });
   });
 
 
@@ -280,6 +287,70 @@ describe('Survey API', () => {
   }); // end describe /api/survey/ GET
 
 
+
+  // copy tests
+  describe('/api/survey/copy/surveyId POST',() => {
+    it('should return 400 given bad surveyId format /api/survey/copy/surveyId POST', (done) => {
+      // alter our object
+      let body = { 'includeResponses': true, 'copyLabel': 'COPY' };
+      chai.request(server)
+        .post('/api/survey/copy/' + 'InvalidID')
+        .set('Authorization', jwt)
+        .send(body) // send our modified object
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.SURVEY_BAD_ID.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.SURVEY_BAD_ID.code);
+          res.should.have.status(400);
+          done();
+        });
+    });
+
+    it('should return 404 given surveyId not found in DB /api/survey/copy/surveyId POST', (done) => {
+      // alter our object
+      let body = { 'includeResponses': true, 'copyLabel': 'COPY' };
+      chai.request(server)
+        .post('/api/survey/copy/' + 'aaaaaaaaaaaaaaaaaaaaaaaa')
+        .set('Authorization', jwt)
+        .send(body) // send our modified object
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.body.message.should.equal(status.SURVEY_NOT_FOUND.message);
+          res.body.should.have.property('status');
+          res.body.status.should.equal(status.SURVEY_NOT_FOUND.code);
+          res.should.have.status(404);
+          done();
+        });
+    });
+
+    it('should return 200 given valid id, without responses /api/survey/copy/surveyId POST', (done) => {
+      // alter our object
+      let body = { 'includeResponses': false, 'copyLabel': 'COPY' };
+      chai.request(server)
+        .post('/api/survey/copy/' + surveyId)
+        .set('Authorization', jwt)
+        .send(body) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(200);
+          expect(val.surveyValidation(res.body)).to.equal(true);
+          done();
+        });
+    });
+    it('should return 200 given valid id, with responses /api/survey/copy/surveyId POST', (done) => {
+      // alter our object
+      let body = { 'includeResponses': true, 'copyLabel': 'COPY' };
+      chai.request(server)
+        .post('/api/survey/copy/' + surveyId)
+        .set('Authorization', jwt)
+        .send(body) // send our modified object
+        .end( (err, res) => {
+          res.should.have.status(200);
+          expect(val.surveyValidation(res.body)).to.equal(true);
+          done();
+        });
+    });
+  });
 
   describe('/api/survey/ PATCH',() => {
     // PATCH: PATCH SURVEY
@@ -488,19 +559,21 @@ describe('Survey API', () => {
     });
 
     it('should return 200 given empty database /api/survey/ GET', (done) => {
-      chai.request(server)
-      .delete('/api/survey/' + surveyId)
-      .set('Authorization', jwt)
-      .end((err, res) => {
+      Survey.remove({}, () => {
         chai.request(server)
-        .get('/api/survey/')
+        .delete('/api/survey/' + surveyId)
+        .set('Authorization', jwt)
         .end((err, res) => {
-          res.body.should.have.property('message');
-          res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
-          res.body.should.have.property('status');
-          res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
-          res.should.have.status(200);
-          done();
+          chai.request(server)
+          .get('/api/survey/')
+          .end((err, res) => {
+            res.body.should.have.property('message');
+            res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
+            res.body.should.have.property('status');
+            res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
+            res.should.have.status(200);
+            done();
+          });
         });
       });
     });
