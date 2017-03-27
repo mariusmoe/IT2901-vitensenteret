@@ -16,6 +16,7 @@ h1, h2, h3, h4, h5, h6 {
   margin: 0 auto;
 }
 
+* { -webkit-tap-highlight-color: rgba(0, 0, 0, 0); }
 
 // SET THE THEME IN viten.themes.scss! DO NOT MODIFY THE CODE BELOW
 $survey-app-primary: mat-palette(nth($vitenPrimary, 1), nth($vitenPrimary, 2), nth($vitenPrimary, 3), nth($vitenPrimary, 4));
