@@ -18,6 +18,7 @@
   align-items: center;
   justify-content: center;
   height: 75vh;
+  border-radius: 75vh;
 }
 /*No border around playbutton when clicked*/
 .playbutton.clicked{
@@ -31,6 +32,7 @@
   height: 10vh;
   width: 10vh;
   opacity: 0.4;
+  border-radius: 10vh;
 }
 .exitButton:hover{
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
@@ -51,6 +53,7 @@
 .svgButton{
    width: 60vh;
    height: 60vh;
+   border-radius: 60vh;
 }
 .svgButton:focus {outline: none;}
 .qnavigateArea:focus {outline: none;}
@@ -231,6 +234,7 @@ input[type=image]:disabled
 .flag {
   height: 8vw;
   width: 8vw;
+  border-radius: 8vw;
 }
 
 .flag:focus{outline: none;}
