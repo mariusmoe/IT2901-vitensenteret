@@ -151,9 +151,23 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    * @param  {string} type the type of raw data. Either 'csv' or 'json'
    */
   downloadAs(type: string) {
-    this.surveyService.getSurveyAs(this.survey._id, type).subscribe(
+    if (type === 'json') {
+      const dlLink = document.createElement('a');
+      dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
+
+      const blob = new Blob([JSON.stringify({ survey: this.survey, responses: this.responses}, null, '\t')], { type: 'application/json' });
+      const url = window.URL.createObjectURL(blob);
+      dlLink.href = url;
+      // Then we do some DOM trickery to click this link to begin the download
+      document.body.appendChild(dlLink);
+      dlLink.click();
+      document.body.removeChild(dlLink);
+      return;
+    }
+
+    this.surveyService.getSurveyAsCSV(this.survey._id).subscribe(
       result => {
-        const data = (type === 'csv' ? result._body : result.json());
+        const data = result._body;
         const dlLink = document.createElement('a');
         dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
         const blob = new Blob([result._body], { type: 'text/csv' });
