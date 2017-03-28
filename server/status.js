@@ -91,6 +91,22 @@ module.exports = {
     message: 'Survey has been deleted',
     code: 2026
   },
+  NO_NICKNAME_PROVIDED: {
+    message: 'No nickname provided',
+    code: 2027
+  },
+  NICKNAME_TAKEN: {
+    message: 'nickname taken',
+    code: 2028
+  },
+  UNKNOWN_NICKNAME: {
+    message: 'Unknown nicname',
+    code: 2029
+  },
+  NO_NICKNAMES_FOUND: {
+    message: 'Could not find any nicnames',
+    code: 2030
+  },
 
   // ROUTER CODES
   ROUTE_INVALID: {
