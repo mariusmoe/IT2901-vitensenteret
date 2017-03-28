@@ -73,6 +73,7 @@ export class ActiveSurveyComponent implements OnInit {
   transition = false; // If true, animation between pages are triggerd
   englishEnabled: boolean;
   Twolanguage: boolean;
+  private noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
 
   done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
@@ -136,6 +137,9 @@ export class ActiveSurveyComponent implements OnInit {
           return;
         }
         this.survey = result.survey;
+        if (!this.survey.active) {
+          this.router.navigate(['/choosesurvey']);
+        }
         this.response = <Response> {
             nickname: undefined,
             questionlist: [],
@@ -176,6 +180,16 @@ export class ActiveSurveyComponent implements OnInit {
     }
     this.timer.newTimer('idleTimer', 1);
     this.subscribeabortTimer();
+    // This method checks if a qestion is required and has been answered
+    if (this.survey.questionlist[this.page].required) {
+      if (this.response.questionlist[this.page] == null) {
+        this.noreqans = true;
+      } else {
+        this.noreqans = false;
+      }
+    } else {
+      this.noreqans = false;
+    }
   }
 
 /**
@@ -221,13 +235,12 @@ export class ActiveSurveyComponent implements OnInit {
  * @param  {any} alternative a list of numbers to send to survey
  */
 addOrChangeAnswer(alternative: any) {
-  this.response.questionlist[this.page] = alternative;
-
-
-  if (this.page + 1 === this.totalPages) {
+  if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null) {
     this.animLoop = true;
+    this.lastQuestionAnswered = 'active';
+    this.noreqans = false;
   }
-
+  this.response.questionlist[this.page] = alternative;
 }
    /**
     * Updates the nickname in Response
@@ -299,6 +312,16 @@ addOrChangeAnswer(alternative: any) {
   animEnd(event) {
     if (!event.fromState) {
       this.transition = false;
+      // This method checks if a qestion is required and has been answered
+      if (this.survey.questionlist[this.page].required) {
+        if (this.response.questionlist[this.page] == null) {
+          this.noreqans = true;
+        } else {
+          this.noreqans = false;
+        }
+      } else {
+        this.noreqans = false;
+      }
     }
   }
 

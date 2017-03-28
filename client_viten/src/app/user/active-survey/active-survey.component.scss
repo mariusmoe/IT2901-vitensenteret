@@ -18,6 +18,7 @@
   align-items: center;
   justify-content: center;
   height: 75vh;
+  border-radius: 75vh;
 }
 /*No border around playbutton when clicked*/
 .playbutton.clicked{
@@ -31,6 +32,7 @@
   height: 10vh;
   width: 10vh;
   opacity: 0.4;
+  border-radius: 10vh;
 }
 .exitButton:hover{
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
@@ -51,12 +53,13 @@
 .svgButton{
    width: 60vh;
    height: 60vh;
+   border-radius: 60vh;
 }
 .svgButton:focus {outline: none;}
 .qnavigateArea:focus {outline: none;}
 .exitButton:focus {outline: none;}
 
-/* Styling for the container of the Start Survey text above the play button */
+/* Styling for the container of the Start Survey text below the play button */
 .startTextContainer{
   width: 100vw;
   height: 10vh;
@@ -83,10 +86,10 @@
 /* Styling for of the Start Survey text above the play button */
 .startText{
   font-family: 'Baloo Bhaina', cursive;
-  font-size: 50px;
-  font-size: 5vw;
+  font-size: 6vw;
   font-weight: bold;
-  color: black;
+  color: #263238;
+  text-shadow: 6px 6px 8px #888888;
 }
 
 /* Styling for the container for the logos under the play button */
@@ -123,7 +126,6 @@
 
 /*This is the navigation pane that lets you navigate between questions*/
 .qnavigate {
-  font-family: 'Baloo Bhaina', cursive;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -179,7 +181,15 @@ h3 {
 
 .questionTitle{
   font-family: 'Baloo Bhaina', cursive;
-  font-size: 3vh;
+  color: #263238;
+  font-size: 4vw;
+  line-height: 4vw;
+}
+
+.qtext {
+  font-family: 'Baloo Bhaina', cursive;
+  color: #263238;
+  font-size: 3vw;
 }
 
 .surveyDone{
@@ -215,6 +225,7 @@ h3 {
   height: inherit;
   width: inherit;
 }
+
 input[type=image]:disabled
 {
     opacity:0.5;
@@ -223,6 +234,7 @@ input[type=image]:disabled
 .flag {
   height: 8vw;
   width: 8vw;
+  border-radius: 8vw;
 }
 
 .flag:focus{outline: none;}
