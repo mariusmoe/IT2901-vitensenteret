@@ -232,14 +232,12 @@ export class ActiveSurveyComponent implements OnInit {
  * @param  {any} alternative a list of numbers to send to survey
  */
 addOrChangeAnswer(alternative: any) {
-  this.response.questionlist[this.page] = alternative;
-
-  // mergeconflict resolve
-  if (this.page + 1 === this.totalPages) {
+  if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
+    this.noreqans = false;
   }
-
+  this.response.questionlist[this.page] = alternative;
 }
    /**
     * Updates the nickname in Response
