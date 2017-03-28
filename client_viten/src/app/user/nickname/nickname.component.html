@@ -1,6 +1,13 @@
 <md-card>
   <md-card-content>
+    <h1>Search color</h1>
+    <ng2-completer [(ngModel)]="searchStr" [datasource]="dataService" [minSearchLength]="0"></ng2-completer>
+    <!-- Uses the ng2-completer to search for already-existing nicknames.
+         If name exists, it will suggest new names or combinatios of others-->
     <h2>Hva heter du?</h2>
-    <input type='text' class="freetxtBox" [(ngModel)] = "textValue" #textBox maxlength="100" name="" placeholder="Max 100" (change) = "updateAnswers()">
+    <ng2-completer [(ngModel)]="nickname" placeholder [datasource]="suggestions" [minSearchLength]="0" (change)="updateAnswers()"></ng2-completer>`
+
+    <!-- <h2>Hva heter du?</h2>
+    <input type='text' class="freetxtBox" [(ngModel)] = "textValue" #textBox maxlength="100" name="" placeholder="Max 100" (change) = "updateAnswers()"> -->
   </md-card-content>
 </md-card>

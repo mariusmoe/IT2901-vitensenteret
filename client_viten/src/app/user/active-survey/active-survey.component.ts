@@ -198,6 +198,7 @@ addOrChangeAnswer(alternative: any) {
     */
    checkNick(nickname) {
      this.response.nickname = nickname;
+     console.log('Added nick: ', this.response.nickname);
    }
 
 /**

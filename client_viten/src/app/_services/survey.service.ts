@@ -81,6 +81,14 @@ changeChoosesurvey(password: string): Observable<boolean> {
     return localStorage.getItem('token');
   }
 
+  /**
+   * Gets all nicknames a survey has registered
+   * @return {[type]} [description]
+   */
+  public getNicknames() {
+    return [];
+  }
+
 
 
   /**
