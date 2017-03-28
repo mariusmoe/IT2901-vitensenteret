@@ -175,7 +175,7 @@ export class ActiveSurveyComponent implements OnInit {
   /**
    * This method starts the survey as well as the inactivity timer
    */
-  private startSurvey() {
+  startSurvey() {
     // Checks if the survey is inactive
     if (this.route.snapshot.params['surveyId']) {
       const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
