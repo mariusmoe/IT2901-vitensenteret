@@ -196,7 +196,7 @@ addOrChangeAnswer(alternative: any) {
     * @param  {[type]} nickname [description]
     * @return {[type]}          [description]
     */
-   checkNick(nickname) {
+   updateNick(nickname) {
      this.response.nickname = nickname;
      console.log('Added nick: ', this.response.nickname);
    }
