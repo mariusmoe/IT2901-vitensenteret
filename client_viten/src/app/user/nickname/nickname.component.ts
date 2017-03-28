@@ -68,9 +68,7 @@ export class NicknameComponent implements OnInit {
       // if nickname is taken, use the ng2-completer tool to suggest other names and combinations of them.
       // Database is checked if nick is taken
       if (this.nickname ) {}
-      this.suggestions = [
-        this.nickname + '123', this.nickname + '456'
-      ];
+
       console.log(this.suggestions);
 
     }
@@ -81,12 +79,17 @@ export class NicknameComponent implements OnInit {
      * new nicknames, to not cause duplicates.
      * @return {[type]} [description]
      */
-    checkNickname () {
+    openNickname () {
       this.allNames = this.surveyService.getNicknames();
       if (!this.allNames.contains(this.nickname)) {
         console.log('nickname is open');
+        return true;
       }
       console.log('nickname is taken');
+      this.suggestions = [
+        this.nickname + '123', this.nickname + '456'
+      ];
+      return false;
     }
 
 }

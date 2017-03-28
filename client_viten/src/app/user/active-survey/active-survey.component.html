@@ -57,7 +57,7 @@
 
       <!-- Childcomponents that handle each answer-type -->
       <div class="answerTypes">
-        <app-nickname *ngIf = "(this.survey.isPost || !this.survey.postKey!==undefined) && this.nicknamePage && !this.postDone" [questionObject] = survey.questionlist[page] (answer) = 'checkNick($event)'></app-nickname>
+        <app-nickname *ngIf = "(this.survey.isPost || !this.survey.postKey!==undefined) && this.nicknamePage && !this.postDone" [questionObject] = survey.questionlist[page] (answer) = 'updateNick($event)'></app-nickname>
         <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
         <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
         <app-single-choice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-single-choice>
