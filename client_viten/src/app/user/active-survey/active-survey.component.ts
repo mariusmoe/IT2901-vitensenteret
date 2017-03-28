@@ -1,4 +1,5 @@
-import { Component, OnInit, trigger, state, transition, style, keyframes, animate, Input, Output, HostListener } from '@angular/core';
+import { Component, OnInit, Input, Output, HostListener } from '@angular/core';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { SurveyService } from '../../_services/survey.service';
 import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params } from '@angular/router';
