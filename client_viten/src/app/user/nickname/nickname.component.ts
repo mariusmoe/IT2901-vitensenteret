@@ -41,6 +41,8 @@ export class NicknameComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.allNames = this.surveyService.getNicknames();
+    console.log('These are the names: ', this.allNames);
   }
 
     /**
@@ -80,7 +82,6 @@ export class NicknameComponent implements OnInit {
      * @return {[type]} [description]
      */
     openNickname () {
-      this.allNames = this.surveyService.getNicknames();
       if (!this.allNames.contains(this.nickname)) {
         console.log('nickname is open');
         return true;
