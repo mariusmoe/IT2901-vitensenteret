@@ -388,7 +388,7 @@ exports.answerOneSurvey = (req, res, next) => {
 
 exports.getNicknamesForOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
-  Nickname.find({surveyId: surveyId}, (err, nicknames) => {
+  Nickname.find({surveyId: surveyId}, {'nickname': true}, (err, nicknames) => {
     if (err) { return next(err); }
     if (!nicknames) {
       return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
