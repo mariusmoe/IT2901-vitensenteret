@@ -71,8 +71,8 @@ md-card {
   display: inline-block;
   transform: scale(0.68);
   position: absolute;
-  top: 70px;
-  right: -9px;
+  top: 27px;
+  right: 65px;
   color: white;
   md-chip {
     outline: none;
@@ -80,4 +80,11 @@ md-card {
   .mat-accent {
     color: white;
   }
+}
+
+.activeToggle {
+  display: inline-block;
+  position: absolute;
+  top: 62px;
+  right: 14px;
 }
