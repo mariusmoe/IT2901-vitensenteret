@@ -131,7 +131,9 @@ export class ActiveSurveyComponent implements OnInit {
     // Sets default language to Norwegian at startup
     this.switchtono();
     if (this.route.snapshot.params['surveyId']) {
-      this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+      const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+        sub.unsubscribe();
+
         if (!result) {
           console.log('DEBUG: BAD surveyId param from router!');
           // TODO: Redirect to base create survey ?
@@ -173,23 +175,37 @@ export class ActiveSurveyComponent implements OnInit {
   /**
    * This method starts the survey as well as the inactivity timer
    */
-  startSurvey() {
-    console.log('survey started');
-    this.started = true;
-    if (this.survey.isPost || this.survey.postKey !== undefined) {
-      this.postDone = false;
-    }
-    this.timer.newTimer('idleTimer', 1);
-    this.subscribeabortTimer();
-    // This method checks if a qestion is required and has been answered
-    if (this.survey.questionlist[this.page].required) {
-      if (this.response.questionlist[this.page] == null) {
-        this.noreqans = true;
-      } else {
-        this.noreqans = false;
-      }
-    } else {
-      this.noreqans = false;
+  private startSurvey() {
+    // Checks if the survey is inactive
+    if (this.route.snapshot.params['surveyId']) {
+      const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+
+        sub.unsubscribe();
+
+        if (!result.survey.active) {
+          alert('Survey is not available');
+          return;
+        }
+        this.started = true;
+        if (this.survey.isPost || this.survey.postKey !== undefined) {
+          this.postDone = false;
+        }
+        this.timer.newTimer('idleTimer', 1);
+        this.subscribeabortTimer();
+        // This method checks if a qestion is required and has been answered
+        if (this.survey.questionlist[this.page].required) {
+          if (this.response.questionlist[this.page] == null) {
+            this.noreqans = true;
+          } else {
+            this.noreqans = false;
+          }
+        } else {
+          this.noreqans = false;
+        }
+
+
+
+      });
     }
   }
 
@@ -216,7 +232,8 @@ export class ActiveSurveyComponent implements OnInit {
     this.timer.delTimer('idleTimer');
 
     if (this.route.snapshot.params['surveyId']) {
-      this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+      const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+        sub.unsubscribe();
         if (!result) {
           console.log ('DEBUG: BAD surveyId param from router!');
           return;
