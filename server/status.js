@@ -100,11 +100,11 @@ module.exports = {
     code: 2028
   },
   UNKNOWN_NICKNAME: {
-    message: 'Unknown nicname',
+    message: 'Unknown nickname',
     code: 2029
   },
   NO_NICKNAMES_FOUND: {
-    message: 'Could not find any nicnames',
+    message: 'Could not find any nicknames',
     code: 2030
   },
 
