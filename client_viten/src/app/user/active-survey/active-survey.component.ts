@@ -71,6 +71,7 @@ export class ActiveSurveyComponent implements OnInit {
   private page = 0; // The current page the user is on
   private totalPages = 0; // The total amount of pages in the survey
   private transition = false; // If true, animation between pages are triggerd
+  private noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
   private englishEnabled: boolean;
   private Twolanguage: boolean;
 
@@ -176,6 +177,16 @@ export class ActiveSurveyComponent implements OnInit {
     }
     this.timer.newTimer('idleTimer', 1);
     this.subscribeabortTimer();
+    // This method checks if a qestion is required and has been answered
+    if (this.survey.questionlist[this.page].required) {
+      if (this.response.questionlist[this.page] == null) {
+        this.noreqans = true;
+      } else {
+        this.noreqans = false;
+      }
+    } else {
+      this.noreqans = false;
+    }
   }
 
 /**
@@ -223,7 +234,7 @@ export class ActiveSurveyComponent implements OnInit {
 addOrChangeAnswer(alternative: any) {
   this.response.questionlist[this.page] = alternative;
 
-  //mergeconflict resolve
+  // mergeconflict resolve
   if (this.page + 1 === this.totalPages) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
@@ -300,6 +311,16 @@ addOrChangeAnswer(alternative: any) {
   animEnd(event) {
     if (!event.fromState) {
       this.transition = false;
+      // This method checks if a qestion is required and has been answered
+      if (this.survey.questionlist[this.page].required) {
+        if (this.response.questionlist[this.page] == null) {
+          this.noreqans = true;
+        } else {
+          this.noreqans = false;
+        }
+      } else {
+        this.noreqans = false;
+      }
     }
   }
 
