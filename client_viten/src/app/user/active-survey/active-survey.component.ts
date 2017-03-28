@@ -137,6 +137,9 @@ export class ActiveSurveyComponent implements OnInit {
           return;
         }
         this.survey = result.survey;
+        if (!this.survey.active) {
+          this.router.navigate(['/choosesurvey']);
+        }
         this.response = <Response> {
             nickname: undefined,
             questionlist: [],
