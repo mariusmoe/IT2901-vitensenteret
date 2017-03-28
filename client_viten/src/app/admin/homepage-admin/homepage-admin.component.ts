@@ -117,6 +117,28 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * Toggles the active state of the survey
+   */
+  toggleActive() {
+    // store current state
+    const toggleStateBeforePatch = this.survey.active;
+    // set new state
+    this.survey.active = !this.survey.active;
+    // patch the survey
+    const sub1 = this.surveyService.patchSurvey(this.survey._id, this.survey).subscribe(result => {
+      // update the all surveys list as well
+      const sub2 = this.surveyService.getAllSurveys().subscribe(r => sub2.unsubscribe() );
+
+      sub1.unsubscribe();
+    }, error => {
+      // reset if things went bad
+      this.survey.active = toggleStateBeforePatch;
+
+      sub1.unsubscribe();
+    });
+  }
+
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
