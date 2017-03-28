@@ -33,6 +33,7 @@ import { FreetxtComponent } from './user/freetxt/freetxt.component';
 import { YesNoComponent } from './user/yes-no/yes-no.component';
 import { MultiplechoiceComponent } from './user/multiplechoice/multiplechoice.component';
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
+import { Ng2CompleterModule } from "ng2-completer";
 
 
 import { ClipboardModule } from 'ngx-clipboard';
@@ -92,6 +93,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     ChartsModule,
     ClipboardModule,
     DragulaModule,
+    Ng2CompleterModule,
     MaterialModule.forRoot()
   ],
   entryComponents: [
