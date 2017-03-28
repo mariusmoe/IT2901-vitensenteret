@@ -34,6 +34,7 @@ export const LANG_EN_TRANS = {
   'Option': 'Option',
   'Percentage': 'Percentage',
   'Responses': 'Responses',
+  'User': 'User',
 
   // roles
   'admin': 'Admin',
@@ -128,6 +129,9 @@ export const LANG_EN_TRANS = {
   'Create post-survey': 'Create post-survey',
   'Edit post-survey': 'Edit post-survey',
   'Copy with responses': 'Copy with responses',
+    'Survey deleted': 'Survey deleted',
+    'Are you sure you want to delete this survey?': 'Are you sure you want to delete this survey?',
+    'The survey will be deleted! This action is permanent!': 'The survey will be deleted! This action is permanent!',
 
   // Admin settings component
   'Retype password': 'Retype password',
@@ -176,6 +180,7 @@ export const LANG_EN_TRANS = {
   'Search results for search': 'Search results for %0:',
   'Start': 'Start',
   'Start POST': 'Start POST',
+  'Start survey': 'Start survey',
 
   // PDF download lines
   'Date created: d': 'Date created: %0',

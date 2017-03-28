@@ -96,6 +96,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           this.lockdown = true;
           this.setupInitialSurveyStateFrom(result.survey);
           this.survey.name = 'POST: ' + this.survey.name;
+          this.survey.isPost = true;
 
           this.preSurvey = result.survey;
         } else {
@@ -207,8 +208,12 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     // remove options-properties of non-multi questions
     for (const qo of clone.questionlist) {
       if (qo.mode !== 'multi' && qo.mode !== 'single') {
-        delete qo.lang.no.options;
-        delete qo.lang.en.options;
+        if (qo.lang.no) {
+          delete qo.lang.no.options;
+        }
+        if (qo.lang.en) {
+          delete qo.lang.en.options;
+        }
       }
     }
 
@@ -240,21 +245,18 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // this.route.parent gives us the PARENT domain (ranging from '' to the parent
       // of this route). We want to return to the parent url in a programatic
       // fashion as to avoid issues should the route name be altered.
-      if (this.isPatch) {
-        // We append /:surveyId at the end to bring the user back to the survey he or she just edited.
-        // so long as this isn't a post-survey..
-        if (!this.survey.isPost) {
-          this.router.navigate([this.route.parent.snapshot.url.join('/') + '/' + this.survey._id]);
-          return;
-        }
+      if (this.preSurvey && this.preSurvey._id) {
+        this.router.navigate([this.route.parent.snapshot.url.join('/'), this.preSurvey._id]);
+      } else if (this.survey._id && !this.isPost) {
+        this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
+      } else {
+        this.router.navigate([this.route.parent.snapshot.url.join('/')]);
       }
-      this.router.navigate([this.route.parent.snapshot.url.join('/')]);
     };
 
     // Check prepost conditions first
     if (this.isPost) {
       this.surveyService.postSurvey(clone).subscribe(result => {
-        // success(result)
         this.preSurvey.postKey = result._id;
         this.surveyService.patchSurvey(this.preSurvey._id, this.preSurvey).subscribe(result2 => success(result2), error => err(error));
       }, error => err(error));

@@ -1,10 +1,20 @@
 <div class="searchBox">
-  <md-input-container>
-    <input mdInput type="search" placeholder="{{'Search' | translate}}"
-    [formControl]="searchFormControl" [(value)]="searchInput"
-    md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">
+  <md-input-container class="search">
+    <input mdInput type="search"
+            placeholder="{{'Search' | translate}}"
+            [formControl]="searchFormControl"
+            [(value)]="searchInput"
+            md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">
     <span md-prefix><md-icon class="searchIcon">search</md-icon></span>
   </md-input-container>
+  <button md-mini-fab
+  class="addButton"
+  color="primary"
+  routerLink="/admin/editsurvey"
+  routerLinkActive="active"
+  md-tooltip="{{ 'Create New Survey' | translate }}">
+  <md-icon>add</md-icon>
+</button>
 </div>
 
 
