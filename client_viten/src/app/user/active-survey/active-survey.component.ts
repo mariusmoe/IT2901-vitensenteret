@@ -64,17 +64,17 @@ import { TranslateService } from '../../_services/translate.service';
 
 export class ActiveSurveyComponent implements OnInit {
   @Input() alternative: number; // The answer- \input recieved from child components.
-  private properSurvey = false; // If the survey is valid, posting it to the database is possible.
-  private started = false; // If a survey is started, this is true.
-  private survey: Survey; // The survey-object which is used to access information about the survey
-  private response: Response; // The reposne-object that is used to control all user input
-  private page = 0; // The current page the user is on
-  private totalPages = 0; // The total amount of pages in the survey
-  private transition = false; // If true, animation between pages are triggerd
-  private englishEnabled: boolean;
-  private Twolanguage: boolean;
+  properSurvey = false; // If the survey is valid, posting it to the database is possible.
+  started = false; // If a survey is started, this is true.
+  survey: Survey; // The survey-object which is used to access information about the survey
+  response: Response; // The reposne-object that is used to control all user input
+  page = 0; // The current page the user is on
+  totalPages = 0; // The total amount of pages in the survey
+  transition = false; // If true, animation between pages are triggerd
+  englishEnabled: boolean;
+  Twolanguage: boolean;
 
-  private done = false; // if true it takes you to the endMessage-screen
+  done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
                Is only initialized if survey is pre/post. Set to true in html.*/
   nicknamePage; // Only initialized if pre-post. Is true when the user is on the nickname page.
@@ -168,7 +168,7 @@ export class ActiveSurveyComponent implements OnInit {
   /**
    * This method starts the survey as well as the inactivity timer
    */
-  private startSurvey() {
+  startSurvey() {
     console.log('survey started');
     this.started = true;
     if (this.survey.isPost || this.survey.postKey !== undefined) {

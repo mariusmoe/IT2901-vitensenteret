@@ -19,7 +19,7 @@
 
 
     <md-menu #copyMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
-      <button md-menu-item  (click)="copySurvey()" [disabled]="generatingPDF">
+      <button md-menu-item  (click)="copySurvey(false)" [disabled]="generatingPDF">
         {{ 'Copy' | translate }}
       </button>
       <button md-menu-item (click)="copySurvey(true)" [disabled] = "(responses ? responses.length : 0) == 0">
