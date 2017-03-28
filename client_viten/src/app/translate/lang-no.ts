@@ -188,6 +188,9 @@ export const LANG_NO_TRANS = {
   'Date created: d': 'Dato laget: %0',
   'Date printed: d': 'Dato printet: %0',
 
+  // Nickname component
+  'Name': 'Hva heter du?',
+
 
 
 

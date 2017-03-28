@@ -9,8 +9,6 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 
 
-
-
 @Component({
   selector: 'active-survey',
   templateUrl: './active-survey.component.html',
@@ -31,7 +29,36 @@ import { TranslateService } from '../../_services/translate.service';
         style({opacity: 1, transform: 'scale(1.1)', ofset: 1})
       ]))),
       transition('active => inactive', animate('50ms'))
-    ])
+    ]),
+    trigger('shakeArrow', [
+      state('active', style({})),
+      state('inactive', style({})),
+      transition('inactive => active', animate('500ms', keyframes([
+        style({transform: 'translateX(0) scaleX(1)', ofset: 0.1}),
+        style({transform: 'translateX(2%) scaleX(1)', ofset: 0.2}),
+        style({transform: 'translateX(4%) scaleX(1)', ofset: 0.3}),
+        style({transform: 'translateX(6%) scaleX(1)', ofset: 0.4}),
+        style({transform: 'translateX(8%) scaleX(1)', ofset: 0.5}),
+        style({transform: 'translateX(10%) scaleX(0.9)', ofset: 0.6}),
+        style({transform: 'translateX(6%) scaleX(0.94)', ofset: 0.7}),
+        style({transform: 'translateX(2%) scaleX(0.98)', ofset: 0.8}),
+        style({transform: 'translateX(0) scaleX(1)', ofset: 0.9}),
+        style({transform: 'translateX(0) scaleX(1)', ofset: 1}),
+      ]))),
+      transition('active => inactive', animate('500ms'))
+    ]),
+    trigger('playGrow', [
+      state('active', style({transform: 'scale(1.05)'})),
+      state('inactive', style({transform: 'scale(0.95)'})),
+      transition('inactive => active', animate('2500ms ease-in-out', keyframes([
+        style({opacity: 1, transform: 'scale(0.95)', ofset: 0.1}),
+        style({opacity: 1, transform: 'scale(1.05)', ofset: 1})
+      ]))),
+      transition('active => inactive', animate('2500ms ease-in-out', keyframes([
+        style({opacity: 1, transform: 'scale(1.05)', ofset: 0.1}),
+        style({opacity: 1, transform: 'scale(0.95)', ofset: 1})
+      ]))),
+    ]),
   ]
 })
 
@@ -45,8 +72,7 @@ export class ActiveSurveyComponent implements OnInit {
   private totalPages = 0; // The total amount of pages in the survey
   private transition = false; // If true, animation between pages are triggerd
   private englishEnabled: boolean;
-  private enenable: boolean;
-  private noenable: boolean;
+  private Twolanguage: boolean;
 
   private done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
@@ -60,6 +86,9 @@ export class ActiveSurveyComponent implements OnInit {
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
+  lastQuestionAnswered = 'inactive';
+  animLoop = false;
+  playButtonActive = 'inactive';
 
 
   /**
@@ -99,8 +128,6 @@ export class ActiveSurveyComponent implements OnInit {
   ngOnInit() {
     // Sets default language to Norwegian at startup
     this.switchtono();
-
-
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
@@ -118,7 +145,7 @@ export class ActiveSurveyComponent implements OnInit {
 
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
-        this.noenable = true;
+        this.Twolanguage = true;
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
@@ -142,6 +169,7 @@ export class ActiveSurveyComponent implements OnInit {
    * This method starts the survey as well as the inactivity timer
    */
   private startSurvey() {
+    console.log('survey started');
     this.started = true;
     if (this.survey.isPost || this.survey.postKey !== undefined) {
       this.postDone = false;
@@ -154,6 +182,7 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
+    console.log('survey is done');
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
@@ -164,6 +193,9 @@ export class ActiveSurveyComponent implements OnInit {
     this.response.nickname = undefined;
 
     this.response.questionlist = [];
+    // Animation variable
+    this.lastQuestionAnswered = 'inactive';
+    this.animLoop = false;
 
     this.subscribeabortTimer();
     this.timer.delTimer('idleTimer');
@@ -190,6 +222,13 @@ export class ActiveSurveyComponent implements OnInit {
  */
 addOrChangeAnswer(alternative: any) {
   this.response.questionlist[this.page] = alternative;
+
+  //mergeconflict resolve
+  if (this.page + 1 === this.totalPages) {
+    this.animLoop = true;
+    this.lastQuestionAnswered = 'active';
+  }
+
 }
    /**
     * Updates the nickname in Response
@@ -205,6 +244,7 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
+    console.log('previous question');
     if (this.page <= 0) {
       return;
     }
@@ -222,6 +262,7 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
+    console.log('next question');
     // Handles an empty answer
     if (typeof this.response.questionlist[this.page] === 'undefined') {
       this.response.questionlist[this.page] = -1;
@@ -302,10 +343,13 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
+    console.log('trying to end survey');
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
       this.transition = true;
       this.postSurvey();
       this.response.questionlist = [];
+      this.lastQuestionAnswered = 'inactive';
+      this.animLoop = false;
       this.done = true;
       this.resetTimer();
       return;
@@ -337,24 +381,38 @@ resetTimer() {
 
   /**
   * This method changes the language from eng to no
-  * The mothod should not be visible if there is no alternative languages in the survey
+  * The method should not be visible if there is no alternative languages in the survey
   */
   private switchtono() {
-    this.noenable = true;
-    this.enenable = false;
+    this.Twolanguage = true;
     // Animation change
     this.flagActiveEnglish = 'inactive';
     this.flagActiveNorwegian = 'active';
   }
     /**
     * This method changes the language from no to eng
-    * The mothod should not be visible if there is no alternative languages in the survey
+    * The method should not be visible if there is no alternative languages in the survey
     */
   private switchtoen() {
-    this.enenable = true;
-    this.noenable = false;
+    this.Twolanguage = !true;
     // Animation change
     this.flagActiveEnglish = 'active';
     this.flagActiveNorwegian = 'inactive';
+  }
+
+  animationEnd() {
+    if (this.lastQuestionAnswered === 'inactive' && this.animLoop) {
+      this.lastQuestionAnswered = 'active';
+    } else if (this.lastQuestionAnswered === 'active' && this.animLoop) {
+      this.lastQuestionAnswered = 'inactive';
+    }
+  }
+
+  playCycle() {
+    if (this.playButtonActive === 'inactive') {
+      this.playButtonActive = 'active';
+    } else if (this.playButtonActive === 'active') {
+      this.playButtonActive = 'inactive';
+    }
   }
 }
