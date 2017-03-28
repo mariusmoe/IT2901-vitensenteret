@@ -412,9 +412,9 @@ exports.getNicknamesForOneSurvey = (req, res, next) => {
       Nickname.find({surveyId: surveyId}, {'nickname': true}, (err, nicknames) => {
         // console.log(nicknames);
         if (err) { return next(err); }
-        if (nicknames.length == 0) {
-          return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
-        }
+        // if (nicknames.length == 0) {
+        //   return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+        // }
         return res.status(200).send( {nicknames: nicknames} );
       });
     }
