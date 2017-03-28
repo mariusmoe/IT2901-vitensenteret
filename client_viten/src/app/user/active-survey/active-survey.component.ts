@@ -226,6 +226,7 @@ addOrChangeAnswer(alternative: any) {
 
   if (this.page + 1 === this.totalPages) {
     this.animLoop = true;
+    this.lastQuestionAnswered = 'active';
   }
 
 }
