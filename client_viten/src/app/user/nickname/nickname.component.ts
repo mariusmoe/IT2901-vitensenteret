@@ -52,7 +52,7 @@ export class NicknameComponent implements OnInit {
        sub.unsubscribe();
     },
     error => {
-      console.log('error when get nicknames')
+      console.log('error when get nicknames');
       console.log(error);
     });
   }
