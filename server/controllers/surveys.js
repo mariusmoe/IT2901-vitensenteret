@@ -292,21 +292,23 @@ const getSecureRandomBytes = (callback) => {
 // })
 
 const setNickname = (surveyId, nickname, callback) => {
+  console.log(surveyId + "  -   " + nickname);
   Nickname.find({nickname: nickname}, (err, nickname) => {
-    if (err) {return next(err); }
+    
     if (!nickname) {
-      // Nickname is aviliable
-    getSecureRandomBytes((random) => {
-      let newNickname = new Nickname({
-        nickname: nickname,
-        surveyId: surveyId,
-        uniqueName: random
+      console.log('No nickname taken!');
+        // Nickname is aviliable
+      getSecureRandomBytes((random) => {
+        let newNickname = new Nickname({
+          nickname: nickname,
+          surveyId: surveyId,
+          uniqueName: random
+        });
+        newNickname.save((err, nickname) => {
+          if (err) {return next(err); }
+          callback(false, nickname);
+        });
       });
-      newNickname.save((err, nickname) => {
-        if (err) {return next(err); }
-        callback(false, nickname);
-      });
-    });
     } else {
       // Nickname is taken
       callback(true, null)
@@ -362,6 +364,7 @@ exports.answerOneSurvey = (req, res, next) => {
       } else {
         setNickname(surveyId, responseObject.nickname, (err, nickname) => {
           if(err) {
+            console.log(status.NICKNAME_TAKEN.message);
             return res.status(400).send( {message: status.NICKNAME_TAKEN.message, status: status.NICKNAME_TAKEN.code})
           }
           let newResponse = new Response({

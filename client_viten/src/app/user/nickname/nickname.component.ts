@@ -1,5 +1,5 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
-import { QuestionObject } from '../../_models/survey';
+import { Survey, QuestionObject } from '../../_models/survey';
 import { Response } from '../../_models/response';
 import { CompleterService, CompleterData } from 'ng2-completer';
 import { SurveyService } from '../../_services/survey.service';
@@ -12,6 +12,7 @@ import { SurveyService } from '../../_services/survey.service';
 export class NicknameComponent implements OnInit {
   @Input() questionObject: QuestionObject;
   @Input() response: Response;
+  @Input() survey: Survey;
   @Output() answer = new EventEmitter();
   public nickname: string; // The written nickname
   key; // The key used to store a nickname in localstorage
@@ -41,7 +42,7 @@ export class NicknameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.allNames = this.surveyService.getNicknames();
+    this.allNames = this.surveyService.getNicknames(this.survey._id);
     console.log('These are the names: ', this.allNames);
   }
 

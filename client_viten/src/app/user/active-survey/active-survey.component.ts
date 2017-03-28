@@ -328,9 +328,9 @@ resetTimer() {
  */
   private postSurvey() {
     const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-    if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
-      delete responseClone.nickname;
-    }
+    // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
+    //   delete responseClone.nickname;
+    // }
     this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
       this.properSurvey = true;
     });
