@@ -9,8 +9,6 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 
 
-
-
 @Component({
   selector: 'active-survey',
   templateUrl: './active-survey.component.html',
@@ -74,8 +72,7 @@ export class ActiveSurveyComponent implements OnInit {
   private totalPages = 0; // The total amount of pages in the survey
   private transition = false; // If true, animation between pages are triggerd
   private englishEnabled: boolean;
-  private enenable: boolean;
-  private noenable: boolean;
+  private Twolanguage: boolean;
 
   private done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
@@ -131,8 +128,6 @@ export class ActiveSurveyComponent implements OnInit {
   ngOnInit() {
     // Sets default language to Norwegian at startup
     this.switchtono();
-
-
     if (this.route.snapshot.params['surveyId']) {
       this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         if (!result) {
@@ -150,7 +145,7 @@ export class ActiveSurveyComponent implements OnInit {
 
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
-        this.noenable = true;
+        this.Twolanguage = true;
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
@@ -174,6 +169,7 @@ export class ActiveSurveyComponent implements OnInit {
    * This method starts the survey as well as the inactivity timer
    */
   private startSurvey() {
+    console.log('survey started');
     this.started = true;
     if (this.survey.isPost || this.survey.postKey !== undefined) {
       this.postDone = false;
@@ -186,6 +182,7 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
+    console.log('survey is done');
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
@@ -225,10 +222,13 @@ export class ActiveSurveyComponent implements OnInit {
  */
 addOrChangeAnswer(alternative: any) {
   this.response.questionlist[this.page] = alternative;
+
+  //mergeconflict resolve
   if (this.page + 1 === this.totalPages) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
   }
+
 }
    /**
     * Updates the nickname in Response
@@ -244,6 +244,7 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
+    console.log('previous question');
     if (this.page <= 0) {
       return;
     }
@@ -261,6 +262,7 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
+    console.log('next question');
     // Handles an empty answer
     if (typeof this.response.questionlist[this.page] === 'undefined') {
       this.response.questionlist[this.page] = -1;
@@ -341,6 +343,7 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
+    console.log('trying to end survey');
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
       this.transition = true;
       this.postSurvey();
@@ -378,22 +381,20 @@ resetTimer() {
 
   /**
   * This method changes the language from eng to no
-  * The mothod should not be visible if there is no alternative languages in the survey
+  * The method should not be visible if there is no alternative languages in the survey
   */
   private switchtono() {
-    this.noenable = true;
-    this.enenable = false;
+    this.Twolanguage = true;
     // Animation change
     this.flagActiveEnglish = 'inactive';
     this.flagActiveNorwegian = 'active';
   }
     /**
     * This method changes the language from no to eng
-    * The mothod should not be visible if there is no alternative languages in the survey
+    * The method should not be visible if there is no alternative languages in the survey
     */
   private switchtoen() {
-    this.enenable = true;
-    this.noenable = false;
+    this.Twolanguage = !true;
     // Animation change
     this.flagActiveEnglish = 'active';
     this.flagActiveNorwegian = 'inactive';

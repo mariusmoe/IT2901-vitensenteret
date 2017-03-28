@@ -1,5 +1,6 @@
 import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
+import { TranslateService } from '../../_services/translate.service';
 
 @Component({
   selector: 'app-nickname',
@@ -13,7 +14,7 @@ export class NicknameComponent implements OnInit {
   key;
   savedTxt;
 
-  constructor() { }
+  constructor(public translateService: TranslateService) { }
 
   ngOnInit() {
   }

@@ -46,13 +46,13 @@
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
 
       <!-- Either displays the title of a question or shows the endMessage if the survey is done -->
-      <div *ngIf="enenable">
+      <div *ngIf="!Twolanguage">
         <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.en.txt}}</span></div>
         <div class="surveyDone" *ngIf="this.done && this.postDone" (click)="exitSurvey()"><span>{{survey.endMessage.en}}</span></div>
       </div>
-      <div *ngIf="noenable">
+      <div *ngIf="Twolanguage">
         <div class="txt" *ngIf="!this.done && !this.nicknamePage"><span class="questionTitle">{{this.survey.questionlist[page].lang.no.txt}}</span></div>
-        <div class="surveyDone" *ngIf="this.done && this.postDone" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
+        <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
       </div>
 
       <!-- Childcomponents that handle each answer-type -->
