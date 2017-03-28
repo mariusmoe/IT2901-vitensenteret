@@ -18,6 +18,7 @@ export class NicknameComponent implements OnInit {
   key; // The key used to store a nickname in localstorage
   allNames; // A list of all nicknames a survey has registered
   taken; // Testvariable for whether a nickname is taken or not
+  availableNick; // Control-variable for if a nickname is available
 
   public searchStr: string;
   public dataService: CompleterData;
@@ -42,7 +43,8 @@ export class NicknameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.allNames = this.surveyService.getNicknames(this.survey._id);
+    // this.allNames = this.surveyService.getNicknames(this.survey._id);
+    this.allNames = ['roger', 'per'];
     console.log('These are the names: ', this.allNames);
   }
 
@@ -62,17 +64,20 @@ export class NicknameComponent implements OnInit {
       // Clear suggestions
       this.suggestions = [];
       // Check if nickname is taken
-      this.taken = false;
-      if (!this.taken) {
+      if (this.freeNickname()) {
         // If false, emit nickname
+        this.availableNick = true;
         this.answer.emit(this.nickname);
         localStorage.setItem(this.key, this.nickname);
+        return;
       }
       // if nickname is taken, use the ng2-completer tool to suggest other names and combinations of them.
       // Database is checked if nick is taken
-      if (this.nickname ) {}
+      this.availableNick = false;
 
-      console.log(this.suggestions);
+
+      console.log('Suggestions: ', this.suggestions);
+      console.log('All names: ', this.allNames);
 
     }
 
@@ -82,8 +87,8 @@ export class NicknameComponent implements OnInit {
      * new nicknames, to not cause duplicates.
      * @return {[type]} [description]
      */
-    openNickname () {
-      if (!this.allNames.contains(this.nickname)) {
+    freeNickname () {
+      if (this.allNames.indexOf(this.nickname) === -1) {
         console.log('nickname is open');
         return true;
       }
