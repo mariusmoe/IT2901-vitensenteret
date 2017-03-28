@@ -38,7 +38,7 @@
               <md-hint align="end">
                 {{newPassword2.value.length}} / 4++</md-hint>
           </md-input-container>
-          <md-icon class="done" *ngIf="newPassword.value === newPassword2.value && !newPassword.value === '' ">done all</md-icon>
+          <md-icon class="done" *ngIf="newPassword.value === newPassword2.value && !(newPassword.value === '') ">done all</md-icon>
         </md-card-content>
         <md-card-actions>
           <button md-raised-button

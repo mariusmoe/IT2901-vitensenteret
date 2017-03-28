@@ -73,7 +73,7 @@ export class ActiveSurveyComponent implements OnInit {
   transition = false; // If true, animation between pages are triggerd
   englishEnabled: boolean;
   Twolanguage: boolean;
-  private noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
+  noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
 
   done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.

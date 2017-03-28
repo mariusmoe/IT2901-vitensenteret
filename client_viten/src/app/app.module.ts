@@ -9,6 +9,8 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { HostListener } from '@angular/core';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent, DeleteSurveyDialog } from './admin/homepage-admin/homepage-admin.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
@@ -92,6 +94,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     ChartsModule,
     ClipboardModule,
     DragulaModule,
+    BrowserAnimationsModule,
     MaterialModule.forRoot()
   ],
   entryComponents: [
