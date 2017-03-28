@@ -5,7 +5,12 @@
     <!-- Uses the ng2-completer to search for already-existing nicknames.
          If name exists, it will suggest new names or combinatios of others-->
     <h2>Hva heter du?</h2>
-    <ng2-completer [(ngModel)]="nickname" placeholder [datasource]="suggestions" [minSearchLength]="0" (change)="updateAnswers()"></ng2-completer>`
+    <ng2-completer [(ngModel)]="nickname"
+                    placeholder="empty"
+                    [datasource]="suggestions"
+                    [minSearchLength]="0"
+                    (change)="updateAnswers()">
+    </ng2-completer>`
 
     <!-- <h2>Hva heter du?</h2>
     <input type='text' class="freetxtBox" [(ngModel)] = "textValue" #textBox maxlength="100" name="" placeholder="Max 100" (change) = "updateAnswers()"> -->

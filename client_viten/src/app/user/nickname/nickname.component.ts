@@ -14,40 +14,32 @@ export class NicknameComponent implements OnInit {
   @Input() response: Response;
   @Input() survey: Survey;
   @Output() answer = new EventEmitter();
-  public nickname: string; // The written nickname
+  public searchNickname: string; // The written nickname
   key; // The key used to store a nickname in localstorage
-  allNames; // A list of all nicknames a survey has registered
+  allNames: any; // A list of all nicknames a survey has registered
   taken; // Testvariable for whether a nickname is taken or not
 
   public searchStr: string;
   public dataService: CompleterData;
-  protected searchData = [
-    { color: 'red', value: '#f00' },
-    { color: 'green', value: '#0f0' },
-    { color: 'blue', value: '#00f' },
-    { color: 'cyan', value: '#0ff' },
-    { color: 'magenta', value: '#f0f' },
-    { color: 'yellow', value: '#ff0' },
-    { color: 'black', value: '#000' }
-  ];
+  public suggestions: CompleterData;
+  public searchData = [];
 
   // Randomly generated combination of nicknames will be added based on the nickname written
   // was taken or not. See updateAnswers()
-  public suggestions = [];
+  // public suggestions = [];
   // public suggestions = ['James T. Kirk', 'Benjamin Sisko', 'Jean-Luc Picard', 'Spock',
   // 'Jonathan Archer', 'Hikaru Sulu', 'Christopher Pike', 'Rachel Garrett' ];
 
   constructor(private completerService: CompleterService, private surveyService: SurveyService) {
-    this.dataService = completerService.local(this.searchData, 'color', 'color');
+    this.suggestions = completerService.local(this.searchData, 'nickname', 'nickname');
   }
 
   ngOnInit() {
-    console.log(this.survey._id);
     const sub  = this.surveyService.getNicknames(this.survey._id)
       .subscribe( result => {
-       console.log(result);
        this.allNames = result;
        console.log('These are the names: ', this.allNames);
+       this.allNames.forEach((x) => {this.searchData.push(x)})
        sub.unsubscribe();
     },
     error => {
@@ -70,17 +62,17 @@ export class NicknameComponent implements OnInit {
    */
     updateAnswers() {
       // Clear suggestions
-      this.suggestions = [];
+      // this.suggestions = [];
       // Check if nickname is taken
       this.taken = false;
       if (!this.taken) {
         // If false, emit nickname
-        this.answer.emit(this.nickname);
-        localStorage.setItem(this.key, this.nickname);
+        this.answer.emit(this.searchNickname);
+        localStorage.setItem(this.key, this.searchNickname);
       }
       // if nickname is taken, use the ng2-completer tool to suggest other names and combinations of them.
       // Database is checked if nick is taken
-      if (this.nickname ) {}
+      if (this.searchNickname ) {}
 
       console.log(this.suggestions);
 
@@ -93,14 +85,14 @@ export class NicknameComponent implements OnInit {
      * @return {[type]} [description]
      */
     openNickname () {
-      if (!this.allNames.contains(this.nickname)) {
+      if (!this.allNames.contains(this.searchNickname)) {
         console.log('nickname is open');
         return true;
       }
       console.log('nickname is taken');
-      this.suggestions = [
-        this.nickname + '123', this.nickname + '456'
-      ];
+      // this.suggestions = [
+      //   this.nickname + '123', this.nickname + '456'
+      // ];
       return false;
     }
 
