@@ -32,5 +32,6 @@ export const environment = {
       newUser: 'https://vitensurvey.party:2000/api/auth/register',
       checkChoosesurvey: 'https://vitensurvey.party:2000/api/survey/escape',
       surveyCopy:   'https://vitensurvey.party:2000/api/survey/copy',
+      allNicknames: 'https://vitensurvey.party:2000/api/survey/all_nicknames',
     }
 };
