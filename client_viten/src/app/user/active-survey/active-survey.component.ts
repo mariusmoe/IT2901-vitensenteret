@@ -223,10 +223,9 @@ export class ActiveSurveyComponent implements OnInit {
 addOrChangeAnswer(alternative: any) {
   this.response.questionlist[this.page] = alternative;
 
-  //mergeconflict resolve
+
   if (this.page + 1 === this.totalPages) {
     this.animLoop = true;
-    this.lastQuestionAnswered = 'active';
   }
 
 }
