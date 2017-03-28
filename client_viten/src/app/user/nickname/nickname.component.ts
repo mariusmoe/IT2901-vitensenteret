@@ -19,6 +19,7 @@ export class NicknameComponent implements OnInit {
   allNames; // A list of all nicknames a survey has registered
   taken; // Testvariable for whether a nickname is taken or not
   availableNick; // Control-variable for if a nickname is available
+  pre; // control-variable: true when pre-survey
 
   public searchStr: string;
   public dataService: CompleterData;
@@ -55,6 +56,10 @@ export class NicknameComponent implements OnInit {
       console.log('error when get nicknames');
       console.log(error);
     });
+    if (this.survey.isPost) {
+      this.pre = true;
+    }
+    this.pre = false;
   }
 
     /**
