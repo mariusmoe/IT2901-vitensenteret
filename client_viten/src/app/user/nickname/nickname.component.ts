@@ -43,9 +43,18 @@ export class NicknameComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.allNames = this.surveyService.getNicknames(this.survey._id);
-    this.allNames = ['roger', 'per'];
-    console.log('These are the names: ', this.allNames);
+    console.log(this.survey._id);
+    const sub  = this.surveyService.getNicknames(this.survey._id)
+      .subscribe( result => {
+       console.log(result);
+       this.allNames = result;
+       console.log('These are the names: ', this.allNames);
+       sub.unsubscribe();
+    },
+    error => {
+      console.log('error when get nicknames')
+      console.log(error);
+    });
   }
 
     /**

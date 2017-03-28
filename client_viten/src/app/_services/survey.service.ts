@@ -89,12 +89,12 @@ changeChoosesurvey(password: string): Observable<boolean> {
     return this.http.get(environment.URL.allNicknames + '/' + surveyId)
     .map( response => {
       console.log(response);
-      // const json = response.json();
-      // console.log(json);
-      // return json;
-      return response;
+      const json = response.json();
+      console.log(json);
+      return json.nicknames;
     },
     error => {
+      console.log(error.json());
       return error.json();
     });
 }
