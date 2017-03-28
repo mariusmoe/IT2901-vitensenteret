@@ -1,5 +1,5 @@
 {
-  "secret": "testtesttesttesttesttesttesttesttesttest",
+  "secret": "XwAljEYbSnaBncbiIDQeAoofHHrzHjVoDXvEwKuA",
   "database": "mongodb://localhost/vitensurveytest",
   "port": 3000
 }
