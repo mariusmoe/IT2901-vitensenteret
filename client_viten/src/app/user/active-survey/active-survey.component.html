@@ -72,7 +72,7 @@
     <div class="qnavigate" *ngIf="!this.done">
       <div class="qnavigateArea"><input type='image' [hidden]="this.page === 0" class="qnavigateArea" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition" />
       </div>
-      <h3>{{page+1}}/{{totalPages}}</h3>
+      <h3 class="qtext">{{page+1}} / {{totalPages}}</h3>
       <!-- This is the right-side arrow that takes the user to the next page when the arrow is clicked -->
       <div class="qnavigateArea" *ngIf="!this.nicknamePage"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition || noreqans" [@shakeArrow]="lastQuestionAnswered" (@shakeArrow.done)="animationEnd()"></div>
         <!-- This arrow is only visible within the nickname component, as it directs the user from that very component to the endMessage page. Backarrow should be visible -->
