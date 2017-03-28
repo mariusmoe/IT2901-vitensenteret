@@ -48,17 +48,15 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
       transition('active => inactive', animate('500ms'))
     ]),
     trigger('playGrow', [
-      state('active', style({transform: 'scale(1)'})),
-      state('inactive', style({transform: 'scale(1)'})),
-      transition('inactive => active', animate('2500ms', keyframes([
-        style({opacity: 1, transform: 'scale(1)', ofset: 0.1}),
-        style({opacity: 1, transform: 'scale(1.1)', ofset: 0.5}),
-        style({opacity: 1, transform: 'scale(1)', ofset: 1})
+      state('active', style({transform: 'scale(1.05)'})),
+      state('inactive', style({transform: 'scale(0.95)'})),
+      transition('inactive => active', animate('2500ms ease-in-out', keyframes([
+        style({opacity: 1, transform: 'scale(0.95)', ofset: 0.1}),
+        style({opacity: 1, transform: 'scale(1.05)', ofset: 1})
       ]))),
-      transition('active => inactive', animate('2500ms', keyframes([
-        style({opacity: 1, transform: 'scale(1)', ofset: 0.1}),
-        style({opacity: 1, transform: 'scale(0.9)', ofset: 0.5}),
-        style({opacity: 1, transform: 'scale(1)', ofset: 1})
+      transition('active => inactive', animate('2500ms ease-in-out', keyframes([
+        style({opacity: 1, transform: 'scale(1.05)', ofset: 0.1}),
+        style({opacity: 1, transform: 'scale(0.95)', ofset: 1})
       ]))),
     ]),
   ]
