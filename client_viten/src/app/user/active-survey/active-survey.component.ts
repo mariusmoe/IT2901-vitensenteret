@@ -29,7 +29,36 @@ import { TranslateService } from '../../_services/translate.service';
         style({opacity: 1, transform: 'scale(1.1)', ofset: 1})
       ]))),
       transition('active => inactive', animate('50ms'))
-    ])
+    ]),
+    trigger('shakeArrow', [
+      state('active', style({})),
+      state('inactive', style({})),
+      transition('inactive => active', animate('500ms', keyframes([
+        style({transform: 'translateX(0) scaleX(1)', ofset: 0.1}),
+        style({transform: 'translateX(2%) scaleX(1)', ofset: 0.2}),
+        style({transform: 'translateX(4%) scaleX(1)', ofset: 0.3}),
+        style({transform: 'translateX(6%) scaleX(1)', ofset: 0.4}),
+        style({transform: 'translateX(8%) scaleX(1)', ofset: 0.5}),
+        style({transform: 'translateX(10%) scaleX(0.9)', ofset: 0.6}),
+        style({transform: 'translateX(6%) scaleX(0.94)', ofset: 0.7}),
+        style({transform: 'translateX(2%) scaleX(0.98)', ofset: 0.8}),
+        style({transform: 'translateX(0) scaleX(1)', ofset: 0.9}),
+        style({transform: 'translateX(0) scaleX(1)', ofset: 1}),
+      ]))),
+      transition('active => inactive', animate('500ms'))
+    ]),
+    trigger('playGrow', [
+      state('active', style({transform: 'scale(1.05)'})),
+      state('inactive', style({transform: 'scale(0.95)'})),
+      transition('inactive => active', animate('2500ms ease-in-out', keyframes([
+        style({opacity: 1, transform: 'scale(0.95)', ofset: 0.1}),
+        style({opacity: 1, transform: 'scale(1.05)', ofset: 1})
+      ]))),
+      transition('active => inactive', animate('2500ms ease-in-out', keyframes([
+        style({opacity: 1, transform: 'scale(1.05)', ofset: 0.1}),
+        style({opacity: 1, transform: 'scale(0.95)', ofset: 1})
+      ]))),
+    ]),
   ]
 })
 
@@ -57,6 +86,9 @@ export class ActiveSurveyComponent implements OnInit {
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
+  lastQuestionAnswered = 'inactive';
+  animLoop = false;
+  playButtonActive = 'inactive';
 
 
   /**
@@ -161,6 +193,9 @@ export class ActiveSurveyComponent implements OnInit {
     this.response.nickname = undefined;
 
     this.response.questionlist = [];
+    // Animation variable
+    this.lastQuestionAnswered = 'inactive';
+    this.animLoop = false;
 
     this.subscribeabortTimer();
     this.timer.delTimer('idleTimer');
@@ -187,7 +222,13 @@ export class ActiveSurveyComponent implements OnInit {
  */
 addOrChangeAnswer(alternative: any) {
   this.response.questionlist[this.page] = alternative;
-  console.log(this.response.questionlist);
+
+  //mergeconflict resolve
+  if (this.page + 1 === this.totalPages) {
+    this.animLoop = true;
+    this.lastQuestionAnswered = 'active';
+  }
+
 }
    /**
     * Updates the nickname in Response
@@ -307,6 +348,8 @@ resetTimer() {
       this.transition = true;
       this.postSurvey();
       this.response.questionlist = [];
+      this.lastQuestionAnswered = 'inactive';
+      this.animLoop = false;
       this.done = true;
       this.resetTimer();
       return;
@@ -355,5 +398,21 @@ resetTimer() {
     // Animation change
     this.flagActiveEnglish = 'active';
     this.flagActiveNorwegian = 'inactive';
+  }
+
+  animationEnd() {
+    if (this.lastQuestionAnswered === 'inactive' && this.animLoop) {
+      this.lastQuestionAnswered = 'active';
+    } else if (this.lastQuestionAnswered === 'active' && this.animLoop) {
+      this.lastQuestionAnswered = 'inactive';
+    }
+  }
+
+  playCycle() {
+    if (this.playButtonActive === 'inactive') {
+      this.playButtonActive = 'active';
+    } else if (this.playButtonActive === 'active') {
+      this.playButtonActive = 'inactive';
+    }
   }
 }
