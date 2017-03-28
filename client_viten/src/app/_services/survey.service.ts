@@ -85,9 +85,17 @@ changeChoosesurvey(password: string): Observable<boolean> {
    * Gets all nicknames a survey has registered
    * @return {[type]} [description]
    */
-  public getNicknames() {
-    return [];
-  }
+  public getNicknames(): Observable<string[]> {
+    return this.http.get(environment.URL.allNicknames)
+    .map( response => {
+      const json = response.json();
+      console.log(json);
+      return json;
+    },
+    error => {
+      return error.json();
+    });
+}
 
 
 
