@@ -60,6 +60,9 @@ export const LANG_EN_TRANS = {
   'Number of responses: n': 'Number of responses: %0',
   'Number of responses: n, m': 'Number of responses: %0, %1',
 
+  // Dynamic loading controls
+  'Load more': 'Load more',
+
   // Survey Question mode labels
   'Yes': 'Yes',
   'No': 'No',

@@ -49,4 +49,4 @@
 
 <!-- More button -->
 <button md-raised-button *ngIf="surveyService.surveyList.length > searchResultNum"
-  class="loadMoreButton" color="primary" (click)="loadMore()">Load more</button>
+  class="loadMoreButton" color="primary" (click)="loadMore()">{{ 'Load more' | translate }}</button>

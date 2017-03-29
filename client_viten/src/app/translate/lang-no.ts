@@ -56,9 +56,12 @@ export const LANG_NO_TRANS = {
   'smiley': 'Smiley',
   'text': 'Tekst',
 
-    // Survey response numbers
+  // Survey response numbers
   'Number of responses: n': 'Antall svar: %0',
   'Number of responses: n, m': 'Antall svar: %0, %1',
+
+  // Dynamic loading controls
+  'Load more': 'Last in flere',
 
   // Survey Question mode labels
   'Yes': 'Yes',

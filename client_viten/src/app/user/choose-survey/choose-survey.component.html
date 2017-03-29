@@ -48,7 +48,7 @@
     <h2 class="header">{{ 'All Surveys' | translate }}</h2>
     <div class="showresults surveyParent" >
       <!--TODO Button must route to a pop-up window-->
-      <md-card class="survey" *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: null : this.surveyService.surveyList.length : true">
+      <md-card class="survey" *ngFor="let survey of this.surveyService.surveyList | adminSurveyPipe: null : allSurveysNum : true">
         <md-card-title>
           {{survey.name}}
         </md-card-title>
@@ -65,5 +65,8 @@
         </md-card-actions>
       </md-card>
     </div>
+    <!-- More button -->
+    <button md-raised-button *ngIf="surveyService.surveyList.length > allSurveysNum"
+      class="loadMoreButton" color="primary" (click)="loadMore()">{{ 'Load more' | translate }}</button>
   </div>
 </div>
