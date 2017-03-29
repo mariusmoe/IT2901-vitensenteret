@@ -88,6 +88,7 @@ export class ActiveSurveyComponent implements OnInit {
   englishEnabled: boolean;
   Twolanguage: boolean;
   noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
+  showmodal = false; // controls the visibility state of the modal window
 
   done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
