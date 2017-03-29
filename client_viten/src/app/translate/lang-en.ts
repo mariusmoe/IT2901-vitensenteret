@@ -40,6 +40,9 @@ export const LANG_EN_TRANS = {
   'admin': 'Admin',
   'member': 'Member',
 
+  // Permissions
+  'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
+
   // Languages
   'Norwegian': 'Norwegian',
   'English': 'English',

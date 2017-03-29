@@ -40,6 +40,9 @@ export const LANG_NO_TRANS = {
   'admin': 'Superadmin',
   'member': 'Adminbruker',
 
+  // Permissions
+  'You do not have the required permissions for this action!': 'Du har ikke de nødvendige rettighetene for dette!',
+
   // Languages
   'Norwegian': 'Norsk',
   'English': 'Engelsk',
