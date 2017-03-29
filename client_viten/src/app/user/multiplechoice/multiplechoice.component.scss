@@ -1,3 +1,4 @@
+/*
 .multiChoiceContainer {
   display: flex;
   flex-wrap: nowrap;
@@ -14,3 +15,15 @@
     }
   }
 }
+*/
+
+.multiChoiceContainer {
+  width: 75vw;
+  height: 50vh;
+  display: flex;
+  flex-wrap: wrap;
+  transform: scale(1.5);
+  .child {
+    min-width: 37.5vw;
+  }
+  }
