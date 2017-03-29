@@ -1,6 +1,23 @@
 <md-card>
   <md-card-content>
-    <h2>{{ 'Name' | translate}}</h2>
-    <input type='text' class="freetxtBox" [(ngModel)] = "textValue" #textBox maxlength="100" name="" placeholder="Max 100" (change) = "updateAnswers()">
+
+    <!-- Uses the ng2-completer to search for already-existing nicknames.
+         If name exists, it will suggest new names or combinatios of others-->
+    <h1>{{'Nickname' | translate}}</h1>
+    <p *ngIf="nickNameNotRegistered">{{'You need to answer the pre survey first' | translate }}</p>
+    <p *ngIf="isNicknameTaken">{{'This nickname is taken, choose another one' | translate}}</p>
+    <md-input-container>
+      <input mdInput placeholder="Nickname" [mdAutocomplete]="auto" [formControl]="nickCtrl" #nick (change)="updateAnswers(nick.value)">
+    </md-input-container>
+
+    <md-autocomplete #auto="mdAutocomplete">
+      <md-option *ngFor="let nickname of filteredNicknames | async" [value]="nickname">
+        {{ nickname }}
+      </md-option>
+    </md-autocomplete>
+
+
+    <!-- <h2>Hva heter du?</h2>
+    <input type='text' class="freetxtBox" [(ngModel)] = "textValue" #textBox maxlength="100" name="" placeholder="Max 100" (change) = "updateAnswers()"> -->
   </md-card-content>
 </md-card>

@@ -35,10 +35,14 @@ export const LANG_EN_TRANS = {
   'Percentage': 'Percentage',
   'Responses': 'Responses',
   'User': 'User',
+  'Nickname': 'Nickname',
 
   // roles
   'admin': 'Admin',
   'member': 'Member',
+
+  // Permissions
+  'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
 
   // Languages
   'Norwegian': 'Norwegian',
@@ -59,6 +63,9 @@ export const LANG_EN_TRANS = {
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
   'Number of responses: n, m': 'Number of responses: %0, %1',
+
+  // Dynamic loading controls
+  'Load more': 'Load more',
 
   // Survey Question mode labels
   'Yes': 'Yes',
@@ -188,11 +195,11 @@ export const LANG_EN_TRANS = {
 
   // Nickname component
   'Name': 'What is your name?',
+  'You need to answer the pre survey first': 'You need to answer the pre survey first',
+    'This nickname is taken, choose another one': 'This nickname is taken, choose another one',
 
   // Modal dialog in active survey
   'Sorry': 'Sorry',
   'ContactError': 'Something went wrong! Please contact the staff.'
-
-
 
 };

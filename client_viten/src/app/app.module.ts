@@ -37,6 +37,7 @@ import { MultiplechoiceComponent } from './user/multiplechoice/multiplechoice.co
 import { AdminSurveysPipe } from './_pipes/adminSurveysPipe';
 
 
+
 import { ClipboardModule } from 'ngx-clipboard';
 import { DragulaModule } from 'ng2-dragula';
 import { NewUserComponent } from './admin/new-user/new-user.component';
