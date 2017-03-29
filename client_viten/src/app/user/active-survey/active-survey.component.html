@@ -24,7 +24,7 @@
 
   <!-- The playbutton at the start of every survey -->
   <div class="playbutton" [ngClass]="{'clicked': started}">
-    <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()">
+    <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()" [@playGrow]="playButtonActive" (@playGrow.done)="playCycle()">
   </div>
   <div class="startTextContainer" *ngIf="!started">
     <div class="startText">{{'Start survey' | translate:[this.startText]}} </div>
@@ -46,13 +46,13 @@
     <div class="surveyQuestion" [@easeInOut] = "" (@easeInOut.done)="animEnd($event)" *ngIf="!transition ">
 
       <!-- Either displays the title of a question or shows the endMessage if the survey is done -->
-      <div *ngIf="enenable">
+      <div *ngIf="!Twolanguage">
         <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.en.txt}}</span></div>
         <div class="surveyDone" *ngIf="this.done && this.postDone" (click)="exitSurvey()"><span>{{survey.endMessage.en}}</span></div>
       </div>
-      <div *ngIf="noenable">
-        <div class="txt" *ngIf="!this.done"><span class="questionTitle">{{this.survey.questionlist[page].lang.no.txt}}</span></div>
-        <div class="surveyDone" *ngIf="this.done && this.postDone" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
+      <div *ngIf="Twolanguage">
+        <div class="txt" *ngIf="!this.done && !this.nicknamePage"><span class="questionTitle">{{this.survey.questionlist[page].lang.no.txt}}</span></div>
+        <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
       </div>
 
       <!-- Childcomponents that handle each answer-type -->
@@ -72,12 +72,11 @@
     <div class="qnavigate" *ngIf="!this.done">
       <div class="qnavigateArea"><input type='image' [hidden]="this.page === 0" class="qnavigateArea" id="qButton" src="../../assets/images/ArrowLeft.svg" (click)="previousQ()" [disabled]="transition" />
       </div>
-      <h3>{{page+1}}/{{totalPages}}</h3>
+      <h3 class="qtext">{{page+1}} / {{totalPages}}</h3>
       <!-- This is the right-side arrow that takes the user to the next page when the arrow is clicked -->
-      <div class="qnavigateArea" *ngIf="!this.nicknamePage"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition"></div>
+      <div class="qnavigateArea" *ngIf="!this.nicknamePage"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition || noreqans" [@shakeArrow]="lastQuestionAnswered" (@shakeArrow.done)="animationEnd()"></div>
         <!-- This arrow is only visible within the nickname component, as it directs the user from that very component to the endMessage page. Backarrow should be visible -->
       <div class="qnavigateArea" *ngIf="this.nicknamePage"><input [disabled]="this.response.nickname === undefined" class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="postDone = true; endSurvey()"></div>
     </div>
-
   </div>
 </div>

@@ -9,8 +9,10 @@ import { ChartsModule } from 'ng2-charts/ng2-charts';
 import { SimpleTimer } from 'ng2-simple-timer';
 import { HostListener } from '@angular/core';
 
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+
 import { AppComponent } from './app.component';
-import { HomepageAdminComponent } from './admin/homepage-admin/homepage-admin.component';
+import { HomepageAdminComponent, DeleteSurveyDialog } from './admin/homepage-admin/homepage-admin.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { AuthGuard } from './_guards/auth.guard';
@@ -24,7 +26,7 @@ import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } 
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 import { AdminSettingsComponent, DeleteDialog, ReferDialog, CredentialDialog } from './admin/admin-settings/admin-settings.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
-import { BarChartComponent } from './admin/survey-retrieval/chart/chart.component';
+import { ChartComponent } from './admin/survey-retrieval/chart/chart.component';
 
 import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
 import { SmileyComponent } from './user/smiley/smiley.component';
@@ -60,7 +62,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     SurveyAlternativesDialog,
     ActiveSurveyComponent,
     SurveyRetrievalComponent,
-    BarChartComponent,
+    ChartComponent,
     SurveyPublishDialog,
     AdminOutletComponent,
     AdminSettingsComponent,
@@ -79,7 +81,8 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     LogoComponentComponent,
     SinglechoiceComponent,
     NicknameComponent,
-    QuitsurveyPromptComponent
+    QuitsurveyPromptComponent,
+    DeleteSurveyDialog
 
   ],
   imports: [
@@ -91,6 +94,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     ChartsModule,
     ClipboardModule,
     DragulaModule,
+    BrowserAnimationsModule,
     MaterialModule.forRoot()
   ],
   entryComponents: [
@@ -100,7 +104,8 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     SurveyAlternativesDialog,
     SurveyPublishDialog,
     CredentialDialog,
-    QuitsurveyPromptComponent
+    QuitsurveyPromptComponent,
+    DeleteSurveyDialog
   ],
   providers: [
     AuthGuard,

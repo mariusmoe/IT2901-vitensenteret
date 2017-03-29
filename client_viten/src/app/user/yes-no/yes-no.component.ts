@@ -1,4 +1,5 @@
-import { Component, OnInit, Input, Output, EventEmitter, trigger, transition, style, animate, state, keyframes } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { QuestionObject } from '../../_models/survey';
 
 @Component({

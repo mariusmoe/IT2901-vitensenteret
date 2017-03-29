@@ -1,7 +1,7 @@
-import { animate, AnimationEntryMetadata, state, style, transition, trigger } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 
 // Component transition animations
-export const slideInDownAnimation: AnimationEntryMetadata =
+export const slideInDownAnimation =
   trigger('routeAnimation', [
     state('*',
       style({
@@ -18,7 +18,7 @@ export const slideInDownAnimation: AnimationEntryMetadata =
     ])
   ]);
 
-  export const slideDownFadeInAnimation: AnimationEntryMetadata =
+  export const slideDownFadeInAnimation =
     trigger('routeAnimation', [
       state('*',
         style({
@@ -35,7 +35,7 @@ export const slideInDownAnimation: AnimationEntryMetadata =
       ])
     ]);
 
-  export const slideOutAnimation: AnimationEntryMetadata =
+  export const slideOutAnimation =
     trigger('routeAnimation', [
       state('*',
         style({

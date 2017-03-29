@@ -13,14 +13,10 @@ import { Subscription } from 'rxjs/Subscription';
 export class ChooseSurveyComponent implements OnInit, OnDestroy {
 
   searchFormControl = new FormControl();
-
   surveySub: Subscription;
   loaded = false;
   search = '';
   search_result = false;
-
-
-
 
   constructor(public surveyService: SurveyService, public translateService: TranslateService) {
 
@@ -30,6 +26,7 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
     // Loads all active surveys
     this.surveySub = this.surveyService.getAllSurveys().subscribe( (surveys) => {
       this.loaded = true;
+      console.log('oninit');
     });
     // subscribe to the search form for searching
     this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
@@ -38,6 +35,7 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    console.log('ondestroy');
     this.surveySub.unsubscribe();
   }
 

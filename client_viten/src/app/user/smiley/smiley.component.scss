@@ -10,12 +10,7 @@
 .smile {
   height: 30vh;
   width: 30vh;
-  //opacity: 0.5;
-
-  &.active{
-    //opacity: 1;
-    //animation: jump-out 0.75s 1;
-  }
+  border-radius: 30vh;
 }
 
 .smile:focus{outline: none;}
