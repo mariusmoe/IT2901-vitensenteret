@@ -1,31 +1,15 @@
-/*
 .multiChoiceContainer {
+  width: 60vw;
+  height: 60vh;
+  margin-left: 25vw;
   display: flex;
-  flex-wrap: nowrap;
-  flex-direction: row;
-  align-items: center;
-  transform: scale(1.5);
-  display: inline-block;
+  flex-wrap: wrap;
 
-  .region {
+  .choice {
     text-align: left;
-    md-checkbox {
-      padding: 0.5em;
-      display: block;
+    width: 30vw;
+    .child {
+      zoom: 2;
     }
   }
 }
-*/
-
-.multiChoiceContainer {
-  width: 30vw;
-  height: 25vh;
-  margin-top: 5vh;
-  display: flex;
-  flex-wrap: wrap;
-  transform: scale(2);
-  .child {
-    text-align: left;
-    width: 15vw;
-  }
-  }
