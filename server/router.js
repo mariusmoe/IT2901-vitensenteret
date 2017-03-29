@@ -106,8 +106,6 @@ module.exports = (app) => {
   // retrive all surveys as a json object
   surveyRoutes.get('/json', SurveyController.getAllSurveysAsJson);
 
-  surveyRoutes.get('/json/:surveyId', SurveyController.getSurveyAsJson);
-
   surveyRoutes.get('/csv/:surveyId',requireAuth, SurveyController.getSurveyAsCSV);
 
   surveyRoutes.post('/copy/:surveyId', requireAuth, SurveyController.copySurvey);

@@ -13,18 +13,12 @@ import { Subscription } from 'rxjs/Subscription';
 export class ChooseSurveyComponent implements OnInit, OnDestroy {
 
   searchFormControl = new FormControl();
-
   surveySub: Subscription;
   loaded = false;
   search = '';
   search_result = false;
 
-
-
-
-  constructor(public surveyService: SurveyService, public translateService: TranslateService) {
-
-  }
+  constructor(public surveyService: SurveyService, public translateService: TranslateService) {  }
 
   ngOnInit() {
     // Loads all active surveys
@@ -40,8 +34,6 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this.surveySub.unsubscribe();
   }
-
-
+  // Shows the date on the format dd/mm/yyyy
   formatDate(date): string {  return new Date(date).toLocaleDateString(); }
-  formatmilliseconds(date): number {  return new Date(date).valueOf(); }
 }

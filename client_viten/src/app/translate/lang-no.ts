@@ -189,10 +189,14 @@ export const LANG_NO_TRANS = {
   'Date created: d': 'Dato laget: %0',
   'Date printed: d': 'Dato printet: %0',
 
+  // Nickname component
+  'Name': 'Hva heter du?',
   // PLay survey
   'You need to answer the pre survey first': 'Du må svare på pre undersøkelsen først',
 
-
+  // Modal dialog in active survey
+  'Sorry': 'Beklager',
+  'ContactError': 'Noe gikk galt! Venligst kontakt de ansatte.'
 
 
 };

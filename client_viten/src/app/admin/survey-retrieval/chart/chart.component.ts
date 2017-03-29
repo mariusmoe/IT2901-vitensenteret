@@ -211,4 +211,19 @@ export class BarChartComponent implements OnInit {
     document.body.removeChild(dlLink);
   }
 
+
+  /**
+   * Rounds a value to the given number of decimals
+   * @param  {number} value    the float value to fix to a given decimal point
+   * @param  {number} decimals the number of decimals to show, as an int.
+   * @return string            a string representation of the value, with fixed decimal points
+   */
+  round(value: number, decimals: number): string {
+    if (typeof value !== 'number') {
+      return '0.00';
+    }
+    return value.toFixed(2);
+  }
+
+
 }

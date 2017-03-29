@@ -187,8 +187,12 @@ export const LANG_EN_TRANS = {
   'Date created: d': 'Date created: %0',
   'Date printed: d': 'Date printed: %0',
 
+  // Nickname component
+  'Name': 'What is your name?',
   'You need to answer the pre survey first': 'You need to answer the pre survey first',
 
-
+  // Modal dialog in active survey
+  'Sorry': 'Sorry',
+  'ContactError': 'Something went wrong! Please contact the staff.'
 
 };
