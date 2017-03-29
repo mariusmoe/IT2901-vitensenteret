@@ -4,7 +4,9 @@ const validator = require('validator'),
       status = require('../status'),
       Survey  = require('../models/survey'),
       Response = require('../models/response'),
+      Nickname = require('../models/nickname'),
       jsonfile = require('jsonfile'),
+      crypto = require('crypto'),
       fs = require('fs'),
       config = require('config'),
       json2csv = require('json2csv'),
@@ -36,36 +38,6 @@ exports.createSurvey = (req, res, next) => {
     return res.status(200).send( survey );
   })
 }
-
-// POST
-// exports.linkPrePost = (req, res, next) => {
-//   const preKey  = req.body.preKey;
-//   const postKey = req.body.postKey;
-//   PrePost.find({preKey: preKey},  (err, existingPreKey) => {
-//     if (err) { return next(err); }
-//     PrePost.find({postKey: postKey},  (err, existingPostKey) => {
-//     if (err) { return next(err); }
-//     if (existingPreKey.length >= 1 || existingPostKey.length >= 1) {
-//       return res.status(400).send({message: 'FAILURE - Already exists'})
-//     }
-//     const newPrePost = new PrePost({
-//       preKey: preKey,
-//       postKey: postKey
-//     });
-//     newPrePost.save((err, prePost) => {
-//       if (err) { return next(err); }
-//       console.log(prePost);
-//       return res.status(200).send({message: 'SUCCESS', prePost: prePost})
-//     })
-//   })
-// })
-//
-// }
-
-// GET
-// exports.getPrePost = (req, res, next) => {
-//
-// }
 
 
 // GET
@@ -303,11 +275,53 @@ exports.deleteOneSurvey = (req, res, next) => {
 
 }
 
+
+/**
+ * getSecureRandomBytes in hex format
+ * @return {String} A random string of text
+ */
+const getSecureRandomBytes = (callback) => {
+    crypto.randomBytes(8, function(err, buffer) {
+      if (err) { return next(err); }
+      callback(Date.now().toString(16) + buffer.toString('hex'));
+    });
+};
+
+// getSecureRandomBytes((random) => {
+//   console.log("RANDOM: " + random );
+// })
+
+const setNickname = (surveyId, nickname, callback) => {
+  // console.log(surveyId + "  -   " + nickname);
+  Nickname.find({nickname: nickname}, (err, foundNickname) => {
+    // console.log(foundNickname);
+    if (foundNickname.length > 0) {
+      // Nickname is taken
+      callback(true, null)
+    } else {
+      // console.log('No nickname taken!');
+      // Nickname is aviliable
+      getSecureRandomBytes((random) => {
+        let newNickname = new Nickname({
+          nickname: nickname,
+          surveyId: surveyId,
+          uniqueName: random
+        });
+        newNickname.save((err, nickname) => {
+          if (err) {return next(err); }
+          callback(false, nickname);
+        });
+      });
+    }
+  })
+}
+
+
 // POST
 exports.answerOneSurvey = (req, res, next) => {
   const surveyId        = req.params.surveyId,
         responseObject  = req.body;
-
+  // console.log(responseObject);
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
   if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
     // but we should check the validity of the id
@@ -319,14 +333,93 @@ exports.answerOneSurvey = (req, res, next) => {
   if (!val.responseValidation(responseObject)) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
+  if (responseObject.nickname) {
+    Survey.findById(surveyId, (err, survey) => {
+      if (survey.isPost) {
+        // Survey is post and is sent with a nickname
+        // lookup nicnames for this survey and see if it is already there
+        // if not ignore it !!!
+        Nickname.find({nickname: responseObject.nickname}, (err, foundNickname) => {
+          if (err) { return next(err); }
+          if(foundNickname.length == 0) {
+            // nickname is not present - return FAILURE
+            return res.status(400).send( {message: status.UNKNOWN_NICKNAME.message, status: status.UNKNOWN_NICKNAME.code})
+          } else {
+            // nickname exists - SUCCESS
 
-  let newResponse = new Response(responseObject);
-  newResponse.save( (err, answer) => {
-    if (err) { return next(err); }
-    return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
-  });
+            let newResponse = new Response({
+                nickname: foundNickname.uniqueName,
+                surveyId: surveyId,
+                questionlist: responseObject.questionlist
+            });
+            newResponse.save( (err, answer) => {
+              if (err) { return next(err); }
+              Nickname.findByIdAndRemove(foundNickname, (err) => {
+                if (err) { return next(err); }
+                return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
+              })
+
+            });
+          }
+        })
+      } else {
+        setNickname(surveyId, responseObject.nickname, (err, nickname) => {
+          if(err) {
+            // console.log(status.NICKNAME_TAKEN.message);
+            return res.status(400).send( {message: status.NICKNAME_TAKEN.message, status: status.NICKNAME_TAKEN.code})
+          }
+          let newResponse = new Response({
+              nickname: nickname.uniqueName,
+              surveyId: surveyId,
+              questionlist: responseObject.questionlist
+          });
+          newResponse.save( (err, answer) => {
+            if (err) { return next(err); }
+            return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
+          });
+        })
+      }
+    })
+  } else {
+    let newResponse = new Response(responseObject);
+    newResponse.save( (err, answer) => {
+      if (err) { return next(err); }
+      return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
+    });
+  }
 }
 
+
+exports.getNicknamesForOneSurvey = (req, res, next) => {
+  const surveyId = req.params.surveyId;
+  // console.log("surveyId: " + surveyId);
+  Survey.findById(surveyId, (err, survey) => {
+    if (err) { return next(err); }
+    // console.log(survey);
+    if (survey.isPost) {
+      Survey.findOne({postKey: surveyId}, (err, preSurvey) => {
+        // console.log(preSurvey);
+        Nickname.find({surveyId: preSurvey._id}, {'nickname': true}, (err, nicknames) => {
+          // console.log(nicknames);
+          if (err) { return next(err); }
+          if (nicknames.length == 0) {
+            return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+          }
+          return res.status(200).send( {nicknames: nicknames} );
+        });
+      })
+    } else {
+      Nickname.find({surveyId: surveyId}, {'nickname': true}, (err, nicknames) => {
+        // console.log(nicknames);
+        if (err) { return next(err); }
+        // if (nicknames.length == 0) {
+        //   return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+        // }
+        return res.status(200).send( {nicknames: nicknames} );
+      });
+    }
+  })
+}
 
 // JSON
 exports.getAllSurveysAsJson = (req, res, next) => {

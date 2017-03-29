@@ -101,6 +101,8 @@ module.exports = (app) => {
   //Check if password is correct
   surveyRoutes.post('/escape', AuthenticationController.checkOneEscape);
 
+  surveyRoutes.get('/all_nicknames/:surveyId', SurveyController.getNicknamesForOneSurvey);
+
   // retrive all surveys as a json object
   surveyRoutes.get('/json', SurveyController.getAllSurveysAsJson);
 

@@ -35,6 +35,7 @@ export const LANG_NO_TRANS = {
   'Percentage': 'Prosent',
   'Responses': 'Svar',
   'User': 'Bruker',
+  'Nickname': 'Kallenavn',
 
   // Roles
   'admin': 'Superadmin',
@@ -196,12 +197,13 @@ export const LANG_NO_TRANS = {
 
   // Nickname component
   'Name': 'Hva heter du?',
+  // PLay survey
+  'You need to answer the pre survey first': 'Du må svare på pre undersøkelsen først',
+  'This nickname is taken, choose another one': 'Dette kallenavnet er tatt, velg et annet',
 
   // Modal dialog in active survey
   'Sorry': 'Beklager',
   'ContactError': 'Noe gikk galt! Venligst kontakt de ansatte.'
-
-
 
 
 };

@@ -59,7 +59,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
-
+    console.log(response);
     return this.http.post(environment.URL.survey + '/' + response.surveyId, response, options)
     .map( success => {
       console.log(success);
@@ -80,6 +80,23 @@ changeChoosesurvey(password: string): Observable<boolean> {
   private getToken(): string {
     return localStorage.getItem('token');
   }
+
+  /**
+   * Gets all nicknames a survey has registered
+   * @return {[type]} [description]
+   */
+  public getNicknames(surveyId: string): Observable<any> {
+    return this.http.get(environment.URL.allNicknames + '/' + surveyId)
+    .map( response => {
+      console.log(response);
+      const json = response.json();
+      console.log(json);
+      return json.nicknames;
+    },
+    error => {
+      return error;
+    });
+}
 
 
 

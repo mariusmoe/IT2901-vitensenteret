@@ -35,6 +35,7 @@ export const LANG_EN_TRANS = {
   'Percentage': 'Percentage',
   'Responses': 'Responses',
   'User': 'User',
+  'Nickname': 'Nickname',
 
   // roles
   'admin': 'Admin',
@@ -194,11 +195,11 @@ export const LANG_EN_TRANS = {
 
   // Nickname component
   'Name': 'What is your name?',
+  'You need to answer the pre survey first': 'You need to answer the pre survey first',
+    'This nickname is taken, choose another one': 'This nickname is taken, choose another one',
 
   // Modal dialog in active survey
   'Sorry': 'Sorry',
   'ContactError': 'Something went wrong! Please contact the staff.'
-
-
 
 };
