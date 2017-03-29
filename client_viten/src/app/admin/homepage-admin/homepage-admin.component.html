@@ -42,13 +42,13 @@
           <button *ngIf="survey.postKey && survey.postKey.length > 0" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey.postKey}}" routerLinkActive="active">
             <md-icon>local_post_office</md-icon> {{ 'Edit post-survey' | translate }}
           </button>
-          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
-            <md-icon>delete</md-icon> {{ 'Delete' | translate }}
-          </button>
           <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
             <md-icon>build</md-icon> {{ 'Edit' | translate }}
           </button>
           <button md-raised-button color="accent" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
+          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
+            <md-icon>delete</md-icon> {{ 'Delete' | translate }}
+          </button>
         </div>
       </md-toolbar>
       <md-card>
@@ -95,6 +95,9 @@
             <md-icon>build</md-icon> {{ 'Edit' | translate }}
           </button>
           <button md-raised-button color="accent" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
+          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
+            <md-icon>delete</md-icon> {{ 'Delete' | translate }}
+          </button>
         </md-card-actions>
       </md-card>
     </div>
