@@ -287,6 +287,7 @@ input[type=image]:disabled
       align-content: center;
       overflow: hidden;
       margin: 1vw;
+      width: 75vw;
 
         span{
           font-family: 'Roboto', sans-serif;
@@ -301,7 +302,7 @@ input[type=image]:disabled
       display: flex;
       justify-content: center;
       align-content: center;
-      margin-top: 10vh;
+      margin-top: 20vh;
 
       .modal-button {
         color: white;
