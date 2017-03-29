@@ -35,6 +35,7 @@ export const LANG_EN_TRANS = {
   'Percentage': 'Percentage',
   'Responses': 'Responses',
   'User': 'User',
+  'Nickname': 'Nickname',
 
   // roles
   'admin': 'Admin',
@@ -185,6 +186,8 @@ export const LANG_EN_TRANS = {
   // PDF download lines
   'Date created: d': 'Date created: %0',
   'Date printed: d': 'Date printed: %0',
+
+  'You need to answer the pre survey first': 'You need to answer the pre survey first',
 
 
 

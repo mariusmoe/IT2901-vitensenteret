@@ -35,6 +35,7 @@ export const LANG_NO_TRANS = {
   'Percentage': 'Prosent',
   'Responses': 'Svar',
   'User': 'Bruker',
+  'Nickname': 'Kallenavn',
 
   // Roles
   'admin': 'Superadmin',
@@ -187,6 +188,9 @@ export const LANG_NO_TRANS = {
   // PDF download lines
   'Date created: d': 'Dato laget: %0',
   'Date printed: d': 'Dato printet: %0',
+
+  // PLay survey
+  'You need to answer the pre survey first': 'Du må svare på pre undersøkelsen først',
 
 
 

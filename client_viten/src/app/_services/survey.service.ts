@@ -94,8 +94,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
       return json.nicknames;
     },
     error => {
-      console.log(error.json());
-      return error.json();
+      return error;
     });
 }
 
