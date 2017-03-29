@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,6 +19,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private userSub;
   private userListSub;
   public  user: User;
+  newEmailForm: FormGroup;
   private email = '';
   private userList: User[] = [];
   private selectedRow: number;
@@ -33,12 +35,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     private surveyService: SurveyService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
+    private fb: FormBuilder,
     public languageService: TranslateService) {
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
       if (this.user.role === 'admin') {
         this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
       }
+      this.newEmailForm = fb.group({
+        'newEmail': [null, Validators.required],
+      });
+
     }
 
 
