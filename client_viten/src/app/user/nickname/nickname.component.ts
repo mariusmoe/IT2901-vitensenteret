@@ -15,6 +15,7 @@ export class NicknameComponent implements OnInit {
   @Input() response: Response;
   @Input() survey: Survey;
   @Output() answer = new EventEmitter();
+  @Input() isNicknameTaken: boolean;
   public searchNickname: string; // The written nickname
   key; // The key used to store a nickname in localstorage
   allNames: any; // A list of all nicknames a survey has registered
@@ -46,12 +47,12 @@ export class NicknameComponent implements OnInit {
 }
 
   ngOnInit() {
-    console.log(this.survey);
+    // console.log(this.survey);
     const sub  = this.surveyService.getNicknames(this.survey._id)
       .subscribe( result => {
         if (this.survey.isPost) {
           this.allNames = result;
-          console.log('These are the names: ', this.allNames);
+          // console.log('These are the names: ', this.allNames);
           this.allNames.forEach((x) => { this.nicknames.push(x.nickname); });
         }
        sub.unsubscribe();
@@ -107,10 +108,10 @@ export class NicknameComponent implements OnInit {
      */
     openNickname () {
       if (!this.allNames.contains(this.searchNickname)) {
-        console.log('nickname is open');
+        // console.log('nickname is open');
         return true;
       }
-      console.log('nickname is taken');
+      // console.log('nickname is taken');
       // this.suggestions = [
       //   this.nickname + '123', this.nickname + '456'
       // ];

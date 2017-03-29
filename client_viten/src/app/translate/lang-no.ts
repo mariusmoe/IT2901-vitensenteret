@@ -193,6 +193,7 @@ export const LANG_NO_TRANS = {
   'Name': 'Hva heter du?',
   // PLay survey
   'You need to answer the pre survey first': 'Du må svare på pre undersøkelsen først',
+  'This nickname is taken, choose another one': 'Dette kallenavnet er tatt, velg et annet',
 
   // Modal dialog in active survey
   'Sorry': 'Beklager',

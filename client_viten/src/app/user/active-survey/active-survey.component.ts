@@ -98,6 +98,7 @@ export class ActiveSurveyComponent implements OnInit {
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
   public startText = 'Start survey';
 
+  isNicknameTaken = false
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
@@ -227,7 +228,7 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
-    console.log('survey is done');
+    // console.log('survey is done');
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
@@ -281,7 +282,7 @@ addOrChangeAnswer(alternative: any) {
     */
    updateNick(nickname) {
      this.response.nickname = nickname;
-     console.log('Added nick: ', this.response.nickname);
+    //  console.log('Added nick: ', this.response.nickname);
    }
 
 /**
@@ -289,7 +290,7 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
-    console.log('previous question');
+    // console.log('previous question');
     if (this.page <= 0) {
       return;
     }
@@ -307,18 +308,54 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
-    console.log('next question');
+    // console.log('next question');
     // Handles an empty answer
     if (typeof this.response.questionlist[this.page] === 'undefined') {
       this.response.questionlist[this.page] = -1;
     }
     // If current page is the last with questions, the next page should be the endSurvey page
-    if (this.page + 1 >= this.totalPages) {
+    let pageCopy = this.page;
+    if (pageCopy + 1 >= this.totalPages) {
       if (this.survey.postKey !== undefined || this.survey.isPost) {
-        console.log('pre-survey is available');
+        // console.log('pre-survey is available');
         this.nicknamePage = true;
       }
-      this.endSurvey();
+      // If it is the last page in the survey, it should end it.
+      // console.log('trying to end survey');
+      if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
+
+        const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
+        // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
+        //   delete responseClone.nickname;
+        // }
+        this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
+          if (proper) {
+            this.transition = true;
+            this.properSurvey = true;
+            this.response.questionlist = [];
+            this.lastQuestionAnswered = 'inactive';
+            this.animLoop = false;
+            this.done = true;
+            this.resetTimer();
+          }
+        },
+        error => {
+            console.log('Error when posting survey');
+            console.log(error);
+            this.nicknamePage = true;
+            return;
+        });
+        // this.response.questionlist = [];
+        // this.lastQuestionAnswered = 'inactive';
+        // this.animLoop = false;
+        // this.done = true;
+        this.resetTimer();
+        return;
+      } else {
+        // Else it should navigate to the nickname component
+        this.nicknamePage = true;
+      }
+
       this.transition = true;
       return;
     }
@@ -398,14 +435,34 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
-    console.log('trying to end survey');
+    // console.log('trying to end survey');
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
-      this.transition = true;
-      this.postSurvey();
-      this.response.questionlist = [];
-      this.lastQuestionAnswered = 'inactive';
-      this.animLoop = false;
-      this.done = true;
+
+      const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
+      // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
+      //   delete responseClone.nickname;
+      // }
+      this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
+        if (proper) {
+          this.transition = true;
+          this.properSurvey = true;
+          this.response.questionlist = [];
+          this.lastQuestionAnswered = 'inactive';
+          this.animLoop = false;
+          this.done = true;
+          this.resetTimer();
+        }
+      },
+      error => {
+          console.log('Error when posting survey');
+          console.log(error);
+          this.postDone = false;
+          this.isNicknameTaken = true;
+      });
+      // this.response.questionlist = [];
+      // this.lastQuestionAnswered = 'inactive';
+      // this.animLoop = false;
+      // this.done = true;
       this.resetTimer();
       return;
     }
@@ -421,18 +478,6 @@ resetTimer() {
     const dialogRef = this.dialog.open(QuitsurveyPromptComponent);
   }
 
-/**
- * This method posts the survey to the database
- */
-  private postSurvey() {
-    const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-    // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
-    //   delete responseClone.nickname;
-    // }
-    this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
-      this.properSurvey = true;
-    });
-  }
 
   /**
   * This method changes the language from eng to no
