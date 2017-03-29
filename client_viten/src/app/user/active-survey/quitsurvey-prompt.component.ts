@@ -12,9 +12,9 @@ import { SimpleTimer } from 'ng2-simple-timer';
 })
 export class QuitsurveyPromptComponent {
 
-  private errorStr = "Feil kode";
-  private badRequest = "Have you remembered to set a exit code?";
-  private hasError = false;
+  errorStr = "Feil kode";
+  badRequest = "Have you remembered to set a exit code?";
+  hasError = false;
 
   abortTimer: string;
   abortCounter = 0;

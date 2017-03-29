@@ -1,6 +1,6 @@
 {
   "project": {
-    "version": "1.0.0-beta.26",
+    "version": "1.0.0-beta.28.3",
     "name": "client-viten"
   },
   "apps": [
@@ -23,8 +23,9 @@
         "../node_modules/jspdf/dist/jspdf.min.js",
         "../node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js"
       ],
+
+      "environmentSource": "environments/environment.ts",
       "environments": {
-        "source": "environments/environment.ts",
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       }

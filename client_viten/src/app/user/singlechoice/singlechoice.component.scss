@@ -1,0 +1,17 @@
+
+.singleChoiceContainer {
+  display: flex;
+  flex-wrap: nowrap;
+  flex-direction: row;
+  align-items: center;
+  transform: scale(1.5);
+  display: inline-block;
+
+  .radioOptions {
+    text-align: left;
+    md-radio-button {
+      padding: 0.5em;
+      display: block;
+    }
+  }
+}

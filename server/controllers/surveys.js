@@ -243,14 +243,64 @@ exports.deleteOneSurvey = (req, res, next) => {
     // but we should check the validity of the id
     return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
   }
-
-  Survey.findByIdAndRemove( surveyId, (err, survey) => {
+  Survey.findById(surveyId, (err, survey) => {
     if (!survey) {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
-    return res.status(200).send({message: status.SURVEY_DELETED.message, status: status.SURVEY_DELETED.code, survey: survey});
-  });
+    if (survey.postKey) {
+      Survey.findById(survey.postKey, (err, postSurvey) => {
+        //      delete survey
+        //             postSurvey
+        //             surveyAnswers      if answers
+        //             postSurveyAnswers  if answers
+        if (err) { return next(err); }
+        Response.find({surveyId: survey.postKey}, (err, postResponses) => {
+          if (postResponses) {
+            postResponses.forEach((postResponses) => {
+              postResponses.remove((err) => {
+                if (err) { return next(err); }
+              });
+            })
+          }
+          survey.remove((err) => {
+            if (err) { return next(err); }
+            Response.find({surveyId: surveyId}, (err, responses) => {
+              if (responses) {
+                responses.forEach((response) => {
+                  response.remove((err) => {
+                    if (err) { return next(err); }
+                  });
+                })
+              }
+              postSurvey.remove((err) => {
+                if (err) { return next(err); }
+                return res.status(200).send( {message: status.SURVEY_DELETED.message, status: status.SURVEY_DELETED.code})
+              })
+            });
+          })
+        })
+
+      })
+    } else {
+      //      delete survey
+      //             survey answers if answers
+      Response.find({surveyId: surveyId}, (err, responses) => {
+        if (responses) {
+          responses.forEach((response) => {
+            response.remove((err) => {
+              if (err) { return next(err); }
+            });
+          })
+        }
+        survey.remove((err) => {
+          if (err) { return next(err); }
+          return res.status(200).send( {message: status.SURVEY_DELETED.message, status: status.SURVEY_DELETED.code})
+        })
+      })
+    }
+  })
+
 }
 
 // POST
@@ -266,7 +316,7 @@ exports.answerOneSurvey = (req, res, next) => {
   if (!responseObject) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_OBJECT_MISSING.message, status: status.SURVEY_RESPONSE_OBJECT_MISSING.code });
   }
-  if (!val.responseValidation(responseObject, true)) {
+  if (!val.responseValidation(responseObject)) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
 
@@ -306,73 +356,6 @@ exports.getAllSurveysAsJson = (req, res, next) => {
   });
 }
 
-
-
-exports.getSurveyAsJson = (req, res, next) => {
-  const surveyId = req.params.surveyId
-  if (!surveyId) {
-    return res.status(400).send( {message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code})
-  }
-  if (!surveyId.match(/^[0-9a-fA-F]{24}$/)) {
-    // but we should check the validity of the id
-    return res.status(400).send( {message: status.SURVEY_BAD_ID.message, status: status.SURVEY_BAD_ID.code})
-  }
-
-  Survey.findById(surveyId, (err, survey) => {
-    if (!survey) {
-      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-    }
-    if (err) { return next(err); }
-
-    let data = JSON.stringify(survey, null, 2);
-
-
-    // Open a gate to the temp directory
-    temp.open('json', function(err, info) {
-      if (!err) {
-        fs.write(info.fd, data , function(err){
-          if (err) {console.error(err);}
-        });
-        // close file system operation (it is now safe to read from file)
-        fs.close(info.fd, function(err) {
-          res.setHeader('content-type', 'application/json')
-          res.download(info.path, 'data.json', function(err){
-            if (err) {console.error(err);}
-          })
-        });
-      }
-    });
-
-
-
-    //
-    // jsonfile.writeFile(file, survey, {spaces: 2}, function(err) {
-    //   // return res.status(200).download( file );
-    //   // TODO: GIVE THE REPORT A BETTER NAME!
-    //   res.download(file, 'report.json', function(err){
-    //   if (err) {
-    //     // Handle error, but keep in mind the response may be partially-sent
-    //     // so check res.headersSent
-    //     fs.unlink('temp/data.json', (err) => {
-    //       if (err) {console.error(err);};
-    //       if(config.util.getEnv('NODE_ENV') !== 'test') {
-    //           console.log('SUCCESS - successfully deleted temp/data.json');
-    //         };
-    //       });
-    //   } else {
-    //     // decrement a download credit, etc.
-    //     fs.unlink('temp/data.json', (err) => {
-    //       if (err) {console.error(err);};
-    //       // console.log(config.util.getEnv('NODE_ENV'));
-    //       if(config.util.getEnv('NODE_ENV') !== 'test') {
-    //           console.log('SUCCESS - successfully deleted temp/data.json');
-    //         };
-    //     });
-    //   }
-    //   });
-    // });
-  });
-}
 
 exports.getSurveyAsCSV = (req, res, next) => {
     const surveyId = req.params.surveyId
