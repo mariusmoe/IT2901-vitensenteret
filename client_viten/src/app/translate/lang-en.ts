@@ -40,6 +40,9 @@ export const LANG_EN_TRANS = {
   'admin': 'Admin',
   'member': 'Member',
 
+  // Permissions
+  'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
+
   // Languages
   'Norwegian': 'Norwegian',
   'English': 'English',
@@ -59,6 +62,9 @@ export const LANG_EN_TRANS = {
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
   'Number of responses: n, m': 'Number of responses: %0, %1',
+
+  // Dynamic loading controls
+  'Load more': 'Load more',
 
   // Survey Question mode labels
   'Yes': 'Yes',

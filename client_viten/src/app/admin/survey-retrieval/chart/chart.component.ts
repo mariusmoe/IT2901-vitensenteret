@@ -8,7 +8,7 @@ import { TranslateService } from '../../../_services/translate.service';
   templateUrl: './chart.component.html',
   styleUrls: ['./chart.component.scss']
 })
-export class BarChartComponent implements OnInit {
+export class ChartComponent implements OnInit {
   @Input() index: number;
   @Input() questionObject: QuestionObject;
   @Input() responses: Response[];

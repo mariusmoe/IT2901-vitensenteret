@@ -40,6 +40,9 @@ export const LANG_NO_TRANS = {
   'admin': 'Superadmin',
   'member': 'Adminbruker',
 
+  // Permissions
+  'You do not have the required permissions for this action!': 'Du har ikke de nødvendige rettighetene for dette!',
+
   // Languages
   'Norwegian': 'Norsk',
   'English': 'Engelsk',
@@ -56,9 +59,12 @@ export const LANG_NO_TRANS = {
   'smiley': 'Smiley',
   'text': 'Tekst',
 
-    // Survey response numbers
+  // Survey response numbers
   'Number of responses: n': 'Antall svar: %0',
   'Number of responses: n, m': 'Antall svar: %0, %1',
+
+  // Dynamic loading controls
+  'Load more': 'Last in flere',
 
   // Survey Question mode labels
   'Yes': 'Yes',

@@ -1,4 +1,5 @@
-import { Component, OnInit, OnDestroy, Inject, Input, animate, state, style, transition, trigger, keyframes } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, Input } from '@angular/core';
+import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { SurveyService } from '../../_services/survey.service';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';

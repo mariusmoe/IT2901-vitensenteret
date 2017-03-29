@@ -1,7 +1,9 @@
-import { Component, OnInit, OnDestroy, ViewChild, animate, state, style, transition, trigger  } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { SurveyService } from '../../_services/survey.service';
 import { TranslateService } from '../../_services/translate.service';
+import { AuthenticationService } from '../../_services/authentication.service';
 import { Survey } from '../../_models/survey';
 import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
@@ -43,6 +45,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     private datePipe: DatePipe,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
+    public authenticationService: AuthenticationService,
     private translateService: TranslateService) {
   }
 
@@ -54,6 +57,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         this.getSurvey(param);
       }
     });
+    console.log(this.authenticationService.getUser());
   }
 
   ngOnDestroy() {

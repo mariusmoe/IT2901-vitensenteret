@@ -17,6 +17,7 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
   loaded = false;
   search = '';
   search_result = false;
+  allSurveysNum = 12; // start at 12
 
   constructor(public surveyService: SurveyService, public translateService: TranslateService) {  }
 
@@ -36,4 +37,8 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
   }
   // Shows the date on the format dd/mm/yyyy
   formatDate(date): string {  return new Date(date).toLocaleDateString(); }
+
+  loadMore() {
+    this.allSurveysNum += 12; // load 12 more
+  }
 }

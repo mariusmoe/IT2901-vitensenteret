@@ -1,4 +1,4 @@
-import { OpaqueToken } from '@angular/core';
+import { InjectionToken } from '@angular/core';
 
 // based on https://scotch.io/tutorials/simple-language-translation-in-angular-2-part-1
 
@@ -7,7 +7,7 @@ import { LANG_EN_NAME, LANG_EN_TRANS } from './lang-en';
 import { LANG_NO_NAME, LANG_NO_TRANS } from './lang-no';
 
 // translation token
-export const TRANSLATIONS = new OpaqueToken('translations');
+export const TRANSLATIONS = new InjectionToken('translations');
 
 // all translations
 // const dictionary = {
