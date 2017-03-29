@@ -86,8 +86,8 @@ export class ActiveSurveyComponent implements OnInit {
   private transition = false; // If true, animation between pages are triggerd
   private noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
   private englishEnabled: boolean;
-  private Twolanguage = true;
-  showmodal = true; // This controls if theere should be and error message overlay
+  private Twolanguage: boolean;
+  showmodal = false; // This controls if theere should be and error message overlay
 
   private done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
@@ -165,7 +165,8 @@ export class ActiveSurveyComponent implements OnInit {
 
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
-        //this.switchtono();
+        this.Twolanguage = true;
+        this.translateService.use('no');
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
@@ -438,6 +439,7 @@ resetTimer() {
   */
   private switchtono() {
     this.Twolanguage = true;
+    this.translateService.use('no');
     // Animation change
     this.flagActiveEnglish = 'inactive';
     this.flagActiveNorwegian = 'active';
@@ -448,6 +450,7 @@ resetTimer() {
     */
   private switchtoen() {
     this.Twolanguage = !true;
+    this.translateService.use('en');
     // Animation change
     this.flagActiveEnglish = 'active';
     this.flagActiveNorwegian = 'inactive';
