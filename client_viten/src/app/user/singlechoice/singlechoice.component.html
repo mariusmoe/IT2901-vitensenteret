@@ -1,7 +1,7 @@
-<div class = "singleChoiceContainer">
   <md-radio-group class = "radioOptions" [(ngModel)] = "selectedOption">
-   <md-radio-button *ngFor = "let option of options" [value] = "option" (change) = "updateAnswers(this.questionObject.lang.no.options.indexOf(option))">
-     {{option}}
-   </md-radio-button>
+    <div class="choice" *ngFor = "let option of options">
+      <md-radio-button class="child" [value] = "option" (change) = "updateAnswers(this.questionObject.lang.no.options.indexOf(option))">
+        {{option}}
+      </md-radio-button>
+    </div>
   </md-radio-group>
-</div>

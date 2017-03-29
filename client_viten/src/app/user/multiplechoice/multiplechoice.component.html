@@ -1,7 +1,7 @@
 <div class="multiChoiceContainer">
-  <!--<div class="region"> -->
-    <md-checkbox class="child" *ngFor="let option of options; let i = index;" [(ngModel)]="checkModels[i]" [checked]="checkModels[i]" (change) = "updateAnswers()">
+  <div class="choice" *ngFor="let option of options; let i = index;" >
+    <md-checkbox class="child" [(ngModel)]="checkModels[i]" [checked]="checkModels[i]" (change) = "updateAnswers()">
       {{option}}
     </md-checkbox>
-  <!-- </div> -->
+  </div>
 </div>
