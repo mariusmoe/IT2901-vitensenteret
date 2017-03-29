@@ -18,12 +18,14 @@
 */
 
 .multiChoiceContainer {
-  width: 75vw;
-  height: 50vh;
+  width: 30vw;
+  height: 25vh;
+  margin-top: 5vh;
   display: flex;
   flex-wrap: wrap;
-  transform: scale(1.5);
+  transform: scale(2);
   .child {
-    min-width: 37.5vw;
+    text-align: left;
+    width: 15vw;
   }
   }

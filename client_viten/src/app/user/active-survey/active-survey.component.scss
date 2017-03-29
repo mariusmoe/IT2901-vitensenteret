@@ -1,5 +1,7 @@
+$main-background-color: #F5F5F5;
+
 .active_survey_window{
-  background-color: #F5F5F5;
+  background-color: $main-background-color;
   .surveyView{
     display: flex;
     .playbutton{
@@ -200,9 +202,10 @@ h3 {
   width: 100vw;
   overflow: hidden;
     span{
+      font-family: 'Baloo Bhaina', cursive;
       margin: auto auto;
       font-weight: bold;
-      font-size: 10vh;
+      font-size: 10vw;
     }
 }
 
@@ -238,3 +241,93 @@ input[type=image]:disabled
 }
 
 .flag:focus{outline: none;}
+
+
+.modal {
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Sit on top */
+  left: 0;
+  top: 0;
+  width: 100%; /* Full width */
+  height: 100%; /* Full height */
+  overflow: auto; /* Enable scroll if needed */
+  background-color: rgb(0,0,0); /* Fallback color */
+  background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+
+  .modal-content {
+    background-color: $main-background-color;
+    margin: 12vh auto;
+    width: 75vw;
+    height: 75vh;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-content: center;
+
+    .modal-text-big{
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      overflow: hidden;
+      margin: 1vw;
+      margin-bottom: 10vh;
+
+        span{
+          font-family: 'Roboto', sans-serif;
+          margin: auto auto;
+          font-weight: bold;
+          font-size: 5vw;
+          text-align: center;
+        }
+    }
+
+    .modal-text-small{
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      overflow: hidden;
+      margin: 1vw;
+      width: 75vw;
+
+        span{
+          font-family: 'Roboto', sans-serif;
+          margin: auto auto;
+          font-weight: bold;
+          font-size: 3vw;
+          text-align: center;
+        }
+    }
+
+    .button-div {
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      margin-top: 20vh;
+
+      .modal-button {
+        color: white;
+        background-color: #FF5722;
+        align-content: center;
+      }
+    }
+
+  }
+}
+
+
+// Disable highlights
+
+// http://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting-using-css
+.active_survey_window {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+* { // scoped by angular. ELse this would be horrible
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
+}

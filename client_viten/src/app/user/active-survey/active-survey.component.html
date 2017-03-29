@@ -1,11 +1,22 @@
 <!-- The main container of the component -->
 <div class="active_survey_window">
   <input class="quitSurvey" type="image" src="../../assets/images/Exit.svg" (click)="quitSurvey()">
-  <!--testdata
-  <p>
-    active-survey works!
-  </p>-->
-  <!--Startbutton for an active survey   *ngIf="!started"   -->
+
+  <!--This window overlays when there is an error with playing the survey-->
+  <div class="modal" *ngIf="showmodal">
+    <div class="modal-content">
+      <div class="modal-text-big">
+        <span>{{ 'Sorry' | translate }}</span>
+      </div>
+      <div class="modal-text-small">
+        <span>{{ 'ContactError' | translate }}</span>
+      </div>
+      <div class="button-div">
+        <button md-button class="modal-button" (click)="hideModal()">OK</button>
+      </div>
+    </div>
+  </div>
+
 
   <!-- The languageSelection buttons that shows when there exist alternative languages -->
   <!-- TODO translateservice in click do not work -->

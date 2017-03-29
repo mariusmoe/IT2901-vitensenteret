@@ -34,19 +34,32 @@ import { TranslateService } from '../../_services/translate.service';
     trigger('shakeArrow', [
       state('active', style({})),
       state('inactive', style({})),
-      transition('inactive => active', animate('500ms', keyframes([
-        style({transform: 'translateX(0) scaleX(1)', ofset: 0.1}),
-        style({transform: 'translateX(2%) scaleX(1)', ofset: 0.2}),
-        style({transform: 'translateX(4%) scaleX(1)', ofset: 0.3}),
-        style({transform: 'translateX(6%) scaleX(1)', ofset: 0.4}),
-        style({transform: 'translateX(8%) scaleX(1)', ofset: 0.5}),
-        style({transform: 'translateX(10%) scaleX(0.9)', ofset: 0.6}),
-        style({transform: 'translateX(6%) scaleX(0.94)', ofset: 0.7}),
-        style({transform: 'translateX(2%) scaleX(0.98)', ofset: 0.8}),
-        style({transform: 'translateX(0) scaleX(1)', ofset: 0.9}),
-        style({transform: 'translateX(0) scaleX(1)', ofset: 1}),
+      transition('inactive => active', animate('1000ms', keyframes([
+        style({transform: 'translateX(0)', ofset: 0}),
+        style({transform: 'translateX(0)', ofset: 0.1}),
+        style({transform: 'translateX(2%)', ofset: 0.2}),
+        style({transform: 'translateX(4%)', ofset: 0.3}),
+        style({transform: 'translateX(6%)', ofset: 0.4}),
+        style({transform: 'translateX(8%)', ofset: 0.5}),
+        style({transform: 'translateX(10%)', ofset: 0.6}),
+        style({transform: 'translateX(6%)', ofset: 0.7}),
+        style({transform: 'translateX(2%)', ofset: 0.8}),
+        style({transform: 'translateX(0)', ofset: 0.9}),
+        style({transform: 'translateX(0)', ofset: 1}),
       ]))),
-      transition('active => inactive', animate('500ms'))
+      transition('active => inactive', animate('500ms', keyframes([
+        style({transform: 'rotate(0)', ofset: 0}),
+        style({transform: 'rotate(2deg)', ofset: 0.1}),
+        style({transform: 'rotate(-2deg)', ofset: 0.2}),
+        style({transform: 'rotate(2deg)', ofset: 0.3}),
+        style({transform: 'rotate(-2deg)', ofset: 0.4}),
+        style({transform: 'rotate(2deg)', ofset: 0.5}),
+        style({transform: 'rotate(-2deg)', ofset: 0.6}),
+        style({transform: 'rotate(2deg)', ofset: 0.7}),
+        style({transform: 'rotate(-2deg)', ofset: 0.8}),
+        style({transform: 'rotate(2deg)', ofset: 0.9}),
+        style({transform: 'rotate(0)', ofset: 1}),
+      ])))
     ]),
     trigger('playGrow', [
       state('active', style({transform: 'scale(1.05)'})),
@@ -75,6 +88,7 @@ export class ActiveSurveyComponent implements OnInit {
   englishEnabled: boolean;
   Twolanguage: boolean;
   noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
+  showmodal = false; // controls the visibility state of the modal window
 
   done = false; // if true it takes you to the endMessage-screen
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
@@ -153,6 +167,7 @@ export class ActiveSurveyComponent implements OnInit {
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
         this.Twolanguage = true;
+        this.translateService.use('no');
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
@@ -183,7 +198,7 @@ export class ActiveSurveyComponent implements OnInit {
         sub.unsubscribe();
 
         if (!result.survey.active) {
-          alert('Survey is not available');
+          this.showModal();
           return;
         }
         this.started = true;
@@ -425,6 +440,7 @@ resetTimer() {
   */
   private switchtono() {
     this.Twolanguage = true;
+    this.translateService.use('no');
     // Animation change
     this.flagActiveEnglish = 'inactive';
     this.flagActiveNorwegian = 'active';
@@ -435,6 +451,7 @@ resetTimer() {
     */
   private switchtoen() {
     this.Twolanguage = !true;
+    this.translateService.use('en');
     // Animation change
     this.flagActiveEnglish = 'active';
     this.flagActiveNorwegian = 'inactive';
@@ -454,5 +471,13 @@ resetTimer() {
     } else if (this.playButtonActive === 'active') {
       this.playButtonActive = 'inactive';
     }
+  }
+
+  hideModal() {
+    this.showmodal = false;
+  }
+
+  showModal() {
+    this.showmodal = true;
   }
 }

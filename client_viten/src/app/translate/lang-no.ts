@@ -191,6 +191,10 @@ export const LANG_NO_TRANS = {
   // Nickname component
   'Name': 'Hva heter du?',
 
+  // Modal dialog in active survey
+  'Sorry': 'Beklager',
+  'ContactError': 'Noe gikk galt! Venligst kontakt de ansatte.'
+
 
 
 

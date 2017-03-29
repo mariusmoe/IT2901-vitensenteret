@@ -189,6 +189,10 @@ export const LANG_EN_TRANS = {
   // Nickname component
   'Name': 'What is your name?',
 
+  // Modal dialog in active survey
+  'Sorry': 'Sorry',
+  'ContactError': 'Something went wrong! Please contact the staff.'
+
 
 
 };
