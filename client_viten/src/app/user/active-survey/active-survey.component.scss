@@ -238,3 +238,21 @@ input[type=image]:disabled
 }
 
 .flag:focus{outline: none;}
+
+
+// Disable highlights
+
+// http://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting-using-css
+.active_survey_window {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+* { // scoped by angular. ELse this would be horrible
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-tap-highlight-color: transparent;
+}
