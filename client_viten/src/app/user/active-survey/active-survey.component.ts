@@ -99,7 +99,7 @@ export class ActiveSurveyComponent implements OnInit {
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
   public startText = 'Start survey';
 
-  isNicknameTaken = false
+  isNicknameTaken = false;
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
@@ -315,7 +315,7 @@ addOrChangeAnswer(alternative: any) {
       this.response.questionlist[this.page] = -1;
     }
     // If current page is the last with questions, the next page should be the endSurvey page
-    let pageCopy = this.page;
+    const pageCopy = this.page;
     if (pageCopy + 1 >= this.totalPages) {
       if (this.survey.postKey !== undefined || this.survey.isPost) {
         // console.log('pre-survey is available');
