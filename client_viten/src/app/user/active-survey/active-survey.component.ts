@@ -272,9 +272,19 @@ addOrChangeAnswer(alternative: any) {
   if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
-    this.noreqans = false;
   }
   this.response.questionlist[this.page] = alternative;
+
+  // This method checks if a qestion is required and has been answered
+  if (this.survey.questionlist[this.page].required) {
+    if (this.response.questionlist[this.page] == null) {
+      this.noreqans = true;
+    } else {
+      this.noreqans = false;
+    }
+  } else {
+    this.noreqans = false;
+  }
 }
    /**
     * Updates the nickname in Response

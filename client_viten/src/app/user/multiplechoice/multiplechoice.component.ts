@@ -37,6 +37,12 @@ export class MultiplechoiceComponent implements OnInit {
         this.answerList.push(i);
       }
     });
+
+    // Important for the required logic in active-survey
+    if (this.answerList[0] == null) {
+      this.answerList = null;
+    }
+
     this.answer.emit(this.answerList);
   }
 }
