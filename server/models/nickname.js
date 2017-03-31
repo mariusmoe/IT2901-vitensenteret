@@ -14,7 +14,7 @@ const nicknameSchema = new Schema({
   uniqueName: String,   // unique nickname
   expirationDate: {
     type: Date,
-    expires:  60*60*24,  // expire after 24h
+    // expires:  60*60*24,  // expire after 24h
     default: Date.now
   }
 });
