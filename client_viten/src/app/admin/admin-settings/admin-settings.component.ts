@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,6 +19,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private userSub;
   private userListSub;
   public  user: User;
+  newEmailForm: FormGroup;
   private email = '';
   private userList: User[] = [];
   private selectedRow: number;
@@ -33,12 +35,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     private surveyService: SurveyService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
+    private fb: FormBuilder,
     public languageService: TranslateService) {
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
       if (this.user.role === 'admin') {
         this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
       }
+      this.newEmailForm = fb.group({
+        'newEmail': [null, Validators.required],
+      });
+
     }
 
 
@@ -217,13 +224,14 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'delete-acccount-dialog',
   template: `
-  <h1>{{ 'Are you sure you want to delete this account?' | translate }}</h1>
-  <br>
-  <p>{{ 'The account will be deleted! This action is permanent!' | translate }}</p>
-  <md-dialog-actions>
+  <h1 md-dialog-title>{{ 'Are you sure you want to delete this account?' | translate }}</h1>
+  <div md-dialog-content>
+    {{ 'The account will be deleted! This action is permanent!' | translate }}
+  </div>
+  <div md-dialog-actions>
     <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
-    <button md-raised-button color="primary"  md-dialog-close>{{ 'Cancel' | translate }}</button>
-  </md-dialog-actions>
+    <button md-raised-button md-dialog-close color="primary">{{ 'Cancel' | translate }}</button>
+  </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
 })
@@ -239,28 +247,29 @@ export class DeleteDialog {
 @Component({
   selector: 'refer-acccount-dialog',
   template: `
-  <h1>{{ 'Refer one userType' | translate:[data.role] }}</h1>
-  <br>
-  <p>{{ 'A referral link is only active for two weeks' | translate }}</p>
-  <md-input-container class="referralField">
-    <input class="referralField"
-      mdInput placeholder="{{ 'Referral link' | translate }}"
-      value="{{data.referralURL}}"
-      [(ngModel)] = "text">
-  </md-input-container>
-  <button md-raised-button
-    class="btn btn-default"
-    [class.btn-success] = 'isCopied'
-    type="button"
-    ngxClipboard
-    [cbContent] = 'text'
-    (cbOnSuccess) = 'isCopied = true'>
-      {{ 'Copy' | translate }}
-      <md-icon>content_copy</md-icon>
-  </button>
-  <md-dialog-actions>
-    <button md-raised-button color="primary"  md-dialog-close>{{ 'Okay' | translate }}</button>
-  </md-dialog-actions>
+  <h1 md-dialog-title>{{ 'Refer one userType' | translate:[data.role] }}</h1>
+  <div md-dialog-content>
+    <p>{{ 'A referral link is only active for two weeks' | translate }}</p>
+    <md-input-container class="referralField">
+      <input class="referralField"
+        mdInput placeholder="{{ 'Referral link' | translate }}"
+        value="{{data.referralURL}}"
+        [(ngModel)] = "text">
+    </md-input-container>
+    <button md-raised-button
+      class="btn btn-default"
+      [class.btn-success] = 'isCopied'
+      type="button"
+      ngxClipboard
+      [cbContent] = 'text'
+      (cbOnSuccess) = 'isCopied = true'>
+        {{ 'Copy' | translate }}
+        <md-icon>content_copy</md-icon>
+    </button>
+  </div>
+  <div md-dialog-actions>
+    <button md-raised-button md-dialog-close color="primary">{{ 'Okay' | translate }}</button>
+  </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
 })
@@ -283,15 +292,15 @@ export class ReferDialog {
 @Component({
   selector: 'credential-changed-dialog',
   template: `
-  <h1>{{ 'Success' | translate }}</h1>
-  <br>
-
-  <p>{{ data.credential === 'password' ?
-    ('You have now changed your password' | translate) : ('You have now changed your email' | translate)}}</p>
-  <p>{{ 'You will now be logged out' | translate }}</p>
-  <md-dialog-actions>
+  <h1 md-dialog-title>{{ 'Success' | translate }}</h1>
+  <div md-dialog-content>
+    <p>{{ data.credential === 'password' ?
+      ('You have now changed your password' | translate) : ('You have now changed your email' | translate)}}</p>
+    <p>{{ 'You will now be logged out' | translate }}</p>
+  </div>
+  <div md-dialog-actions>
     <button md-raised-button color="primary" (click)="dialogRef.close('yes')">{{ 'Okay' | translate }}</button>
-  </md-dialog-actions>
+  </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
 })

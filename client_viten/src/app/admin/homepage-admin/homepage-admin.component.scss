@@ -88,3 +88,13 @@ md-card {
   top: 62px;
   right: 14px;
 }
+
+
+div[md-dialog-actions] {
+  button {
+    margin-left: 10px;
+    &:first-of-type {
+      margin: 0;
+    }
+  }
+}

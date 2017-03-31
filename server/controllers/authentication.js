@@ -67,7 +67,7 @@ exports.patchOneEscape = (req, res, next) => {
  */
 exports.checkOneEscape = (req, res, next) => {
   const password = req.body.password;
-  if (!password) {
+  if (!password || typeof password !== 'string') {
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
   }
   Escape.findOne({}, (err, escape) => {
@@ -76,7 +76,7 @@ exports.checkOneEscape = (req, res, next) => {
       return res.status(401).send({message: false, error: 'ERROR'});
     }
     escape.comparePassword(password, function(err, isMatch) {
-      if (err) { return done(err); }
+      if (err) { return next(err); }
       if (isMatch) {
         return res.status(200).send({message: true});
       } else {

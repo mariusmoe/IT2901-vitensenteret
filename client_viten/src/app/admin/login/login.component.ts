@@ -31,6 +31,7 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
+    // sets background according to the noWrapper class (see app.component.scss)
     document.querySelector('html').classList.add('noWrapper');
   }
   ngOnDestroy() {

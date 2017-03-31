@@ -1,21 +1,10 @@
-.freetxtContainer {
-  width: 35vw;
-  height: 20vh;
-  background-color:white;
-  overflow: scroll;
-}
-
-input {
-  resize: none;
-  border: none;
-  height: auto;
-}
-
-md-card-content {
-  padding: 0;
-  height: auto;
-}
 
 md-card {
   margin: auto auto;
+  margin-top: 25vh;
+
+  md-card-content {
+    padding: 0;
+    height: auto;
+  }
 }

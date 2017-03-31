@@ -1,6 +1,6 @@
 $main-background-color: #F5F5F5;
 
-.active_survey_window{
+.active_survey_window {
   background-color: $main-background-color;
   .surveyView{
     display: flex;
@@ -14,7 +14,7 @@ $main-background-color: #F5F5F5;
 }
 
 /*Styling for the big playbutton at the start of a survey*/
-.playbutton{
+.playbutton {
   //
   display: flex;
   align-items: center;
@@ -23,11 +23,11 @@ $main-background-color: #F5F5F5;
   border-radius: 75vh;
 }
 /*No border around playbutton when clicked*/
-.playbutton.clicked{
+.playbutton.clicked {
   display: none;
 }
 // Styling the exit button
-.exitButton{
+.exitButton {
   position: fixed;
   top: 5px;
   right: 5px;
@@ -36,7 +36,7 @@ $main-background-color: #F5F5F5;
   opacity: 0.4;
   border-radius: 10vh;
 }
-.exitButton:hover{
+.exitButton:hover {
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
     animation-iteration-count: infinite;
@@ -52,7 +52,7 @@ $main-background-color: #F5F5F5;
 }
 
 // Styling for the playbutton
-.svgButton{
+.svgButton {
    width: 60vh;
    height: 60vh;
    border-radius: 60vh;
@@ -62,7 +62,7 @@ $main-background-color: #F5F5F5;
 .exitButton:focus {outline: none;}
 
 /* Styling for the container of the Start Survey text below the play button */
-.startTextContainer{
+.startTextContainer {
   width: 100vw;
   height: 10vh;
   text-align: center;
@@ -86,7 +86,7 @@ $main-background-color: #F5F5F5;
 }
 
 /* Styling for of the Start Survey text above the play button */
-.startText{
+.startText {
   font-family: 'Baloo Bhaina', cursive;
   font-size: 6vw;
   font-weight: bold;
@@ -95,31 +95,31 @@ $main-background-color: #F5F5F5;
 }
 
 /* Styling for the container for the logos under the play button */
-.logoContainer{
+.logoContainer {
   display: flex;
 }
 
 /* Styling for the vitenlogo Container */
-.vitenContainer{
+.vitenContainer {
   height: 15vh;
   width: 50vw;
 }
 
 /* Styling for the robotlogo Container */
-.robotContainer{
+.robotContainer {
   height: 15vh;
   width: 50vw;
 }
 
 /* Styling for the vitenlogo */
-.vitenlogo{
+.vitenlogo {
   height: 80px;
   width: 80px;
   margin: 0 0 0 30px;
 }
 
 /* Styling for the robotlogo */
-.robotlogo{
+.robotlogo {
   height: 80px;
   width: 80px;
   float: right;
@@ -139,18 +139,18 @@ $main-background-color: #F5F5F5;
   width: 96%;
   left: 2%;
 
-  .qnavigateArea{
+  .qnavigateArea {
     padding: 0 5px 0 5px;
     height: 15vh;
     width: 15vw;
     // margin-bottom: 10px;
-    &.alignRight{
+    &.alignRight {
       text-align: right;
     }
   }
 }
 
-.surveyQuestion{
+.surveyQuestion {
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -159,11 +159,11 @@ $main-background-color: #F5F5F5;
   height: 100vh;
   width: 100vw;
 }
-.answerTypes{
+.answerTypes {
   display: flex;
   justify-content: center;
 }
-.txt{
+.txt {
   text-align: center;
   max-width: 75vw;
   margin-top: 5vh;
@@ -181,7 +181,7 @@ h3 {
   text-align: center;
 }
 
-.questionTitle{
+.questionTitle {
   font-family: 'Baloo Bhaina', cursive;
   color: #263238;
   font-size: 4vw;
@@ -194,14 +194,14 @@ h3 {
   font-size: 3vw;
 }
 
-.surveyDone{
+.surveyDone {
   display: flex;
   justify-content: center;
   align-content: center;
   height: 100vh;
   width: 100vw;
   overflow: hidden;
-    span{
+    span {
       font-family: 'Baloo Bhaina', cursive;
       margin: auto auto;
       font-weight: bold;
@@ -209,11 +209,11 @@ h3 {
     }
 }
 
-.surveyDone:hover{
+.surveyDone:hover {
   cursor: pointer;
 }
 
-.quitSurvey{
+.quitSurvey {
   position: fixed;
   top: 5px;
   left: 5px;
@@ -223,15 +223,14 @@ h3 {
   cursor: default;
 }
 
-#qButton{
+#qButton {
   max-width: 100%;
   height: inherit;
   width: inherit;
 }
 
-input[type=image]:disabled
-{
-    opacity:0.5;
+input[type=image]:disabled {
+  opacity:0.5;
 }
 
 .flag {
@@ -240,7 +239,9 @@ input[type=image]:disabled
   border-radius: 8vw;
 }
 
-.flag:focus{outline: none;}
+.flag:focus {
+  outline: none;
+}
 
 
 .modal {
@@ -264,7 +265,7 @@ input[type=image]:disabled
     flex-wrap: wrap;
     align-content: center;
 
-    .modal-text-big{
+    .modal-text-big {
       display: flex;
       justify-content: center;
       align-content: center;
@@ -272,16 +273,16 @@ input[type=image]:disabled
       margin: 1vw;
       margin-bottom: 10vh;
 
-        span{
-          font-family: 'Roboto', sans-serif;
-          margin: auto auto;
-          font-weight: bold;
-          font-size: 5vw;
-          text-align: center;
-        }
+      span {
+        font-family: 'Roboto', sans-serif;
+        margin: auto auto;
+        font-weight: bold;
+        font-size: 5vw;
+        text-align: center;
+      }
     }
 
-    .modal-text-small{
+    .modal-text-small {
       display: flex;
       justify-content: center;
       align-content: center;
@@ -289,13 +290,13 @@ input[type=image]:disabled
       margin: 1vw;
       width: 75vw;
 
-        span{
-          font-family: 'Roboto', sans-serif;
-          margin: auto auto;
-          font-weight: bold;
-          font-size: 3vw;
-          text-align: center;
-        }
+      span {
+        font-family: 'Roboto', sans-serif;
+        margin: auto auto;
+        font-weight: bold;
+        font-size: 3vw;
+        text-align: center;
+      }
     }
 
     .button-div {

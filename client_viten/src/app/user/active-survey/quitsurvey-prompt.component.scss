@@ -1,22 +1,26 @@
 
-input[type=number], input[type=tel] {
-    -webkit-text-security: disc;
-}
+.wrapper {
 
-.quitSurvey-code{
-  text-align: center;
-}
+  h1 {
+    text-align: center;
+  }
 
-.prompt-buttons{
-  color: white;
-}
+  md-input-container {
+    margin: 0 auto;
+    display: inline-block;
+    input {
+      text-security: disc;
+      -webkit-text-security: disc;
+      -moz-text-security: disc;
+    }
+  }
 
-.cancel{
-  float: left;
-  background-color: #FF5722;
-}
-
-.submit{
-  float: right;
-  background-color: #42A5F5;
+  div[md-dialog-actions] {
+    button {
+      margin-left: 10px;
+      &:first-of-type {
+        margin: 0;
+      }
+    }
+  }
 }

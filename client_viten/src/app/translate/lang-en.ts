@@ -36,6 +36,7 @@ export const LANG_EN_TRANS = {
   'Responses': 'Responses',
   'User': 'User',
   'Nickname': 'Nickname',
+  'Code': 'Code',
 
   // roles
   'admin': 'Admin',
@@ -200,6 +201,9 @@ export const LANG_EN_TRANS = {
 
   // Modal dialog in active survey
   'Sorry': 'Sorry',
-  'ContactError': 'Something went wrong! Please contact the staff.'
+  'ContactError': 'Something went wrong! Please contact the staff.',
 
+  // quit survey prompt
+  'Enter the code to quit': 'Enter the code to quit',
+  'Incorrect code': 'Incorrect code',
 };
