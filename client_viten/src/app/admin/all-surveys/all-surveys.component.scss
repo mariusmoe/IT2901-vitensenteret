@@ -41,12 +41,14 @@ md-list {
   font-size: 0.7em;
 }
 
+
 .survey {
   cursor: pointer;
   cursor: hand;
   border-left: 2px solid #f44336;
   background-color: rgba(255,255,255,0.5);
   position: relative;
+  //border to differentiate the other surveys
   border-bottom: 1px solid rgba(0, 0, 0, .1);
   .chip {
     pointer-events: none;
