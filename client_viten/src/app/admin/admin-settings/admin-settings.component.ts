@@ -129,7 +129,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       },
       error => {
         this.openSnackBar(this.languageService.instant('Could not change your password'), 'FAILURE');
-        console.error(error);
+        // console.error(error);
     });
   }
 
@@ -267,7 +267,7 @@ export class DeleteDialog {
         <md-icon>content_copy</md-icon>
     </button>
   </div>
-  <div md-dialog-actions>
+  <div md-dialog-actions align="center">
     <button md-raised-button md-dialog-close color="primary">{{ 'Okay' | translate }}</button>
   </div>
   `,
@@ -292,14 +292,15 @@ export class ReferDialog {
 @Component({
   selector: 'credential-changed-dialog',
   template: `
-  <h1 md-dialog-title>{{ 'Success' | translate }}</h1>
-  <div md-dialog-content>
+  <h1 md-dialog-title align="center">{{ 'Success' | translate }}</h1>
+  <div md-dialog-content align="center">
     <p>{{ data.credential === 'password' ?
       ('You have now changed your password' | translate) : ('You have now changed your email' | translate)}}</p>
     <p>{{ 'You will now be logged out' | translate }}</p>
   </div>
-  <div md-dialog-actions>
-    <button md-raised-button color="primary" (click)="dialogRef.close('yes')">{{ 'Okay' | translate }}</button>
+  <div md-dialog-actions align="center">
+    <button md-raised-button color="primary"
+    (click)="dialogRef.close('yes')">{{ 'Okay' | translate }}</button>
   </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
