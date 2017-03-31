@@ -101,7 +101,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   deleteSurvey(surveyId: string) {
 
       this.dialogRef = this.dialog.open(DeleteSurveyDialog, {
-        disableClose: false
+        disableClose: false,
+        width: '500px',
       });
       this.dialogRef.afterClosed().subscribe(result => {
         // console.log('result: ' + result);
@@ -333,16 +334,17 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
  */
 @Component({
   selector: 'delete-survey-dialog',
+  styleUrls: ['./homepage-admin.component.scss'],
   template: `
-  <h1>{{ 'Are you sure you want to delete this survey?' | translate }}</h1>
-  <br>
-  <p>{{ 'The survey will be deleted! This action is permanent!' | translate }}</p>
-  <md-dialog-actions>
+  <h1 md-dialog-title>{{ 'Are you sure you want to delete this survey?' | translate }}</h1>
+  <div md-dialog-content>
+    {{ 'The survey will be deleted! This action is permanent!' | translate }}
+  </div>
+  <div md-dialog-actions align="center">
     <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
-    <button md-raised-button color="primary"  md-dialog-close>{{ 'Cancel' | translate }}</button>
-  </md-dialog-actions>
-  `,
-  styleUrls: ['./homepage-admin.component.scss']
+    <button md-raised-button md-dialog-close color="primary" class="alignRight">{{ 'Cancel' | translate }}</button>
+  </div>
+  `
 })
 export class DeleteSurveyDialog {
   constructor(public dialogRef: MdDialogRef<DeleteSurveyDialog>) { }

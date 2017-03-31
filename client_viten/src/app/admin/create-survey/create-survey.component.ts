@@ -346,8 +346,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   selector: 'alternatives-dialog',
   styleUrls: ['./create-survey.component.scss'],
   template: `
-  <h2 md-dialog-title>{{ 'Set Alternatives' | translate }}</h2>
-  <md-dialog-content>
+  <h1 md-dialog-title>{{ 'Set Alternatives' | translate }}</h1>
+  <div md-dialog-content>
     <span>{{ 'At least two alternatives must be set, with a maximum of 6.' | translate }}</span>
     <div *ngFor="let i of numAlternatives;">
       <md-input-container>
@@ -371,16 +371,16 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6 || data.lockdown"
     (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
-  </md-dialog-content>
-  <md-dialog-actions align="center">
-  </md-dialog-actions>
-  <md-dialog-actions align="center">
+  </div>
+  <div md-dialog-actions align="center">
+  </div>
+  <div md-dialog-actions align="center">
     <button md-raised-button color="primary" [disabled]="!canSave"
     [md-tooltip]="canSave ? '' : 'All required fields must be filled in!'"
     tooltip-position="above"
     (click)="save()">{{ 'Save' | translate }}</button>
     <button md-raised-button color="warn" (click)="cancel()">{{ 'Cancel' | translate }}</button>
-  </md-dialog-actions>
+  </div>
   `
 })
 export class SurveyAlternativesDialog {
@@ -514,19 +514,17 @@ export class SurveyAlternativesDialog {
   selector: 'post-survey-dialog',
   styleUrls: ['./create-survey.component.scss'],
   template: `
-  <h2 md-dialog-title class="alignCenter">{{ 'Post results' | translate }}</h2>
-  <md-dialog-content align="center">
+  <h1 md-dialog-title class="alignCenter">{{ 'Post results' | translate }}</h1>
+  <div md-dialog-content align="center">
     <p>{{ 'Could not post your survey. Error:' | translate }}</p>
     <span class="error">
-      <span>{{data.status}}</span>
-      <span>: </span>
-      <span>{{data.message}}</span>
+      {{data.status}} : {{data.message}}
     </span>
     <p>{{ 'The system cannot proceed until the issue has been resolved.' | translate }}</p>
-  </md-dialog-content>
-  <md-dialog-actions align="center">
+  </div>
+  <div md-dialog-actions align="center">
     <button md-raised-button color="primary" (click)="okay()">{{ 'Okay' | translate }}</button>
-  </md-dialog-actions>
+  </div>
   `
 })
 export class SurveyPublishDialog {

@@ -7,7 +7,7 @@
     <p *ngIf="nickNameNotRegistered">{{'You need to answer the pre survey first' | translate }}</p>
     <p *ngIf="isNicknameTaken">{{'This nickname is taken, choose another one' | translate}}</p>
     <md-input-container>
-      <input mdInput placeholder="Nickname" [mdAutocomplete]="auto" [formControl]="nickCtrl" #nick (change)="updateAnswers(nick.value)">
+      <input mdInput placeholder="{{'Nickname' | translate}}" [mdAutocomplete]="auto" [formControl]="nickCtrl" #nick (change)="updateAnswers(nick.value)">
     </md-input-container>
 
     <md-autocomplete #auto="mdAutocomplete">

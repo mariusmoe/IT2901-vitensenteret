@@ -36,6 +36,7 @@ export const LANG_NO_TRANS = {
   'Responses': 'Svar',
   'User': 'Bruker',
   'Nickname': 'Kallenavn',
+  'Code': 'Kode',
 
   // Roles
   'admin': 'Superadmin',
@@ -203,7 +204,11 @@ export const LANG_NO_TRANS = {
 
   // Modal dialog in active survey
   'Sorry': 'Beklager',
-  'ContactError': 'Noe gikk galt! Venligst kontakt de ansatte.'
+  'ContactError': 'Noe gikk galt! Venligst kontakt de ansatte.',
+
+  // quit survey prompt
+  'Enter the code to quit': 'Skriv inn koden for å avslutte undersøkelsen',
+  'Incorrect code': 'Feil kode',
 
 
 };

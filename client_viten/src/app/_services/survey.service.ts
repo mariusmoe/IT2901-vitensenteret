@@ -23,6 +23,8 @@ export class SurveyService {
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
+    console.log(password);
+
     return this.http.post(environment.URL.checkChoosesurvey, {password: password}, options)
     .map( response => {
       console.log(response);
