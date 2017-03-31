@@ -269,7 +269,7 @@ export class ActiveSurveyComponent implements OnInit {
  * @param  {any} alternative a list of numbers to send to survey
  */
 addOrChangeAnswer(alternative: any) {
-  if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null) {
+  if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null && alternative != null) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
   }
