@@ -291,30 +291,6 @@ const getSecureRandomBytes = (callback) => {
 //   console.log("RANDOM: " + random );
 // })
 
-const setNickname = (surveyId, nickname, callback) => {
-  // console.log(surveyId + "  -   " + nickname);
-  Nickname.find({nickname: nickname}, (err, foundNickname) => {
-    // console.log(foundNickname);
-    if (foundNickname.length > 0) {
-      // Nickname is taken
-      callback(true, null)
-    } else {
-      // console.log('No nickname taken!');
-      // Nickname is aviliable
-      getSecureRandomBytes((random) => {
-        let newNickname = new Nickname({
-          nickname: nickname,
-          surveyId: surveyId,
-          uniqueName: random
-        });
-        newNickname.save((err, nickname) => {
-          if (err) {return next(err); }
-          callback(false, nickname);
-        });
-      });
-    }
-  })
-}
 
 
 // POST
@@ -334,13 +310,42 @@ exports.answerOneSurvey = (req, res, next) => {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
   if (responseObject.nickname) {
+    // Helper function for readability down below
+    const setNickname = (surveyId, nickname, callback) => {
+      // console.log(surveyId + "  -   " + nickname);
+      Nickname.find({nickname: nickname}, (err, foundNickname) => {
+        // console.log(foundNickname);
+        if (foundNickname.length > 0) {
+          // Nickname is taken
+          callback(true, null)
+        } else {
+          // console.log('No nickname taken!');
+          // Nickname is aviliable
+          getSecureRandomBytes((random) => {
+            let newNickname = new Nickname({
+              nickname: nickname,
+              surveyId: surveyId,
+              uniqueName: random
+            });
+            newNickname.save((err, nickname) => {
+              if (err) {return next(err); }
+              callback(false, nickname);
+            });
+          });
+        }
+      })
+    }
+
     Survey.findById(surveyId, (err, survey) => {
-      if (survey.isPost) {
+      if (survey.isPost) { // TODO: < --- if err, then this goes bad here!
+
+        // ^ FIXME! (the surveyId is never verifed to exist)
+
         // Survey is post and is sent with a nickname
         // lookup nicnames for this survey and see if it is already there
         // if not ignore it !!!
-        Nickname.find({nickname: responseObject.nickname}, (err, foundNickname) => {
-          if (err) { return next(err); }
+        Nickname.find({nickname: responseObject.nickname}, (err2, foundNickname) => {
+          if (err2) { return next(err2); }
           if(foundNickname.length == 0) {
             // nickname is not present - return FAILURE
             return res.status(400).send( {message: status.UNKNOWN_NICKNAME.message, status: status.UNKNOWN_NICKNAME.code})
@@ -352,10 +357,10 @@ exports.answerOneSurvey = (req, res, next) => {
                 surveyId: surveyId,
                 questionlist: responseObject.questionlist
             });
-            newResponse.save( (err, answer) => {
-              if (err) { return next(err); }
-              Nickname.findByIdAndRemove(foundNickname, (err) => {
-                if (err) { return next(err); }
+            newResponse.save( (err3, answer) => {
+              if (err3) { return next(err3); }
+              Nickname.findByIdAndRemove(foundNickname, (err4) => {
+                if (err4) { return next(err4); }
                 return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
               })
 
@@ -363,8 +368,8 @@ exports.answerOneSurvey = (req, res, next) => {
           }
         })
       } else {
-        setNickname(surveyId, responseObject.nickname, (err, nickname) => {
-          if(err) {
+        setNickname(surveyId, responseObject.nickname, (err5, nickname) => {
+          if(err5) {
             // console.log(status.NICKNAME_TAKEN.message);
             return res.status(400).send( {message: status.NICKNAME_TAKEN.message, status: status.NICKNAME_TAKEN.code})
           }
@@ -373,8 +378,8 @@ exports.answerOneSurvey = (req, res, next) => {
               surveyId: surveyId,
               questionlist: responseObject.questionlist
           });
-          newResponse.save( (err, answer) => {
-            if (err) { return next(err); }
+          newResponse.save( (err6, answer) => {
+            if (err6) { return next(err6); }
             return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
           });
         })
@@ -382,8 +387,8 @@ exports.answerOneSurvey = (req, res, next) => {
     })
   } else {
     let newResponse = new Response(responseObject);
-    newResponse.save( (err, answer) => {
-      if (err) { return next(err); }
+    newResponse.save( (err7, answer) => {
+      if (err7) { return next(err); }
       return res.status(200).send( {message: status.SURVEY_RESPONSE_SUCCESS.message, status: status.SURVEY_RESPONSE_SUCCESS.code})
     });
   }
