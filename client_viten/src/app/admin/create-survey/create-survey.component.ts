@@ -6,6 +6,7 @@ import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TranslateService } from '../../_services/translate.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-create-survey',
@@ -352,7 +353,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     <div *ngFor="let i of numAlternatives;">
       <md-input-container>
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'Norwegian' | translate }})"
-        [(ngModel)]="qoEditObj.lang.no.options[i]" required (change)='setSaveReadyStatus()'>
+        [(ngModel)]="qoEditObj.lang.no.options[i]" required (change)='setSaveReadyStatus()' [formControl]="formControl">
         <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])
           || fieldCheckDup(qoEditObj.lang.no.options[i], qoEditObj.lang.no.options)"
           >{{ !fieldValidate(qoEditObj.lang.no.options[i]) ? ('This field is required.' | translate)
@@ -360,7 +361,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       </md-input-container>
       <md-input-container *ngIf="data.englishEnabled">
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'English' | translate }})"
-        [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()'>
+        [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()' [formControl]="formControl">
         <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])
           || fieldCheckDup(qoEditObj.lang.en.options[i], qoEditObj.lang.en.options)"
           >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
@@ -383,17 +384,21 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   </div>
   `
 })
-export class SurveyAlternativesDialog {
+export class SurveyAlternativesDialog implements OnInit {
   qoEditObj: QuestionObject;
   outputQuestionObject: QuestionObject;
   alternativeDefaults: boolean[];
   activeAlternatives: Object[];
   canSave = false;
 
+  formControl: FormControl;
+
   // for complicated reasons, this is required.
   numAlternatives: number[];
 
   constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
+    // form control
+    this.formControl = new FormControl();
     // Create a copy of our questionObject
     this.qoEditObj = JSON.parse(JSON.stringify(this.data.questionObject));
     // if there are less than 2 options, fill them in
@@ -403,6 +408,13 @@ export class SurveyAlternativesDialog {
     // this is required! Do NOT remove!
     this.numAlternatives = Array(this.qoEditObj.lang.no.options.length).fill(0).map((x, i) => i);
     this.setSaveReadyStatus();
+  }
+
+  ngOnInit() {
+    // Listens to changes in the textbox
+    this.formControl.valueChanges.subscribe(value => {
+      this.setSaveReadyStatus();
+    });
   }
 
 
