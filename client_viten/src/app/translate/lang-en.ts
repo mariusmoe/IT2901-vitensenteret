@@ -140,6 +140,9 @@ export const LANG_EN_TRANS = {
     'Survey deleted': 'Survey deleted',
     'Are you sure you want to delete this survey?': 'Are you sure you want to delete this survey?',
     'The survey will be deleted! This action is permanent!': 'The survey will be deleted! This action is permanent!',
+    'Go to survey': 'Go to survey',
+    'Go to post survey': 'Go to post survey',
+    'The survey is not active': 'The survey is not active',
 
   // Admin settings component
   'Retype password': 'Retype password',
