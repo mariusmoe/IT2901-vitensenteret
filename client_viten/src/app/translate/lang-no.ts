@@ -141,6 +141,9 @@ export const LANG_NO_TRANS = {
   'Survey deleted': 'Undersøkelse slettet',
   'Are you sure you want to delete this survey?': 'Er du sikker på at du vil slette denne undersøkelsen?',
   'The survey will be deleted! This action is permanent!': 'Undersøkelsen vil bli slettet! Denne handlingen er permanent!',
+  'Go to survey': 'Gå til undersøkelsen',
+  'Go to post survey': 'Gå til post undersøkelse',
+  'The survey is not active': 'Undersøkelsen er ikke aktiv',
 
 
   // Admin settings component
