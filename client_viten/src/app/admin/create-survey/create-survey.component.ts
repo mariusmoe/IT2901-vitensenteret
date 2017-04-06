@@ -71,22 +71,36 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
     if (!param) {
       // Set defaults seeing we had no router parameter
-      // Do not remove the following lines!
-      this.survey = {
-        'name': '',
-        'comment': '',
-        'date': new Date().toISOString(),
-        'activationDate': new Date().toISOString(), // intentionally not iso string
-        'deactivationDate': undefined,
-        'active': true,
-        'isPost': false,
-        'questionlist': [],
-        'endMessage': {
-          'no': '',
-          'en': '', // do not remove. see submitSurvey for handling of english properties.
-        }
-      };
-      this.setPushReadyStatus();
+      // Though if we have a session in the works, load that!
+      const sessionSurveyString = sessionStorage.getItem('surveyInCreation');
+      const sessionSurveyObject = JSON.parse(sessionSurveyString);
+      // We are only to use this system IF we are creating a fresh survey.
+      // Param above is nonexisting, i.e. we're creating a FRESH survey,
+      // and if the sessionStorage contains a survey with NO id, then we're good
+      // to go.
+      if (sessionSurveyObject && (<Survey>sessionSurveyObject)._id === undefined) {
+        this.survey = sessionSurveyObject;
+        // though we should update some bits of information;
+        this.survey.date = new Date().toISOString();
+        this.survey.activationDate = new Date().toISOString();
+      } else {
+        // Do not remove the following lines!
+        this.survey = {
+          'name': '',
+          'comment': '',
+          'date': new Date().toISOString(),
+          'activationDate': new Date().toISOString(), // intentionally not iso string
+          'deactivationDate': undefined,
+          'active': true,
+          'isPost': false,
+          'questionlist': [],
+          'endMessage': {
+            'no': '',
+            'en': '', // do not remove. see submitSurvey for handling of english properties.
+          }
+        };
+      }
+      this.onSurveyChange();
       this.startupLoading = false;
       return;
     }
@@ -115,7 +129,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         }
 
         // Do not remove the following lines!
-        this.setPushReadyStatus();
+        this.onSurveyChange();
         this.startupLoading = false;
         sub.unsubscribe();
       },
@@ -144,11 +158,14 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * setSaveReadyStatus()
+   * onSurveyChange()
    *
    * Checks every part of the survey and returns true if the survey is valid
+   * Also updates the session storage
    */
-  setPushReadyStatus() {
+  onSurveyChange() {
+    // Update the session storage
+    sessionStorage.setItem('surveyInCreation', JSON.stringify(this.survey));
     // note: comment is NOT required, and is thusly not listed here.
     let status = this.fieldValidate(this.survey.name)     // name
       && this.survey.questionlist.length > 0              // at least one question
@@ -243,6 +260,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     const success = (result) => {
       this.submitLoading = false;
 
+      // given success status for creation of survey, we now remove what we have in the session storage
+      sessionStorage.removeItem('surveyInCreation');
+
       // this.route.snapshot is the route for the SUBDOMAIN of /admin
       // this.route.parent gives us the PARENT domain (ranging from '' to the parent
       // of this route). We want to return to the parent url in a programatic
@@ -296,7 +316,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     };
     this.survey.questionlist.push(qo);
     // Do not remove the following line!
-    this.setPushReadyStatus();
+    this.onSurveyChange();
   }
 
   /**
@@ -307,7 +327,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   removeQuestion(index: number) {
     this.survey.questionlist.splice(index, 1);
     // Do not remove the following line!
-    this.setPushReadyStatus();
+    this.onSurveyChange();
   }
 
 
@@ -334,7 +354,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         qo.lang.no.options = output.lang.no.options;
         qo.lang.en.options = output.lang.en.options;
         // Do not remove the following line!
-        this.setPushReadyStatus();
+        this.onSurveyChange();
       }
       sub.unsubscribe();
     });
