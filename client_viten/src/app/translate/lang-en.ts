@@ -62,8 +62,8 @@ export const LANG_EN_TRANS = {
   'text': 'Free Text',
 
   // Survey Pre post labels
-  'Pre-survey': 'Pre-survey',
-  'Post-survey': 'Post-survey',
+  'Pre': 'Pre',
+  'Post': 'Post',
 
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
