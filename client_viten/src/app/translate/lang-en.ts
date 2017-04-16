@@ -61,6 +61,10 @@ export const LANG_EN_TRANS = {
   'smiley': 'Smiley',
   'text': 'Free Text',
 
+  // Survey Pre post labels
+  'Pre': 'Pre',
+  'Post': 'Post',
+
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
   'Number of responses: n, m': 'Number of responses: %0, %1',

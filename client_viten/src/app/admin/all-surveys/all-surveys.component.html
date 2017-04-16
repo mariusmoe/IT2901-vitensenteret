@@ -18,7 +18,7 @@
 </div>
 
 
-<md-progress-circle *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
+<md-progress-spinner *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
 
 <md-list class="list" *ngIf="!searchLoading">
   <md-list-item
@@ -41,7 +41,7 @@
   </md-list-item>
 </md-list>
 <!-- loading circle -->
-<md-progress-circle *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-circle>
+<md-progress-spinner *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
 <span class="listComment"  *ngIf="!loading">
   {{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length,
   searchResultNum > surveyService.surveyList.length ? surveyService.surveyList.length : searchResultNum] }}

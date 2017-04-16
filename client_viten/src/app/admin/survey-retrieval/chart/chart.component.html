@@ -5,7 +5,7 @@
            then show that. Else show norwegian.
       -->
       <span>{{ questionObject.mode | translate }}</span>
-      <h1>{{ (languageService.getCurrentLang() === 'en' && questionObject.lang.en && questionObject.lang.en.txt) ?
+      <h1>{{ (translateService.getCurrentLang() === 'en' && questionObject.lang.en && questionObject.lang.en.txt) ?
               questionObject.lang.en.txt : questionObject.lang.no.txt}}</h1>
     </div>
 
