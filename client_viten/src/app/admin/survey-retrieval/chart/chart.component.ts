@@ -56,7 +56,8 @@ export class ChartComponent implements OnInit {
 
     this.chartData = [{ 'data': new Array(this.chartLabels.length) }];
     if (this.postResponses && this.postResponses.length > 0) {
-      this.chartData.push({ 'data': new Array(this.chartLabels.length) });
+      this.chartData[0]['label'] = this.languageService.instant('Pre-survey');
+      this.chartData.push({ 'data': new Array(this.chartLabels.length), 'label': this.languageService.instant('Post-survey') });
     }
 
 
@@ -177,13 +178,11 @@ export class ChartComponent implements OnInit {
         position: 'bottom',
         // if the legend is set for this type of chart, then display it.
         display: (this.chartLegends.indexOf(this.chartType) >= 0),
+      },
+      scales: {
+        yAxes: [{ ticks: { beginAtZero: true } }]
       }
     };
-    if (this.chartType === 'bar') {
-      this.chartOptions['scales'] = {
-        yAxes: [{ ticks: { beginAtZero: true } }]
-      };
-    }
   }
 
   /**
@@ -199,7 +198,8 @@ export class ChartComponent implements OnInit {
     // interpret our image as a .png, and we want to control the file name.
     // As such we replace all non-filepath-friendly characters from the question
     // and add the .png extension.
-    const dlLink = document.createElement('a');
+    const dlLink = document.createElement('a') as any; // as any disables tslinting.
+
     dlLink.download = this.questionObject.lang.no.txt.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.png';
     // the href is still just the image, though! That is what we want the user to download! The browser INTERPRETS
     // our image as a png, but the binary data is still the same. If we do not let the browser interpret it as anything,
