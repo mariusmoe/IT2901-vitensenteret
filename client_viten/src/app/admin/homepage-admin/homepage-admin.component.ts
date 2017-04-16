@@ -157,7 +157,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    */
   downloadAs(type: string) {
     if (type === 'json') {
-      const dlLink = document.createElement('a');
+      const dlLink = document.createElement('a') as any;
       dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
 
       const blob = new Blob([JSON.stringify({ survey: this.survey, responses: this.responses}, null, '\t')], { type: 'application/json' });
@@ -173,7 +173,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     this.surveyService.getSurveyAsCSV(this.survey._id).subscribe(
       result => {
         const data = result._body;
-        const dlLink = document.createElement('a');
+        const dlLink = document.createElement('a') as any;
         dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
         const blob = new Blob([result._body], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
@@ -210,16 +210,15 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       pdf.text(textOffset, y, text);
     };
 
-    // start wroting data to the PDF.
+    // start writing data to the PDF.
     pdf.setFontSize(30);
     centeredText(22, 'Vitensenteret');
     pdf.setFontSize(18);
     pdf.text(25, 35, this.survey.name);
     pdf.setFontSize(8);
     pdf.text(25, 44, this.survey.comment);
-    // Dates and num answers are right-aligned
+    // Dates and num answers are right-aligned (Logo added at the very bottom)
     rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
-
     rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
     const responses = this.responses.length;
     const postResponses = this.responses.length;
@@ -237,8 +236,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     const tables = this.surveyDOM.nativeElement.querySelectorAll('table.chartData');
     // Set up a dummy canvas. This dummy canvas is used to set a white background
     // and to avoid other corruptions to / of the actual real canvases
-    const dummyCanvas = document.createElement('canvas');
-    const dummyCanvasContext = dummyCanvas.getContext('2d');
+    const dummyCanvas = document.createElement('canvas') as any;
+    const dummyCanvasContext = dummyCanvas.getContext('2d') as any;
     dummyCanvas.width = canvases[0].height * 2;
     dummyCanvas.height = canvases[0].height;
     dummyCanvasContext.fillStyle = '#FFFFFF';
@@ -303,11 +302,26 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       rightAlignedText(20, pdf.internal.pageSize.height - 18, i + '/' + pageNr);
     }
 
-    // save our doc with a OS-friendly filename that is related to the survey at hand
-    const filename = todayFormatted + '_' + this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
-    pdf.save(filename);
-    // update our component with our new status
-    this.generatingPDF = false;
+    pdf.setPage(1);
+    const img = new Image();
+    img.src = '../../assets/images/vitenlogo.png';
+    const self = this;
+    const logoSize = 15;
+    img.onload = function() {
+        const canvas = document.createElement('canvas') as any;
+        canvas.width = img.width;
+        canvas.height = img.height;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+        pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
+          pdf.internal.pageSize.width - logoSize - 23, 12, logoSize, logoSize
+        );
+
+        // save our doc with a OS-friendly filename that is related to the survey at hand
+        const filename = todayFormatted + '_' + self.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
+        pdf.save(filename);
+        // update our component with our new status
+        self.generatingPDF = false;
+    };
   }
 
 
