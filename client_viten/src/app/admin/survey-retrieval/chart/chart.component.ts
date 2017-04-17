@@ -188,17 +188,15 @@ export class ChartComponent implements OnInit {
 
     const self = this;
     const animFunction = function(input) {
-      let anim = 1;
-      let height = 0;
-      // console.log(input);
-      if (input) {
-        height = input.chartInstance.chart.height;
-        anim = input.animationObject.currentStep / input.animationObject.numSteps;
+      if (input && input.animationObject.currentStep === input.animationObject.numSteps) {
+        // avoid drawing twice at the last step (it also triggers on complete)
+        return;
       }
 
       // this context is that of the normal js this here!
       const chartInstance = this.chart;
       const ctx = chartInstance.ctx;
+      ctx.font = 'normal 12px Arial';
       ctx.fillStyle = '#444';
       ctx.textAlign = 'center';
       ctx.textBaseline = 'bottom';
@@ -213,16 +211,25 @@ export class ChartComponent implements OnInit {
               const angle = obj._model.startAngle + (obj._model.endAngle - obj._model.startAngle) / 2;
               const offset = obj._model.innerRadius + (obj._model.outerRadius - obj._model.innerRadius) / 2;
               ctx.fillText(data, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset);
-              ctx.fillText(dataset.label, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset + 15);
+
+              if (self.postResponses) {
+                ctx.fillText(dataset.label, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset + 15);
+              }
             });
           } else {
             const offset = meta.type === 'bar' ? 22 : -10;
             meta.data.forEach(function (obj, index) {
               if (obj.hidden) { return; }
-
               const data = dataset.data[index];
-              ctx.fillText(data, obj._model.x, obj._model.y + offset);
-              ctx.fillText(dataset.label, obj._model.x, obj._model.y + offset + 15);
+              // if the height of the bar is lower than the height of the text we're adding..
+              if ( (obj._model.base - obj._model.y) <= 20 ) {
+                ctx.fillText(data, obj._model.x, obj._model.y - 20);
+              } else {
+                ctx.fillText(data, obj._model.x, obj._model.y + offset);
+              }
+              if (self.postResponses) {
+                ctx.fillText(dataset.label, obj._model.x, obj._model.y + offset + 15);
+              }
             });
           }
       });
