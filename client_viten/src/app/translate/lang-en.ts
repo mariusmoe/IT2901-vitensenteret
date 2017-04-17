@@ -201,6 +201,8 @@ export const LANG_EN_TRANS = {
   // PDF download lines
   'Date created: d': 'Date created: %0',
   'Date printed: d': 'Date printed: %0',
+  'Figure: n': 'Figure: %0',
+  'Table: n': 'Table: %0',
 
   // Nickname component
   'Name': 'What is your name?',
@@ -214,4 +216,8 @@ export const LANG_EN_TRANS = {
   // quit survey prompt
   'Enter the code to quit': 'Enter the code to quit',
   'Incorrect code': 'Incorrect code',
+
+  // play-survey - Free text
+  'Max 255 characters': 'Max 255 characters',
+  'Your answer': 'Your answer',
 };

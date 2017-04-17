@@ -56,8 +56,16 @@
    &.active {
       color: #A1E232;
   }
-
 }
+.activeIconText {
+  position: absolute;
+  top: 102px;
+  right: 44px;
+  transform: translateX(50%); // center on itself
+  text-align: center;
+  font-size: 0.8em;
+}
+
 .visibility-text {
   margin: 0px;
   text-align: center;
