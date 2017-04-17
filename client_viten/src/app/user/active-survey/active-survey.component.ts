@@ -8,7 +8,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
-
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'active-survey',
@@ -135,7 +135,9 @@ export class ActiveSurveyComponent implements OnInit {
     private route: ActivatedRoute,
     private timer: SimpleTimer,
     public dialog: MdDialog,
-    public translateService: TranslateService) {
+    public translateService: TranslateService,
+    private title: Title) {
+      title.setTitle(translateService.instant('Vitensenteret - Survey'));
   }
 
   /**
