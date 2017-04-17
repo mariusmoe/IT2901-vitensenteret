@@ -83,8 +83,8 @@
             : ('Number of responses: n' | translate: [responses ? responses.length : 0])
           }}</md-card-subtitle>
           <md-icon align="left" class="activeIcon"
-          [ngClass]="{active: survey.active, surveyActiveIcon: true}"
-          [mdTooltip]="(survey.active ? 'Active' : 'Inactive') | translate" tooltip-position="above">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
+          [ngClass]="{active: survey.active, surveyActiveIcon: true}">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
+          <span class="activeIconText">{{ (survey.active ? 'Active' : 'Inactive') | translate }}</span>
         </md-card-title-group>
         <md-card-content>
           <div *ngIf="survey.postKey && survey.postKey.length > 1" class="chip">

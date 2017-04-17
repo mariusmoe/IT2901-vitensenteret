@@ -266,6 +266,9 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.8), 'JPEG',
         (pdf.internal.pageSize.width - itemWidth) / 2, chartPos, itemWidth, chartHeight);
 
+      pdf.setFontSize(5);
+      centeredText(chartPos + chartHeight + 2, this.translateService.instant('Figure: n', i + 1));
+
       // Modify our table slightly, as to make it pretty for the PDF.
       // This circumvents the fact that the autoTableHtmlToJson does not deal with
       // html cell attribute colspan.
@@ -291,6 +294,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         styles: {fontSize: 7 },
         tableWidth: itemWidth
       });
+      pdf.setFontSize(5);
+      centeredText(pdf.autoTable.previous.finalY + 3, this.translateService.instant('Table: n', i + 1));
       // <-- END TABLE
       counter++;
     });

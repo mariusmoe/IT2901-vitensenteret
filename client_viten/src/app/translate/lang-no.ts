@@ -203,6 +203,8 @@ export const LANG_NO_TRANS = {
   // PDF download lines
   'Date created: d': 'Dato laget: %0',
   'Date printed: d': 'Dato printet: %0',
+  'Figure: n': 'Figur: %0',
+  'Table: n': 'Tabell: %0',
 
   // Nickname component
   'Name': 'Hva heter du?',
@@ -218,5 +220,7 @@ export const LANG_NO_TRANS = {
   'Enter the code to quit': 'Skriv inn koden for å avslutte undersøkelsen',
   'Incorrect code': 'Feil kode',
 
-
+  // play-survey - Free text
+  'Max 255 characters': 'Maks 255 bokstaver',
+  'Your answer': 'Ditt svar',
 };
