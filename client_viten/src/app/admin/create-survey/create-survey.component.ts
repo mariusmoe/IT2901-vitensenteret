@@ -165,7 +165,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
    */
   onSurveyChange() {
     // Update the session storage
-    sessionStorage.setItem('surveyInCreation', JSON.stringify(this.survey));
+    if (!this.isPost) {
+      sessionStorage.setItem('surveyInCreation', JSON.stringify(this.survey));
+    }
     // note: comment is NOT required, and is thusly not listed here.
     let status = this.fieldValidate(this.survey.name)     // name
       && this.survey.questionlist.length > 0              // at least one question
