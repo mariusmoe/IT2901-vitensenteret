@@ -178,6 +178,7 @@ export const LANG_NO_TRANS = {
   'You have now changed your password': 'Du har nå byttet passord',
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
+  'Code to exit survey': 'kode for å komme ut av undersøkelsen',
 
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
