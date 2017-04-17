@@ -27,14 +27,17 @@ md-list {
 }
 
 .addButton {
-  transform: scale(0.80);
   flex: 1 1;
-  width: 40px;
-  max-width: 40px;
-  min-width: 40px;
+  max-width: 33px;
+  min-width: 33px; // down from 40px
+  max-height: 33px;
+  min-height: 33px;
   display:inline-block;
   margin-top: 6px;
   margin-left: 4px;
+  .mat-icon {
+    line-height: 18px; // down from 24px
+  }
 }
 
 .listComment {
@@ -53,12 +56,13 @@ md-list {
   .chip {
     pointer-events: none;
     display: inline-block;
-    transform: scale(0.68);
     position: absolute;
-    right: -6px;
+    right: 4px;
     top: 5px;
     color: white;
     md-chip {
+      font-size: 9px; // down from 13px default
+      padding: 4px 7px 3px 7px; // down from 8px 12px 8px 12px default
       outline: none;
     }
     .mat-accent {

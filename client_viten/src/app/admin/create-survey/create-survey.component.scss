@@ -95,7 +95,7 @@ md-input-container {
   @extend .flexParent;
   justify-content: center;
 
-  md-progress-circle,
+  md-progress-spinner,
   button {
     flex: 0 1;
   }

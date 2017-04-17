@@ -61,6 +61,10 @@ export const LANG_EN_TRANS = {
   'smiley': 'Smiley',
   'text': 'Free Text',
 
+  // Survey Pre post labels
+  'Pre': 'Pre',
+  'Post': 'Post',
+
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
   'Number of responses: n, m': 'Number of responses: %0, %1',
@@ -172,6 +176,7 @@ export const LANG_EN_TRANS = {
   'You have now changed your password': 'You have now changed your password',
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
+  'Code to exit survey': 'Code to exit survey',
 
   // survey retrieval chart component
   'Download as PNG': 'Download as PNG',
