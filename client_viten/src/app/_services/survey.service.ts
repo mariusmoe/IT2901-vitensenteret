@@ -18,36 +18,46 @@ export class SurveyService {
 
   }
 
+  /**
+   * Requests to exit a survey
+   * @param  {string}              password The password that is to match the exit survey password
+   * @return {Observable<boolean>}          The server's response, as an Observable
+   */
   checkChoosesurvey(password: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    console.log(password);
+    // console.log(password);
 
     return this.http.post(environment.URL.checkChoosesurvey, {password: password}, options)
     .map( response => {
-      console.log(response);
+      // console.log(response);
       return true;
     },
     error => {
-      console.error(error.json());
+      // console.error(error.json());
       return false;
     });
   }
 
-changeChoosesurvey(password: string): Observable<boolean> {
+  /**
+   * Requests to change the exit-survey password
+   * @param  {string}              password The new exit-survey password
+   * @return {Observable<boolean>}          The server's response, as an Observable
+   */
+  changeChoosesurvey(password: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
     return this.http.patch(environment.URL.checkChoosesurvey, {password: password}, options)
     .map( response => {
-      console.log(response);
+      // console.log(response);
       return true;
     },
     error => {
-      console.error(error.json());
+      // console.error(error.json());
       return false;
     });
   }
@@ -61,14 +71,14 @@ changeChoosesurvey(password: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
-    console.log(response);
+    // console.log(response);
     return this.http.post(environment.URL.survey + '/' + response.surveyId, response, options)
     .map( success => {
-      console.log(success);
+      // console.log(success);
       return true;
     },
     error => {
-      console.error(error.json());
+      // console.error(error.json());
       return false;
     });
   }
@@ -77,7 +87,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
   /**
    * getToken()
    *
-   * @returns {string} user token if it exists in the local storage. undefined otherwise
+   * @return {string} user token if it exists in the local storage. undefined otherwise
    */
   private getToken(): string {
     return localStorage.getItem('token');
@@ -90,9 +100,9 @@ changeChoosesurvey(password: string): Observable<boolean> {
   public getNicknames(surveyId: string): Observable<any> {
     return this.http.get(environment.URL.allNicknames + '/' + surveyId)
     .map( response => {
-      console.log(response);
+      // console.log(response);
       const json = response.json();
-      console.log(json);
+      // console.log(json);
       return json.nicknames;
     },
     error => {
@@ -106,7 +116,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
    * getSurvey(idString: String)
    *
    * @param {string} idString the id of the survey one wants to get
-   * @returns {Observable<any>} returns an observable holding the requested survey and responses
+   * @return {Observable<any>} returns an observable holding the requested survey and responses
    */
    getSurvey(idString: String): Observable<any> {
      return this.http.get(environment.URL.survey + '/' + idString)
@@ -126,7 +136,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
    * postSurvey(survey: Survey)
    *
    * @param {Survey} survey a Survey model object holding the survey data one wants to post
-   * @returns {Observable<boolean>} returns an observable with the success status of the http post
+   * @return {Observable<boolean>} returns an observable with the success status of the http post
    */
   postSurvey(survey: Survey): Observable<Survey> {
     const token = this.getToken();
@@ -149,7 +159,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
    * patchSurvey(surveyId: string, survey: Survey)
    *
    * @param {Survey} survey a Survey model object holding the survey data one wants to patch
-   * @returns {Observable<Survey>} returns an observable with the success status of the http patch
+   * @return {Observable<Survey>} returns an observable with the success status of the http patch
    */
   patchSurvey(surveyId: string, survey: Survey): Observable<any> {
     const token = this.getToken();
@@ -173,7 +183,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
    * deleteSurvey(surveyId: string)
    *
    * @param {string} idString the id of the survey one wants to get
-   * @returns {Observable<boolean>} returns an observable with the success status of the http delete
+   * @return {Observable<boolean>} returns an observable with the success status of the http delete
    */
   deleteSurvey(surveyId: string): Observable<boolean> {
     const token = this.getToken();
@@ -223,7 +233,7 @@ changeChoosesurvey(password: string): Observable<boolean> {
   /**
    * getAllSurveys()
    *
-   * @returns {Observable<SurveyList[]>} returns an observable with a list of
+   * @return {Observable<SurveyList[]>} returns an observable with a list of
    * objects with survey names, ids, active status and date.
    */
   getAllSurveys(): Observable<SurveyList[]> {

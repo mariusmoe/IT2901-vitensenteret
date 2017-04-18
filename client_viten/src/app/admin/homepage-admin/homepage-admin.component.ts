@@ -145,6 +145,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   }
 
 
+  /**
+   * Opens a snackbar with the input message and action
+   * @param  {string} message The message to be displayed
+   * @param  {string} action  the action message to be displayed
+   */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 4000,
@@ -329,7 +334,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     };
   }
 
-
+  /**
+   * Copies a survey
+   * @param  {boolean} includeResponses whether to include the responses for the survey
+   */
   copySurvey(includeResponses: boolean) {
     this.surveyService.copySurvey(this.survey._id, includeResponses).subscribe(survey => {
       // force redraw by doing 2 redirects

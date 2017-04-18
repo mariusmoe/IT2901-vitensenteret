@@ -60,7 +60,12 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       });
     }
 
-    formatDate(dateString: string) {
+    /**
+     * Takes a utc datestring and returns a local time datestring
+     * @param  {string} dateString the utc datestring
+     * @return {string}            local time datestring
+     */
+    formatDate(dateString: string): string {
       return new Date(dateString).toLocaleDateString();
     }
 

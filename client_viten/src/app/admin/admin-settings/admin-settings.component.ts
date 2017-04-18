@@ -57,11 +57,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     // this.emailSub.unsubscribe();
   }
 
-
+  /**
+   * Sets the language to the selected value
+   */
   setSelectedLanguage() {
     this.languageService.use(this.selectedLanguage);
   }
 
+  /**
+   * Changes the exit-survey password
+   * @param  {string} password new password
+   */
   changeExitSurveyPassword(password: string) {
     this.surveyService.changeChoosesurvey(password)
       .subscribe(result => {
@@ -73,6 +79,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * changes user email
+   * @param  {string} newEmail the new email to be used
+   */
   changeEmail(newEmail: string) {
     this.service.changeEmail(newEmail)
         .subscribe(result => {
@@ -103,6 +113,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * changes the user password
+   * @param  {string} newPassword the new password to be used
+   * @return {[type]}             [description]
+   */
   changePassword(newPassword: string) {
     this.service.changePassword(newPassword)
       .subscribe(result => {
@@ -133,7 +148,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  requestReferral(role) {
+  /**
+   * requests a referral link
+   * @param  {string} role The role of the user that is to be referred
+   */
+  requestReferral(role: string) {
     this.service.getReferral(role)
         .subscribe(result => {
           // console.log(result);
@@ -147,6 +166,9 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         });
   }
 
+  /**
+   * Gets a list of users
+   */
   getUsers() {
     this.user = this.service.getUser();
 
@@ -156,14 +178,9 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
-  setSelected(selected: number) {
-    this.selectedRow = selected;
-  }
-
   /**
-   * Delete the current user
-   *
-   * Delete the user that is currently loged in
+   * Deletes the user of a given id
+   * @param  {string} id the id of the user that is to be deleted
    */
   deleteUser(id: string) {
     if (id === this.user._id) {
@@ -182,6 +199,12 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         }
   }
 
+
+  /**
+   * Opens a snackbar with the given message and action message
+   * @param  {string} message The message that is to be displayed
+   * @param  {string} action  the action message that is to be displayed
+   */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 2000,
@@ -189,9 +212,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Opens a dialog
-   *
-   * Promts the user to delete the account or not
+   * Opens a delete user dialog and prompts the user if he or she wants to delete said user
+   * @param  {string} id the id of the user that is to be deleted
    */
   openDialog(id: string) {
     if (id === this.user._id) {
@@ -277,11 +299,15 @@ export class ReferDialog {
   public isCopied = false;
   public text = '';
   constructor(public dialogRef: MdDialogRef<ReferDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
-    this.setCopyBox(); }
+    this.setCopyBox();
+  }
 
-    setCopyBox() {
-      this.text = this.data.referralURL;
-    }
+  /**
+   * Sets the text of the box to be that of the referral link
+   */
+  setCopyBox() {
+    this.text = this.data.referralURL;
+  }
 }
 
 /**

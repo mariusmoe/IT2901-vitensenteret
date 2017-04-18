@@ -34,11 +34,17 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
     this.routerSub.unsubscribe();
   }
 
+  /**
+   * Logs the user out
+   */
   public logout() {
     this.service.logOut();
   }
 
-
+  /**
+   * Gets the page navigation breadcrumbs
+   * @return {string[]} The breadcrumbs
+   */
   public getBreadcrumbs(): string[]  {
     const urls = [];
 
