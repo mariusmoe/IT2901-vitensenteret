@@ -43,9 +43,13 @@ export class NewUserComponent implements OnInit, OnDestroy {
     document.querySelector('html').classList.remove('noWrapper');
   }
 
-  submitForm(form: {email: string, password: string, passwordconfirm: string}): void {
+  /**
+   * submits register user form
+   * @param {string}  form            an object holding the email, password and passwordConfirm properties
+   */
+  submitForm(form: { email: string, password: string, passwordconfirm: string }): void {
     this.loading = true;
-    console.log(form);
+    // console.log(form);
 
     this.loading = true;
     const sub = this.authenticationService.registerUser(form.email, form.password, this.param)
@@ -69,6 +73,11 @@ export class NewUserComponent implements OnInit, OnDestroy {
 
   }
 
+  /**
+   * Opens a snackbar with the given message and action message
+   * @param  {string} message The message that is to be displayed
+   * @param  {string} action  the action message that is to be displayed
+   */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 5000,

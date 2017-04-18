@@ -157,21 +157,6 @@ export class ChartComponent implements OnInit {
   }
 
 
-  private drawValue(context) {
-    const chartInstance = this.canvas.nativeElement;
-    const ctx = chartInstance.ctx;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'bottom';
-    this.chartData.forEach(function (dataset: any, i) {
-        const meta = chartInstance.controller.getDatasetMeta(i);
-        meta.data.forEach(function (bar, index) {
-            const data = dataset.data[index];
-            ctx.fillText(data, bar._model.x, bar._model.y - 5);
-        });
-    });
-  }
-
-
   /**
    * Sets the chart options based on chartType
    */

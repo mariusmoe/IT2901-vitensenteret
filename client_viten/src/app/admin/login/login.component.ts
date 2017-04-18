@@ -38,6 +38,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     document.querySelector('html').classList.remove('noWrapper');
   }
 
+  /**
+   * submits the login form
+   * @param  {User}   user the user that is to be logged in
+   */
   submitForm(user: User) {
     this.loading = true;
     // console.log(user);
