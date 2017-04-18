@@ -57,7 +57,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         this.getSurvey(param);
       }
     });
-    console.log(this.authenticationService.getUser());
+    // console.log(this.authenticationService.getUser());
   }
 
   ngOnDestroy() {

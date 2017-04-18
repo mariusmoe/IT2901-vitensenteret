@@ -3,6 +3,10 @@
 export const LANG_NO_NAME = 'no';
 
 export const LANG_NO_TRANS = {
+  // Application
+  'Vitensenteret - AdminPortal': 'Vitensenteret - AdminPortal',
+  'Vitensenteret - Survey': 'Vitensenteret - Undersøkelse',
+
   // Generic
   'Edit': 'Endre',
   'Create': 'Lag',

@@ -3,6 +3,10 @@
 export const LANG_EN_NAME = 'en';
 
 export const LANG_EN_TRANS = {
+  // Application
+  'Vitensenteret - AdminPortal': 'Vitensenteret - AdminPortal',
+  'Vitensenteret - Survey': 'Vitensenteret - Survey',
+
   // Generic
   'Edit': 'Edit',
   'Create': 'Create',
