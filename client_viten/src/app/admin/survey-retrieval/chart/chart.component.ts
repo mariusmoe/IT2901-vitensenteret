@@ -54,7 +54,7 @@ export class ChartComponent implements OnInit {
     }
 
     this.chartData = [{ 'data': new Array(this.chartLabels.length) }];
-    if (this.postResponses && this.postResponses.length > 0) {
+    if (this.postResponses) {
       this.chartData[0]['label'] = this.translateService.instant('Pre');
       this.chartData.push({
         'data': new Array(this.chartLabels.length),
@@ -75,7 +75,7 @@ export class ChartComponent implements OnInit {
         this.chartData[0]['data'][response.questionlist[this.index]] += 1;
       }
     }
-    if (this.postResponses && this.postResponses.length > 0) {
+    if (this.postResponses) {
       for (let i = 0; i < this.chartLabels.length; i++) {
         this.chartData[1]['data'][i] = 0;
       }
@@ -206,15 +206,22 @@ export class ChartComponent implements OnInit {
             // All of these are circular.
             meta.data.forEach(function (obj, index) {
               if (obj.hidden) { return; }
-
+              // Get the data values
               const data = dataset.data[index];
-              const angle = obj._model.startAngle + (obj._model.endAngle - obj._model.startAngle) / 2;
-              const offset = obj._model.innerRadius + (obj._model.outerRadius - obj._model.innerRadius) / 2;
-              ctx.fillText(data, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset);
-
-              if (self.postResponses) {
-                ctx.fillText(dataset.label, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset + 15);
+              if (data > 0) {
+                // if the value is worthy to represent (more than 0), then display it.
+                // We need to calculate the position, and we know it is based on a circle
+                // We extract the start and end angles, and the radiuses of the objects
+                const angle = obj._model.startAngle + (obj._model.endAngle - obj._model.startAngle) / 2;
+                const offset = obj._model.innerRadius + (obj._model.outerRadius - obj._model.innerRadius) / 2;
+                // Then calculate the position
+                ctx.fillText(data, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset);
+                if (self.postResponses) {
+                  // if there are post responses, then we also include pre / post label
+                  ctx.fillText(dataset.label, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset + 15);
+                }
               }
+
             });
           } else {
             const offset = meta.type === 'bar' ? 22 : -10;
@@ -222,13 +229,10 @@ export class ChartComponent implements OnInit {
               if (obj.hidden) { return; }
               const data = dataset.data[index];
               // if the height of the bar is lower than the height of the text we're adding..
-              if ( (obj._model.base - obj._model.y) <= 20 ) {
-                ctx.fillText(data, obj._model.x, obj._model.y - 20);
-              } else {
-                ctx.fillText(data, obj._model.x, obj._model.y + offset);
-              }
+              const newOffset = (obj._model.base - obj._model.y) <= 20 ? (-20) : offset;
+              ctx.fillText(data, obj._model.x, obj._model.y + newOffset);
               if (self.postResponses) {
-                ctx.fillText(dataset.label, obj._model.x, obj._model.y + offset + 15);
+                ctx.fillText(dataset.label, obj._model.x, obj._model.y + newOffset + 15);
               }
             });
           }
