@@ -285,16 +285,16 @@ exports.roleAuthorization = function(role){
 }
 
 exports.changeEmail = function(req, res, next) {
+  if (!req.body.email.newEmail || req.body.email.newEmail === '') {
+    res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
+    return next(err);
+  }
   User.findById(req.user._id, function(err, user) {
     if (err) {
       res.status(422).json({ error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
       return next(err);
     }
-    if (req.body.email == '') {
-      res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
-      return next(err);
-    }
-    user.email = req.body.email
+    user.email = req.body.email.newEmail;
     user.save(function(err){
       if(err){
         throw err;
