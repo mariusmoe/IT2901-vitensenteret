@@ -44,13 +44,11 @@ export class LoginComponent implements OnInit, OnDestroy {
    */
   submitForm(user: User) {
     this.loading = true;
-    // console.log(user);
 
     this.loading = true;
     const sub = this.authenticationService.login(user.email, user.password)
         .subscribe(result => {
           sub.unsubscribe();
-          // console.log("Got response!")
           if (result === true) {
               this.router.navigate(['/admin']);
           } else {

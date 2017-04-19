@@ -47,19 +47,16 @@ export class NicknameComponent implements OnInit {
 }
 
   ngOnInit() {
-    // console.log(this.survey);
     const sub  = this.surveyService.getNicknames(this.survey._id)
       .subscribe( result => {
         if (this.survey.isPost) {
           this.allNames = result;
-          // console.log('These are the names: ', this.allNames);
           this.allNames.forEach((x) => { this.nicknames.push(x.nickname); });
         }
        sub.unsubscribe();
     },
     error => {
-      console.log('error when get nicknames');
-      console.log(error);
+      console.error('error when get nicknames');
     });
     this.nickCtrl.valueChanges.subscribe(value => {
       // do something with value here
@@ -108,10 +105,8 @@ export class NicknameComponent implements OnInit {
      */
     openNickname () {
       if (!this.allNames.contains(this.searchNickname)) {
-        // console.log('nickname is open');
         return true;
       }
-      // console.log('nickname is taken');
       // this.suggestions = [
       //   this.nickname + '123', this.nickname + '456'
       // ];

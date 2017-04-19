@@ -28,15 +28,12 @@ export class SurveyService {
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    // console.log(password);
 
     return this.http.post(environment.URL.checkChoosesurvey, {password: password}, options)
     .map( response => {
-      // console.log(response);
       return true;
     },
     error => {
-      // console.error(error.json());
       return false;
     });
   }
@@ -53,11 +50,9 @@ export class SurveyService {
 
     return this.http.patch(environment.URL.checkChoosesurvey, {password: password}, options)
     .map( response => {
-      // console.log(response);
       return true;
     },
     error => {
-      // console.error(error.json());
       return false;
     });
   }
@@ -71,14 +66,11 @@ export class SurveyService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
-    // console.log(response);
     return this.http.post(environment.URL.survey + '/' + response.surveyId, response, options)
     .map( success => {
-      // console.log(success);
       return true;
     },
     error => {
-      // console.error(error.json());
       return false;
     });
   }
@@ -100,9 +92,7 @@ export class SurveyService {
   public getNicknames(surveyId: string): Observable<any> {
     return this.http.get(environment.URL.allNicknames + '/' + surveyId)
     .map( response => {
-      // console.log(response);
       const json = response.json();
-      // console.log(json);
       return json.nicknames;
     },
     error => {

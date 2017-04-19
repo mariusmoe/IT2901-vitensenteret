@@ -57,7 +57,6 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         this.getSurvey(param);
       }
     });
-    // console.log(this.authenticationService.getUser());
   }
 
   ngOnDestroy() {
@@ -105,7 +104,6 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         width: '500px',
       });
       this.dialogRef.afterClosed().subscribe(result => {
-        // console.log('result: ' + result);
         if (result === 'yes') {
           this.surveyService.deleteSurvey(surveyId).subscribe(
             _result => {
@@ -188,7 +186,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         dlLink.click();
         document.body.removeChild(dlLink);
       },
-      error => {console.log('error downloading as ' + type); }, // TODO: clean up error logging
+      error => {console.error('error downloading as ' + type); }, // TODO: clean up error logging
     );
   }
 

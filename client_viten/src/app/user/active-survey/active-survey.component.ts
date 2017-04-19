@@ -152,7 +152,6 @@ export class ActiveSurveyComponent implements OnInit {
         sub.unsubscribe();
 
         if (!result) {
-          console.log('DEBUG: BAD surveyId param from router!');
           // TODO: Redirect to base create survey ?
           return;
         }
@@ -176,7 +175,6 @@ export class ActiveSurveyComponent implements OnInit {
           && this.survey.questionlist[0].lang.en.txt
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
-          console.log('This survey have english ');
         }
 
 
@@ -231,7 +229,6 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
-    // console.log('survey is done');
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
@@ -253,7 +250,6 @@ export class ActiveSurveyComponent implements OnInit {
       const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         sub.unsubscribe();
         if (!result) {
-          console.log ('DEBUG: BAD surveyId param from router!');
           return;
         }
         this.survey = result.survey;
@@ -295,7 +291,6 @@ addOrChangeAnswer(alternative: any) {
     */
    updateNick(nickname) {
      this.response.nickname = nickname;
-    //  console.log('Added nick: ', this.response.nickname);
    }
 
 /**
@@ -303,7 +298,6 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
-    // console.log('previous question');
     if (this.page <= 0) {
       return;
     }
@@ -321,7 +315,6 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
-    // console.log('next question');
     // Handles an empty answer
     if (typeof this.response.questionlist[this.page] === 'undefined') {
       this.response.questionlist[this.page] = -1;
@@ -330,11 +323,9 @@ addOrChangeAnswer(alternative: any) {
     const pageCopy = this.page;
     if (pageCopy + 1 >= this.totalPages) {
       if (this.survey.postKey !== undefined || this.survey.isPost) {
-        // console.log('pre-survey is available');
         this.nicknamePage = true;
       }
       // If it is the last page in the survey, it should end it.
-      // console.log('trying to end survey');
       if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
         const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
@@ -353,8 +344,7 @@ addOrChangeAnswer(alternative: any) {
           }
         },
         error => {
-            console.log('Error when posting survey');
-            console.log(error);
+            console.error('Error when posting survey');
             this.nicknamePage = true;
             return;
         });
@@ -448,7 +438,6 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
-    // console.log('trying to end survey');
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
       const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
@@ -467,8 +456,7 @@ resetTimer() {
         }
       },
       error => {
-          console.log('Error when posting survey');
-          console.log(error);
+          console.error('Error when posting survey');
           this.postDone = false;
           this.isNicknameTaken = true;
       });
