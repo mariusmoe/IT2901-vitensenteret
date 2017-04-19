@@ -82,7 +82,20 @@ let responsesToSurvey = [
     "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
   },
   {
-    "nickname": "Ruffsetufs2",
+    "nickname": "Ruffsetufsetuffs",
+    "surveyId": null, // set manually below.
+    "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
+  }
+]
+
+let responsesToSurveyPrepost = [
+  {
+    "nickname": "prepostnick1",
+    "surveyId": null, // set manually below.
+    "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
+  },
+  {
+    "nickname": "prepostnick2",
     "surveyId": null, // set manually below.
     "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
   }
@@ -588,7 +601,7 @@ describe('Survey API', () => {
 // FIXME dirty creation of pre post
 // PRE-survey
 var preSurveyObject;
-describe('/api/survey/ prePost',() => {
+describe('/api/survey/prePost',() => {
   // POST: CREATE SURVEY
   it('should create a preSurvey given valid input /api/survey/ POST', (done) => {
     chai.request(server)
@@ -604,10 +617,10 @@ describe('/api/survey/ prePost',() => {
       expect(val.surveyValidation(res.body)).to.equal(true);
       res.should.have.status(200);
       let tasksCompleted = false;
-      for (let response of responsesToSurvey) {
-        response["surveyId"] = surveyId;
+      for (let response of responsesToSurveyPrepost) {
+        response["surveyId"] = preSurveyId;
         chai.request(server)
-        .post('/api/survey/' + surveyId)
+        .post('/api/survey/' + preSurveyId)
         .set('Authorization', jwt)
         .send(response)
         .end( (err, res) => {
@@ -641,10 +654,10 @@ describe('/api/survey/ prePost',() => {
       expect(val.surveyValidation(res.body)).to.equal(true);
       res.should.have.status(200);
       let tasksCompleted = false;
-      for (let response of responsesToSurvey) {
-        response["surveyId"] = surveyId;
+      for (let response of responsesToSurveyPrepost) {
+        response["surveyId"] = postSurveyId;
         chai.request(server)
-        .post('/api/survey/' + surveyId)
+        .post('/api/survey/' + postSurveyId)
         .set('Authorization', jwt)
         .send(response)
         .end( (err, res) => {
