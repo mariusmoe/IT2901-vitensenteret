@@ -372,7 +372,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     <div *ngFor="let i of numAlternatives;">
       <md-input-container>
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'Norwegian' | translate }})"
-        [(ngModel)]="qoEditObj.lang.no.options[i]" required (change)='setSaveReadyStatus()' [formControl]="formControl">
+        [(ngModel)]="qoEditObj.lang.no.options[i]" required (input)='setSaveReadyStatus()'>
         <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])
           || fieldCheckDup(qoEditObj.lang.no.options[i], qoEditObj.lang.no.options)"
           >{{ !fieldValidate(qoEditObj.lang.no.options[i]) ? ('This field is required.' | translate)
@@ -380,7 +380,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       </md-input-container>
       <md-input-container *ngIf="data.englishEnabled">
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'English' | translate }})"
-        [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()' [formControl]="formControl">
+        [(ngModel)]="qoEditObj.lang.en.options[i]" required (input)='setSaveReadyStatus()'>
         <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])
           || fieldCheckDup(qoEditObj.lang.en.options[i], qoEditObj.lang.en.options)"
           >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
@@ -410,14 +410,11 @@ export class SurveyAlternativesDialog implements OnInit {
   activeAlternatives: Object[];
   canSave = false;
 
-  formControl: FormControl;
-
   // for complicated reasons, this is required.
   numAlternatives: number[];
 
   constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
-    // form control
-    this.formControl = new FormControl();
+
     // Create a copy of our questionObject
     this.qoEditObj = JSON.parse(JSON.stringify(this.data.questionObject));
     // if there are less than 2 options, fill them in
@@ -430,12 +427,8 @@ export class SurveyAlternativesDialog implements OnInit {
   }
 
   ngOnInit() {
-    // Listens to changes in the textbox
-    this.formControl.valueChanges.subscribe(value => {
-      this.setSaveReadyStatus();
-    });
-  }
 
+  }
 
   /**
    * cancel()
