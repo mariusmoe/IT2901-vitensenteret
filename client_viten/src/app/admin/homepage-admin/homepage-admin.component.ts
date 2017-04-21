@@ -165,7 +165,16 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       const dlLink = document.createElement('a') as any;
       dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
 
-      const blob = new Blob([JSON.stringify({ survey: this.survey, responses: this.responses}, null, '\t')], { type: 'application/json' });
+      const jsonObject = {
+        survey: this.survey,
+        responses: this.responses
+      };
+      if (this.survey.postKey && this.survey.postKey.length > 0) {
+        jsonObject['postSurvey'] = this.postSurvey;
+        jsonObject['postResponses'] = this.postResponses;
+      }
+
+      const blob = new Blob([JSON.stringify(jsonObject, null, '\t')], { type: 'application/json' } );
       const url = window.URL.createObjectURL(blob);
       dlLink.href = url;
       // Then we do some DOM trickery to click this link to begin the download

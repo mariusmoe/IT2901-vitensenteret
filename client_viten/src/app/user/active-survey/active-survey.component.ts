@@ -97,7 +97,6 @@ export class ActiveSurveyComponent implements OnInit {
 
   abortTimer: string; // The ID for the timer
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
-  public startText = 'Start survey';
 
   isNicknameTaken = false;
   // Animation variables
@@ -338,9 +337,6 @@ addOrChangeAnswer(alternative: any) {
       if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
         const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-        // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
-        //   delete responseClone.nickname;
-        // }
         this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
           if (proper) {
             this.transition = true;
@@ -452,9 +448,6 @@ resetTimer() {
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
       const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-      // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
-      //   delete responseClone.nickname;
-      // }
       this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
         if (proper) {
           this.transition = true;
