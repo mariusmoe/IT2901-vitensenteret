@@ -43,8 +43,8 @@ export const LANG_EN_TRANS = {
   'Code': 'Code',
 
   // roles
-  'admin': 'Admin',
-  'member': 'Member',
+  'admin': 'Superadmin',
+  'member': 'Admin',
 
   // Permissions
   'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
@@ -162,8 +162,8 @@ export const LANG_EN_TRANS = {
   'Change email': 'Change email',
   'User settings': 'User settings',
   'Superadmin settings': 'Superadmin settings',
-  'Request admin': 'Request admin',
-  'Request member': 'Request member',
+  'Refer admin': 'Refer admin',
+  'Refer member': 'Refer member',
   'You need to write the same password twice': 'You need to write the same password twice',
   'Delete account': 'Delete account',
   'Change the preferred language here': 'Change the preferred language here',
@@ -174,7 +174,7 @@ export const LANG_EN_TRANS = {
   'Can\'t delete current user': 'Can\'t delete current user',
   'Are you sure you want to delete this account?': 'Are you sure you want to delete this account?',
   'The account will be deleted! This action is permanent!': 'The account will be deleted! This action is permanent!',
-  'Refer one userType': 'Refer one %0',
+  'Refer a userType': 'Refer a %0',
   'A referral link is only active for two weeks': 'A referral link is only active for two weeks',
   'You have now changed your email': 'You have now changed your email',
   'You have now changed your password': 'You have now changed your password',
