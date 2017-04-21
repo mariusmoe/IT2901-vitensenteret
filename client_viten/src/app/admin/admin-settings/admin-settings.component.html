@@ -85,10 +85,10 @@
         <md-card-subtitle>{{user.role | translate }}</md-card-subtitle>
         <md-card-actions>
           <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
-            {{ 'Request admin' | translate }}
+            {{ 'Refer admin' | translate }}
           </button>
           <button md-raised-button color="primary" minlength="3" (click)="requestReferral('member')">
-            {{ 'Request member' | translate }}
+            {{ 'Refer member' | translate }}
           </button>
         </md-card-actions>
         <br>
@@ -158,7 +158,7 @@
             [ngClass]="{ odd: odd, even: even }">
             <td>{{user._id}}</td>
             <td>{{user.email}}</td>
-            <td>{{user.role}}</td>
+            <td>{{ user.role | translate }}</td>
             <td><md-icon>delete_forever</md-icon></td>
           </tr>
         </table>
