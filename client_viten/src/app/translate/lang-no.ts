@@ -164,8 +164,8 @@ export const LANG_NO_TRANS = {
   'Change email': 'Bytt epostkonto',
   'User settings': 'Brukerinstillinger',
   'Superadmin settings': 'Superadmin seksjon',
-  'Request admin': 'Få invitasjonslink for superadmin',
-  'Request member': 'Få invitasjonslink for adminbruker',
+  'Refer admin': 'Generer invitasjonslink for superadmin',
+  'Refer member': 'Generer invitasjonslink for adminbruker',
   'You need to write the same password twice': 'Du må skrive passordet to ganger',
   'Delete account': 'Slett kontoen',
   'Change the preferred language here': 'Bytt ditt foretrukne språk her',
@@ -227,4 +227,8 @@ export const LANG_NO_TRANS = {
   // play-survey - Free text
   'Max 255 characters': 'Maks 255 bokstaver',
   'Your answer': 'Ditt svar',
+
+  // Footer
+  'Group n': 'Gruppe %0',
+  'IT2901 - Informatics Project II': 'IT2901 - Informatikk Prosjektarbeid II',
 };

@@ -264,7 +264,7 @@ export class DeleteDialog {
 @Component({
   selector: 'refer-acccount-dialog',
   template: `
-  <h1 md-dialog-title>{{ 'Refer one userType' | translate:[data.role] }}</h1>
+  <h1 md-dialog-title>{{ 'Refer a userType' | translate : [data.role] }}</h1>
   <div md-dialog-content>
     <p>{{ 'A referral link is only active for two weeks' | translate }}</p>
     <md-input-container class="referralField">

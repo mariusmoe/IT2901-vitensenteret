@@ -344,7 +344,7 @@ exports.answerOneSurvey = (req, res, next) => {
         // Survey is post and is sent with a nickname
         // lookup nicnames for this survey and see if it is already there
         // if not ignore it !!!
-        Nickname.find({nickname: responseObject.nickname}, (err2, foundNickname) => {
+        Nickname.findOne({nickname: responseObject.nickname}, (err2, foundNickname) => {
           if (err2) { return next(err2); }
           if(foundNickname.length == 0) {
             // nickname is not present - return FAILURE

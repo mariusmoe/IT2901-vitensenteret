@@ -42,8 +42,7 @@
 
 
   <div class="footer">
-    <div class="flexchild"></div> <!-- essentially left side flex object -->
-    <div class="breadcrumbs flexchild alignCenter">
+    <div class="breadcrumbs">
       <!-- oneline'd to avoid space characters in between each span element in the link. Do not un-oneline it. -->
       <span *ngFor="let crumb of breadcrumbs; let i = index;"
       ><a routerLink="/{{crumb.url}}" routerLinkActive="active"
@@ -51,6 +50,21 @@
       class = 'separator'>/</span></span>
       <!-- do not show the '/' if it is the last crumb in the list -->
     </div>
-    <div class="flexchild alignRight"></div> <!-- right side flex object -->
+    <div class="notice">
+      <span>{{ 'Group n' | translate : [9] }}</span>
+      <span>{{ 'IT2901 - Informatics Project II' | translate }}</span>
+      <div class="box">
+        <div class="col">
+          <span>Christian Haugland</span>
+          <span>Sondre Kristensen</span>
+          <span>Hung Quang Thieu</span>
+        </div>
+        <div class="col">
+          <span>Birathepan Tharmakulasingam</span>
+          <span>Marius Oscar Moe</span>
+          <span>Trygve Sørensen</span>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
