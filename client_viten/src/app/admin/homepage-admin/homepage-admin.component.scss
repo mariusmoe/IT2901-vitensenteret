@@ -56,8 +56,16 @@
    &.active {
       color: #A1E232;
   }
-
 }
+.activeIconText {
+  position: absolute;
+  top: 102px;
+  right: 44px;
+  transform: translateX(50%); // center on itself
+  text-align: center;
+  font-size: 0.8em;
+}
+
 .visibility-text {
   margin: 0px;
   text-align: center;
@@ -69,12 +77,13 @@ md-card {
 
 .chip {
   display: inline-block;
-  transform: scale(0.68);
   position: absolute;
-  top: 27px;
-  right: 65px;
+  top: 33px;
+  right: 72px;
   color: white;
   md-chip {
+    font-size: 9px; // down from 13px default
+    padding: 4px 7px 3px 7px; // down from 8px 12px 8px 12px default
     outline: none;
   }
   .mat-accent {
@@ -85,6 +94,24 @@ md-card {
 .activeToggle {
   display: inline-block;
   position: absolute;
-  top: 62px;
+  top: 75px;
   right: 14px;
+}
+
+
+div[md-dialog-actions] {
+  button {
+    margin-left: 10px;
+    &:first-of-type {
+      margin: 0;
+    }
+  }
+}
+
+.openInBrowser {
+  vertical-align: middle;
+}
+
+.openInBrowserDiv {
+  height: 36px;
 }

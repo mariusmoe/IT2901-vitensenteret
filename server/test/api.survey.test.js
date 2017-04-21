@@ -12,6 +12,7 @@ chai.use(chaiHttp);
 let mongoose = require('mongoose');
 let Survey  = require('../models/survey');
 let Response  = require('../models/response');
+let Nickname  = require('../models/nickname');
 
 // testing variables
 
@@ -81,7 +82,20 @@ let responsesToSurvey = [
     "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
   },
   {
-    "nickname": "Ruffsetufs",
+    "nickname": "Ruffsetufsetuffs",
+    "surveyId": null, // set manually below.
+    "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
+  }
+]
+
+let responsesToSurveyPrepost = [
+  {
+    "nickname": "prepostnick1",
+    "surveyId": null, // set manually below.
+    "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
+  },
+  {
+    "nickname": "prepostnick2",
     "surveyId": null, // set manually below.
     "questionlist": [0, 3, 4, 5, "hello", [1,2,4], -1, 4]
   }
@@ -93,13 +107,15 @@ describe('Survey API', () => {
   before( (done) => {
     Survey.remove({}, () => {
       Response.remove({}, () => {
-        chai.request(server)
+        Nickname.remove({}, () => {
+          chai.request(server)
           .post('/api/auth/register_developer')
           .send({'email': 'test@test.no', 'password': 'test'})
           .end((err, res) => {
             //res.should.have.status(200);
             done();
           });
+        });
       });
     });
   });
@@ -129,14 +145,14 @@ describe('Survey API', () => {
       .post('/api/survey')
       .set('Authorization', jwt)
       .send(validJsonObject)
-      .end( (err, res) => {
+      .end( (err1, res1) => {
         // DO NOT REMOVE: USED FOR THE OTHER TESTS
-        surveyId = res.body._id;
+        surveyId = res1.body._id;
         // DO NOT REMOVE
 
         // verify that the returned object is valid
-        expect(val.surveyValidation(res.body)).to.equal(true);
-        res.should.have.status(200);
+        expect(val.surveyValidation(res1.body)).to.equal(true);
+        res1.should.have.status(200);
 
 
         let tasksCompleted = false;
@@ -146,13 +162,13 @@ describe('Survey API', () => {
           .post('/api/survey/' + surveyId)
           .set('Authorization', jwt)
           .send(response)
-          .end( (err, res) => {
+          .end( (err2, res2) => {
             // verify that the returned object is valid
-            res.body.should.have.property('message');
-            res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
-            res.body.should.have.property('status');
-            res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
-            res.should.have.status(200);
+            res2.body.should.have.property('message');
+            res2.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
+            res2.body.should.have.property('status');
+            res2.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
+            res2.should.have.status(200);
             if (tasksCompleted) {
               done();
             } else {
@@ -585,7 +601,7 @@ describe('Survey API', () => {
 // FIXME dirty creation of pre post
 // PRE-survey
 var preSurveyObject;
-describe('/api/survey/ prePost - DELETE',() => {
+describe('/api/survey/prePost',() => {
   // POST: CREATE SURVEY
   it('should create a preSurvey given valid input /api/survey/ POST', (done) => {
     chai.request(server)
@@ -601,10 +617,10 @@ describe('/api/survey/ prePost - DELETE',() => {
       expect(val.surveyValidation(res.body)).to.equal(true);
       res.should.have.status(200);
       let tasksCompleted = false;
-      for (let response of responsesToSurvey) {
-        response["surveyId"] = surveyId;
+      for (let response of responsesToSurveyPrepost) {
+        response["surveyId"] = preSurveyId;
         chai.request(server)
-        .post('/api/survey/' + surveyId)
+        .post('/api/survey/' + preSurveyId)
         .set('Authorization', jwt)
         .send(response)
         .end( (err, res) => {
@@ -638,10 +654,10 @@ describe('/api/survey/ prePost - DELETE',() => {
       expect(val.surveyValidation(res.body)).to.equal(true);
       res.should.have.status(200);
       let tasksCompleted = false;
-      for (let response of responsesToSurvey) {
-        response["surveyId"] = surveyId;
+      for (let response of responsesToSurveyPrepost) {
+        response["surveyId"] = postSurveyId;
         chai.request(server)
-        .post('/api/survey/' + surveyId)
+        .post('/api/survey/' + postSurveyId)
         .set('Authorization', jwt)
         .send(response)
         .end( (err, res) => {

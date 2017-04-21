@@ -1,13 +1,21 @@
-<form>
-  <h1 md-dialog-title>Skriv inn kode for å avslutte undersøkelsen.</h1>
-  <div class="quitSurvey-code">
-    <md-input-container>
-      <input #code mdInput type="tel" placeholder="Kode" value="" autocomplete="off">
+<div class="wrapper">
+  <h1 md-dialog-title>{{ 'Enter the code to quit' | translate }}</h1>
+  <form [formGroup]="codeForm" (ngSubmit)="quitSurvey(codeForm.value.code.toString())">
+    <div align="center">
+      <md-input-container>
+        <input mdInput type="number" placeholder="{{ 'Code' | translate }}" autocomplete="off" [formControl]="codeForm.controls['code']">
+        <md-hint *ngIf="codeForm.controls['code'].hasError('required') && codeForm.controls['code'].touched">
+          {{ 'This field is required.' | translate }}
+        </md-hint>
+        <md-hint class="warning" *ngIf="!codeForm.controls['code'].hasError('required') &&
+        codeForm.controls['code'].invalid && codeForm.controls['code'].touched">
+        {{ 'This field is invalid.' | translate }}
+      </md-hint>
     </md-input-container>
-    <p *ngIf="hasError"> Hello</p>
-  </div>
-  <div class="prompt-buttons">
-    <button class="submit" type="submit" md-button (click)="quitSurvey(code.value)"> OK </button>
-    <button class="cancel" type="button" md-button (click)="cancelPrompt()"> Avbryt </button>
-  </div>
-</form>
+    </div>
+    <div md-dialog-actions align="center">
+      <button md-raised-button color="primary" type="submit" [disabled]="!codeForm.valid">{{ 'Okay' | translate }}</button>
+      <button md-raised-button color="warn" type="button" (click)="cancelPrompt()">{{ 'Cancel' | translate }}</button>
+    </div>
+  </form>
+</div>

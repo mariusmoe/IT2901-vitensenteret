@@ -38,7 +38,7 @@
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()" [@playGrow]="playButtonActive" (@playGrow.done)="playCycle()">
   </div>
   <div class="startTextContainer" *ngIf="!started">
-    <div class="startText">{{'Start survey' | translate:[this.startText]}} </div>
+    <div class="startText">{{'Start survey' | translate }} </div>
   </div>
   <div class="logoContainer" *ngIf="!started">
     <div class="vitenContainer">

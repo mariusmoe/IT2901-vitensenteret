@@ -6,6 +6,7 @@ import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TranslateService } from '../../_services/translate.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-create-survey',
@@ -60,7 +61,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // If we have a router parameter, we should attempt to use that first.
-    // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
 
     // Safe checking of url if last part is prepost
@@ -70,22 +70,36 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
     if (!param) {
       // Set defaults seeing we had no router parameter
-      // Do not remove the following lines!
-      this.survey = {
-        'name': '',
-        'comment': '',
-        'date': new Date().toISOString(),
-        'activationDate': new Date().toISOString(), // intentionally not iso string
-        'deactivationDate': undefined,
-        'active': true,
-        'isPost': false,
-        'questionlist': [],
-        'endMessage': {
-          'no': '',
-          'en': '', // do not remove. see submitSurvey for handling of english properties.
-        }
-      };
-      this.setPushReadyStatus();
+      // Though if we have a session in the works, load that!
+      const sessionSurveyString = sessionStorage.getItem('surveyInCreation');
+      const sessionSurveyObject = JSON.parse(sessionSurveyString);
+      // We are only to use this system IF we are creating a fresh survey.
+      // Param above is nonexisting, i.e. we're creating a FRESH survey,
+      // and if the sessionStorage contains a survey with NO id, then we're good
+      // to go.
+      if (sessionSurveyObject && (<Survey>sessionSurveyObject)._id === undefined) {
+        this.survey = sessionSurveyObject;
+        // though we should update some bits of information;
+        this.survey.date = new Date().toISOString();
+        this.survey.activationDate = new Date().toISOString();
+      } else {
+        // Do not remove the following lines!
+        this.survey = {
+          'name': '',
+          'comment': '',
+          'date': new Date().toISOString(),
+          'activationDate': new Date().toISOString(), // intentionally not iso string
+          'deactivationDate': undefined,
+          'active': true,
+          'isPost': false,
+          'questionlist': [],
+          'endMessage': {
+            'no': '',
+            'en': '', // do not remove. see submitSurvey for handling of english properties.
+          }
+        };
+      }
+      this.onSurveyChange();
       this.startupLoading = false;
       return;
     }
@@ -114,7 +128,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         }
 
         // Do not remove the following lines!
-        this.setPushReadyStatus();
+        this.onSurveyChange();
         this.startupLoading = false;
         sub.unsubscribe();
       },
@@ -143,11 +157,16 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * setSaveReadyStatus()
+   * onSurveyChange()
    *
    * Checks every part of the survey and returns true if the survey is valid
+   * Also updates the session storage
    */
-  setPushReadyStatus() {
+  onSurveyChange() {
+    // Update the session storage
+    if (!this.isPost) {
+      sessionStorage.setItem('surveyInCreation', JSON.stringify(this.survey));
+    }
     // note: comment is NOT required, and is thusly not listed here.
     let status = this.fieldValidate(this.survey.name)     // name
       && this.survey.questionlist.length > 0              // at least one question
@@ -242,6 +261,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     const success = (result) => {
       this.submitLoading = false;
 
+      // given success status for creation of survey, we now remove what we have in the session storage
+      sessionStorage.removeItem('surveyInCreation');
+
       // this.route.snapshot is the route for the SUBDOMAIN of /admin
       // this.route.parent gives us the PARENT domain (ranging from '' to the parent
       // of this route). We want to return to the parent url in a programatic
@@ -267,10 +289,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     } else {
       // Send request to the server; either PATCH or POST.
       if (this.isPatch) {
-        // console.log("PATCHING!")
         this.surveyService.patchSurvey(clone._id, clone).subscribe(result => success(result), error => err(error));
       } else {
-        // console.log("POSTING!")
         this.surveyService.postSurvey(clone).subscribe(result => success(result), error => err(error));
       }
     }
@@ -295,7 +315,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     };
     this.survey.questionlist.push(qo);
     // Do not remove the following line!
-    this.setPushReadyStatus();
+    this.onSurveyChange();
   }
 
   /**
@@ -306,7 +326,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   removeQuestion(index: number) {
     this.survey.questionlist.splice(index, 1);
     // Do not remove the following line!
-    this.setPushReadyStatus();
+    this.onSurveyChange();
   }
 
 
@@ -333,7 +353,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         qo.lang.no.options = output.lang.no.options;
         qo.lang.en.options = output.lang.en.options;
         // Do not remove the following line!
-        this.setPushReadyStatus();
+        this.onSurveyChange();
       }
       sub.unsubscribe();
     });
@@ -346,13 +366,13 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   selector: 'alternatives-dialog',
   styleUrls: ['./create-survey.component.scss'],
   template: `
-  <h2 md-dialog-title>{{ 'Set Alternatives' | translate }}</h2>
-  <md-dialog-content>
+  <h1 md-dialog-title>{{ 'Set Alternatives' | translate }}</h1>
+  <div md-dialog-content>
     <span>{{ 'At least two alternatives must be set, with a maximum of 6.' | translate }}</span>
     <div *ngFor="let i of numAlternatives;">
       <md-input-container>
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'Norwegian' | translate }})"
-        [(ngModel)]="qoEditObj.lang.no.options[i]" required (change)='setSaveReadyStatus()'>
+        [(ngModel)]="qoEditObj.lang.no.options[i]" required (input)='setSaveReadyStatus()'>
         <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])
           || fieldCheckDup(qoEditObj.lang.no.options[i], qoEditObj.lang.no.options)"
           >{{ !fieldValidate(qoEditObj.lang.no.options[i]) ? ('This field is required.' | translate)
@@ -360,7 +380,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       </md-input-container>
       <md-input-container *ngIf="data.englishEnabled">
         <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'English' | translate }})"
-        [(ngModel)]="qoEditObj.lang.en.options[i]" required (change)='setSaveReadyStatus()'>
+        [(ngModel)]="qoEditObj.lang.en.options[i]" required (input)='setSaveReadyStatus()'>
         <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])
           || fieldCheckDup(qoEditObj.lang.en.options[i], qoEditObj.lang.en.options)"
           >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
@@ -371,19 +391,19 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6 || data.lockdown"
     (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
-  </md-dialog-content>
-  <md-dialog-actions align="center">
-  </md-dialog-actions>
-  <md-dialog-actions align="center">
+  </div>
+  <div md-dialog-actions align="center">
+  </div>
+  <div md-dialog-actions align="center">
     <button md-raised-button color="primary" [disabled]="!canSave"
     [md-tooltip]="canSave ? '' : 'All required fields must be filled in!'"
     tooltip-position="above"
     (click)="save()">{{ 'Save' | translate }}</button>
     <button md-raised-button color="warn" (click)="cancel()">{{ 'Cancel' | translate }}</button>
-  </md-dialog-actions>
+  </div>
   `
 })
-export class SurveyAlternativesDialog {
+export class SurveyAlternativesDialog implements OnInit {
   qoEditObj: QuestionObject;
   outputQuestionObject: QuestionObject;
   alternativeDefaults: boolean[];
@@ -394,6 +414,7 @@ export class SurveyAlternativesDialog {
   numAlternatives: number[];
 
   constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
+
     // Create a copy of our questionObject
     this.qoEditObj = JSON.parse(JSON.stringify(this.data.questionObject));
     // if there are less than 2 options, fill them in
@@ -405,6 +426,9 @@ export class SurveyAlternativesDialog {
     this.setSaveReadyStatus();
   }
 
+  ngOnInit() {
+
+  }
 
   /**
    * cancel()
@@ -514,19 +538,17 @@ export class SurveyAlternativesDialog {
   selector: 'post-survey-dialog',
   styleUrls: ['./create-survey.component.scss'],
   template: `
-  <h2 md-dialog-title class="alignCenter">{{ 'Post results' | translate }}</h2>
-  <md-dialog-content align="center">
+  <h1 md-dialog-title class="alignCenter">{{ 'Post results' | translate }}</h1>
+  <div md-dialog-content align="center">
     <p>{{ 'Could not post your survey. Error:' | translate }}</p>
     <span class="error">
-      <span>{{data.status}}</span>
-      <span>: </span>
-      <span>{{data.message}}</span>
+      {{data.status}} : {{data.message}}
     </span>
     <p>{{ 'The system cannot proceed until the issue has been resolved.' | translate }}</p>
-  </md-dialog-content>
-  <md-dialog-actions align="center">
+  </div>
+  <div md-dialog-actions align="center">
     <button md-raised-button color="primary" (click)="okay()">{{ 'Okay' | translate }}</button>
-  </md-dialog-actions>
+  </div>
   `
 })
 export class SurveyPublishDialog {

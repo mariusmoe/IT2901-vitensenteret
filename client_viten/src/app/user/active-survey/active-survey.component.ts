@@ -8,7 +8,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
-
+import { Title } from '@angular/platform-browser';
 
 @Component({
   selector: 'active-survey',
@@ -97,9 +97,8 @@ export class ActiveSurveyComponent implements OnInit {
 
   abortTimer: string; // The ID for the timer
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
-  public startText = 'Start survey';
 
-  isNicknameTaken = false
+  isNicknameTaken = false;
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
@@ -135,7 +134,9 @@ export class ActiveSurveyComponent implements OnInit {
     private route: ActivatedRoute,
     private timer: SimpleTimer,
     public dialog: MdDialog,
-    public translateService: TranslateService) {
+    public translateService: TranslateService,
+    private title: Title) {
+      title.setTitle(translateService.instant('Vitensenteret - Survey'));
   }
 
   /**
@@ -150,7 +151,6 @@ export class ActiveSurveyComponent implements OnInit {
         sub.unsubscribe();
 
         if (!result) {
-          console.log('DEBUG: BAD surveyId param from router!');
           // TODO: Redirect to base create survey ?
           return;
         }
@@ -174,7 +174,6 @@ export class ActiveSurveyComponent implements OnInit {
           && this.survey.questionlist[0].lang.en.txt
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
-          console.log('This survey have english ');
         }
 
 
@@ -229,7 +228,6 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
-    // console.log('survey is done');
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
@@ -251,7 +249,6 @@ export class ActiveSurveyComponent implements OnInit {
       const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         sub.unsubscribe();
         if (!result) {
-          console.log ('DEBUG: BAD surveyId param from router!');
           return;
         }
         this.survey = result.survey;
@@ -269,12 +266,22 @@ export class ActiveSurveyComponent implements OnInit {
  * @param  {any} alternative a list of numbers to send to survey
  */
 addOrChangeAnswer(alternative: any) {
-  if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null) {
+  if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null && alternative != null) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
-    this.noreqans = false;
   }
   this.response.questionlist[this.page] = alternative;
+
+  // This method checks if a qestion is required and has been answered
+  if (this.survey.questionlist[this.page].required) {
+    if (this.response.questionlist[this.page] == null) {
+      this.noreqans = true;
+    } else {
+      this.noreqans = false;
+    }
+  } else {
+    this.noreqans = false;
+  }
 }
    /**
     * Updates the nickname in Response
@@ -283,7 +290,6 @@ addOrChangeAnswer(alternative: any) {
     */
    updateNick(nickname) {
      this.response.nickname = nickname;
-    //  console.log('Added nick: ', this.response.nickname);
    }
 
 /**
@@ -291,7 +297,6 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
-    // console.log('previous question');
     if (this.page <= 0) {
       return;
     }
@@ -309,26 +314,20 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
-    // console.log('next question');
     // Handles an empty answer
     if (typeof this.response.questionlist[this.page] === 'undefined') {
       this.response.questionlist[this.page] = -1;
     }
     // If current page is the last with questions, the next page should be the endSurvey page
-    let pageCopy = this.page;
+    const pageCopy = this.page;
     if (pageCopy + 1 >= this.totalPages) {
       if (this.survey.postKey !== undefined || this.survey.isPost) {
-        // console.log('pre-survey is available');
         this.nicknamePage = true;
       }
       // If it is the last page in the survey, it should end it.
-      // console.log('trying to end survey');
       if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
         const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-        // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
-        //   delete responseClone.nickname;
-        // }
         this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
           if (proper) {
             this.transition = true;
@@ -341,8 +340,7 @@ addOrChangeAnswer(alternative: any) {
           }
         },
         error => {
-            console.log('Error when posting survey');
-            console.log(error);
+            console.error('Error when posting survey');
             this.nicknamePage = true;
             return;
         });
@@ -436,13 +434,9 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
-    // console.log('trying to end survey');
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
       const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-      // if (this.survey.isPost || (this.survey.postKey && this.survey.postKey.length > 0)) {
-      //   delete responseClone.nickname;
-      // }
       this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
         if (proper) {
           this.transition = true;
@@ -455,8 +449,7 @@ resetTimer() {
         }
       },
       error => {
-          console.log('Error when posting survey');
-          console.log(error);
+          console.error('Error when posting survey');
           this.postDone = false;
           this.isNicknameTaken = true;
       });

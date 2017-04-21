@@ -70,6 +70,13 @@ md-card {
     margin: 5px;
     max-width: 250px;
     min-width: 250px;
+    padding-bottom: 48px; // original 24 + 24 (from actions below)
+
+    md-card-actions {
+      margin-top: 24px;
+      position: absolute;
+      bottom: 24px; // offsets 8 (padding) + 16 (margin-bottom)
+    }
   }
 }
 

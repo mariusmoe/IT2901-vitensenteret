@@ -27,18 +27,17 @@ export class ChartComponent implements OnInit {
   chartLegends = ['doughnut', 'pie', 'polarArea'];
   chartLabels; // instantiated in constructor
 
-  constructor(public languageService: TranslateService) {
+  constructor(public translateService: TranslateService) {
     this.chartLabels = {
-                // TODO: VERIFY THE ORDER OF THESE!!!
-      'binary': [languageService.instant('No'), languageService.instant('Yes')],
-      'star': [languageService.instant('1 Star'), languageService.instant('2 Stars'),
-              languageService.instant('3 Stars'), languageService.instant('4 Stars'),
-              languageService.instant('5 Stars')
+      'binary': [translateService.instant('No'), translateService.instant('Yes')],
+      'star': [translateService.instant('1 Star'), translateService.instant('2 Stars'),
+              translateService.instant('3 Stars'), translateService.instant('4 Stars'),
+              translateService.instant('5 Stars')
       ],
       'single': undefined,
       'multi': undefined,
-      'smiley': [languageService.instant('Sad'), languageService.instant('Neutral'),
-                languageService.instant('Happy') // TODO: VERIFY THE ORDER OF THESE!!!
+      'smiley': [translateService.instant('Sad'), translateService.instant('Neutral'),
+                translateService.instant('Happy') // TODO: VERIFY THE ORDER OF THESE!!!
       ],
     };
   }
@@ -55,8 +54,12 @@ export class ChartComponent implements OnInit {
     }
 
     this.chartData = [{ 'data': new Array(this.chartLabels.length) }];
-    if (this.postResponses && this.postResponses.length > 0) {
-      this.chartData.push({ 'data': new Array(this.chartLabels.length) });
+    if (this.postResponses) {
+      this.chartData[0]['label'] = this.translateService.instant('Pre');
+      this.chartData.push({
+        'data': new Array(this.chartLabels.length),
+        'label': this.translateService.instant('Post')
+      });
     }
 
 
@@ -72,7 +75,7 @@ export class ChartComponent implements OnInit {
         this.chartData[0]['data'][response.questionlist[this.index]] += 1;
       }
     }
-    if (this.postResponses && this.postResponses.length > 0) {
+    if (this.postResponses) {
       for (let i = 0; i < this.chartLabels.length; i++) {
         this.chartData[1]['data'][i] = 0;
       }
@@ -151,7 +154,8 @@ export class ChartComponent implements OnInit {
     const newB = Math.round((end - b) * absPercent) + b;
 
     return '#' + (0x1000000 + (newR + newG + newB)).toString(16).slice(1);
-    }
+  }
+
 
   /**
    * Sets the chart options based on chartType
@@ -162,9 +166,64 @@ export class ChartComponent implements OnInit {
     // Use English text if English language is selected and an English question text exists.
     // Otherwise use Norwegian
     let titleText = this.questionObject.lang.no.txt;
-    if (this.languageService.getCurrentLang() === 'en' && this.questionObject.lang.en && this.questionObject.lang.en.txt) {
+    if (this.translateService.getCurrentLang() === 'en' && this.questionObject.lang.en && this.questionObject.lang.en.txt) {
       titleText = this.questionObject.lang.en.txt;
     }
+
+
+    const self = this;
+    const animFunction = function(input) {
+      if (input && input.animationObject.currentStep === input.animationObject.numSteps) {
+        // avoid drawing twice at the last step (it also triggers on complete)
+        return;
+      }
+
+      // this context is that of the normal js this here!
+      const chartInstance = this.chart;
+      const ctx = chartInstance.ctx;
+      ctx.font = 'normal 12px Arial';
+      ctx.fillStyle = '#444';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'bottom';
+      this.data.datasets.forEach(function (dataset, i) {
+          const meta = chartInstance.controller.getDatasetMeta(i);
+          if (self.bigCharts.indexOf(meta.type) >= 0) {
+            // All of these are circular.
+            meta.data.forEach(function (obj, index) {
+              if (obj.hidden) { return; }
+              // Get the data values
+              const data = dataset.data[index];
+              if (data > 0) {
+                // if the value is worthy to represent (more than 0), then display it.
+                // We need to calculate the position, and we know it is based on a circle
+                // We extract the start and end angles, and the radiuses of the objects
+                const angle = obj._model.startAngle + (obj._model.endAngle - obj._model.startAngle) / 2;
+                const offset = obj._model.innerRadius + (obj._model.outerRadius - obj._model.innerRadius) / 2;
+                // Then calculate the position
+                ctx.fillText(data, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset);
+                if (self.postResponses) {
+                  // if there are post responses, then we also include pre / post label
+                  ctx.fillText(dataset.label, obj._model.x + Math.cos(angle) * offset, obj._model.y + Math.sin(angle) * offset + 15);
+                }
+              }
+
+            });
+          } else {
+            const offset = meta.type === 'bar' ? 22 : -10;
+            meta.data.forEach(function (obj, index) {
+              if (obj.hidden) { return; }
+              const data = dataset.data[index];
+              // if the height of the bar is lower than the height of the text we're adding..
+              const newOffset = (obj._model.base - obj._model.y) <= 20 ? (-20) : offset;
+              ctx.fillText(data, obj._model.x, obj._model.y + newOffset);
+              if (self.postResponses) {
+                ctx.fillText(dataset.label, obj._model.x, obj._model.y + newOffset + 15);
+              }
+            });
+          }
+      });
+    };
+
 
     // SetOptions, setting title text and legend if Legend is needed
     this.chartOptions = {
@@ -173,10 +232,17 @@ export class ChartComponent implements OnInit {
           display: true,
           text: titleText,
       },
+      tooltips: {
+        // enabled: false,
+      },
       legend: {
         position: 'bottom',
         // if the legend is set for this type of chart, then display it.
         display: (this.chartLegends.indexOf(this.chartType) >= 0),
+      },
+      animation: {
+        onComplete: animFunction,
+        onProgress: animFunction
       }
     };
     if (this.chartType === 'bar') {
@@ -199,7 +265,8 @@ export class ChartComponent implements OnInit {
     // interpret our image as a .png, and we want to control the file name.
     // As such we replace all non-filepath-friendly characters from the question
     // and add the .png extension.
-    const dlLink = document.createElement('a');
+    const dlLink = document.createElement('a') as any; // as any disables tslinting.
+
     dlLink.download = this.questionObject.lang.no.txt.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.png';
     // the href is still just the image, though! That is what we want the user to download! The browser INTERPRETS
     // our image as a png, but the binary data is still the same. If we do not let the browser interpret it as anything,
@@ -224,6 +291,4 @@ export class ChartComponent implements OnInit {
     }
     return value.toFixed(2);
   }
-
-
 }

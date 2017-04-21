@@ -57,7 +57,6 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         this.getSurvey(param);
       }
     });
-    console.log(this.authenticationService.getUser());
   }
 
   ngOnDestroy() {
@@ -101,10 +100,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   deleteSurvey(surveyId: string) {
 
       this.dialogRef = this.dialog.open(DeleteSurveyDialog, {
-        disableClose: false
+        disableClose: false,
+        width: '500px',
       });
       this.dialogRef.afterClosed().subscribe(result => {
-        // console.log('result: ' + result);
         if (result === 'yes') {
           this.surveyService.deleteSurvey(surveyId).subscribe(
             _result => {
@@ -144,6 +143,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   }
 
 
+  /**
+   * Opens a snackbar with the input message and action
+   * @param  {string} message The message to be displayed
+   * @param  {string} action  the action message to be displayed
+   */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 4000,
@@ -156,10 +160,19 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    */
   downloadAs(type: string) {
     if (type === 'json') {
-      const dlLink = document.createElement('a');
+      const dlLink = document.createElement('a') as any;
       dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
 
-      const blob = new Blob([JSON.stringify({ survey: this.survey, responses: this.responses}, null, '\t')], { type: 'application/json' });
+      const jsonObject = {
+        survey: this.survey,
+        responses: this.responses
+      };
+      if (this.survey.postKey && this.survey.postKey.length > 0) {
+        jsonObject['postSurvey'] = this.postSurvey;
+        jsonObject['postResponses'] = this.postResponses;
+      }
+
+      const blob = new Blob([JSON.stringify(jsonObject, null, '\t')], { type: 'application/json' } );
       const url = window.URL.createObjectURL(blob);
       dlLink.href = url;
       // Then we do some DOM trickery to click this link to begin the download
@@ -172,7 +185,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     this.surveyService.getSurveyAsCSV(this.survey._id).subscribe(
       result => {
         const data = result._body;
-        const dlLink = document.createElement('a');
+        const dlLink = document.createElement('a') as any;
         dlLink.download = this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.' + type;
         const blob = new Blob([result._body], { type: 'text/csv' });
         const url = window.URL.createObjectURL(blob);
@@ -182,7 +195,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         dlLink.click();
         document.body.removeChild(dlLink);
       },
-      error => {console.log('error downloading as ' + type); }, // TODO: clean up error logging
+      error => {console.error('error downloading as ' + type); }, // TODO: clean up error logging
     );
   }
 
@@ -209,16 +222,15 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       pdf.text(textOffset, y, text);
     };
 
-    // start wroting data to the PDF.
+    // start writing data to the PDF.
     pdf.setFontSize(30);
     centeredText(22, 'Vitensenteret');
     pdf.setFontSize(18);
     pdf.text(25, 35, this.survey.name);
     pdf.setFontSize(8);
     pdf.text(25, 44, this.survey.comment);
-    // Dates and num answers are right-aligned
+    // Dates and num answers are right-aligned (Logo added at the very bottom)
     rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
-
     rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
     const responses = this.responses.length;
     const postResponses = this.responses.length;
@@ -236,8 +248,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     const tables = this.surveyDOM.nativeElement.querySelectorAll('table.chartData');
     // Set up a dummy canvas. This dummy canvas is used to set a white background
     // and to avoid other corruptions to / of the actual real canvases
-    const dummyCanvas = document.createElement('canvas');
-    const dummyCanvasContext = dummyCanvas.getContext('2d');
+    const dummyCanvas = document.createElement('canvas') as any;
+    const dummyCanvasContext = dummyCanvas.getContext('2d') as any;
     dummyCanvas.width = canvases[0].height * 2;
     dummyCanvas.height = canvases[0].height;
     dummyCanvasContext.fillStyle = '#FFFFFF';
@@ -266,6 +278,9 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.8), 'JPEG',
         (pdf.internal.pageSize.width - itemWidth) / 2, chartPos, itemWidth, chartHeight);
 
+      pdf.setFontSize(5);
+      centeredText(chartPos + chartHeight + 2, this.translateService.instant('Figure: n', i + 1));
+
       // Modify our table slightly, as to make it pretty for the PDF.
       // This circumvents the fact that the autoTableHtmlToJson does not deal with
       // html cell attribute colspan.
@@ -291,6 +306,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         styles: {fontSize: 7 },
         tableWidth: itemWidth
       });
+      pdf.setFontSize(5);
+      centeredText(pdf.autoTable.previous.finalY + 3, this.translateService.instant('Table: n', i + 1));
       // <-- END TABLE
       counter++;
     });
@@ -302,14 +319,32 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       rightAlignedText(20, pdf.internal.pageSize.height - 18, i + '/' + pageNr);
     }
 
-    // save our doc with a OS-friendly filename that is related to the survey at hand
-    const filename = todayFormatted + '_' + this.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
-    pdf.save(filename);
-    // update our component with our new status
-    this.generatingPDF = false;
+    pdf.setPage(1);
+    const img = new Image();
+    img.src = '../../assets/images/vitenlogo.png';
+    const self = this;
+    const logoSize = 15;
+    img.onload = function() {
+        const canvas = document.createElement('canvas') as any;
+        canvas.width = img.width;
+        canvas.height = img.height;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+        pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
+          pdf.internal.pageSize.width - logoSize - 23, 12, logoSize, logoSize
+        );
+
+        // save our doc with a OS-friendly filename that is related to the survey at hand
+        const filename = todayFormatted + '_' + self.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
+        pdf.save(filename);
+        // update our component with our new status
+        self.generatingPDF = false;
+    };
   }
 
-
+  /**
+   * Copies a survey
+   * @param  {boolean} includeResponses whether to include the responses for the survey
+   */
   copySurvey(includeResponses: boolean) {
     this.surveyService.copySurvey(this.survey._id, includeResponses).subscribe(survey => {
       // force redraw by doing 2 redirects
@@ -333,16 +368,17 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
  */
 @Component({
   selector: 'delete-survey-dialog',
+  styleUrls: ['./homepage-admin.component.scss'],
   template: `
-  <h1>{{ 'Are you sure you want to delete this survey?' | translate }}</h1>
-  <br>
-  <p>{{ 'The survey will be deleted! This action is permanent!' | translate }}</p>
-  <md-dialog-actions>
+  <h1 md-dialog-title>{{ 'Are you sure you want to delete this survey?' | translate }}</h1>
+  <div md-dialog-content>
+    {{ 'The survey will be deleted! This action is permanent!' | translate }}
+  </div>
+  <div md-dialog-actions align="center">
     <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
-    <button md-raised-button color="primary"  md-dialog-close>{{ 'Cancel' | translate }}</button>
-  </md-dialog-actions>
-  `,
-  styleUrls: ['./homepage-admin.component.scss']
+    <button md-raised-button md-dialog-close color="primary" class="alignRight">{{ 'Cancel' | translate }}</button>
+  </div>
+  `
 })
 export class DeleteSurveyDialog {
   constructor(public dialogRef: MdDialogRef<DeleteSurveyDialog>) { }

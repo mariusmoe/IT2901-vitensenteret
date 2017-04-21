@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-freetxt',
@@ -12,12 +13,19 @@ export class FreetxtComponent implements OnInit {
   public textValue;
   key;
   savedTxt;
+  textControl;
   @Input() currentAnswer: string;
 
-  constructor() { }
+  constructor() {
+    this.textControl = new FormControl();
+  }
 
   ngOnInit() {
     this.textValue = this.currentAnswer;
+    // Listens to changes in the textbox
+    this.textControl.valueChanges.subscribe(value => {
+      this.updateAnswers();
+    });
   }
 
   /**
@@ -33,7 +41,11 @@ export class FreetxtComponent implements OnInit {
  * @param  {number[]} userChoice An output number that shows which answer was chosen by a user
  */
   updateAnswers() {
-    this.answer.emit(this.textValue);
+    if (this.textValue === '') {
+      this.answer.emit(null);
+    } else {
+      this.answer.emit(this.textValue);
+    }
   }
 
 }

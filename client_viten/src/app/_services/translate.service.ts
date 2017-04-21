@@ -13,19 +13,32 @@ export class TranslateService {
     ];
     private PLACEHOLDER = '%';
 
-    public getCurrentLang() {
-        return this.currentLang;
-    }
-
     constructor(@Inject(TRANSLATIONS) private _translations: any) {
     }
 
+    /**
+     * Gets the currently used language
+     * @return {string} the currenly used language, in short. I.e. 'en'.
+     */
+    public getCurrentLang(): string {
+        return this.currentLang;
+    }
+
+    /**
+     * Changes the translation language
+     * @param {string} lang the new language ot be used, in short. I.e. 'en'.
+     */
     public use(lang: string): void {
         // set current language
         this.currentLang = lang;
         localStorage.setItem('lang', lang);
     }
 
+    /**
+     * Translates a key into the readable output in the selected language
+     * @param  {string} key the text key that is to be translated
+     * @return {string}     the translated text
+     */
     private translate(key: string): string {
         // private perform translation
         const translation = key;
@@ -37,8 +50,13 @@ export class TranslateService {
         throw Error('NO TRANSLATION FOUND FOR : ' + key);
     }
 
-
-    public replace(word = '', words: string | string[] = '') {
+    /**
+     * Formats text and substitutes the placeholder tag with the input text
+     * @param  {string}    word='' the text that is to be formatted
+     * @param  {string || string[]} words The string or strings that is to be filled into text
+     * @return {string}            The final formatted string
+     */
+    public replace(word = '', words: string | string[] = ''): string {
         let translation: string = word;
 
         const values: string[] = [].concat(words);
@@ -50,7 +68,13 @@ export class TranslateService {
         // return 'T:' + translation;
     }
 
-    public instant(key: string, words?: string | string[]) { // add optional parameter
+    /**
+     * translate text
+     * @param  {string}    key the key that is to be translated
+     * @param  {string || string[]}    words The string or strings that is to be filled into text
+     * @return {string}        The translated text
+     */
+    public instant(key: string, words?: string | string[]): string { // add optional parameter
         const translation: string = this.translate(key);
 
         if (!words) { return 'T:' + translation; } // return 'T:' + translation; }

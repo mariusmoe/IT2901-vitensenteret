@@ -67,7 +67,7 @@ exports.patchOneEscape = (req, res, next) => {
  */
 exports.checkOneEscape = (req, res, next) => {
   const password = req.body.password;
-  if (!password) {
+  if (!password || typeof password !== 'string') {
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
   }
   Escape.findOne({}, (err, escape) => {
@@ -76,7 +76,7 @@ exports.checkOneEscape = (req, res, next) => {
       return res.status(401).send({message: false, error: 'ERROR'});
     }
     escape.comparePassword(password, function(err, isMatch) {
-      if (err) { return done(err); }
+      if (err) { return next(err); }
       if (isMatch) {
         return res.status(200).send({message: true});
       } else {
@@ -285,16 +285,16 @@ exports.roleAuthorization = function(role){
 }
 
 exports.changeEmail = function(req, res, next) {
+  if (!req.body.email.newEmail || req.body.email.newEmail === '') {
+    res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
+    return next(err);
+  }
   User.findById(req.user._id, function(err, user) {
     if (err) {
       res.status(422).json({ error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
       return next(err);
     }
-    if (req.body.email == '') {
-      res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
-      return next(err);
-    }
-    user.email = req.body.email
+    user.email = req.body.email.newEmail;
     user.save(function(err){
       if(err){
         throw err;

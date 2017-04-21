@@ -3,6 +3,10 @@
 export const LANG_NO_NAME = 'no';
 
 export const LANG_NO_TRANS = {
+  // Application
+  'Vitensenteret - AdminPortal': 'Vitensenteret - AdminPortal',
+  'Vitensenteret - Survey': 'Vitensenteret - Undersøkelse',
+
   // Generic
   'Edit': 'Endre',
   'Create': 'Lag',
@@ -36,6 +40,7 @@ export const LANG_NO_TRANS = {
   'Responses': 'Svar',
   'User': 'Bruker',
   'Nickname': 'Kallenavn',
+  'Code': 'Kode',
 
   // Roles
   'admin': 'Superadmin',
@@ -59,6 +64,10 @@ export const LANG_NO_TRANS = {
   'multi': 'Flervalgs',
   'smiley': 'Smiley',
   'text': 'Tekst',
+
+  // Survey Pre post labels
+  'Pre': 'Pre',
+  'Post': 'Post',
 
   // Survey response numbers
   'Number of responses: n': 'Antall svar: %0',
@@ -140,6 +149,9 @@ export const LANG_NO_TRANS = {
   'Survey deleted': 'Undersøkelse slettet',
   'Are you sure you want to delete this survey?': 'Er du sikker på at du vil slette denne undersøkelsen?',
   'The survey will be deleted! This action is permanent!': 'Undersøkelsen vil bli slettet! Denne handlingen er permanent!',
+  'Go to survey': 'Gå til undersøkelsen',
+  'Go to post survey': 'Gå til post undersøkelse',
+  'The survey is not active': 'Undersøkelsen er ikke aktiv',
 
 
   // Admin settings component
@@ -152,8 +164,8 @@ export const LANG_NO_TRANS = {
   'Change email': 'Bytt epostkonto',
   'User settings': 'Brukerinstillinger',
   'Superadmin settings': 'Superadmin seksjon',
-  'Request admin': 'Få invitasjonslink for superadmin',
-  'Request member': 'Få invitasjonslink for adminbruker',
+  'Refer admin': 'Generer invitasjonslink for superadmin',
+  'Refer member': 'Generer invitasjonslink for adminbruker',
   'You need to write the same password twice': 'Du må skrive passordet to ganger',
   'Delete account': 'Slett kontoen',
   'Change the preferred language here': 'Bytt ditt foretrukne språk her',
@@ -170,6 +182,7 @@ export const LANG_NO_TRANS = {
   'You have now changed your password': 'Du har nå byttet passord',
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
+  'Code to exit survey': 'kode for å komme ut av undersøkelsen',
 
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
@@ -194,6 +207,8 @@ export const LANG_NO_TRANS = {
   // PDF download lines
   'Date created: d': 'Dato laget: %0',
   'Date printed: d': 'Dato printet: %0',
+  'Figure: n': 'Figur: %0',
+  'Table: n': 'Tabell: %0',
 
   // Nickname component
   'Name': 'Hva heter du?',
@@ -203,7 +218,17 @@ export const LANG_NO_TRANS = {
 
   // Modal dialog in active survey
   'Sorry': 'Beklager',
-  'ContactError': 'Noe gikk galt! Venligst kontakt de ansatte.'
+  'ContactError': 'Noe gikk galt! Venligst kontakt de ansatte.',
 
+  // quit survey prompt
+  'Enter the code to quit': 'Skriv inn koden for å avslutte undersøkelsen',
+  'Incorrect code': 'Feil kode',
 
+  // play-survey - Free text
+  'Max 255 characters': 'Maks 255 bokstaver',
+  'Your answer': 'Ditt svar',
+
+  // Footer
+  'Group n': 'Gruppe %0',
+  'IT2901 - Informatics Project II': 'IT2901 - Informatikk Prosjektarbeid II',
 };

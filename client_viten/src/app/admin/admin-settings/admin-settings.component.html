@@ -5,16 +5,20 @@
       <md-card>
         <md-card-title>{{ 'Email' | translate }}</md-card-title>
         <md-card-content>
-          <!-- TODO: rewrite this with form controll -->
-          <md-input-container>
-            <input mdInput
-              placeholder="{{user.email}}"
-              #newEmail>
-          </md-input-container>
+          <form [formGroup]="newEmailForm" (ngSubmit)="changeEmail(newEmailForm.value)">
+            <md-input-container>
+              <input mdInput type="email" pattern="\S+@\S+\.\S+" placeholder="{{user.email}}" [formControl]="newEmailForm.controls['newEmail']">
+              <md-hint class="warning" *ngIf="newEmailForm.controls['newEmail'].invalid && newEmailForm.controls['newEmail'].touched">
+                {{ 'This field is invalid.' | translate }}
+              </md-hint>
+            </md-input-container>
+            <md-card-actions>
+              <button md-raised-button type="submit" color="primary" [disabled]="newEmailForm.controls['newEmail'].invalid">
+                {{ 'Change email' | translate }}
+              </button>
+            </md-card-actions>
+          </form>
         </md-card-content>
-        <md-card-actions>
-          <button md-raised-button color="primary" [disabled]='newEmail.value==user.email || (newEmail.value === "") ' (click)="changeEmail(newEmail.value)">{{ 'Change email' | translate }}</button>
-        </md-card-actions>
       </md-card>
       <md-card>
         <md-card-title>{{ 'Password' | translate }}</md-card-title>
@@ -81,16 +85,16 @@
         <md-card-subtitle>{{user.role | translate }}</md-card-subtitle>
         <md-card-actions>
           <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
-            {{ 'Request admin' | translate }}
+            {{ 'Refer admin' | translate }}
           </button>
           <button md-raised-button color="primary" minlength="3" (click)="requestReferral('member')">
-            {{ 'Request member' | translate }}
+            {{ 'Refer member' | translate }}
           </button>
         </md-card-actions>
         <br>
 
 
-          <md-card-title>{{ 'Password' | translate }} to exit survey</md-card-title>
+          <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
           <md-card-content>
             <md-input-container>
               <input mdInput
@@ -154,7 +158,7 @@
             [ngClass]="{ odd: odd, even: even }">
             <td>{{user._id}}</td>
             <td>{{user.email}}</td>
-            <td>{{user.role}}</td>
+            <td>{{ user.role | translate }}</td>
             <td><md-icon>delete_forever</md-icon></td>
           </tr>
         </table>

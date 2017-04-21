@@ -95,7 +95,7 @@ md-input-container {
   @extend .flexParent;
   justify-content: center;
 
-  md-progress-circle,
+  md-progress-spinner,
   button {
     flex: 0 1;
   }
@@ -105,15 +105,11 @@ md-input-container {
   display: block;
 }
 
-md-dialog-actions {
+div[md-dialog-actions] {
   button {
     margin-left: 10px;
     &:first-of-type {
       margin: 0;
-    }
-    &.alignRight {
-      align-self: flex-end;
-      text-align: right;
     }
   }
 }

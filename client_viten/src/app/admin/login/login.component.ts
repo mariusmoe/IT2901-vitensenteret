@@ -31,21 +31,24 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
   ngOnInit() {
+    // sets background according to the noWrapper class (see app.component.scss)
     document.querySelector('html').classList.add('noWrapper');
   }
   ngOnDestroy() {
     document.querySelector('html').classList.remove('noWrapper');
   }
 
+  /**
+   * submits the login form
+   * @param  {User}   user the user that is to be logged in
+   */
   submitForm(user: User) {
     this.loading = true;
-    // console.log(user);
 
     this.loading = true;
     const sub = this.authenticationService.login(user.email, user.password)
         .subscribe(result => {
           sub.unsubscribe();
-          // console.log("Got response!")
           if (result === true) {
               this.router.navigate(['/admin']);
           } else {

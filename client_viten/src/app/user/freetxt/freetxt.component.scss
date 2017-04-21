@@ -3,8 +3,10 @@
   font-size: 2vw;
   width: 75vw;
   height: 45vh;
+  max-width: 75vw;
+  max-height: 45vh;
   background-color: white;
-  overflow: scroll;
+  resize: none;
 }
 
 input {

@@ -8,11 +8,11 @@ import { QuestionObject } from '../../_models/survey';
   styleUrls: ['./smiley.component.scss'],
   animations: [
   trigger('jumpOut', [
-    state('inactive', style({opacity: 0.5})),
+    state('inactive', style({opacity: 0.8, transform: 'scale(0.9,0.9)'})),
     state('active', style({opacity: 1, transform: 'scale(1.1,1.1)'})),
     transition('inactive => active', animate('500ms', keyframes([
-      style({opacity: 0.5, transform: 'scale(1,1)', offset: 0}),
-      style({opacity: 0.8, transform: 'scale(1.4,1.2)', offset: 0.25}),
+      style({opacity: 0.8, transform: 'scale(0.9,0.9)', offset: 0}),
+      style({opacity: 0.9, transform: 'scale(1.4,1.2)', offset: 0.25}),
       style({opacity: 1, transform: 'scale(0.9,0.9)', offset: 0.8}),
       style({opacity: 1, transform: 'scale(1.1,1.1)', offset: 1.0})
     ]))),

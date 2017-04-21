@@ -3,6 +3,10 @@
 export const LANG_EN_NAME = 'en';
 
 export const LANG_EN_TRANS = {
+  // Application
+  'Vitensenteret - AdminPortal': 'Vitensenteret - AdminPortal',
+  'Vitensenteret - Survey': 'Vitensenteret - Survey',
+
   // Generic
   'Edit': 'Edit',
   'Create': 'Create',
@@ -36,10 +40,11 @@ export const LANG_EN_TRANS = {
   'Responses': 'Responses',
   'User': 'User',
   'Nickname': 'Nickname',
+  'Code': 'Code',
 
   // roles
-  'admin': 'Admin',
-  'member': 'Member',
+  'admin': 'Superadmin',
+  'member': 'Admin',
 
   // Permissions
   'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
@@ -59,6 +64,10 @@ export const LANG_EN_TRANS = {
   'multi': 'Multiple Choice',
   'smiley': 'Smiley',
   'text': 'Free Text',
+
+  // Survey Pre post labels
+  'Pre': 'Pre',
+  'Post': 'Post',
 
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
@@ -139,6 +148,9 @@ export const LANG_EN_TRANS = {
     'Survey deleted': 'Survey deleted',
     'Are you sure you want to delete this survey?': 'Are you sure you want to delete this survey?',
     'The survey will be deleted! This action is permanent!': 'The survey will be deleted! This action is permanent!',
+    'Go to survey': 'Go to survey',
+    'Go to post survey': 'Go to post survey',
+    'The survey is not active': 'The survey is not active',
 
   // Admin settings component
   'Retype password': 'Retype password',
@@ -150,8 +162,8 @@ export const LANG_EN_TRANS = {
   'Change email': 'Change email',
   'User settings': 'User settings',
   'Superadmin settings': 'Superadmin settings',
-  'Request admin': 'Request admin',
-  'Request member': 'Request member',
+  'Refer admin': 'Refer admin',
+  'Refer member': 'Refer member',
   'You need to write the same password twice': 'You need to write the same password twice',
   'Delete account': 'Delete account',
   'Change the preferred language here': 'Change the preferred language here',
@@ -162,12 +174,13 @@ export const LANG_EN_TRANS = {
   'Can\'t delete current user': 'Can\'t delete current user',
   'Are you sure you want to delete this account?': 'Are you sure you want to delete this account?',
   'The account will be deleted! This action is permanent!': 'The account will be deleted! This action is permanent!',
-  'Refer one userType': 'Refer one %0',
+  'Refer a userType': 'Refer a %0',
   'A referral link is only active for two weeks': 'A referral link is only active for two weeks',
   'You have now changed your email': 'You have now changed your email',
   'You have now changed your password': 'You have now changed your password',
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
+  'Code to exit survey': 'Code to exit survey',
 
   // survey retrieval chart component
   'Download as PNG': 'Download as PNG',
@@ -192,6 +205,8 @@ export const LANG_EN_TRANS = {
   // PDF download lines
   'Date created: d': 'Date created: %0',
   'Date printed: d': 'Date printed: %0',
+  'Figure: n': 'Figure: %0',
+  'Table: n': 'Table: %0',
 
   // Nickname component
   'Name': 'What is your name?',
@@ -200,6 +215,17 @@ export const LANG_EN_TRANS = {
 
   // Modal dialog in active survey
   'Sorry': 'Sorry',
-  'ContactError': 'Something went wrong! Please contact the staff.'
+  'ContactError': 'Something went wrong! Please contact the staff.',
 
+  // quit survey prompt
+  'Enter the code to quit': 'Enter the code to quit',
+  'Incorrect code': 'Incorrect code',
+
+  // play-survey - Free text
+  'Max 255 characters': 'Max 255 characters',
+  'Your answer': 'Your answer',
+
+    // Footer
+    'Group n': 'Group %0',
+    'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
 };

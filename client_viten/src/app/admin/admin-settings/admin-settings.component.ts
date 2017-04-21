@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
@@ -18,6 +19,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private userSub;
   private userListSub;
   public  user: User;
+  newEmailForm: FormGroup;
   private email = '';
   private userList: User[] = [];
   private selectedRow: number;
@@ -33,12 +35,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     private surveyService: SurveyService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
+    private fb: FormBuilder,
     public languageService: TranslateService) {
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
       if (this.user.role === 'admin') {
         this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
       }
+      this.newEmailForm = fb.group({
+        'newEmail': [null, Validators.required],
+      });
+
     }
 
 
@@ -50,11 +57,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     // this.emailSub.unsubscribe();
   }
 
-
+  /**
+   * Sets the language to the selected value
+   */
   setSelectedLanguage() {
     this.languageService.use(this.selectedLanguage);
   }
 
+  /**
+   * Changes the exit-survey password
+   * @param  {string} password new password
+   */
   changeExitSurveyPassword(password: string) {
     this.surveyService.changeChoosesurvey(password)
       .subscribe(result => {
@@ -66,6 +79,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * changes user email
+   * @param  {string} newEmail the new email to be used
+   */
   changeEmail(newEmail: string) {
     this.service.changeEmail(newEmail)
         .subscribe(result => {
@@ -80,7 +97,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
             this.dialogRef = this.dialog.open(CredentialDialog, config);
 
             this.dialogRef.afterClosed().subscribe(dialogResult => {
-              // console.log('result: ' + dialogResult);
               if (dialogResult === 'yes') {
                 this.router.navigate(['/login']);
               }
@@ -96,6 +112,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       });
   }
 
+  /**
+   * changes the user password
+   * @param  {string} newPassword the new password to be used
+   * @return {[type]}             [description]
+   */
   changePassword(newPassword: string) {
     this.service.changePassword(newPassword)
       .subscribe(result => {
@@ -110,7 +131,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
           this.dialogRef = this.dialog.open(CredentialDialog, config);
 
           this.dialogRef.afterClosed().subscribe(dialogResult => {
-            // console.log('result: ' + dialogResult);
             if (dialogResult === 'yes') {
               this.router.navigate(['/login']);
             }
@@ -122,14 +142,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       },
       error => {
         this.openSnackBar(this.languageService.instant('Could not change your password'), 'FAILURE');
-        console.error(error);
+        // console.error(error);
     });
   }
 
-  requestReferral(role) {
+  /**
+   * requests a referral link
+   * @param  {string} role The role of the user that is to be referred
+   */
+  requestReferral(role: string) {
     this.service.getReferral(role)
         .subscribe(result => {
-          // console.log(result);
           const config: MdDialogConfig = {
             data: {
               referralURL: result,
@@ -140,23 +163,20 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         });
   }
 
+  /**
+   * Gets a list of users
+   */
   getUsers() {
     this.user = this.service.getUser();
 
     this.userListSub = this.service.getAllUsers().subscribe(users => {
       this.userList = users; // Subscribe and get user from the authService
-      // console.log(this.userList);
     });
   }
 
-  setSelected(selected: number) {
-    this.selectedRow = selected;
-  }
-
   /**
-   * Delete the current user
-   *
-   * Delete the user that is currently loged in
+   * Deletes the user of a given id
+   * @param  {string} id the id of the user that is to be deleted
    */
   deleteUser(id: string) {
     if (id === this.user._id) {
@@ -175,6 +195,12 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         }
   }
 
+
+  /**
+   * Opens a snackbar with the given message and action message
+   * @param  {string} message The message that is to be displayed
+   * @param  {string} action  the action message that is to be displayed
+   */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
       duration: 2000,
@@ -182,9 +208,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * Opens a dialog
-   *
-   * Promts the user to delete the account or not
+   * Opens a delete user dialog and prompts the user if he or she wants to delete said user
+   * @param  {string} id the id of the user that is to be deleted
    */
   openDialog(id: string) {
     if (id === this.user._id) {
@@ -195,7 +220,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       });
 
       this.dialogRef.afterClosed().subscribe(result => {
-        // console.log('result: ' + result);
         if (result === 'yes') {
           this.deleteUser(id);
         }
@@ -217,13 +241,14 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'delete-acccount-dialog',
   template: `
-  <h1>{{ 'Are you sure you want to delete this account?' | translate }}</h1>
-  <br>
-  <p>{{ 'The account will be deleted! This action is permanent!' | translate }}</p>
-  <md-dialog-actions>
+  <h1 md-dialog-title>{{ 'Are you sure you want to delete this account?' | translate }}</h1>
+  <div md-dialog-content>
+    {{ 'The account will be deleted! This action is permanent!' | translate }}
+  </div>
+  <div md-dialog-actions>
     <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
-    <button md-raised-button color="primary"  md-dialog-close>{{ 'Cancel' | translate }}</button>
-  </md-dialog-actions>
+    <button md-raised-button md-dialog-close color="primary">{{ 'Cancel' | translate }}</button>
+  </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
 })
@@ -239,28 +264,29 @@ export class DeleteDialog {
 @Component({
   selector: 'refer-acccount-dialog',
   template: `
-  <h1>{{ 'Refer one userType' | translate:[data.role] }}</h1>
-  <br>
-  <p>{{ 'A referral link is only active for two weeks' | translate }}</p>
-  <md-input-container class="referralField">
-    <input class="referralField"
-      mdInput placeholder="{{ 'Referral link' | translate }}"
-      value="{{data.referralURL}}"
-      [(ngModel)] = "text">
-  </md-input-container>
-  <button md-raised-button
-    class="btn btn-default"
-    [class.btn-success] = 'isCopied'
-    type="button"
-    ngxClipboard
-    [cbContent] = 'text'
-    (cbOnSuccess) = 'isCopied = true'>
-      {{ 'Copy' | translate }}
-      <md-icon>content_copy</md-icon>
-  </button>
-  <md-dialog-actions>
-    <button md-raised-button color="primary"  md-dialog-close>{{ 'Okay' | translate }}</button>
-  </md-dialog-actions>
+  <h1 md-dialog-title>{{ 'Refer a userType' | translate : [data.role] }}</h1>
+  <div md-dialog-content>
+    <p>{{ 'A referral link is only active for two weeks' | translate }}</p>
+    <md-input-container class="referralField">
+      <input class="referralField"
+        mdInput placeholder="{{ 'Referral link' | translate }}"
+        value="{{data.referralURL}}"
+        [(ngModel)] = "text">
+    </md-input-container>
+    <button md-raised-button
+      class="btn btn-default"
+      [class.btn-success] = 'isCopied'
+      type="button"
+      ngxClipboard
+      [cbContent] = 'text'
+      (cbOnSuccess) = 'isCopied = true'>
+        {{ 'Copy' | translate }}
+        <md-icon>content_copy</md-icon>
+    </button>
+  </div>
+  <div md-dialog-actions align="center">
+    <button md-raised-button md-dialog-close color="primary">{{ 'Okay' | translate }}</button>
+  </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
 })
@@ -268,11 +294,15 @@ export class ReferDialog {
   public isCopied = false;
   public text = '';
   constructor(public dialogRef: MdDialogRef<ReferDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
-    this.setCopyBox(); }
+    this.setCopyBox();
+  }
 
-    setCopyBox() {
-      this.text = this.data.referralURL;
-    }
+  /**
+   * Sets the text of the box to be that of the referral link
+   */
+  setCopyBox() {
+    this.text = this.data.referralURL;
+  }
 }
 
 /**
@@ -283,15 +313,16 @@ export class ReferDialog {
 @Component({
   selector: 'credential-changed-dialog',
   template: `
-  <h1>{{ 'Success' | translate }}</h1>
-  <br>
-
-  <p>{{ data.credential === 'password' ?
-    ('You have now changed your password' | translate) : ('You have now changed your email' | translate)}}</p>
-  <p>{{ 'You will now be logged out' | translate }}</p>
-  <md-dialog-actions>
-    <button md-raised-button color="primary" (click)="dialogRef.close('yes')">{{ 'Okay' | translate }}</button>
-  </md-dialog-actions>
+  <h1 md-dialog-title align="center">{{ 'Success' | translate }}</h1>
+  <div md-dialog-content align="center">
+    <p>{{ data.credential === 'password' ?
+      ('You have now changed your password' | translate) : ('You have now changed your email' | translate)}}</p>
+    <p>{{ 'You will now be logged out' | translate }}</p>
+  </div>
+  <div md-dialog-actions align="center">
+    <button md-raised-button color="primary"
+    (click)="dialogRef.close('yes')">{{ 'Okay' | translate }}</button>
+  </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
 })

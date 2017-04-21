@@ -43,23 +43,20 @@ export class NicknameComponent implements OnInit {
   }
 
   filterNicknames(val: string) {
-  return val ? this.nicknames.filter((s) => new RegExp(val, 'gi').test(s)) : this.nicknames;
-}
+    return val ? this.nicknames.filter((s) => new RegExp(val, 'gi').test(s)) : this.nicknames;
+  }
 
   ngOnInit() {
-    // console.log(this.survey);
     const sub  = this.surveyService.getNicknames(this.survey._id)
       .subscribe( result => {
         if (this.survey.isPost) {
           this.allNames = result;
-          // console.log('These are the names: ', this.allNames);
           this.allNames.forEach((x) => { this.nicknames.push(x.nickname); });
         }
        sub.unsubscribe();
     },
     error => {
-      console.log('error when get nicknames');
-      console.log(error);
+      console.error('error when get nicknames');
     });
     this.nickCtrl.valueChanges.subscribe(value => {
       // do something with value here
@@ -67,22 +64,14 @@ export class NicknameComponent implements OnInit {
         // tell the user to do the pre survey first
         if (value.length > 2) {
           this.nickNameNotRegistered = true;
+          return;
         }
-      } else {
-        this.answer.emit(value);
-        this.nickNameNotRegistered = false;
-
       }
+      // Assume everything is okay here
+      this.answer.emit(value);
+      this.nickNameNotRegistered = false;
     });
   }
-
-    /**
-     * This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
-     * @param  {number[]} alt The output answer sent to active-survey-component
-     */
-    addChange(alt) {
-      this.answer.emit(alt);
-    }
 
   /**
    * This updates the variables that posts to the active-survey component
@@ -104,14 +93,11 @@ export class NicknameComponent implements OnInit {
      * Checks if nickname is taken based on pre or post. If it is a post-survey, it will
      * allow matching names to pass. If it is a pre-survey, matching names will recieve suggestions of
      * new nicknames, to not cause duplicates.
-     * @return {[type]} [description]
      */
     openNickname () {
       if (!this.allNames.contains(this.searchNickname)) {
-        // console.log('nickname is open');
         return true;
       }
-      // console.log('nickname is taken');
       // this.suggestions = [
       //   this.nickname + '123', this.nickname + '456'
       // ];

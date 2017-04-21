@@ -51,6 +51,11 @@ export class AuthenticationService {
       );
   }
 
+  /**
+   * requests to change the user's password
+   * @param  {string}              newPassword the new password chosen by the user
+   * @return {Observable<boolean>}             servers response, as an Observable
+   */
   changePassword(newPassword: string): Observable<boolean> {
     const token = this.getToken();
     const headers = new Headers({'content-type': 'application/json'});
@@ -69,7 +74,12 @@ export class AuthenticationService {
       );
   }
 
-  getReferral(role): Observable<string> {
+  /**
+   * requests a referral link from the server
+   * @param  {string}             role The role of the user that is to be referred
+   * @return {Observable<string>}      The referral link, as an Observable
+   */
+  getReferral(role: string): Observable<string> {
     const token = this.getToken();
     if (!token) {
       return Observable.throw('jwt not found'); // TODO: fix me.
@@ -111,9 +121,8 @@ export class AuthenticationService {
   }
 
   /**
-   * getToken
-   *
-   * @returns String - user token if it exists in the local storage. undefined otherwise
+   * Gets the JWT token from localStorage
+   * @return {string} user token if it exists in the local storage. undefined otherwise
    */
   private getToken(): string {
     return localStorage.getItem('token');
@@ -137,18 +146,22 @@ export class AuthenticationService {
       headers: headers,
       body: body
     });
-      return this.http.delete(environment.URL.delete, options)
-      .map(
-        response => {
-          return true;
-        },
-        error => {
-          console.log(error.text());
-          return false;
-        }
-      );
-    }
+    return this.http.delete(environment.URL.delete, options)
+    .map(
+      response => {
+        return true;
+      },
+      error => {
+        console.log(error.text());
+        return false;
+      }
+    );
+  }
 
+  /**
+   * Requests all users from the server
+   * @return {Observable<User[]>} a list of User, as an Observable
+   */
   getAllUsers(): Observable<User[]> {
     const token = this.getToken();
     const headers = new Headers();
@@ -230,7 +243,13 @@ export class AuthenticationService {
       });
   }
 
-  login(email, password): Observable<boolean> {
+  /**
+   * Requests to log the user in
+   * @param  {string}              email    The user's email
+   * @param  {string}              password The user's password
+   * @return {Observable<boolean>}          Server's response, as an Observable
+   */
+  login(email: string, password: string): Observable<boolean> {
       const headers = new Headers({'content-type': 'application/json'});
       const options = new RequestOptions({headers: headers});
       const data = { 'email': email, 'password': password };
@@ -254,7 +273,13 @@ export class AuthenticationService {
         );
   }
 
-
+  /**
+   * Requests to register a user
+   * @param  {string}              email    The email of the user
+   * @param  {string}              password The password of the user
+   * @param  {string}              link     The referral link that was used
+   * @return {Observable<boolean>}          Server's response, as an Observable
+   */
   registerUser(email: string, password: string, link: string): Observable<boolean> {
       const headers = new Headers({'content-type': 'application/json'});
       const options = new RequestOptions({headers: headers});
