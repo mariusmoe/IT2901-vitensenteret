@@ -224,4 +224,8 @@ export const LANG_EN_TRANS = {
   // play-survey - Free text
   'Max 255 characters': 'Max 255 characters',
   'Your answer': 'Your answer',
+
+    // Footer
+    'Group n': 'Group %0',
+    'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
 };

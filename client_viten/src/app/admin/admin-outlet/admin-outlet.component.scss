@@ -38,17 +38,34 @@
 
 .footer {
   background: $vitenHTMLBackground;
-  display: flex;
-}
-
-
-.breadcrumbs {
   font-size: 0.80em;
-  padding: 10px;
-  span.separator {
-    margin: 0 0.2em; // em is relative to font-size
+
+  .breadcrumbs {
+    text-align: center;
+
+    padding: 10px;
+    span.separator {
+      margin: 0 0.2em; // em is relative to font-size
+    }
+    a, a:active, a:visited {
+      color: inherit;
+    }
   }
-  a, a:active, a:visited {
-    color: inherit;
+
+  .notice {
+    margin: 20px 0 50px 0;
+    color: #555;
+    text-align: center;
+    span {
+      display: block;
+    }
+    .box {
+      margin: 0 auto;
+      display: inline-block;
+      .col {
+        padding: 10px;
+        display: inline-block;
+      }
+    }
   }
 }

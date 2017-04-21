@@ -227,4 +227,8 @@ export const LANG_NO_TRANS = {
   // play-survey - Free text
   'Max 255 characters': 'Maks 255 bokstaver',
   'Your answer': 'Ditt svar',
+
+  // Footer
+  'Group n': 'Gruppe %0',
+  'IT2901 - Informatics Project II': 'IT2901 - Informatikk Prosjektarbeid II',
 };
