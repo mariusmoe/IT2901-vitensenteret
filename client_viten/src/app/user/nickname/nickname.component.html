@@ -4,11 +4,11 @@
     <!-- Uses the ng2-completer to search for already-existing nicknames.
          If name exists, it will suggest new names or combinatios of others-->
     <h1>{{'Nickname' | translate}}</h1>
-    <p *ngIf="nickNameNotRegistered">{{'You need to answer the pre survey first' | translate }}</p>
-    <p *ngIf="isNicknameTaken">{{'This nickname is taken, choose another one' | translate}}</p>
     <md-input-container>
       <input mdInput placeholder="{{'Nickname' | translate}}" [mdAutocomplete]="auto" [formControl]="nickCtrl" #nick (change)="updateAnswers(nick.value)">
     </md-input-container>
+    <p *ngIf="nickNameNotRegistered">{{'You need to answer the pre survey first' | translate }}</p>
+    <p *ngIf="isNicknameTaken">{{'This nickname is taken, choose another one' | translate}}</p>
 
     <md-autocomplete #auto="mdAutocomplete">
       <md-option *ngFor="let nickname of filteredNicknames | async" [value]="nickname">
