@@ -241,13 +241,13 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'delete-acccount-dialog',
   template: `
-  <h1 md-dialog-title>{{ 'Are you sure you want to delete this account?' | translate }}</h1>
-  <div md-dialog-content>
+  <h1 md-dialog-title align="center">{{ 'Are you sure you want to delete this account?' | translate }}</h1>
+  <div md-dialog-content align="center">
     {{ 'The account will be deleted! This action is permanent!' | translate }}
   </div>
-  <div md-dialog-actions>
-    <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
-    <button md-raised-button md-dialog-close color="primary">{{ 'Cancel' | translate }}</button>
+  <div md-dialog-actions align="center">
+    <button md-raised-button color="warn" (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
+    <button md-raised-button md-dialog-close color="primary" class="btn btn-default">{{ 'Cancel' | translate }}</button>
   </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
