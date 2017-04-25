@@ -176,7 +176,7 @@ export const LANG_NO_TRANS = {
   'Can\'t delete current user': 'Kan ikke slette brukeren du er logget inn med',
   'Are you sure you want to delete this account?': 'Er du sikker på at du vil slette denne kontoen?',
   'The account will be deleted! This action is permanent!': 'Kontoen vil bli slettet! Dette er permanent!',
-  'Refer one userType': 'Referer en %0',
+  'Refer a userType': 'Referer en %0',
   'A referral link is only active for two weeks': 'En invitasjonslink er kun gyldig i to uker',
   'You have now changed your email': 'Du har nå byttet epostkonto for brukeren din',
   'You have now changed your password': 'Du har nå byttet passord',
