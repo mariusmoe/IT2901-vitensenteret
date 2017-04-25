@@ -86,7 +86,7 @@ export class ActiveSurveyComponent implements OnInit {
   totalPages = 0; // The total amount of pages in the survey
   transition = false; // If true, animation between pages are triggerd
   englishEnabled: boolean;
-  Twolanguage: boolean;
+
   noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
   showmodal = false; // controls the visibility state of the modal window
 
@@ -167,7 +167,6 @@ export class ActiveSurveyComponent implements OnInit {
 
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
-        this.Twolanguage = true;
         this.translateService.use('no');
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
@@ -478,7 +477,6 @@ resetTimer() {
   * The method should not be visible if there is no alternative languages in the survey
   */
   private switchtono() {
-    this.Twolanguage = true;
     this.translateService.use('no');
     // Animation change
     this.flagActiveEnglish = 'inactive';
@@ -489,7 +487,6 @@ resetTimer() {
     * The method should not be visible if there is no alternative languages in the survey
     */
   private switchtoen() {
-    this.Twolanguage = !true;
     this.translateService.use('en');
     // Animation change
     this.flagActiveEnglish = 'active';
