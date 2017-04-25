@@ -16,17 +16,16 @@ export class NicknameComponent implements OnInit {
   @Input() survey: Survey;
   @Output() answer = new EventEmitter();
   @Input() isNicknameTaken: boolean;
+  @Input() nicknamesForSurvey: string[];
   public searchNickname: string; // The written nickname
   key; // The key used to store a nickname in localstorage
   allNames: any; // A list of all nicknames a survey has registered
   taken; // Testvariable for whether a nickname is taken or not
 
   nickCtrl = new FormControl();
-  filteredNicknames: any;
 
   nickNameNotRegistered = false;
 
-  nicknames = [];
 
 
   // Randomly generated combination of nicknames will be added based on the nickname written
@@ -37,30 +36,16 @@ export class NicknameComponent implements OnInit {
 
   constructor( private surveyService: SurveyService) {
     this.nickCtrl = new FormControl();
-    this.filteredNicknames = this.nickCtrl.valueChanges
-        .startWith(null)
-        .map(name => this.filterNicknames(name));
   }
 
   filterNicknames(val: string) {
-    return val ? this.nicknames.filter((s) => new RegExp(val, 'gi').test(s)) : this.nicknames;
+    return val ? this.nicknamesForSurvey.filter((s) => new RegExp(val, 'gi').test(s)) : this.nicknamesForSurvey;
   }
 
   ngOnInit() {
-    const sub  = this.surveyService.getNicknames(this.survey._id)
-      .subscribe( result => {
-        if (this.survey.isPost) {
-          this.allNames = result;
-          this.allNames.forEach((x) => { this.nicknames.push(x.nickname); });
-        }
-       sub.unsubscribe();
-    },
-    error => {
-      console.error('error when get nicknames');
-    });
     this.nickCtrl.valueChanges.subscribe(value => {
       // do something with value here
-      if (this.nicknames.indexOf(value) === -1 && this.survey.isPost) {
+      if (this.nicknamesForSurvey.indexOf(value) === -1 && this.survey.isPost) {
         // tell the user to do the pre survey first
         if (value.length > 2) {
           this.nickNameNotRegistered = true;
@@ -78,15 +63,15 @@ export class NicknameComponent implements OnInit {
    * @param  {number[]} userChoice An output number that shows which answer was chosen by a user
    */
     updateAnswers(nickname: string) {
-      if (this.nicknames.indexOf(nickname) === -1 && this.survey.isPost) {
+      if (this.nicknamesForSurvey.indexOf(nickname) === -1 && this.survey.isPost) {
         // tell the user to do the pre survey first
         if (nickname.length > 2) {
           this.nickNameNotRegistered = true;
         }
       } else {
         this.nickNameNotRegistered = false;
-        this.answer.emit(nickname);
       }
+      this.answer.emit(nickname);
     }
 
     /**

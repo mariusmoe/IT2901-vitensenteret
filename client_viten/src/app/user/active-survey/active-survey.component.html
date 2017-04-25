@@ -68,7 +68,7 @@
 
       <!-- Childcomponents that handle each answer-type -->
       <div class="answerTypes">
-        <app-nickname *ngIf = "(this.survey.isPost || !this.survey.postKey!==undefined) && this.nicknamePage && !this.postDone" [isNicknameTaken] = isNicknameTaken [survey] = survey [questionObject] = survey.questionlist[page] (answer) = 'updateNick($event)'></app-nickname>
+        <app-nickname *ngIf = "(this.survey.isPost || !this.survey.postKey!==undefined) && this.nicknamePage && !this.postDone" [isNicknameTaken] = isNicknameTaken [survey] = survey [questionObject] = survey.questionlist[page] [nicknamesForSurvey] = nicknamesForSurvey (answer) = 'updateNick($event)'></app-nickname>
         <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
         <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
         <app-single-choice *ngIf = "survey.questionlist[page].mode == 'single' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-single-choice>
@@ -87,7 +87,7 @@
       <!-- This is the right-side arrow that takes the user to the next page when the arrow is clicked -->
       <div class="qnavigateArea" *ngIf="!this.nicknamePage"><input class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="nextQ()" [disabled]="transition || noreqans" [@shakeArrow]="lastQuestionAnswered" (@shakeArrow.done)="animationEnd()"></div>
         <!-- This arrow is only visible within the nickname component, as it directs the user from that very component to the endMessage page. Backarrow should be visible -->
-      <div class="qnavigateArea" *ngIf="this.nicknamePage"><input [disabled]="this.response.nickname === undefined" class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="postDone = true; endSurvey()"></div>
+      <div class="qnavigateArea" *ngIf="this.nicknamePage"><input [disabled]="this.response.nickname === undefined || this.response.nickname === '' || (!survey.isPost && isNicknameTaken) || (survey.isPost && !postNicknameMatch)" class="qnavigateArea alignRight" type="image" id="qButton" src="../../assets/images/ArrowRight.svg" (click)="postDone = true; endSurvey()"></div>
     </div>
   </div>
 </div>
