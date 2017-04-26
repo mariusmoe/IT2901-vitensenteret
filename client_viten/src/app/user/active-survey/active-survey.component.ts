@@ -86,7 +86,7 @@ export class ActiveSurveyComponent implements OnInit {
   totalPages = 0; // The total amount of pages in the survey
   transition = false; // If true, animation between pages are triggerd
   englishEnabled: boolean;
-  Twolanguage: boolean;
+
   noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
   showmodal = false; // controls the visibility state of the modal window
 
@@ -94,11 +94,13 @@ export class ActiveSurveyComponent implements OnInit {
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
                Is only initialized if survey is pre/post. Set to true in html.*/
   nicknamePage; // Only initialized if pre-post. Is true when the user is on the nickname page.
+  nicknamesForSurvey: string[];
 
   abortTimer: string; // The ID for the timer
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
 
   isNicknameTaken = false;
+  postNicknameMatch = false;
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
@@ -145,6 +147,8 @@ export class ActiveSurveyComponent implements OnInit {
    */
   ngOnInit() {
     // Sets default language to Norwegian at startup
+    this.nicknamesForSurvey = [];
+    this.postNicknameMatch = false;
     this.switchtono();
     if (this.route.snapshot.params['surveyId']) {
       const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
@@ -167,7 +171,6 @@ export class ActiveSurveyComponent implements OnInit {
 
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
-        this.Twolanguage = true;
         this.translateService.use('no');
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
@@ -175,8 +178,19 @@ export class ActiveSurveyComponent implements OnInit {
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
         }
-
-
+        this.timer.newTimer('refreshNicknames', 30);
+        this.timer.subscribe('refreshNicknames', e => {
+          const sub2 = this.surveyService.getNicknames(this.survey._id)
+            .subscribe( result2 => {
+                this.nicknamesForSurvey = [];
+                result2.forEach((x) => { this.nicknamesForSurvey.push(x.nickname); });
+                sub2.unsubscribe();
+              },
+              error => {
+                console.error('error when get nicknames');
+              }
+            );
+        });
 
         if (this.survey && this.survey.active) {
           this.properSurvey = true;
@@ -290,6 +304,19 @@ addOrChangeAnswer(alternative: any) {
     */
    updateNick(nickname) {
      this.response.nickname = nickname;
+     if (this.survey.isPost) {
+       if (this.nicknamesForSurvey.some(c => c.toLowerCase( ) === (nickname.toLowerCase()))) {
+         this.postNicknameMatch = true;
+       } else {
+         this.postNicknameMatch = false;
+       }
+     } else {
+       if (this.nicknamesForSurvey.some(c => c.toLowerCase( ) === (nickname.toLowerCase()))) {
+         this.isNicknameTaken = true;
+       } else {
+         this.isNicknameTaken = false;
+       }
+     }
    }
 
 /**
@@ -437,8 +464,13 @@ resetTimer() {
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
       const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
+      console.log(responseClone);
       this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
         if (proper) {
+          const indexOfNickname = this.nicknamesForSurvey.indexOf(this.response.nickname);
+          if (indexOfNickname >= 0) {
+            this.nicknamesForSurvey.splice(indexOfNickname, 1);
+          }
           this.transition = true;
           this.properSurvey = true;
           this.response.questionlist = [];
@@ -478,7 +510,6 @@ resetTimer() {
   * The method should not be visible if there is no alternative languages in the survey
   */
   private switchtono() {
-    this.Twolanguage = true;
     this.translateService.use('no');
     // Animation change
     this.flagActiveEnglish = 'inactive';
@@ -489,7 +520,6 @@ resetTimer() {
     * The method should not be visible if there is no alternative languages in the survey
     */
   private switchtoen() {
-    this.Twolanguage = !true;
     this.translateService.use('en');
     // Animation change
     this.flagActiveEnglish = 'active';

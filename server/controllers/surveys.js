@@ -346,7 +346,7 @@ exports.answerOneSurvey = (req, res, next) => {
         // if not ignore it !!!
         Nickname.findOne({nickname: responseObject.nickname}, (err2, foundNickname) => {
           if (err2) { return next(err2); }
-          if(foundNickname.length == 0) {
+          if(!foundNickname || foundNickname.length == 0) {
             // nickname is not present - return FAILURE
             return res.status(400).send( {message: status.UNKNOWN_NICKNAME.message, status: status.UNKNOWN_NICKNAME.code})
           } else {

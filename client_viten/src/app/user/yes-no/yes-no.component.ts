@@ -33,9 +33,9 @@ export class YesNoComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if (this.currentAnswer === 0) {
+    if (this.currentAnswer === 1) {
       this.thumbActiveOne = 'active';
-    } else if (this.currentAnswer === 1) {
+    } else if (this.currentAnswer === 0) {
       this.thumbActiveTwo = 'active';
     }
   }
@@ -48,10 +48,10 @@ export class YesNoComponent implements OnInit {
 
     // Animation triggers
 
-    if (selectedAnswer === 0) {
+    if (selectedAnswer === 1) {
       this.thumbActiveOne = 'active';
       this.thumbActiveTwo = 'inactive';
-    } else if (selectedAnswer === 1) {
+    } else if (selectedAnswer === 0) {
       this.thumbActiveOne = 'inactive';
       this.thumbActiveTwo = 'active';
     }
