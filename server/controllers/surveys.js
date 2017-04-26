@@ -518,8 +518,8 @@ exports.getSurveyAsCSV = (req, res, next) => {
               let totalResponse = 0;
               responses.forEach((response) => {
                 if (response.questionlist[i] == y) {
-                }
                   totalResponse++
+                }
               })
               csv += totalResponse + ','
             })
