@@ -46,8 +46,9 @@ export class TranslateService {
         if (this._translations[this.currentLang] && this._translations[this.currentLang][key]) {
             return this._translations[this.currentLang][key];
         }
-        // TODO: make this return key; when done with translation
-        throw Error('NO TRANSLATION FOUND FOR : ' + key);
+        return key;
+        // make this return key; when done with translation
+        // throw Error('NO TRANSLATION FOUND FOR : ' + key);
     }
 
     /**
@@ -64,7 +65,7 @@ export class TranslateService {
             translation = translation.replace(this.PLACEHOLDER.concat(<any>i), e);
         });
 
-        return 'T:' + translation;
+        return translation;
         // return 'T:' + translation;
     }
 
@@ -77,7 +78,7 @@ export class TranslateService {
     public instant(key: string, words?: string | string[]): string { // add optional parameter
         const translation: string = this.translate(key);
 
-        if (!words) { return 'T:' + translation; } // return 'T:' + translation; }
+        if (!words) { return translation; } // return 'T:' + translation; }
         return this.replace(translation, words); // call replace function
     }
 }

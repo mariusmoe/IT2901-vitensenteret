@@ -61,7 +61,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // If we have a router parameter, we should attempt to use that first.
-    // console.log(this.route.snapshot.url[0].path)
     const param = this.route.snapshot.params['surveyId'];
 
     // Safe checking of url if last part is prepost
@@ -290,10 +289,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     } else {
       // Send request to the server; either PATCH or POST.
       if (this.isPatch) {
-        // console.log("PATCHING!")
         this.surveyService.patchSurvey(clone._id, clone).subscribe(result => success(result), error => err(error));
       } else {
-        // console.log("POSTING!")
         this.surveyService.postSurvey(clone).subscribe(result => success(result), error => err(error));
       }
     }

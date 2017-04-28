@@ -5,13 +5,14 @@
          If name exists, it will suggest new names or combinatios of others-->
     <h1>{{'Nickname' | translate}}</h1>
     <md-input-container>
-      <input mdInput placeholder="{{'Nickname' | translate}}" [mdAutocomplete]="auto" [formControl]="nickCtrl" #nick (change)="updateAnswers(nick.value)">
+      <input *ngIf="!survey.isPost" mdInput placeholder="{{'Nickname' | translate}}" [formControl]="nickCtrl" #nick (change)="updateAnswers(nick.value)">
+      <input *ngIf="survey.isPost" mdInput placeholder="{{'Nickname' | translate}}" [mdAutocomplete]="auto" [formControl]="nickCtrl" #nick (input)="updateAnswers(nick.value)">
     </md-input-container>
-    <p *ngIf="nickNameNotRegistered">{{'You need to answer the pre survey first' | translate }}</p>
-    <p *ngIf="isNicknameTaken">{{'This nickname is taken, choose another one' | translate}}</p>
+    <p *ngIf="survey.isPost && nickNameNotRegistered">{{'You need to answer the pre survey first' | translate }}</p>
+    <p *ngIf="!survey.isPost && isNicknameTaken">{{'This nickname is taken, choose another one' | translate}}</p>
 
     <md-autocomplete #auto="mdAutocomplete">
-      <md-option *ngFor="let nickname of filteredNicknames | async" [value]="nickname">
+      <md-option *ngFor="let nickname of filterNicknames(nickCtrl.value)" [value]="nickname">
         {{ nickname }}
       </md-option>
     </md-autocomplete>

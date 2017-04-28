@@ -86,7 +86,7 @@ export class ActiveSurveyComponent implements OnInit {
   totalPages = 0; // The total amount of pages in the survey
   transition = false; // If true, animation between pages are triggerd
   englishEnabled: boolean;
-  Twolanguage: boolean;
+
   noreqans = false; // If true, there is no answer for required question, and right arrow is disabled
   showmodal = false; // controls the visibility state of the modal window
 
@@ -94,11 +94,13 @@ export class ActiveSurveyComponent implements OnInit {
   postDone; /* postDone is a boolean that tells if the pre-post has been handled.
                Is only initialized if survey is pre/post. Set to true in html.*/
   nicknamePage; // Only initialized if pre-post. Is true when the user is on the nickname page.
+  nicknamesForSurvey: string[];
 
   abortTimer: string; // The ID for the timer
   abortCounter = 0; // The actual timer, updates in the listenCallback() function
 
   isNicknameTaken = false;
+  postNicknameMatch = false;
   // Animation variables
   flagActiveEnglish = 'inactive';
   flagActiveNorwegian = 'inactive';
@@ -145,13 +147,14 @@ export class ActiveSurveyComponent implements OnInit {
    */
   ngOnInit() {
     // Sets default language to Norwegian at startup
+    this.nicknamesForSurvey = [];
+    this.postNicknameMatch = false;
     this.switchtono();
     if (this.route.snapshot.params['surveyId']) {
       const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         sub.unsubscribe();
 
         if (!result) {
-          console.log('DEBUG: BAD surveyId param from router!');
           // TODO: Redirect to base create survey ?
           return;
         }
@@ -168,17 +171,26 @@ export class ActiveSurveyComponent implements OnInit {
 
         // Sets the language to no as standard when it is created
         // this.language = this.survey.questionlist[this.page].lang.no.txt;
-        this.Twolanguage = true;
         this.translateService.use('no');
         // somewhat hacky way to determine english state.
         if (this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
-          console.log('This survey have english ');
         }
-
-
+        this.timer.newTimer('refreshNicknames', 30);
+        this.timer.subscribe('refreshNicknames', e => {
+          const sub2 = this.surveyService.getNicknames(this.survey._id)
+            .subscribe( result2 => {
+                this.nicknamesForSurvey = [];
+                result2.forEach((x) => { this.nicknamesForSurvey.push(x.nickname); });
+                sub2.unsubscribe();
+              },
+              error => {
+                console.error('error when get nicknames');
+              }
+            );
+        });
 
         if (this.survey && this.survey.active) {
           this.properSurvey = true;
@@ -230,7 +242,6 @@ export class ActiveSurveyComponent implements OnInit {
  * This method resets a survey completely
  */
   private exitSurvey() {
-    // console.log('survey is done');
     this.started = false;
     this.properSurvey = false;
     this.page = 0;
@@ -252,7 +263,6 @@ export class ActiveSurveyComponent implements OnInit {
       const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
         sub.unsubscribe();
         if (!result) {
-          console.log ('DEBUG: BAD surveyId param from router!');
           return;
         }
         this.survey = result.survey;
@@ -294,7 +304,19 @@ addOrChangeAnswer(alternative: any) {
     */
    updateNick(nickname) {
      this.response.nickname = nickname;
-    //  console.log('Added nick: ', this.response.nickname);
+     if (this.survey.isPost) {
+       if (this.nicknamesForSurvey.some(c => c.toLowerCase( ) === (nickname.toLowerCase()))) {
+         this.postNicknameMatch = true;
+       } else {
+         this.postNicknameMatch = false;
+       }
+     } else {
+       if (this.nicknamesForSurvey.some(c => c.toLowerCase( ) === (nickname.toLowerCase()))) {
+         this.isNicknameTaken = true;
+       } else {
+         this.isNicknameTaken = false;
+       }
+     }
    }
 
 /**
@@ -302,7 +324,6 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing just to prevent overflow
  */
   private previousQ() {
-    // console.log('previous question');
     if (this.page <= 0) {
       return;
     }
@@ -320,7 +341,6 @@ addOrChangeAnswer(alternative: any) {
  * @return {undefined} Returns nothing to prevent overflow
  */
   private nextQ() {
-    // console.log('next question');
     // Handles an empty answer
     if (typeof this.response.questionlist[this.page] === 'undefined') {
       this.response.questionlist[this.page] = -1;
@@ -329,11 +349,9 @@ addOrChangeAnswer(alternative: any) {
     const pageCopy = this.page;
     if (pageCopy + 1 >= this.totalPages) {
       if (this.survey.postKey !== undefined || this.survey.isPost) {
-        // console.log('pre-survey is available');
         this.nicknamePage = true;
       }
       // If it is the last page in the survey, it should end it.
-      // console.log('trying to end survey');
       if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
         const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
@@ -349,8 +367,7 @@ addOrChangeAnswer(alternative: any) {
           }
         },
         error => {
-            console.log('Error when posting survey');
-            console.log(error);
+            console.error('Error when posting survey');
             this.nicknamePage = true;
             return;
         });
@@ -444,12 +461,16 @@ resetTimer() {
  */
   endSurvey() {
     // If it is the last page in the survey, it should end it.
-    // console.log('trying to end survey');
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
       const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
+      console.log(responseClone);
       this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
         if (proper) {
+          const indexOfNickname = this.nicknamesForSurvey.indexOf(this.response.nickname);
+          if (indexOfNickname >= 0) {
+            this.nicknamesForSurvey.splice(indexOfNickname, 1);
+          }
           this.transition = true;
           this.properSurvey = true;
           this.response.questionlist = [];
@@ -460,8 +481,7 @@ resetTimer() {
         }
       },
       error => {
-          console.log('Error when posting survey');
-          console.log(error);
+          console.error('Error when posting survey');
           this.postDone = false;
           this.isNicknameTaken = true;
       });
@@ -490,7 +510,6 @@ resetTimer() {
   * The method should not be visible if there is no alternative languages in the survey
   */
   private switchtono() {
-    this.Twolanguage = true;
     this.translateService.use('no');
     // Animation change
     this.flagActiveEnglish = 'inactive';
@@ -501,7 +520,6 @@ resetTimer() {
     * The method should not be visible if there is no alternative languages in the survey
     */
   private switchtoen() {
-    this.Twolanguage = !true;
     this.translateService.use('en');
     // Animation change
     this.flagActiveEnglish = 'active';

@@ -49,13 +49,11 @@ export class NewUserComponent implements OnInit, OnDestroy {
    */
   submitForm(form: { email: string, password: string, passwordconfirm: string }): void {
     this.loading = true;
-    // console.log(form);
 
     this.loading = true;
     const sub = this.authenticationService.registerUser(form.email, form.password, this.param)
         .subscribe(result => {
           sub.unsubscribe();
-          // console.log("Got response!")
           if (result === true) {
               this.router.navigate(['/login']);
           } else {

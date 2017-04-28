@@ -294,12 +294,17 @@ exports.changeEmail = function(req, res, next) {
       res.status(422).json({ error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
       return next(err);
     }
-    user.email = req.body.email.newEmail;
-    user.save(function(err){
-      if(err){
-        throw err;
+    User.findOne({email: req.body.email.newEmail}, (err, emailAlreadyExisting) => {
+      if (emailAlreadyExisting) {
+        return res.status(422).send({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code})
       }
-      return res.status(200).send({message: status.EMAIL_CHANGED.message, status: status.EMAIL_CHANGED.code})
+      user.email = req.body.email.newEmail;
+      user.save(function(err){
+        if(err){
+          throw err;
+        }
+        return res.status(200).send({message: status.EMAIL_CHANGED.message, status: status.EMAIL_CHANGED.code})
+      });
     });
   });
 }

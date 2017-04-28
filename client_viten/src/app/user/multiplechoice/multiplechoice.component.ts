@@ -1,5 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter  } from '@angular/core';
 import { QuestionObject } from '../../_models/survey';
+import { TranslateService } from '../../_services/translate.service';
 
 @Component({
   selector: 'app-multiplechoice',
@@ -14,10 +15,14 @@ export class MultiplechoiceComponent implements OnInit {
   checkModels = [];
   @Input() currentAnswer = [];
 
-  constructor() { }
+  constructor(private translateService: TranslateService) { }
 
   ngOnInit() {
-    this.options = this.questionObject.lang.no.options;
+    if (this.translateService.getCurrentLang() === 'en') {
+      this.options = this.questionObject.lang.en.options;
+    } else {
+      this.options = this.questionObject.lang.no.options;
+    }
     this.options.forEach(o => this.checkModels.push(false) );
     if (this.currentAnswer) {
       for (let i = 0; i < this.currentAnswer.length; i++) {

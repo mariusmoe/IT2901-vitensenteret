@@ -97,7 +97,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
             this.dialogRef = this.dialog.open(CredentialDialog, config);
 
             this.dialogRef.afterClosed().subscribe(dialogResult => {
-              // console.log('result: ' + dialogResult);
               if (dialogResult === 'yes') {
                 this.router.navigate(['/login']);
               }
@@ -132,7 +131,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
           this.dialogRef = this.dialog.open(CredentialDialog, config);
 
           this.dialogRef.afterClosed().subscribe(dialogResult => {
-            // console.log('result: ' + dialogResult);
             if (dialogResult === 'yes') {
               this.router.navigate(['/login']);
             }
@@ -155,7 +153,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   requestReferral(role: string) {
     this.service.getReferral(role)
         .subscribe(result => {
-          // console.log(result);
           const config: MdDialogConfig = {
             data: {
               referralURL: result,
@@ -174,7 +171,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
     this.userListSub = this.service.getAllUsers().subscribe(users => {
       this.userList = users; // Subscribe and get user from the authService
-      // console.log(this.userList);
     });
   }
 
@@ -224,7 +220,6 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       });
 
       this.dialogRef.afterClosed().subscribe(result => {
-        // console.log('result: ' + result);
         if (result === 'yes') {
           this.deleteUser(id);
         }
@@ -246,13 +241,13 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 @Component({
   selector: 'delete-acccount-dialog',
   template: `
-  <h1 md-dialog-title>{{ 'Are you sure you want to delete this account?' | translate }}</h1>
-  <div md-dialog-content>
+  <h1 md-dialog-title align="center">{{ 'Are you sure you want to delete this account?' | translate }}</h1>
+  <div md-dialog-content align="center">
     {{ 'The account will be deleted! This action is permanent!' | translate }}
   </div>
-  <div md-dialog-actions>
-    <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
-    <button md-raised-button md-dialog-close color="primary">{{ 'Cancel' | translate }}</button>
+  <div md-dialog-actions align="center">
+    <button md-raised-button color="warn" (click)="dialogRef.close('yes')">{{ 'Delete' | translate }}</button>
+    <button md-raised-button md-dialog-close color="primary" class="btn btn-default">{{ 'Cancel' | translate }}</button>
   </div>
   `,
   styleUrls: ['./admin-settings.component.scss']
