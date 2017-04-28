@@ -48,7 +48,14 @@ export class ChartComponent implements OnInit {
       return;
     }
     if (this.questionObject.mode === 'multi' || this.questionObject.mode === 'single') {
-      this.chartLabels = this.questionObject.lang.no.options;
+      if (this.translateService.getCurrentLang() === 'en' &&
+        this.questionObject.lang.en
+        && this.questionObject.lang.en.options
+        && this.questionObject.lang.en.options.length > 0) {
+          this.chartLabels = this.questionObject.lang.en.options;
+      } else {
+        this.chartLabels = this.questionObject.lang.no.options;
+      }
     } else {
       this.chartLabels = this.chartLabels[this.questionObject.mode];
     }
