@@ -77,8 +77,8 @@ export const LANG_NO_TRANS = {
   'Load more': 'Last in flere',
 
   // Survey Question mode labels
-  'Yes': 'Yes',
-  'No': 'No',
+  'Yes': 'Ja',
+  'No': 'Nei',
   '1 Star': '1 Stjerne',
   '2 Stars': '2 Stjerner',
   '3 Stars': '3 Stjerner',
