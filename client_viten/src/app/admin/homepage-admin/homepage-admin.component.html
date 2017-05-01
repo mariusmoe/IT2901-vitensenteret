@@ -132,7 +132,7 @@
           <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
             <md-icon>build</md-icon> {{ 'Edit' | translate }}
           </button>
-          <button md-raised-button color="accent" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
+          <button md-raised-button color="primary" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
           <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)" [disabled] = "this.authenticationService.getUser().role !== 'admin'">
             <md-icon>delete</md-icon> {{ 'Delete' | translate }}
           </button>
