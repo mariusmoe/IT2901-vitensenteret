@@ -10,3 +10,7 @@ Bachelor in IT2901
 
 
 Bachelor in IT2901
+
+# Requirements
+
+Surveys ran on tablets must be run on Android 5. or higher
