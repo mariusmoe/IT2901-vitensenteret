@@ -4,6 +4,7 @@ const AuthenticationController = require('./controllers/authentication'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport'),
+      config = require('config'),
       path = require('path');
 
 
@@ -45,8 +46,9 @@ module.exports = (app) => {
                  AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
                  AuthenticationController.getReferralLink);
 
-  // Enable this line to register the first user
-  // authRoutes.post('/register_developer', AuthenticationController.register_developer);
+ if (config.util.getEnv('NODE_ENV') !== 'production') {
+     authRoutes.post('/register_developer', AuthenticationController.register_developer);
+ }
 
   // Request a new token
   authRoutes.get('/get_token', requireAuth, AuthenticationController.getJWT);
