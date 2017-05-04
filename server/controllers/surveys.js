@@ -607,11 +607,13 @@ exports.getSurveyAsCSV = (req, res, next) => {
                       question.lang.no.options.forEach( (x,y) => {
                         let totalResponse = 0;
                         responses.forEach((response) => {
-                          response.questionlist[i].forEach((multiOption, n) => {
-                            if (response.questionlist[i][n] == y) {
-                              totalResponse++
-                            }
-                          })
+                          if (response) {
+                            response.questionlist[i].forEach((multiOption, n) => {
+                              if (response.questionlist[i][n] == y) {
+                                totalResponse++
+                              }
+                            })
+                          }
                         })
                         csv += totalResponse + ','
                       })
@@ -630,8 +632,8 @@ exports.getSurveyAsCSV = (req, res, next) => {
                         let totalResponse = 0;
                         responses.forEach((response) => {
                           if (response.questionlist[i] == y) {
-                          }
                             totalResponse++
+                          }
                         })
                         csv += totalResponse + ','
                       })
