@@ -495,6 +495,9 @@ exports.getSurveyAsCSV = (req, res, next) => {
             question.lang.no.options.forEach( (x,y) => {
               let totalResponse = 0;
               responses.forEach((response) => {
+                console.log(response);
+                console.log("-------------");
+                console.log(i);
                 response.questionlist[i].forEach((multiOption, n) => {
                   if (response.questionlist[i][n] == y) {
                     totalResponse++
