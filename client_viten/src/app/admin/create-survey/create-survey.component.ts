@@ -22,11 +22,20 @@ import { FormControl } from '@angular/forms';
       ]))
     ]),
     transition(':leave', [
-      style({ transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0' }),
-      animate('0.1s ease-in-out', style({ 'max-width': '0' }))
-    ])
+      animate(100, keyframes([
+        style({transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0', 'max-width': '300px', offset: 0}),
+        style({transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0', 'max-width': '0',   offset: 1.0})
+      ]))
+    ]),
   ])]
 })
+
+
+// transition(':leave', [
+//  style({ transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0' }),
+//  animate('0.1s ease-in-out', style({ 'max-width': '0%' }))
+// ])
+
 export class CreateSurveyComponent implements OnInit, OnDestroy {
   // COMPONENT VARIABLES
   submitLoading = false;
