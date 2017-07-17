@@ -6,7 +6,7 @@ import { Response } from '../_models/response';
 import { SurveyList } from '../_models/index';
 import { TranslateService } from './translate.service';
 import { environment } from '../../environments/environment';
-
+import 'rxjs/add/operator/map'
 
 
 @Injectable()

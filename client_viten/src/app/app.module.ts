@@ -96,7 +96,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     ClipboardModule,
     DragulaModule,
     BrowserAnimationsModule,
-    MaterialModule.forRoot()
+    MaterialModule
   ],
   entryComponents: [
     SurveyAlternativesDialog,

@@ -69,3 +69,14 @@
     }
   }
 }
+
+.constuctionWarning {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  height: 50px;
+  padding: 0px;
+  color: #efe52b;
+  background-color: #404247;
+}
