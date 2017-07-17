@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
+import 'rxjs/add/operator/filter';
 
 @Component({
   selector: 'app-admin-outlet',
