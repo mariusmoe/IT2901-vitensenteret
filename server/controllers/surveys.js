@@ -56,6 +56,13 @@ exports.getAllSurveys = (req, res, next) => {
   }).lean();
 }
 
+exports.getAllCenters = (req, res, next) => {
+  Survey.find( { 'name': true }, (err, centers) => {
+    if (err) { return next(err); }
+    return res.status(200).send(centers);
+  }).lean();
+}
+
 exports.getOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
@@ -69,6 +76,8 @@ exports.getOneSurvey = (req, res, next) => {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
+
+
 
     // Need to send answers too
     Response.find({surveyId: surveyId}, (err, responses) => {

@@ -6,6 +6,8 @@ let val = require('../libs/validation.js');
 // MAKE SURE THIS ONE IS ACTUALLY VALID!
 let validJsonObject = {
   "name": "måneraketten3",
+  "madeBy": "aaaaaaaaaaaaaaaaaaaaaaaa",
+  "center": "trondheim",
   "date": "2012-04-23T18:25:43.511Z",
   "activationDate": "2012-04-23T18:25:43.511Z",
   "deactivationDate": "2012-04-23T18:25:43.511Z",

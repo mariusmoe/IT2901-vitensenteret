@@ -52,6 +52,10 @@ module.exports = {
     message: 'Password changed',
     code: 1017
   },
+  INSUFFICIENT_PRIVILEGES: {
+    message: 'INSUFFICIENT PRIVILEGES',
+    code: 2050
+  },
 
 
   // SURVEY CODES

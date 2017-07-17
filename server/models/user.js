@@ -21,15 +21,18 @@ const UserSchema = new Schema({
   },
   role: {
     // Decide which user priveleges the user is granted
-    type: String,
-    enum: ['member', 'admin'],
-    default: 'member'
+    rank: { type: String,
+      enum: ['sysadmin', 'vitenleader', 'user'],
+      default: 'user'
+    },
+    center: { mongoose.Schema.Types.ObjectId, ref: 'Center' }
   },
   active: {
     // Verified by email
     type: Boolean,
     default: false
-  }
+  },
+
 },
 {
   timestamps: true

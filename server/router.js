@@ -12,9 +12,10 @@ const AuthenticationController = require('./controllers/authentication'),
 const requireAuth   = passport.authenticate('jwt', { session: false });
 const requireLogin  = passport.authenticate('local', { session: false });
 
-// Role types
-const REQUIRE_ADMIN = "admin",
-      REQUIRE_MEMBER = "member";
+// Role types enum: ['sysadmin', 'vitenleader', 'user'],
+const REQUIRE_SYSADMIN = "sysadmin",
+      REQUIRE_LEADER = "vitenleader",
+      REQUIRE_USER = "user";
 
 module.exports = (app) => {
   // route groups
@@ -43,7 +44,7 @@ module.exports = (app) => {
   // get a referral link - requires admin rights
   authRoutes.get('/get_referral_link/:role',
                  requireAuth,
-                 AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                 AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
                  AuthenticationController.getReferralLink);
 
  if (config.util.getEnv('NODE_ENV') !== 'production') {
@@ -56,13 +57,13 @@ module.exports = (app) => {
   // Delete the account with the provided JWT
   authRoutes.delete('/delete_account',
                     requireAuth,
-                    AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                    AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
                     AuthenticationController.deleteAccount);
 
   // Return all users to superadmin
   authRoutes.get('/all_users',
                     requireAuth,
-                    AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                    AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
                     AuthenticationController.getAllUsers);
 
   // // TODO Password reset request route
@@ -83,12 +84,12 @@ module.exports = (app) => {
   // Test authentication with roleAuthorization
   authRoutes.get('/test',
                  requireAuth,
-                 AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                 AuthenticationController.roleAuthorization(REQUIRE_SYSADMIN),
                  AuthenticationController.test);
 
    authRoutes.get('test2',
                   requireAuth,
-                  AuthenticationController.roleAuthorization(REQUIRE_MEMBER),
+                  AuthenticationController.roleAuthorization(REQUIRE_LEADER),
                   AuthenticationController.test);
   //
   // change email for this account
@@ -98,7 +99,7 @@ module.exports = (app) => {
 
 
   // Add or update password
-  surveyRoutes.patch('/escape', AuthenticationController.patchOneEscape);
+  surveyRoutes.patch('/escape', requireAuth, AuthenticationController.patchOneEscape);
 
   //Check if password is correct
   surveyRoutes.post('/escape', AuthenticationController.checkOneEscape);
@@ -114,7 +115,9 @@ module.exports = (app) => {
 
   surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
-  surveyRoutes.get('/',  SurveyController.getAllSurveys);
+  surveyRoutes.get('/centers',  SurveyController.getAllCenters);
+
+  surveyRoutes.get('/:centerId',  SurveyController.getAllSurveys);
 
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
 
@@ -124,7 +127,7 @@ module.exports = (app) => {
 
   surveyRoutes.delete('/:surveyId',
                       requireAuth,
-                      AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                      AuthenticationController.roleAuthorizationUp(REQUIRE_USER),
                       SurveyController.deleteOneSurvey);
 
 

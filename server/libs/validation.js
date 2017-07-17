@@ -57,6 +57,8 @@ let surveySchema = {
   "type": "object",
   "properties": {
     "_id": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ }, // mongodb sends surveys back to client with this property. Not required.
+    "center": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ },
+    "madeBy": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ },
     "isPost": { "type": "boolean" }, // defines if a survey is a post in the pre-post system. required
     "postKey": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ }, // ID of a post survey should one be created for this survey. Not required.
     "__v": { "type": "integer" }, // mongodb sends surveys back to client with this property. Not required.
@@ -83,7 +85,7 @@ let surveySchema = {
       "required": ["no"]
     }
   },
-  "required": ["name", "date", "activationDate", "active", "questionlist", "endMessage", "isPost"],
+  "required": ["name", "date", "activationDate", "active", "questionlist", "endMessage", "isPost", "madeBy", "center"],
   "additionalProperties": false
 }
 

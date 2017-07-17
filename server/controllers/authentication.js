@@ -223,7 +223,7 @@ exports.getAllUsers = (req, res, next) => {
      let user = new User({
        email: email,
        password: password,
-       role: 'admin'
+       role: 'sysadmin'
      });
      user.save((err, user) => {
        if (err) {return next(err); }
@@ -240,29 +240,42 @@ exports.getAllUsers = (req, res, next) => {
  */
 exports.getReferralLink = (req, res, next) => {
   let role = req.params.role
-  if (!['member', 'admin'].includes(role)){
+  const userTypes = ['sysadmin', 'vitenleader', 'user'];
+  if (!userTypes.includes(role)){
     return res.status(422).send( {error: status.ROLE_INCORRECT.message, status: status.ROLE_INCORRECT.code} );
   }
-  crypto.randomBytes(48, function(err, buffer) {
-    if (err) { return next(err); }
-    const token = buffer.toString('hex');
-    Referral.findOne({referral: token}, (err, existingReferralLink) => {
-      if (existingReferralLink) {
-        return res.status(422).send( {error: status.TRY_AGAIN.message, status: status.TRY_AGAIN.code} );
-      }
+  let id = req.user._id;
+
+  User.findById(id, function(err,foundUser){
+    if(err){
+      res.status(422).json({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
+      return next(err);
+    }
+    // prevent roles from refering users with greater powers
+    if (userTypes.indexOf(foundUser.role) > userTypes.indexOf(role)) {
+      return res.status(422).json({error: status.INSUFFICIENT_PRIVILEGES .message, status: status.INSUFFICIENT_PRIVILEGES.code});
+    }
+    crypto.randomBytes(48, function(err, buffer) {
       if (err) { return next(err); }
-      let referralString = new Referral({
-        referral:  token,
-        role:      role
+      const token = buffer.toString('hex');
+      Referral.findOne({referral: token}, (err, existingReferralLink) => {
+        if (existingReferralLink) {
+          return res.status(422).send( {error: status.TRY_AGAIN.message, status: status.TRY_AGAIN.code} );
+        }
+        if (err) { return next(err); }
+        let referralString = new Referral({
+          referral:  token,
+          role:      role
+        })
+        referralString.save((err, referral) => {
+          if (err) {return next(err); }
+          let refferalBaseLink = req.headers.host.slice(0,req.headers.host.indexOf(':')) + '/register/';
+          // console.log(req.headers.host);
+          res.status(200).send({message: status.REFERRAL_CREATED.message, link: refferalBaseLink + token, status: status.REFERRAL_CREATED.code })
+        });
       })
-      referralString.save((err, referral) => {
-        if (err) {return next(err); }
-        let refferalBaseLink = req.headers.host.slice(0,req.headers.host.indexOf(':')) + '/register/';
-        // console.log(req.headers.host);
-        res.status(200).send({message: status.REFERRAL_CREATED.message, link: refferalBaseLink + token, status: status.REFERRAL_CREATED.code })
-      });
     })
-  })
+  });
 }
 
 
@@ -275,10 +288,29 @@ exports.roleAuthorization = function(role){
         res.status(422).json({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
         return next(err);
       }
-      if(foundUser.role == role){
+      if(foundUser.role.rank == role){
         return next();
       }
       res.status(401).json({error: 'You are not authorized.'});
+      return next('Unauthorized');
+    })
+  }
+}
+
+exports.roleAuthorizationUp = function(role){
+  return function(req,res,next){
+    const userTypes = ['sysadmin', 'vitenleader', 'user'];
+    let id = req.user._id;
+
+    User.findById(id, function(err,foundUser){
+      if(err){
+        res.status(422).json({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
+        return next(err);
+      }
+      if (userTypes.indexOf(foundUser.role.rank) <= userTypes.indexOf(role)) {
+        return next();
+      }
+      res.status(401).json({error: status.INSUFFICIENT_PRIVILEGES .message, status: status.INSUFFICIENT_PRIVILEGES.code});
       return next('Unauthorized');
     })
   }
