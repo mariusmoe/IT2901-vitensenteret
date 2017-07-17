@@ -9,6 +9,7 @@ import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { DatePipe } from '@angular/common';
+import 'rxjs/add/operator/filter';
 
 //  import * as jsPDF from 'jspdf';
 declare const jsPDF: any;
