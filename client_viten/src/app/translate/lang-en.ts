@@ -56,6 +56,7 @@ export const LANG_EN_TRANS = {
   // Forms
   'This field is required.': 'This field is required.',
   'This field is a duplicate.': 'This field is a duplicate.',
+  'Bad format': 'Bad format',
 
   // Survey Question modes
   'binary': 'Yes/No',
@@ -64,6 +65,10 @@ export const LANG_EN_TRANS = {
   'multi': 'Multiple Choice',
   'smiley': 'Smiley',
   'text': 'Free Text',
+
+  // Image URL in create survey
+  'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.':
+    'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.',
 
   // Survey Pre post labels
   'Pre': 'Pre',
@@ -110,6 +115,7 @@ export const LANG_EN_TRANS = {
   'Alternatives: n/m': 'Alternatives: %0/%1',
   'Set Alternatives': 'Set Alternatives',
   'Add a question': 'Add a question',
+  'Image URL (not requrired)': 'Image URL (not required)',
   'At least two alternatives must be set, with a maximum of 6.': 'At least two alternatives must be set, with a maximum of 6.',
   'Deletes this particular question! Careful!': 'Deletes this particular question! Careful!',
   'Several fields are required. Verify that you have filled out all required fields.':

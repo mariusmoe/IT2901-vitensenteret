@@ -56,6 +56,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
+  imageLinkPattern = /(https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
 
 
   constructor(private dialog: MdDialog, private surveyService: SurveyService,
@@ -213,13 +214,26 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * notWhitespace(s: string)
+   * fieldValidate(s: string)
    *
    * @param {string} s a string to check
    * returns true if the input string is not just whitespace
    */
   fieldValidate(s: string) {
     return s && s.length > 0 && (/\S/.test(s));
+  }
+
+
+  /**
+   * imageLinkValidate(s: string)
+   *
+   * @param {string} s a string to check
+   * returns true if the input string matches an url
+   */
+  imageLinkValidate(s: string) {
+    return s === undefined || (s && s.length > 0
+      && /(https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/.test(s)
+      || s.length === 0);
   }
 
 

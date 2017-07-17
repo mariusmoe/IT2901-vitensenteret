@@ -56,6 +56,7 @@ export const LANG_NO_TRANS = {
   // Forms
   'This field is required.': 'Dette feltet er påkrevd.',
   'This field is a duplicate.': 'Dette feltet er et duplikat.',
+  'Bad format': 'Feil format',
 
   // Survey Question modes
   'binary': 'Ja/Nei',
@@ -64,6 +65,10 @@ export const LANG_NO_TRANS = {
   'multi': 'Flervalgs',
   'smiley': 'Smiley',
   'text': 'Tekst',
+
+  // Image URL in create survey
+  'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.':
+    'Dette feltet er VALGFRITT. Feltet tar en hel URL. Eksempel: https://www.myWebsite.com/myImage.png. www.imgur.com er en bilde-delingstjeneste du kan bruke.',
 
   // Survey Pre post labels
   'Pre': 'Pre',
@@ -83,7 +88,7 @@ export const LANG_NO_TRANS = {
   '2 Stars': '2 Stjerner',
   '3 Stars': '3 Stjerner',
   '4 Stars': '4 Stjerner',
-  '5 Stars': '5 Stars',
+  '5 Stars': '5 Stjerner',
   'Sad': 'Trist',
   'Neutral': 'Nøytral',
   'Happy': 'Glad',
@@ -110,6 +115,7 @@ export const LANG_NO_TRANS = {
   'Alternatives: n/m': 'Alternativer: %0/%1',
   'Set Alternatives': 'Sett alternativer',
   'Add a question': 'Legg til spørsmål',
+  'Image URL (not requrired)': 'URL til bilde (om ønskelig)',
   'At least two alternatives must be set, with a maximum of 6.':
     'Minst to av alternativene må være satt. Det kan settes opp til 6 alternativer.',
   'Deletes this particular question! Careful!': 'Forsiktig! Spørsmålet blir slettet!',
