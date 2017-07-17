@@ -5,7 +5,7 @@ const mongoose = require('mongoose'),
 const ReferralSchema = new Schema({
   expirationDate: {
     type: Date,
-    expires:  60*60*24,  // expire after 24h
+    expires:  60*60*24*365/2,  // expire after half a year
     default: Date.now
   },
   referral: {
@@ -16,9 +16,13 @@ const ReferralSchema = new Schema({
     type: Date,
     default: Date.now
   },
+  activeExpiration: {
+    type: Date,
+    default: new Date(+new Date() + 14*24*60*60*1000),
+  },
   active: {
     type: Boolean,
-    default: true
+    default: true,
   },
   role: {
     // Decide which user priveleges the user is granted
