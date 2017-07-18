@@ -27,6 +27,7 @@ export const environment = {
       newEmail: 'https://vitensurvey.party/api/auth/change_email/',
       newPassword: 'https://vitensurvey.party/api/auth/change_password/',
       survey: 'https://vitensurvey.party/api/survey',
+      surveyAll: 'https://vitensurvey.party/api/survey/all',
       surveyAsJson: 'https://vitensurvey.party/api/survey/json',
       surveyAsCSV: 'https://vitensurvey.party/api/survey/csv',
       newUser: 'https://vitensurvey.party/api/auth/register',

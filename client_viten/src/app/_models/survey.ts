@@ -22,6 +22,8 @@ export interface QuestionObject {
 export interface Survey {
   _id?: string;
   name: string;
+  madeBy?: string;
+  center?: string;
   isPost: boolean;
   postKey?: string;
   comment?: string;
