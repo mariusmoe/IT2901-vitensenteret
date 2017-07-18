@@ -1,6 +1,7 @@
 const AuthenticationController = require('./controllers/authentication'),
       SurveyController = require('./controllers/surveys'),
       ErrorController = require('./controllers/error'),
+      CenterController = require('./controllers/centers'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport'),
@@ -22,10 +23,12 @@ module.exports = (app) => {
   const apiRoutes  = express.Router(),
         authRoutes = express.Router(),
         surveyRoutes = express.Router(),
-        angularRoutes = express.Router();
+        angularRoutes = express.Router(),
+        centerRoutes = express.Router();
   // Set auth and survey routes as subgroup to apiRoutes
   apiRoutes.use('/auth', authRoutes);
   apiRoutes.use('/survey', surveyRoutes);
+  apiRoutes.use('/center', centerRoutes);
   // Set a common fallback for /api/*; 404 for invalid route
   apiRoutes.all('*', ErrorController.error);
 
@@ -98,11 +101,6 @@ module.exports = (app) => {
   //
 
 
-  // Add or update password
-  surveyRoutes.patch('/escape', requireAuth, AuthenticationController.patchOneEscape);
-
-  //Check if password is correct
-  surveyRoutes.post('/escape', AuthenticationController.checkOneEscape);
 
   surveyRoutes.get('/all_nicknames/:surveyId', SurveyController.getNicknamesForOneSurvey);
 
@@ -115,9 +113,6 @@ module.exports = (app) => {
 
   surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
-  surveyRoutes.get('/centers',  SurveyController.getAllCenters);
-
-  surveyRoutes.get('/:centerId',  SurveyController.getAllSurveys);
 
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
 
@@ -132,6 +127,27 @@ module.exports = (app) => {
 
 
   surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
+
+
+  /*
+   |--------------------------------------------------------------------------
+   | Center routes
+   |--------------------------------------------------------------------------
+  */
+  centerRoutes.post('/', requireAuth,
+    AuthenticationController.roleAuthorization(REQUIRE_SYSADMIN),
+    CenterController.createCenter);
+
+  centerRoutes.get('/',  CenterController.getAllCenters);
+
+  // Is not needed
+  // centerRoutes.get('/:centerId',  CenterController.getCenter);
+
+  // Add or update password
+  centerRoutes.patch('/escape/:centerId', requireAuth, CenterController.patchOneEscape);
+
+  //Check if password is correct
+  centerRoutes.post('/escape/:centerId', CenterController.checkOneEscape);
 
 
   // retrive one survey as a json object

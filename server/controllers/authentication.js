@@ -5,7 +5,6 @@ const jwt = require('jsonwebtoken'),
       validator = require('validator'),
       config = require('config'),
       User = require('../models/user'),
-      Escape = require('../models/escape'),
       status = require('../status'),
       Referral = require('../models/referral');
 
@@ -31,60 +30,6 @@ function generateToken(user) {
   });
 }
 
-
-// Patch
-/**
- * Add or change choosesurvey password
- */
-exports.patchOneEscape = (req, res, next) => {
-  const password = req.body.password;
-  if (!password) {
-    return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
-  }
-  Escape.findOne({}, (err, escape) => {
-    if (err) {return next(err); }
-    if (!escape) {
-      const newEscape = new Escape({
-        password: password
-      });
-        newEscape.save((err, escape) => {
-          if (err) {return next(err); }
-          return  res.status(200).send({message: 'SUCCESS - new password saved', status: 45678} )
-        });
-    } else {
-      escape.password = password;
-      escape.save((err, escape) => {
-        if (err) {return next(err); }
-        return res.status(200).send({message: 'SUCCESS - password saved', status: 45678} )
-      });
-    }
-  })
-}
-
-// POST
-/**
- * Check if choosesurvey password is correct
- */
-exports.checkOneEscape = (req, res, next) => {
-  const password = req.body.password;
-  if (!password || typeof password !== 'string') {
-    return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
-  }
-  Escape.findOne({}, (err, escape) => {
-    if (err) { return next(err); }
-    if (!escape) {
-      return res.status(401).send({message: false, error: 'ERROR'});
-    }
-    escape.comparePassword(password, function(err, isMatch) {
-      if (err) { return next(err); }
-      if (isMatch) {
-        return res.status(200).send({message: true});
-      } else {
-        return res.status(401).send({message: false});
-      }
-    });
-  });
-}
 
 /**
  * renew JWT
@@ -220,6 +165,7 @@ exports.getAllUsers = (req, res, next) => {
      if (existingUser) {
        return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
      }
+
      let user = new User({
        email: email,
        password: password,
@@ -288,7 +234,7 @@ exports.roleAuthorization = function(role){
         res.status(422).json({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
         return next(err);
       }
-      if(foundUser.role.rank == role){
+      if(foundUser.role == role){
         return next();
       }
       res.status(401).json({error: 'You are not authorized.'});
@@ -307,7 +253,7 @@ exports.roleAuthorizationUp = function(role){
         res.status(422).json({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
         return next(err);
       }
-      if (userTypes.indexOf(foundUser.role.rank) <= userTypes.indexOf(role)) {
+      if (userTypes.indexOf(foundUser.role) <= userTypes.indexOf(role)) {
         return next();
       }
       res.status(401).json({error: status.INSUFFICIENT_PRIVILEGES .message, status: status.INSUFFICIENT_PRIVILEGES.code});

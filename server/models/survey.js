@@ -19,7 +19,7 @@ const SurveySchema = new Schema({
   madeBy: {
     type: mongoose.Schema.Types.ObjectId, ref: 'User',
     required: true
-  }
+  },
   isPost: Boolean,
   postKey: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey'},
   comment: String,
