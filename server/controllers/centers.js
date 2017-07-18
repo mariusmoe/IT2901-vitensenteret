@@ -23,10 +23,13 @@ exports.createCenter = (req, res, next) => {
   // make sure it isn't just an empty object.
   if (Object.keys(receivedCenter).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
+  } // FIXME: Status needs updating above and below
+  if (!val.centerValidation(receivedCenter)){
+    return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
-  // FIXME validate center object
   let newCenter = new Center ( receivedCenter )
 
+  // FIXME: change the "next(err)" so that it returns a json object akin to the above instead
   newCenter.save((err, center) => {
     if (err) {return next(err); }
     return res.status(200).send( center );
