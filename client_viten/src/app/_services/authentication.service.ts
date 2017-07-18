@@ -82,7 +82,7 @@ export class AuthenticationService {
    * @param  {string}             role The role of the user that is to be referred
    * @return {Observable<string>}      The referral link, as an Observable
    */
-  getReferral(role: string): Observable<string> {
+  getReferral(role: string, center: string): Observable<string> {
     const token = this.getToken();
     if (!token) {
       return Observable.throw('jwt not found'); // TODO: fix me.
@@ -90,7 +90,7 @@ export class AuthenticationService {
     const headers = new Headers();
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers });
-      return this.http.get(environment.URL.refer + role, options)
+      return this.http.get(environment.URL.refer + role + '/' + center, options)
       .map(
         response => {
           const jsonResponse = response.json();

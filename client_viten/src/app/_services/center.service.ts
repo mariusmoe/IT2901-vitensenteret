@@ -24,7 +24,7 @@ export class CenterService {
     private router: Router ) {
   }
 
-  getAllCenters(): Observable<Object> {
+  getAllCenters(): Observable<any> {
       return this.http.get(environment.URL.allCenters)
       .map(
         response => {

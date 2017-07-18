@@ -83,13 +83,39 @@
       <md-card>
         <md-card-title>{{ 'Superadmin settings' | translate }}</md-card-title>
         <md-card-subtitle>{{user.role | translate }}</md-card-subtitle>
+        <md-card-content>
+
+          <md-select placeholder="Role" class="dropdown" [(ngModel)]="selectedRole" name="role">
+            <md-option *ngFor="let food of foods" [value]="food.value">
+              {{food.value}}
+            </md-option>
+          </md-select>
+
+
+          <md-select placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter" name="center">
+            <md-option *ngFor="let center of centers" [value]="center._id">
+              {{center.name}}
+            </md-option>
+          </md-select>
+
+          <button md-raised-button class="dropdown" color="primary" minlength="3" (click)="requestReferral(selectedRole, selectedCenter)">
+            Refer
+          </button>
+
+          <p> Selected value: {{selectedValue}} </p>
+
+        </md-card-content>
+
         <md-card-actions>
-          <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
+
+
+
+          <!-- <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
             {{ 'Refer admin' | translate }}
           </button>
           <button md-raised-button color="primary" minlength="3" (click)="requestReferral('member')">
             {{ 'Refer member' | translate }}
-          </button>
+          </button> -->
         </md-card-actions>
         <br>
 

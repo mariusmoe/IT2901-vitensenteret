@@ -29,6 +29,15 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
 
+  public selectedCenter: string;
+
+  foods = [
+    {value: 'sysadmin'},
+    {value: 'vitenleader'},
+    {value: 'user'}
+  ];
+  public centers: Object[] = [];
+
   constructor(
     private router: Router,
     private service: AuthenticationService,
@@ -45,8 +54,16 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       this.newEmailForm = fb.group({
         'newEmail': [null, Validators.required],
       });
+      this.centerService.getAllCenters().subscribe(result => {
+        this.centers = result;
+        this.selectedCenter = result[0]._id;
+
+        console.log(this.centers);
+      });
 
     }
+
+
 
 
 
@@ -150,8 +167,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    * requests a referral link
    * @param  {string} role The role of the user that is to be referred
    */
-  requestReferral(role: string) {
-    this.service.getReferral(role)
+  requestReferral(role: string, center: string) {
+    this.service.getReferral(role, center)
         .subscribe(result => {
           const config: MdDialogConfig = {
             data: {
