@@ -62,9 +62,10 @@ export class NewUserComponent implements OnInit, OnDestroy {
           }
         },
         error => {
+          const body = error.json();
           sub.unsubscribe();
-          this.openSnackBar(this.languageService.instant('Could not register account'), 'FAILURE');
-          this.error = 'Something went wrong';
+          this.openSnackBar(body.message || 'Connection issues', 'FAILURE');
+          this.error = body.message;
           this.loading = false;
         }
       );

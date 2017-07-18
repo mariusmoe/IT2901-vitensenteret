@@ -92,26 +92,34 @@ exports.register = (req, res, next) => {
 
   email = email.toLowerCase(); // use lower case to avoid case sensitivity issues later
 
-  Referral.findOne({referral: confirm_string}, (err, existingReferral) => {
-    if (err) { return next(err); }
 
-    if (!existingReferral) {
-      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
-    }
-    if (!existingReferral.active) {
-      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
-    } else {
-      existingReferral.active = false;
-    }
+  User.findOne({email: email}, (err1, emailAlreadyExisting) => {
+    if (err1) { return next(err1); }
 
-    existingReferral.save((err) => {
-      if (err) { return next(err); }
-      User.findOne({ email: email }, (err, existingUser) => {
-        if (err) { return next(err); }
+    Referral.findOne({referral: confirm_string}, (err2, existingReferral) => {
+      if (err2) { return next(err2); }
 
-        if (existingUser) {
-          return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
-        }
+      // check if the email is already in use first
+      if (emailAlreadyExisting) {
+        return res.status(401).send({ message: status.EMAIL_NOT_AVILIABLE.message, status: status.EMAIL_NOT_AVILIABLE.code });
+      }
+
+      // if we're good on the email, lets check the actual referral link
+      if (!existingReferral) {
+        return res.status(422).send( { message: status.REFERRAL_LINK_WRONG.message, status: status.REFERRAL_LINK_WRONG.code } );
+      }
+      if (!existingReferral.active) {
+        return res.status(401).send( { message: status.REFERRAL_LINK_USED.message, status: status.REFERRAL_LINK_USED.code } );
+      }
+      if (existingReferral.activeExpiration.getTime() <= new Date().getTime()) {
+        return res.status(422).send( { message: status.REFERRAL_LINK_EXPIRED.message, status: status.REFERRAL_LINK_EXPIRED.code } );
+      } else {
+        // set the active to false! important!
+        existingReferral.active = false;
+      }
+      // save
+      existingReferral.save((err3) => {
+        if (err3) { return next(err3); }
         let user = new User({
           email:      email,
           password:   password,
@@ -122,9 +130,12 @@ exports.register = (req, res, next) => {
           res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
         });
       });
-    })
+    });
   });
 }
+
+
+
 
 /**
  * get all users
@@ -163,7 +174,7 @@ exports.getAllUsers = (req, res, next) => {
      if (err) { return next(err); }
 
      if (existingUser) {
-       return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
+       return res.status(422).send( {message: status.EMAIL_NOT_AVILIABLE.message, status: status.EMAIL_NOT_AVILIABLE.code} );
      }
 
      let user = new User({
@@ -231,13 +242,13 @@ exports.roleAuthorization = function(role){
 
     User.findById(id, function(err,foundUser){
       if(err){
-        res.status(422).json({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
+        res.status(422).json({message: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code});
         return next(err);
       }
       if(foundUser.role == role){
         return next();
       }
-      res.status(401).json({error: 'You are not authorized.'});
+      res.status(401).json({message: 'You are not authorized.'});
       return next('Unauthorized');
     })
   }
@@ -264,17 +275,17 @@ exports.roleAuthorizationUp = function(role){
 
 exports.changeEmail = function(req, res, next) {
   if (!req.body.email.newEmail || req.body.email.newEmail === '') {
-    res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
+    res.status(422).json({ message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
     return next(err);
   }
   User.findById(req.user._id, function(err, user) {
     if (err) {
-      res.status(422).json({ error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
+      res.status(422).json({ message: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
       return next(err);
     }
     User.findOne({email: req.body.email.newEmail}, (err, emailAlreadyExisting) => {
       if (emailAlreadyExisting) {
-        return res.status(422).send({error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code})
+        return res.status(422).send({message: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code})
       }
       user.email = req.body.email.newEmail;
       user.save(function(err){
@@ -290,11 +301,11 @@ exports.changeEmail = function(req, res, next) {
 exports.changePassword = (req, res, next) => {
   User.findById(req.user._id, function(err, user) {
     if (err) {
-      res.status(422).json({ error: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
+      res.status(422).json({ message: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code });
       return next(err);
     }
     if (req.body.password == '') {
-      res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
+      res.status(422).json({ message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
       return next(err);
     }
     user.password = req.body.password
