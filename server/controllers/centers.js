@@ -35,7 +35,8 @@ exports.createCenter = (req, res, next) => {
 
 // GET
 exports.getAllCenters = (req, res, next) => {
-  Survey.find( {}, {'password': false }, (err, centers) => {
+  const centerId = req.params.centerId;
+  Center.find( {}, {'password': false }, (err, centers) => {
     if (!centers || centers.length === 0) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       // FIXME wrong error message

@@ -113,6 +113,8 @@ module.exports = (app) => {
 
   surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
+  surveyRoutes.get('/:centerId', SurveyController.getAllSurveys);
+
 
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
 
