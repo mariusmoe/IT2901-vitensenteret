@@ -27,9 +27,10 @@ const ReferralSchema = new Schema({
   role: {
     // Decide which user priveleges the user is granted
     type: String,
-    enum: ['member', 'admin'],
-    default: 'member'
-  }
+    enum: ['sysadmin', 'vitenleader', 'user'],
+    default: 'user'
+  },
+  center: {type: mongoose.Schema.Types.ObjectId, ref: 'Center' }
 
 })
 module.exports = mongoose.model('Referral', ReferralSchema);

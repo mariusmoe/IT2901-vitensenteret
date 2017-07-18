@@ -39,7 +39,8 @@ exports.getJWT = (req, res, next) => {
   let user = { _id: req.user._id, email: req.user.email, role: req.user.role }
   res.status(200).json({
     token: 'JWT ' + generateToken(user),
-    user: user
+    user: user,
+    center: req.user.center
   });
 }
 
@@ -77,8 +78,8 @@ exports.login = (req, res, next) => {
  */
 exports.register = (req, res, next) => {
   const password        = req.body.password,
-        confirm_string  = req.body.referral_string,
-        email           = req.body.email;
+        confirm_string  = req.body.referral_string;
+  let email           = req.body.email;
 
 
   if (validator.isEmpty(email)){
@@ -204,7 +205,7 @@ exports.getReferralLink = (req, res, next) => {
     if (userTypes.indexOf(foundUser.role) > userTypes.indexOf(role)) {
       return res.status(422).json({error: status.INSUFFICIENT_PRIVILEGES .message, status: status.INSUFFICIENT_PRIVILEGES.code});
     }
-    if (foundUser.role =='vitenleader') {
+    if (foundUser.role ==='vitenleader') {
       // set center to same as creator
       centerId = foundUser.center;
     } else {

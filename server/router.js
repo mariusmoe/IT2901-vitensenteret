@@ -45,7 +45,7 @@ module.exports = (app) => {
   authRoutes.post('/login', requireLogin, AuthenticationController.login);
 
   // get a referral link - requires admin rights
-  authRoutes.get('/get_referral_link/:role',
+  authRoutes.get('/get_referral_link/:role/:centerId',
                  requireAuth,
                  AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
                  AuthenticationController.getReferralLink);
