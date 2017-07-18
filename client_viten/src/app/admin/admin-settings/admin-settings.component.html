@@ -82,27 +82,29 @@
     <div class="tabContent">
       <md-card>
         <md-card-title>{{ 'Superadmin settings' | translate }}</md-card-title>
-        <md-card-subtitle>{{user.role | translate }}</md-card-subtitle>
+        <md-card-subtitle>Current role: {{user.role | translate }}</md-card-subtitle>
         <md-card-content>
 
           <md-select placeholder="Role" class="dropdown" [(ngModel)]="selectedRole" name="role">
-            <md-option *ngFor="let food of foods" [value]="food.value">
-              {{food.value}}
+            <md-option *ngFor="let role of roles" [value]="role.value"
+              [disabled]="(role.value==='sysadmin' && user.role != 'sysadmin')">
+              {{role.value}}
             </md-option>
           </md-select>
 
 
-          <md-select placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter" name="center">
+          <md-select placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+            name="center" [disabled]="user.role != 'sysadmin'">
             <md-option *ngFor="let center of centers" [value]="center._id">
               {{center.name}}
             </md-option>
           </md-select>
 
-          <button md-raised-button class="dropdown" color="primary" minlength="3" (click)="requestReferral(selectedRole, selectedCenter)">
+          <button md-raised-button class="dropdown" color="primary" minlength="3"
+            (click)="requestReferral(selectedRole, selectedCenter)"
+            [disabled]="(selectedCenter == 'undefined')">
             Refer
           </button>
-
-          <p> Selected value: {{selectedValue}} </p>
 
         </md-card-content>
 

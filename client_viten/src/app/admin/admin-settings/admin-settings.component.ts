@@ -29,9 +29,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
 
+  public selectedRole: string;
   public selectedCenter: string;
 
-  foods = [
+  roles = [
     {value: 'sysadmin'},
     {value: 'vitenleader'},
     {value: 'user'}
@@ -46,6 +47,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
     public languageService: TranslateService) {
+      this.selectedRole = this.roles[2].value;
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
       if (this.user.role === 'sysadmin') {
@@ -56,11 +58,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       });
       this.centerService.getAllCenters().subscribe(result => {
         this.centers = result;
-        this.selectedCenter = result[0]._id;
-
-        console.log(this.centers);
+        this.selectedCenter = localStorage.getItem('center');
       });
-
     }
 
 
