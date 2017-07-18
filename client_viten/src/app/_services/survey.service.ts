@@ -70,9 +70,11 @@ export class SurveyService {
    * @return {Observable<any>} returns an observable holding the requested survey and responses
    */
    getSurvey(idString: String): Observable<any> {
+     console.log(idString);
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
        const json = response.json();
+       console.log(json);
        const survey = this.correctSurveyValidity(json.survey);
        return { survey: survey, responses: json.responses };
      },
@@ -192,8 +194,9 @@ export class SurveyService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
+    const center = localStorage.getItem('center');
 
-    return this.http.get(environment.URL.survey, { headers })
+    return this.http.get(environment.URL.surveyAll + '/' + center, { headers })
       .map(
         response => {
           // only update our list for status in the 200 range. If we get status 304
