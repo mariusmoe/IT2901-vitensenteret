@@ -46,6 +46,7 @@ let questionSchema = {
     "lang": {
       "$ref": "/language", // references the languageSchema above here
     },
+    "imageLink": { "type": "string", "pattern": /(https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/ },
     "required": { "type": "boolean" }
   },
   "required": ["mode", "lang", "required"],

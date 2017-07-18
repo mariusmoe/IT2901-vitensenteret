@@ -51,6 +51,7 @@ const SurveySchema = new Schema({
         options: [String]
       },
     },
+    imageLink: { type: String },
     required: { type: Boolean, default: true }
   }]
 });

@@ -524,6 +524,49 @@ describe('Survey validation', () => {
     done();
   });
 
+  it('should not validate on bad questionlist imageLink property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check valid format but not accepted value
+    clone.questionlist[0].imageLink = "tooth";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check valid format
+    clone.questionlist[0].imageLink = "https://i.imgur.com/aaaaaaa7.jpg";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check emtpy string
+    clone.questionlist[0].imageLink = "";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace
+    clone.questionlist[0].imageLink = " "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check undefined
+    clone.questionlist[0].imageLink = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check null
+    clone.questionlist[0].imageLink = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.questionlist[0].imageLink;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // valid
+
+    done();
+  });
+
 
   it('should not validate on missing or bad questionlist lang property', (done) => {
     // make sure clone validates correctly.
