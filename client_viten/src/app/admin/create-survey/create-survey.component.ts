@@ -249,6 +249,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     this.submitLoading = true;
 
     // remove options-properties of non-multi questions
+    // also remove imageLink if it is not valid (left blank)
     for (const qo of clone.questionlist) {
       if (qo.mode !== 'multi' && qo.mode !== 'single') {
         if (qo.lang.no) {
@@ -257,6 +258,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         if (qo.lang.en) {
           delete qo.lang.en.options;
         }
+      }
+      if (qo.imageLink.length === 0) {
+        delete qo.imageLink;
       }
     }
 
