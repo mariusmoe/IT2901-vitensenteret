@@ -22,11 +22,20 @@ import { FormControl } from '@angular/forms';
       ]))
     ]),
     transition(':leave', [
-      style({ transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0' }),
-      animate('0.1s ease-in-out', style({ 'max-width': '0' }))
-    ])
+      animate(100, keyframes([
+        style({transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0', 'max-width': '300px', offset: 0}),
+        style({transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0', 'max-width': '0',   offset: 1.0})
+      ]))
+    ]),
   ])]
 })
+
+
+// transition(':leave', [
+//  style({ transform: 'scaleY(0)', 'min-width': '0', 'max-height': '0' }),
+//  animate('0.1s ease-in-out', style({ 'max-width': '0%' }))
+// ])
+
 export class CreateSurveyComponent implements OnInit, OnDestroy {
   // COMPONENT VARIABLES
   submitLoading = false;
@@ -47,6 +56,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
+  imageLinkPattern = /(https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
 
 
   constructor(private dialog: MdDialog, private surveyService: SurveyService,
@@ -204,13 +214,26 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   }
 
   /**
-   * notWhitespace(s: string)
+   * fieldValidate(s: string)
    *
    * @param {string} s a string to check
    * returns true if the input string is not just whitespace
    */
   fieldValidate(s: string) {
     return s && s.length > 0 && (/\S/.test(s));
+  }
+
+
+  /**
+   * imageLinkValidate(s: string)
+   *
+   * @param {string} s a string to check
+   * returns true if the input string matches an url
+   */
+  imageLinkValidate(s: string) {
+    return s === undefined || (s && s.length > 0
+      && /(https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/.test(s)
+      || s.length === 0);
   }
 
 
@@ -226,6 +249,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     this.submitLoading = true;
 
     // remove options-properties of non-multi questions
+    // also remove imageLink if it is not valid (left blank)
     for (const qo of clone.questionlist) {
       if (qo.mode !== 'multi' && qo.mode !== 'single') {
         if (qo.lang.no) {
@@ -234,6 +258,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         if (qo.lang.en) {
           delete qo.lang.en.options;
         }
+      }
+      if (qo.imageLink.length === 0) {
+        delete qo.imageLink;
       }
     }
 

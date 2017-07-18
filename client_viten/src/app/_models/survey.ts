@@ -16,6 +16,7 @@ export interface QuestionObject {
       options?: string[];
     };
   };
+  imageLink?: string;
 }
 
 
