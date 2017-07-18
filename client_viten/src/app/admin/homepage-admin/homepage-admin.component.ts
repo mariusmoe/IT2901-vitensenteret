@@ -37,9 +37,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   generatingPDF = false;
 
   private routerSub: Subscription;
+  public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
 
-    public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
 
+  // constructor
   constructor(private surveyService: SurveyService,
     private router: Router,
     private route: ActivatedRoute,

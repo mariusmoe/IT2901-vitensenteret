@@ -27,7 +27,6 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
     // Update whenever you navigate
     this.routerSub = this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
       this.breadcrumbs = this.getBreadcrumbs();
-
     });
   }
 

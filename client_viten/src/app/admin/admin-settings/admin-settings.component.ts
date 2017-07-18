@@ -5,7 +5,7 @@ import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { SurveyService } from '../../_services/survey.service';
+import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdSnackBar } from '@angular/material';
 
@@ -32,15 +32,15 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private service: AuthenticationService,
-    private surveyService: SurveyService,
+    private centerService: CenterService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
     public languageService: TranslateService) {
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
-      if (this.user.role === 'admin') {
-        this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
+      if (this.user.role === 'sysadmin') {
+        this.getUsers(); // TODO: if user ISN'T sysadmin, do not do execute getUsers()
       }
       this.newEmailForm = fb.group({
         'newEmail': [null, Validators.required],
@@ -69,7 +69,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    * @param  {string} password new password
    */
   changeExitSurveyPassword(password: string) {
-    this.surveyService.changeChoosesurvey(password)
+    this.centerService.exitSurveyUpdatePassword(password)
       .subscribe(result => {
         this.openSnackBar(this.languageService.instant('Password changed'), 'SUCCESS');
       },

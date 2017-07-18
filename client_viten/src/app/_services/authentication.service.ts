@@ -229,8 +229,7 @@ export class AuthenticationService {
             const jsonResponse = response.json();
             if (jsonResponse) {
               localStorage.setItem('token', jsonResponse.token);
-              // TODO: set user info? no dont to this!!!
-              //
+              localStorage.setItem('center', jsonResponse.center);
               return true;
             } else {
               return false;
@@ -262,7 +261,7 @@ export class AuthenticationService {
             const jsonResponse = response.json();
             if (jsonResponse) {
               localStorage.setItem('token', jsonResponse.token);
-              // TODO: set user info? no dont to this!!!
+              localStorage.setItem('center', jsonResponse.center);
               //
               return true;
             } else {

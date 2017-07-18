@@ -30,8 +30,9 @@ export const environment = {
       surveyAsJson: 'https://vitensurvey.party/api/survey/json',
       surveyAsCSV: 'https://vitensurvey.party/api/survey/csv',
       newUser: 'https://vitensurvey.party/api/auth/register',
-      checkChoosesurvey: 'https://vitensurvey.party/api/survey/escape',
+      exitSurvey: 'https://vitensurvey.party/api/center/escape',
       surveyCopy:   'https://vitensurvey.party/api/survey/copy',
       allNicknames: 'https://vitensurvey.party/api/survey/all_nicknames',
+      allCenters: 'https://vitensurvey.party/api/center/',
     }
 };
