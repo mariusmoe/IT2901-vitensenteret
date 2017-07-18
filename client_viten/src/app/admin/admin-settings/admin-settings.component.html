@@ -78,7 +78,7 @@
       </md-card>
     </div>
   </md-tab>
-  <md-tab *ngIf="user.role=='admin'" label="{{ 'Admin settings' | translate }}">
+  <md-tab *ngIf="user.role==='vitenleader' || user.role==='sysadmin'" label="{{ 'Admin settings' | translate }}">
     <div class="tabContent">
       <md-card>
         <md-card-title>{{ 'Superadmin settings' | translate }}</md-card-title>

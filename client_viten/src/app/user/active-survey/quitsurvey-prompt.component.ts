@@ -1,7 +1,7 @@
 import { Component, HostListener } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SurveyService } from '../../_services/survey.service';
+import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdDialogRef } from '@angular/material';
 import { MdSnackBar } from '@angular/material';
@@ -20,7 +20,7 @@ export class QuitsurveyPromptComponent {
   abortCounter = 0;
 
   constructor(
-    private surveyService: SurveyService,
+    private centerService: CenterService,
     private translateService: TranslateService,
     public dialogRef: MdDialogRef<QuitsurveyPromptComponent>,
     private router: Router,
@@ -36,7 +36,7 @@ export class QuitsurveyPromptComponent {
 
   quitSurvey(code: string) {
 
-    const sub = this.surveyService.checkChoosesurvey(code)
+    const sub = this.centerService.exitSurvey(code)
         .subscribe(result => {
           if (result === true) {
             this.router.navigate(['/choosesurvey']);
