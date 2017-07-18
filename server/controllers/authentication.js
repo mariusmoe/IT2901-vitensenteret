@@ -67,7 +67,8 @@ exports.login = (req, res, next) => {
   let user = { _id: req.user._id, email: req.user.email, role: req.user.role }
   res.status(200).json({
     token: 'JWT ' + generateToken(user),
-    user: user
+    user: user,
+    center: req.user.center
   });
 }
 
@@ -131,7 +132,7 @@ exports.register = (req, res, next) => {
  * get all users
  */
 exports.getAllUsers = (req, res, next) => {
-  User.find({}, {'email': true, 'role': true}, (err, users) => {
+  User.find({}, { 'email': true, 'role': true, 'center': true }, (err, users) => {
     if (!users) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       return res.status(200).send({message: status.ROUTE_USERS_VALID_NO_USERS.message, status: status.ROUTE_USERS_VALID_NO_USERS.code});
