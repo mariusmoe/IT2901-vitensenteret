@@ -4,8 +4,8 @@ import { SurveyService } from '../../_services/survey.service';
 import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { SimpleTimer } from 'ng2-simple-timer';
-import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
@@ -501,7 +501,12 @@ resetTimer() {
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    const dialogRef = this.dialog.open(QuitsurveyPromptComponent);
+    const config: MdDialogConfig = {
+      data: {
+        survey: this.survey,
+      }
+    };
+    const dialogRef = this.dialog.open(QuitsurveyPromptComponent, config);
   }
 
 

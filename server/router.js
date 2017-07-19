@@ -146,7 +146,9 @@ module.exports = (app) => {
   // centerRoutes.get('/:centerId',  CenterController.getCenter);
 
   // Add or update password
-  centerRoutes.patch('/escape/:centerId', requireAuth, CenterController.patchOneEscape);
+  centerRoutes.patch('/escape/:centerId', requireAuth,
+    AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
+    CenterController.patchOneEscape);
 
   //Check if password is correct
   centerRoutes.post('/escape/:centerId', CenterController.checkOneEscape);

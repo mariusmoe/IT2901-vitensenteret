@@ -138,5 +138,32 @@ module.exports = {
   SURVEY_RESPONSE_OBJECT_MISSING: {
     message: 'Could not find a response.',
     code: 2032
-  }
+  },
+
+  // ESCAPE SURVEY CODES
+  ESCAPE_MISSING_PASSWORD: {
+    message: 'The request requires a password to be set.',
+    code: 2033,
+  },
+  ESCAPE_MISSING_CENTER: {
+    message: 'The request parameter center is invalid.',
+    code: 2033,
+  },
+  ESCAPE_PATCH_ERROR: {
+    message: 'There was an error updating the password.',
+    code: 2033,
+  },
+  ESCAPE_PATCH_SUCCESSFUL: {
+    message: 'The password has been successfully updated.',
+    code: 1017,
+  },
+  ESCAPE_COMPARE_TRUE: {
+    message: 'The password was matched successfully.',
+    code: 1018,
+  },
+  ESCAPE_COMPARE_FALSE: {
+    message: 'The password did not match.',
+    code: 1019,
+  },
+
 }
