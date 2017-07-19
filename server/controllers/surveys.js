@@ -384,7 +384,6 @@ exports.answerOneSurvey = (req, res, next) => {
       } else {
         setNickname(surveyId, responseObject.nickname, (err5, nickname) => {
           if(err5) {
-            // console.log(status.NICKNAME_TAKEN.message);
             return res.status(400).send( {message: status.NICKNAME_TAKEN.message, status: status.NICKNAME_TAKEN.code})
           }
           let newResponse = new Response({

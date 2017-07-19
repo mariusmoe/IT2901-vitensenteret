@@ -5,6 +5,7 @@ let status = require('../status');
 
 let mongoose = require("mongoose"),
     User = require('../models/user'),
+    Center = require('../models/center'),
     Referral = require('../models/referral');
 
 mongoose.Promise = Promise;
@@ -16,6 +17,7 @@ let should = chai.should();
 var jwt = '';
 let referral_jwt = '';
 let adminReferralLink = '';
+let centerId;
 chai.use(chaiHttp);
 
 let today = new Date();
@@ -26,15 +28,12 @@ describe('Auth API', () => {
     before( (done) => {
       clock = sinon.useFakeTimers();
 
-      User.remove({}).lean().then(Referral.remove({}).lean()).then(() => {
-        chai.request(server)
-          .post('/api/auth/register_developer')
-          .send({'email': 'test@test.no', 'password': 'test'})
-          .end(function(err, res){
-            //res.should.have.status(200);
-            done();
-          })
-      });
+      Center.remove({}).lean().then(User.remove({}).lean().then(Referral.remove({}).lean().then(() => {
+        chai.request(server).post('/api/auth/register_testdata').send('{}').end(function(err,res){
+          centerId = res.body.center._id;
+          done();
+        });
+      })));
     });
 
     after( (done) => {
@@ -45,15 +44,12 @@ describe('Auth API', () => {
   beforeEach((done) => {
       chai.request(server)
       .post('/api/auth/login')
-      .send({'email': 'test@test.no', 'password': 'test'})
+      .send({'email': 'testuser@test.test', 'password': 'test'})
       .end(function(err, res){
         jwt = res.body.token;   // Should be globaly avaliable before each test now
         res.should.have.status(200);
         done();
       });
-  });
-  afterEach((done) => {
-    done();
   });
 
 
@@ -61,7 +57,7 @@ describe('Auth API', () => {
     it('should log in one user /api/auth/login POST', (done) => {
     chai.request(server)
       .post('/api/auth/login')
-      .send({'email': 'test@test.no', 'password': 'test'})
+      .send({'email': 'testuser@test.test', 'password': 'test'})
       .end((err, res) => {
         res.should.have.status(200);
         done();
@@ -79,7 +75,7 @@ describe('Auth API', () => {
     it('should return 401 when the user login password is wrong /api/auth/login POST', (done) => {
     chai.request(server)
       .post('/api/auth/login')
-      .send({'email': 'test@test.no', 'password': 'wrongpassword'}) // wrong password
+      .send({'email': 'testuser@test.test', 'password': 'wrongpassword'}) // wrong password
       .end((err, res) => {
         res.should.have.status(401);
         done();
@@ -98,10 +94,10 @@ describe('Auth API', () => {
 
 
 
-  describe('/api/auth/get_referral_link/[admin/member] POST', () => {
-    it('should create one referral link /api/auth/get_referral_link/admin GET', (done) => {
+  describe('/api/auth/get_referral_link/[role]/[center]/ POST', () => {
+    it('should create one referral link /api/auth/get_referral_link/vitenleader/[center] GET', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link/admin')
+      .get('/api/auth/get_referral_link/vitenleader/' + centerId)
       .set('Authorization', jwt)
       .end( (err, res) => {
         res.should.have.status(200);
@@ -166,7 +162,7 @@ describe('Auth API', () => {
 
     it('should fail to create new user - email already used /api/auth/register with referralLink POST', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link/admin')
+      .get('/api/auth/get_referral_link/vitenleader/' + centerId)
       .set('Authorization', jwt)
       .end( (err1, res1) => {
         res1.should.have.status(200);
@@ -206,9 +202,9 @@ describe('Auth API', () => {
         done();
       });
     });
-    it('should create one referral link /api/auth/get_referral_link/member GET', (done) => {
+    it('should create one referral link /api/auth/get_referral_link/[role]/[center] GET', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link/member')
+      .get('/api/auth/get_referral_link/user/' + centerId)
       .set('Authorization', jwt)
       .end( (err, res) => {
         res.should.have.status(200);
@@ -217,7 +213,7 @@ describe('Auth API', () => {
     });
     it('should return 401 when unauthorized - wrong jwt /api/auth/get_referral_link GET', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link/admin')
+      .get('/api/auth/get_referral_link/user/' + centerId)
       .set('Authorization', 'badcode')  // bad code
       .end( (err, res) => {
         res.should.have.status(401);
@@ -226,7 +222,7 @@ describe('Auth API', () => {
     });
     it('should return 401 when unauthorized - omitted auth property /api/auth/get_referral_link GET', (done) => {
       chai.request(server)
-      .get('/api/auth/get_referral_link/admin')
+      .get('/api/auth/get_referral_link/user/' + centerId)
       // .set('Authorization', 'badcode') // omitted authorization property
       .end( (err, res) => {
         res.should.have.status(401);

@@ -52,6 +52,7 @@ module.exports = (app) => {
 
  if (config.util.getEnv('NODE_ENV') !== 'production') {
      authRoutes.post('/register_developer', AuthenticationController.register_developer);
+     authRoutes.post('/register_testdata', AuthenticationController.register_testdata);
  }
 
   // Request a new token
@@ -97,10 +98,13 @@ module.exports = (app) => {
   //
   // change email for this account
   authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
-  //
-  //
 
 
+  /*
+   |--------------------------------------------------------------------------
+   | Survey routes
+   |--------------------------------------------------------------------------
+  */
 
   surveyRoutes.get('/all_nicknames/:surveyId', SurveyController.getNicknamesForOneSurvey);
 
@@ -111,14 +115,14 @@ module.exports = (app) => {
 
   surveyRoutes.post('/copy/:surveyId', requireAuth, SurveyController.copySurvey);
 
-  surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
+  surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
+  surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
+
 
   surveyRoutes.get('/all/:centerId', SurveyController.getAllSurveys);
 
-
-  surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
 
   // surveyRoutes.post('/linkPrePost', requireAuth, SurveyController.linkPrePost);
 
@@ -128,7 +132,7 @@ module.exports = (app) => {
                       SurveyController.deleteOneSurvey);
 
 
-  surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
+  surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
 
   /*
