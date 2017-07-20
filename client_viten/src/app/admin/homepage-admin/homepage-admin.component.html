@@ -68,7 +68,7 @@
             <md-icon>build</md-icon> {{ 'Edit' | translate }}
           </button>
           <button md-raised-button color="primary" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
-          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)" [disabled] = "this.authenticationService.getUser().role !== 'admin'">
+          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
               <md-icon>delete</md-icon> {{ 'Delete' | translate }}
           </button>
         </div>
@@ -133,7 +133,7 @@
             <md-icon>build</md-icon> {{ 'Edit' | translate }}
           </button>
           <button md-raised-button color="primary" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
-          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)" [disabled] = "this.authenticationService.getUser().role !== 'admin'">
+          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
             <md-icon>delete</md-icon> {{ 'Delete' | translate }}
           </button>
         </md-card-actions>

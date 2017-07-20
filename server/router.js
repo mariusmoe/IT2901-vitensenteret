@@ -124,7 +124,6 @@ module.exports = (app) => {
 
   surveyRoutes.delete('/:surveyId',
                       requireAuth,
-                      AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
                       SurveyController.deleteOneSurvey);
 
 
