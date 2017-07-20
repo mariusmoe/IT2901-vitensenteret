@@ -102,7 +102,7 @@
               </md-card-content>
               <md-card-actions class="actionsBox">
                 <!-- delete question button -->
-                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)"
+                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)" [disabled]="lockdown || survey.questionlist.length == 1"
                 [mdTooltip]="'Deletes this particular question! Careful!' | translate" tooltip-position="above">
                   <md-icon>delete</md-icon>
                 </button>
