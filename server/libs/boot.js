@@ -17,8 +17,8 @@ mongoose.connect(uri, (error) => {
     if(config.util.getEnv('NODE_ENV') == 'production') {
       var options = {
         // ca: [fs.readFileSync(PATH_TO_BUNDLE_CERT_1), fs.readFileSync(PATH_TO_BUNDLE_CERT_2)],
-        cert: fs.readFileSync('/etc/letsencrypt/live/survey.vitensenteret.com/fullchain.pem'),
-        key: fs.readFileSync('/etc/letsencrypt/live/survey.vitensenteret.com/privkey.pem')
+        cert: fs.readFileSync('/etc/letsencrypt/live/vitensurvey.party/fullchain.pem'),
+        key: fs.readFileSync('/etc/letsencrypt/live/vitensurvey.party/privkey.pem')
       };
 
       var server = https.createServer(options, app);
