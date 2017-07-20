@@ -25,6 +25,7 @@ exports.createUserFolder = (req, res, next) => {
   if (!val.centerValidation(receivedCenter)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
+  receivedFolder.isRoot = false;
   let newCenter = new Center ( receivedCenter )
 
   // FIXME: change the "next(err)" so that it returns a json object akin to the above instead
@@ -37,23 +38,17 @@ exports.createUserFolder = (req, res, next) => {
 // GET
 exports.getUserFolders = (req, res, next) => {
   const userId = req.user._id;
-
   if (!userId) {
     return res.status(401).send({message: 'fixme'});
   }
 
-  UserFolder.find( {owner: userId}, (err, folders) => {
-    if (!centers || centers.length === 0) {
-      // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
+  UserFolder.find( {user: userId}, (err, folders) => {
+    if (!folders || folders.length === 0) {
       // FIXME wrong error message
-      return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
+      return res.status(500).send({message: 'fixme'});
     }
     if (err) { return next(err); }
-
-    // the fields returned are specified by the projection (second argument) above.
-    // _id is always returned unless specified as false in the projection.
-
-    return res.status(200).send(centers);
+    return res.status(200).send(folders);
   }).lean();
 }
 

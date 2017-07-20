@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SurveyList } from '../../_models/index';
 import { SurveyService } from '../../_services/survey.service';
+import { UserFolderService } from '../../_services/userFolder.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
@@ -12,7 +13,10 @@ import 'rxjs/add/operator/debounceTime';
 @Component({
   selector: 'app-all-surveys',
   templateUrl: './all-surveys.component.html',
-  styleUrls: ['./all-surveys.component.scss']
+  styleUrls: [
+    '../../../../node_modules/ng2-tree/styles.css',
+    './all-surveys.component.scss'
+  ]
 })
 export class AllSurveysComponent implements OnInit, OnDestroy {
     loading = false;
@@ -28,34 +32,15 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     treeSettings: Ng2TreeSettings = {
       rootIsVisible: false
     };
-    public tree: TreeModel = {
-      value: 'Programming languages by programming paradigm',
-      children: [
-        {
-          value: 'Object-oriented programming',
-          children: [
-            {value: 'Java'},
-            {value: 'C++'},
-            {value: 'C#'}
-          ]
-        },
-        {
-          value: 'Prototype-based programming',
-          children: [
-            {value: 'JavaScript'},
-            {value: 'CoffeeScript'},
-            {value: 'Lua'}
-          ]
-        }
-      ]
-    };
+    public tree: TreeModel;
 
 
 
     constructor(
       private router: Router,
       public route: ActivatedRoute,
-      public surveyService: SurveyService) {
+      public surveyService: SurveyService,
+      public userFolderService: UserFolderService) {
         // request fresh list of surveys
         this.getSurveys();
       }
@@ -63,6 +48,16 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     ngOnInit() {
       this.searchSubscription = this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
         this.searchInput = searchQuery;
+      });
+      const folderSub = this.userFolderService.getAllFolders().subscribe(result => {
+        this.tree = result;
+        console.log('component');
+        console.log(result);
+        folderSub.unsubscribe();
+      },
+      error => {
+        folderSub.unsubscribe();
+        console.error(error);
       });
     }
     ngOnDestroy() {

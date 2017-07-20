@@ -31,7 +31,7 @@ module.exports = (app) => {
   apiRoutes.use('/auth', authRoutes);
   apiRoutes.use('/survey', surveyRoutes);
   apiRoutes.use('/center', centerRoutes);
-  apiRoutes.use('/folders', centerRoutes);
+  apiRoutes.use('/folders', folderRoutes);
   // Set a common fallback for /api/*; 404 for invalid route
   apiRoutes.all('*', ErrorController.error);
 

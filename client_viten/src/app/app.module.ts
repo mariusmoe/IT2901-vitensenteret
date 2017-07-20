@@ -17,6 +17,7 @@ import { HomepageUserComponent } from './user/homepage-user/homepage-user.compon
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
+import { UserFolderService } from './_services/userFolder.service';
 import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
 import { CenterService } from './_services/center.service';
@@ -116,6 +117,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     AuthGuard,
     AuthenticationService,
     SurveyService,
+    UserFolderService,
     CenterService,
     TRANSLATION_PROVIDERS,
     TranslateService,

@@ -6,6 +6,7 @@ const jwt = require('jsonwebtoken'),
       config = require('config'),
       User = require('../models/user'),
       Center = require('../models/center'),
+      UserFolder = require('../models/userFolder'),
       Referral = require('../models/referral'),
       status = require('../status');
 
@@ -80,7 +81,7 @@ exports.login = (req, res, next) => {
 exports.register = (req, res, next) => {
   const password        = req.body.password,
         confirm_string  = req.body.referral_string;
-  let   email           = req.body.email;
+  let   email           = req.body.email; // must be non-const
 
   if (validator.isEmpty(email)){
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
@@ -122,11 +123,16 @@ exports.register = (req, res, next) => {
         let user = new User({
           email:      email,
           password:   password,
-          role:       existingReferral.role
+          role:       existingReferral.role,
+          center:     existingReferral.center
         });
-        user.save((err, user) => {
-          if (err) {return next(err); }
-          res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+        user.save((err4, newUser) => {
+          if (err4) {return next(err4); }
+          let folder = new UserFolder({ user: newUser, isRoot: true, title: 'Root'});
+          folder.save((err5, f) => {
+            if (err5) { next(err5); }
+            res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+          });
         });
       });
     });
@@ -178,9 +184,14 @@ exports.getAllUsers = (req, res, next) => {
        password: password,
        role: 'sysadmin'
      });
-     user.save((err, user) => {
-       if (err) {return next(err); }
-       res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+
+     user.save((err4, user) => {
+       if (err4) {return next(err4); }
+       let folder = new UserFolder({ user: user, isRoot: true, title: 'Root'});
+       folder.save((err5, f) => {
+         if (err5) { next(err5); }
+         res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+       });
      });
    });
  }
@@ -196,8 +207,13 @@ exports.getAllUsers = (req, res, next) => {
        role: 'vitenleader',
        center: center
      });
-     user.save((err2, user) => {
-       res.status(200).send({ user: user, center: center });
+     user.save((err4, user) => {
+       if (err4) {return next(err4); }
+       let folder = new UserFolder({ user: user, isRoot: true, title: 'Root'});
+       folder.save((err5, f) => {
+         if (err5) { next(err5); }
+         res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+       });
      });
    });
  }

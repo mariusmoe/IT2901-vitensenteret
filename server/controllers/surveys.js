@@ -5,6 +5,7 @@ const validator = require('validator'),
       Survey  = require('../models/survey'),
       Response = require('../models/response'),
       Nickname = require('../models/nickname'),
+      UserFolder = require('../models/userFolder'),
       jsonfile = require('jsonfile'),
       crypto = require('crypto'),
       fs = require('fs'),
@@ -27,7 +28,6 @@ exports.createSurvey = (req, res, next) => {
   if (Object.keys(receivedSurvey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
   }
-
   receivedSurvey.madeBy = req.user._id.toString();
   receivedSurvey.center = req.user.center.toString();
 
@@ -35,12 +35,22 @@ exports.createSurvey = (req, res, next) => {
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
-  let newSurvey = new Survey ( receivedSurvey )
+  let newSurvey = new Survey ( receivedSurvey );
+
+
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
-    return res.status(200).send( survey );
-  })
+    UserFolder.findOne({ user: req.user, isRoot: true }, (err2, rootFolder) => {
+      if (err2) { return next(err2); }
+      console.log(rootFolder);
+      rootFolder.surveys.push(survey);
+      rootFolder.save((err3, savedRoot) => {
+        if (err3) { return next(err3); }
+        return res.status(200).send( survey );
+      });
+    });
+  });
 }
 
 
