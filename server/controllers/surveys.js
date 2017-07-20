@@ -183,6 +183,7 @@ exports.patchOneSurvey = (req, res, next) => {
   }
 
   let survey = req.body;
+  let newSurveyActiveMode = survey.active;
 
   // make sure it isn't just an empty object.
   if (Object.keys(survey).length === 0) {
@@ -203,7 +204,17 @@ exports.patchOneSurvey = (req, res, next) => {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
-    return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+    if (newSurveyActiveMode == true) {
+      Response.remove({surveyId: surveyId}, (err1, r1) => {
+        Response.remove({surveyId: survey.postKey}, (err2, r2) => {
+          if (err1 || err2) { return next(err1 || err2); }
+          return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+        }).lean();
+      }).lean();
+    } else {
+      return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+    }
+
   });
 }
 
