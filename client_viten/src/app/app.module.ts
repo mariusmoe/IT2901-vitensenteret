@@ -22,6 +22,8 @@ import { SurveyService } from './_services/survey.service';
 import { CenterService } from './_services/center.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 
+import { TreeModule } from 'ng2-tree';
+
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
@@ -94,6 +96,7 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     HttpModule,
     AppRoutingModule,
     ChartsModule,
+    TreeModule,
     ClipboardModule,
     DragulaModule,
     BrowserAnimationsModule,

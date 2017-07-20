@@ -50,7 +50,7 @@ describe('Center API', () => {
           done();
         });
     });
-    it('should return 200 when checking the password - /api/center/escape/[center] POST', (done) => {
+    it('should return 200 when checking the password, message = true - /api/center/escape/[center] POST', (done) => {
       chai.request(server)
         .post('/api/center/escape/' + centerId)
         .set('Authorization', jwt)
@@ -62,7 +62,7 @@ describe('Center API', () => {
           done();
         });
     });
-    it('should return 200 when checking the password - /api/center/escape/[center] POST', (done) => {
+    it('should return 200 when checking the password (wrong), message = false - /api/center/escape/[center] POST', (done) => {
       chai.request(server)
         .post('/api/center/escape/' + centerId)
         .set('Authorization', jwt)

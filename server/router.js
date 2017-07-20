@@ -2,6 +2,7 @@ const AuthenticationController = require('./controllers/authentication'),
       SurveyController = require('./controllers/surveys'),
       ErrorController = require('./controllers/error'),
       CenterController = require('./controllers/centers'),
+      FolderController = require('./controllers/folders'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport'),
@@ -24,11 +25,13 @@ module.exports = (app) => {
         authRoutes = express.Router(),
         surveyRoutes = express.Router(),
         angularRoutes = express.Router(),
+        folderRoutes = express.Router(),
         centerRoutes = express.Router();
   // Set auth and survey routes as subgroup to apiRoutes
   apiRoutes.use('/auth', authRoutes);
   apiRoutes.use('/survey', surveyRoutes);
   apiRoutes.use('/center', centerRoutes);
+  apiRoutes.use('/folders', centerRoutes);
   // Set a common fallback for /api/*; 404 for invalid route
   apiRoutes.all('*', ErrorController.error);
 
@@ -156,6 +159,21 @@ module.exports = (app) => {
 
   //Check if password is correct
   centerRoutes.post('/escape/:centerId', CenterController.checkOneEscape);
+
+
+  /*
+   |--------------------------------------------------------------------------
+   | Folder routes
+   |--------------------------------------------------------------------------
+  */
+
+  folderRoutes.get('/', requireAuth, FolderController.getUserFolders);
+
+  folderRoutes.post('/', requireAuth, FolderController.createUserFolder);
+
+  folderRoutes.delete('/:folderId', requireAuth, FolderController.deleteUserFolder);
+
+
 
 
   // retrive one survey as a json object

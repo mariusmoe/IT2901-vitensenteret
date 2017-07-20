@@ -5,6 +5,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import {FormControl} from '@angular/forms';
+import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from 'ng2-tree';
 import 'rxjs/add/operator/debounceTime';
 
 
@@ -23,6 +24,34 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
 
     searchSubscription: Subscription;
 
+
+    treeSettings: Ng2TreeSettings = {
+      rootIsVisible: false
+    };
+    public tree: TreeModel = {
+      value: 'Programming languages by programming paradigm',
+      children: [
+        {
+          value: 'Object-oriented programming',
+          children: [
+            {value: 'Java'},
+            {value: 'C++'},
+            {value: 'C#'}
+          ]
+        },
+        {
+          value: 'Prototype-based programming',
+          children: [
+            {value: 'JavaScript'},
+            {value: 'CoffeeScript'},
+            {value: 'Lua'}
+          ]
+        }
+      ]
+    };
+
+
+
     constructor(
       private router: Router,
       public route: ActivatedRoute,
@@ -40,14 +69,15 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       this.searchSubscription.unsubscribe();
     }
 
+
     /**
-     * Select one survey form the list
-     * @param  {string} surveyId the survey ID
-     * Appends the surveyId to the router navigation.
+     * treeNodeSelected is executed when a node is selected in the tree
+     * @param  {NodeEvent} e the event that took place
      */
-    select(surveyId: string) {
-      this.router.navigate(['/admin', surveyId]);
+    treeNodeSelected(e: NodeEvent) {
+      this.router.navigate(['/admin', e.node.value]);
     }
+
 
     /**
      * get all surveys as a list

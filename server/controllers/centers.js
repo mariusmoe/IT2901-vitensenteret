@@ -104,7 +104,7 @@ exports.checkOneEscape = (req, res, next) => {
   if (!password || typeof password !== 'string') {
     return res.status(400).send({message: status.ESCAPE_MISSING_PASSWORD.message, status: status.ESCAPE_MISSING_PASSWORD.code} )
   }
-  Center.findOne({}, (err, escape) => {
+  Center.findById( centerId, (err, escape) => {
     if (err) { return next(err); }
     if (!escape) {
       return res.status(500).send({message: status.ESCAPE_PATCH_ERROR.message, status: status.ESCAPE_PATCH_ERROR.code});

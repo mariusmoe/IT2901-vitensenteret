@@ -120,6 +120,8 @@ module.exports = app => {
       let s = {
         name: funnify(),
         comment: funnify(),
+        center: '596dc7b0d4329a2a08622abd',
+        madeBy: '596de49fc686b5239cab324d',
         questionlist: questions,
         date: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
         activationDate: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
