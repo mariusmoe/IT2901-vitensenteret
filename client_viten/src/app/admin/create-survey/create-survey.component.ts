@@ -34,12 +34,11 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   englishEnabled = false;
   canPostSurvey = false;
   isPost = false;
-  lockdown = false;
 
   // SURVEY VARIABLES
   survey: Survey;
   preSurvey: Survey;
-  maxQuestionLength = 50; // TODO: arbitrary chosen! discuss!
+  maxQuestionLength = 1000; // TODO: arbitrary chosen! discuss!
   isPatch = false;
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
 
@@ -108,7 +107,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     const sub = this.surveyService.getSurvey(param).subscribe(
       result => {
         if (this.isPost) {
-          this.lockdown = true;
           this.setupInitialSurveyStateFrom(result.survey);
           this.survey.name = 'POST: ' + this.survey.name;
           this.survey.isPost = true;
@@ -117,7 +115,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         } else {
           this.survey = result.survey;
           this.isPatch = true;
-          this.lockdown = true;
         }
 
         // somewhat hacky way to determine english state.
@@ -341,7 +338,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       data: {
         questionObject: qo,
         englishEnabled: this.englishEnabled,
-        lockdown: this.lockdown,
       }
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
@@ -386,10 +382,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
             : ('This field is a duplicate.' | translate) }}</md-hint>
       </md-input-container>
-      <button md-icon-button color="warn" [disabled]="(i < 2) || data.lockdown" class="alignRight"
+      <button md-icon-button color="warn" [disabled]="(i < 2)" class="alignRight"
       (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
     </div>
-    <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6 || data.lockdown"
+    <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
     (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
   </div>
   <div md-dialog-actions align="center">
