@@ -19,19 +19,20 @@ export const environment = {
 
 
     URL: {
-      login: 'https://vitensurvey.party/api/auth/login',
-      allUsers: 'https://vitensurvey.party/api/auth/all_users',
-      delete: 'https://vitensurvey.party/api/auth/delete_account',
-      refer: 'https://vitensurvey.party/api/auth/get_referral_link/',
-      renewJWT: 'https://vitensurvey.party/api/auth/get_token/',
-      newEmail: 'https://vitensurvey.party/api/auth/change_email/',
-      newPassword: 'https://vitensurvey.party/api/auth/change_password/',
-      survey: 'https://vitensurvey.party/api/survey',
-      surveyAsJson: 'https://vitensurvey.party/api/survey/json',
-      surveyAsCSV: 'https://vitensurvey.party/api/survey/csv',
-      newUser: 'https://vitensurvey.party/api/auth/register',
-      checkChoosesurvey: 'https://vitensurvey.party/api/survey/escape',
-      surveyCopy:   'https://vitensurvey.party/api/survey/copy',
-      allNicknames: 'https://vitensurvey.party/api/survey/all_nicknames',
+
+      login: 'https://survey.vitensenteret.com:2000/api/auth/login',
+      allUsers: 'https://survey.vitensenteret.com:2000/api/auth/all_users',
+      delete: 'https://survey.vitensenteret.com:2000/api/auth/delete_account',
+      refer: 'https://survey.vitensenteret.com:2000/api/auth/get_referral_link/',
+      renewJWT: 'https://survey.vitensenteret.com:2000/api/auth/get_token/',
+      newEmail: 'https://survey.vitensenteret.com:2000/api/auth/change_email/',
+      newPassword: 'https://survey.vitensenteret.com:2000/api/auth/change_password/',
+      survey: 'https://survey.vitensenteret.com:2000/api/survey',
+      surveyAsJson: 'https://survey.vitensenteret.com:2000/api/survey/json',
+      surveyAsCSV: 'https://survey.vitensenteret.com:2000/api/survey/csv',
+      newUser: 'https://survey.vitensenteret.com:2000/api/auth/register',
+      checkChoosesurvey: 'https://survey.vitensenteret.com:2000/api/survey/escape',
+      surveyCopy:   'https://survey.vitensenteret.com:2000/api/survey/copy',
+      allNicknames: 'https://survey.vitensenteret.com:2000/api/survey/all_nicknames',
     }
 };
