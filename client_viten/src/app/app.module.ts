@@ -10,7 +10,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { HostListener } from '@angular/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent, DeleteSurveyDialog } from './admin/homepage-admin/homepage-admin.component';
@@ -103,7 +103,8 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     ClipboardModule,
     DragulaModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    FileUploadModule
   ],
   entryComponents: [
     SurveyAlternativesDialog,
