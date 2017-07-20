@@ -115,6 +115,10 @@ module.exports = {
     message: 'Could not find any nicknames',
     code: 2029
   },
+  NEED_CENTER: {
+    message: 'Need center to store image',
+    code: 6789
+  },
 
   // ROUTER CODES
   ROUTE_INVALID: {
@@ -124,6 +128,14 @@ module.exports = {
   ROUTE_SURVEYS_VALID_NO_SURVEYS: {
     message: "Request successful, but no surveys exist.",
     code: 1015
+  },
+  FAILED_UPLOAD: {
+    message: "Failed to upload. Maybe the key is wrong?.",
+    code: 2019
+  },
+  UPLOAD_SUCCESS: {
+    message: 'Uploaded image successfully.',
+    code: 1017
   },
 
   // SURVEY RESPONSES CODES

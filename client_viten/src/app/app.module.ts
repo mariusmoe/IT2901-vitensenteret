@@ -10,6 +10,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { HostListener } from '@angular/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FileSelectDirective, FileDropDirective, FileUploader } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent, DeleteSurveyDialog } from './admin/homepage-admin/homepage-admin.component';
@@ -51,6 +52,7 @@ import { LogoComponentComponent } from './logo-component/logo-component.componen
 import { SinglechoiceComponent } from './user/singlechoice/singlechoice.component';
 import { NicknameComponent } from './user/nickname/nickname.component';
 import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-prompt.component';
+import { NewCenterComponent } from './admin/new-center/new-center.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +86,11 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     SinglechoiceComponent,
     NicknameComponent,
     QuitsurveyPromptComponent,
-    DeleteSurveyDialog
+    DeleteSurveyDialog,
+    NewCenterComponent,
+    // FileDropDirective,
+    // FileUploader,
+    // FileSelectDirective
 
   ],
   imports: [

@@ -151,6 +151,13 @@ module.exports = (app) => {
   //Check if password is correct
   centerRoutes.post('/escape/:centerId', CenterController.checkOneEscape);
 
+  /*
+   |--------------------------------------------------------------------------
+   | Image routes is in a separate controller
+   |       See controllers/image.js
+   |--------------------------------------------------------------------------
+  */
+
 
   // retrive one survey as a json object
   // surveyRoutes.get('/:json/:surveyId', SurveyController.getSurveyAsJson);
