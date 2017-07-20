@@ -52,11 +52,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // whenever we navigate, we should query for the survey.
+    const param = this.route.snapshot.params['surveyId'];
+    if (param) { this.getSurvey(param); }
     this.routerSub = this.router.events.filter(event => event instanceof NavigationEnd).subscribe( (event: NavigationEnd) => {
-      const param = this.route.snapshot.params['surveyId'];
-      if (param) {
-        this.getSurvey(param);
-      }
+      const newParam = this.route.snapshot.params['surveyId'];
+      if (newParam) { this.getSurvey(newParam); }
     });
   }
 

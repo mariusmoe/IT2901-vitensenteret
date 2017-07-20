@@ -59,6 +59,7 @@
     <div class="optionContainer">
       <md-card>
         <md-card-title>{{ 'Questions' | translate }}</md-card-title>
+        <md-card-subtitle *ngIf="isPatch">MIDLERTIDIG ADVARSEL: ved endring av undersøkelse forsvinner ALLE responser som er registrert!</md-card-subtitle>
         <md-card-content>
           <div class="flexParent" [dragula]="'questionsBag'" [dragulaModel]="survey.questionlist">
             <!-- QUESTIONOBJECT -->
@@ -102,7 +103,7 @@
               </md-card-content>
               <md-card-actions class="actionsBox">
                 <!-- delete question button -->
-                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)" [disabled]="lockdown || survey.questionlist.length == 1"
+                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)" [disabled]="survey.questionlist.length == 1"
                 [mdTooltip]="'Deletes this particular question! Careful!' | translate" tooltip-position="above">
                   <md-icon>delete</md-icon>
                 </button>
