@@ -1,25 +1,11 @@
 .searchBox {
   padding-right: 8px;
-  display:flex;
-  height: 55px;
   margin-top: 10px;
-  md-input-container {
-    //display: block;
-  }
-  .searchIcon {
-    width: 1em;
-    height: 1em;
-    font-size: 1em;
-  }
 }
 .search {
-  flex: 10 10;
-  margin-left: 4px;
-  display:inline-block;
 }
 
 .addButton {
-  flex: 1 1;
   max-width: 33px;
   min-width: 33px; // down from 40px
   max-height: 33px;

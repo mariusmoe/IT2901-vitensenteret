@@ -41,15 +41,20 @@ exports.createSurvey = (req, res, next) => {
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
-    UserFolder.findOne({ user: req.user, isRoot: true }, (err2, rootFolder) => {
-      if (err2) { return next(err2); }
-      console.log(rootFolder);
-      rootFolder.surveys.push(survey);
-      rootFolder.save((err3, savedRoot) => {
-        if (err3) { return next(err3); }
-        return res.status(200).send( survey );
+    // only PRE-surveys and non-prepost surveys should go in the folders!
+    if(survey.isPost === false) {
+      UserFolder.findOne({ user: req.user, isRoot: true }, (err2, rootFolder) => {
+        if (err2) { return next(err2); }
+        rootFolder.surveys.push(survey);
+        rootFolder.save((err3, savedRoot) => {
+          if (err3) { return next(err3); }
+          return res.status(200).send( survey );
+        });
       });
-    });
+    } else {
+      // its a post-survey, return without creating a folder entry for it.
+      return res.status(200).send( survey );
+    }
   });
 }
 

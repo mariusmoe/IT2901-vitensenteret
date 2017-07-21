@@ -47,7 +47,6 @@ export class CenterService {
   exitSurvey(password: string, centerId: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `${localStorage.getItem('token')}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
     return this.http.post(environment.URL.exitSurvey + '/' + centerId, {password: password}, options)
@@ -67,6 +66,7 @@ export class CenterService {
   exitSurveyUpdatePassword(password: string, centerId: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${localStorage.getItem('token')}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
     return this.http.patch(environment.URL.exitSurvey + '/' + centerId, {password: password}, options)
     .map( response => {

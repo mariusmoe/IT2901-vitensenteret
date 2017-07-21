@@ -7,7 +7,8 @@
             md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">
     <span md-prefix><md-icon class="searchIcon">search</md-icon></span>
   </md-input-container>
-  <button md-mini-fab
+</div>
+<button md-mini-fab
   class="addButton"
   color="primary"
   routerLink="/admin/editsurvey"
@@ -15,8 +16,6 @@
   md-tooltip="{{ 'Create New Survey' | translate }}">
   <md-icon>add</md-icon>
 </button>
-</div>
-
 
 <md-progress-spinner *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
 

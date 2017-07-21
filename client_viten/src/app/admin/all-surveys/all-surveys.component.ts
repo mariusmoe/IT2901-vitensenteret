@@ -14,7 +14,6 @@ import 'rxjs/add/operator/debounceTime';
   selector: 'app-all-surveys',
   templateUrl: './all-surveys.component.html',
   styleUrls: [
-    '../../../../node_modules/ng2-tree/styles.css',
     './all-surveys.component.scss'
   ]
 })
@@ -29,10 +28,27 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     searchSubscription: Subscription;
 
 
+    tree: TreeModel;
+
     treeSettings: Ng2TreeSettings = {
-      rootIsVisible: false
+      rootIsVisible: false,
     };
-    public tree: TreeModel;
+
+    private treeNodeSettings = {
+      'rightMenu': true,
+      // 'leftMenu': true,
+      'cssClasses': {
+        'expanded': 'fa fa-caret-down fa-lg',
+        'collapsed': 'fa fa-caret-right fa-lg',
+        'leaf': 'fa fa-lg',
+        'empty': 'fa fa-caret-right disabled'
+      },
+      'templates': {
+        'node': '<i class="fa fa-folder-o fa-lg"></i>',
+        'leaf': '<i class="fa fa-file-o fa-lg"></i>',
+        'leftMenu': '<i class="fa fa-navicon fa-lg"></i>'
+      },
+    };
 
 
 
@@ -51,8 +67,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       });
       const folderSub = this.userFolderService.getAllFolders().subscribe(result => {
         this.tree = result;
-        console.log('component');
-        console.log(result);
+        this.tree.settings = this.treeNodeSettings;
         folderSub.unsubscribe();
       },
       error => {
@@ -70,7 +85,9 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
      * @param  {NodeEvent} e the event that took place
      */
     treeNodeSelected(e: NodeEvent) {
-      this.router.navigate(['/admin', e.node.value]);
+      if (e.node.isLeaf()) {
+        this.router.navigate(['/admin', e.node.value]);
+      }
     }
 
 
