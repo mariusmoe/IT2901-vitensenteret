@@ -109,13 +109,40 @@
 
 </div> -->
 <div>
+  <md-card>
   <p>
     Create or edit centers
   </p>
   <p>
+    Name
+  </p>
+  <md-input-container>
+    <input mdInput #centerName placeholder="Set name center" [value]="currentCenterName">
+  </md-input-container>
+  <button md-raised-button
+    #changeCenterNameButton
+    color="primary"
+    minlength="3"
+    md-visible="true"
+    (click)="changeCenterName(centerName.value)"
+    >
+    <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
+    ('You need to write the same password twice' | translate ) : '' "
+    mdTooltipPosition="below">
+      {{ 'Change password' | translate }}
+    </div>
+  </button>
+  <!-- - -->
+  <md-select *ngIf="user.role=='sysadmin'" placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+    name="center" [disabled]="user.role != 'sysadmin'">
+    <md-option *ngFor="let center of centers" [value]="center._id">
+      {{center.name}}
+    </md-option>
+  </md-select>
+  <p>
     space
   </p>
-  <input type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/>
+  <input name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/>
   <h3>Upload queue</h3>
   <p>Queue length: {{ uploader?.queue?.length }}</p>
 
@@ -161,30 +188,58 @@
       </tbody>
   </table>
 
-<!--
-  <div>
-      <div>
-          Queue progress:
-          <div class="progress" style="">
-              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-          </div>
-      </div>
-      <button type="button" class="btn btn-success btn-s"
-              (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-          <span class="glyphicon glyphicon-upload"></span> Upload all
-      </button>
-      <button type="button" class="btn btn-warning btn-s"
-              (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-          <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-      </button>
-      <button type="button" class="btn btn-danger btn-s"
-              (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-          <span class="glyphicon glyphicon-trash"></span> Remove all
-      </button>
-  </div> -->
+  <br>
 
+
+    <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
+    <md-card-content>
+      <md-input-container>
+        <input mdInput
+          autocomplete="new-password"
+          type="number"
+          pattern="[0-9]+"
+          inputmode="numeric"
+          placeholder="{{ 'Minimum 4 numbers' | translate }}"
+          #newEscapePassword>
+          <md-hint align="end">{{newEscapePassword.value.length}} / 4++</md-hint>
+      </md-input-container>
+      <br>
+      <p>{{ 'Retype password' | translate }}</p>
+      <md-input-container>
+        <input mdInput
+          [disabled]='newEscapePassword.value.length <= 3 || newEscapePassword.value === "" '
+          type="number"
+          pattern="[0-9]+"
+          inputmode="numeric"
+          placeholder="{{ 'Minimum 4 numbers' | translate }}"
+          #newEscapePassword2>
+          <md-hint align="end">
+            {{newEscapePassword2.value.length}} / 4++</md-hint>
+      </md-input-container>
+      <md-icon class="done" *ngIf="newEscapePassword.value === newEscapePassword2.value && !(newEscapePassword.value === '') ">done all</md-icon>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button
+        #passwordShangeButton
+        color="primary"
+        minlength="3"
+        md-visible="true"
+        [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
+          ('You need to write the same password twice' | translate ) : '' "
+        mdTooltipPosition="below"
+        [disabled]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === ''))"
+        (click)="changeExitSurveyPassword(newEscapePassword.value); newEscapePassword.value = ''; newEscapePassword2.value = ''"
+        >
+        <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
+        ('You need to write the same password twice' | translate ) : '' "
+        mdTooltipPosition="below">
+          {{ 'Change password' | translate }}
+        </div>
+      </button>
+    </md-card-actions>
 
   <p>
     test
   </p>
+  </md-card>
 </div>

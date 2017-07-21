@@ -12,7 +12,7 @@ consign()
   .then('libs/setup.js')
   .then('controllers')
   .then('router.js')
-  .then('controllers/image')
+  // .then('controllers/image')
   .then('libs/boot.js')
   // .then("seed.js")
   .into(app);

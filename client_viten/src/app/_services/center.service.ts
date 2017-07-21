@@ -78,4 +78,22 @@ export class CenterService {
     });
   }
 
+  centerUpdateCenterName(name: string): Observable<boolean> {
+    const token = this.getToken();
+    const headers = new Headers({'content-type': 'application/json'});
+    headers.append('Authorization', `${token}`);
+    const options = new RequestOptions({ headers: headers });
+    const data = { 'name': name };
+      return this.http.post(environment.URL.newPassword, JSON.stringify(data), options)
+      .map(
+        response => {
+          return true;
+        },
+        error => {
+          console.log(error.text());
+          return false;
+        }
+      );
+  }
+
 }

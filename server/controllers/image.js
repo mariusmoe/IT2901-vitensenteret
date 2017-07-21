@@ -69,7 +69,7 @@ imageRoutes.post('/center', requireAuth, function(req, res) {
   	},
   	filename: function(req, file, callback) {
       if (typeof req.user.center == 'undefined') {
-        centerId = file.originalname;
+        centerId = req.body.center + (path.extname(file.originalname), '');
       } else {
         centerId = req.user.center;
       }
@@ -78,15 +78,29 @@ imageRoutes.post('/center', requireAuth, function(req, res) {
   })
 	var upload = multer({
 		storage: storage
-	}).fields([{ name: 'userFile', maxCount: 1 }, { name: 'center', maxCount: 1 }])
+	}).fields([{ name: 'file', maxCount: 1 }, { name: 'center', maxCount: 1 }])
 	upload(req, res, function(err) {
     if (err) {
       return res.status(400).send( {message: status.FAILED_UPLOAD.message, status: status.FAILED_UPLOAD.code})
     }
-    var bitmap = fs.readFileSync('./uploads/' + req.files['userFile'][0].filename).toString('hex', 0, 4)
+
+    if (typeof req.user.center == 'undefined') {
+      var bitmap = fs.readFileSync('./uploads/' + req.body.center + path.extname(req.files['file'][0].filename)).toString('hex', 0, 4)
+      // console.log(file);
+    } else {
+      var bitmap = fs.readFileSync('./uploads/' + req.files['file'][0].filename).toString('hex', 0, 4)
+    }
+
+
+    var bitmap = fs.readFileSync('./uploads/' + req.files['file'][0].filename).toString('hex', 0, 4)
 		if (!checkSignatureNumbers(bitmap)) {
-			fs.unlinkSync('./uploads/' + req.files['userFile'][0].filename)
-			res.end('File is no valid')
+      if (typeof req.user.center == 'undefined') {
+        fs.unlinkSync('./uploads/' + req.body.center + path.extname(req.files['file'][0].filename))
+        res.end('File is no valid')
+      } else {
+        fs.unlinkSync('./uploads/' + req.files['file'][0].filename)
+  			res.end('File is no valid')      }
+
 		}
     return res.status(200).send( {message: status.UPLOAD_SUCCESS.message, status: status.UPLOAD_SUCCESS.code})
 	})
