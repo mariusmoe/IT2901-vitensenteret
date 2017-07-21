@@ -19,25 +19,42 @@
 
 <md-progress-spinner *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
 
+<div class="treeArea">
+  <ul>
+    <ng-template #recursiveList let-folder>
+      <li *ngFor="let folder of list">
+        {{item.name}}
+        <ul *ngIf="item.subnodes.length > 0">
+          <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: item.children }"></ng-container>
+        </ul>
+      </li>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: root }"></ng-container>
+  </ul>
 
-<tree
+
+
+
+  <!-- <tree
   [tree]="tree"
   [settings]="treeSettings"
   (nodeSelected)="treeNodeSelected($event)">
+</tree> -->
+<!--
+<tree
+[tree]="tree"
+[settings]="settings"
+(nodeRemoved)="handleRemoved($event)"
+(nodeRenamed)="handleRenamed($event)"
+(nodeSelected)="handleSelected($event)"
+(nodeMoved)="handleMoved($event)"
+(nodeCreated)="handleCreated($event)"
+(nodeExpanded)="handleExpanded($event)"
+(nodeCollapsed)="handleCollapsed($event)">
 </tree>
-  <!--
-  <tree
-  [tree]="tree"
-    [settings]="settings"
-    (nodeRemoved)="handleRemoved($event)"
-    (nodeRenamed)="handleRenamed($event)"
-    (nodeSelected)="handleSelected($event)"
-    (nodeMoved)="handleMoved($event)"
-    (nodeCreated)="handleCreated($event)"
-    (nodeExpanded)="handleExpanded($event)"
-    (nodeCollapsed)="handleCollapsed($event)">
-  </tree>
-  -->
+
+-->
+</div>
 
 <!-- loading circle -->
 <md-progress-spinner *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>

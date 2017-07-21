@@ -42,14 +42,18 @@ exports.getUserFolders = (req, res, next) => {
     return res.status(401).send({message: 'fixme'});
   }
 
-  UserFolder.find( {user: userId}, (err, folders) => {
+  UserFolder.find( {user: userId}).populate({
+     path: 'surveys',
+     model: 'Survey'
+  }).exec(function(err, folders) {
     if (!folders || folders.length === 0) {
       // FIXME wrong error message
       return res.status(500).send({message: 'fixme'});
     }
     if (err) { return next(err); }
+    console.log(folders);
     return res.status(200).send(folders);
-  }).lean();
+  });
 }
 
 // DELETE

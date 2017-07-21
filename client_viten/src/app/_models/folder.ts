@@ -5,5 +5,5 @@ export interface Folder {
     isRoot: boolean;
     title: string;
     folders?: [Folder];
-    surveys?: [string];
+    surveys?: [Survey];
 }

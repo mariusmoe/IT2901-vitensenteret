@@ -5,10 +5,10 @@ import { JwtHelper } from 'angular2-jwt';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
-import { TreeModel } from 'ng2-tree';
+import { TreeModel, RenamableNode } from 'ng2-tree';
 import { User } from '../_models/user';
 import { Folder } from '../_models/folder';
-import { Survey } from '../_models/Survey';
+import { Survey } from '../_models/survey';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
@@ -41,10 +41,17 @@ export class UserFolderService {
       value: currNode.title,
       children: [],
     };
-    currNode.surveys.forEach( (s: string) => {
+    currNode.surveys.forEach( (s) => {
       // push surveys
       newNode.children.push({
-        'value': s,
+        value: <RenamableNode>{
+          survey: s,
+          setName(name: string): void {
+          },
+          toString(): string {
+            return this.survey.name;
+          },
+        }
       });
     });
     currNode.folders.forEach( (f: Folder) => {
@@ -55,7 +62,7 @@ export class UserFolderService {
     return newNode;
   }
 
-  getAllFolders(): Observable<TreeModel> {
+  getAllFolders(): Observable<Folder[]> {
 
     const token = this.getToken();
     const headers = new Headers();
@@ -64,8 +71,7 @@ export class UserFolderService {
     return this.http.get(environment.URL.folders, options).map(
       response => {
         const folders = response.json();
-        const root = folders.filter(x => x.isRoot = true)[0];
-        return this.treeGeneratorRecursive(root);
+        return folders;
       },
       error => {
         console.log(error.text());
@@ -73,6 +79,24 @@ export class UserFolderService {
       }
     );
   }
+  // getAllFolders(): Observable<TreeModel> {
+  //
+  //   const token = this.getToken();
+  //   const headers = new Headers();
+  //   headers.append('Authorization', `${token}`);
+  //   const options = new RequestOptions({ headers: headers }); // Create a request option
+  //   return this.http.get(environment.URL.folders, options).map(
+  //     response => {
+  //       const folders = response.json();
+  //       const root = folders.filter(x => x.isRoot = true)[0];
+  //       return this.treeGeneratorRecursive(root);
+  //     },
+  //     error => {
+  //       console.log(error.text());
+  //       return null;
+  //     }
+  //   );
+  // }
 
 
 
