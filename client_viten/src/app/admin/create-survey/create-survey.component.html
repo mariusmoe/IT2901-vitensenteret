@@ -13,14 +13,14 @@
             <md-input-container>
               <!-- SURVEY NAME -->
               <input mdInput type="text" placeholder="{{ 'Title' | translate }}" ng-pattern="stringPattern"
-              [(ngModel)]="survey.name" required (change)="onSurveyChange()" [disabled]="lockdown">
+              [(ngModel)]="survey.name" required (change)="onSurveyChange()">
               <md-hint *ngIf="!fieldValidate(survey.name)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
             </md-input-container>
 
             <md-input-container>
               <!-- SURVEY COMMENT (not required) -->
               <input mdInput type="text" placeholder="{{ 'Admin-only Comment' | translate }}" ng-pattern="stringPattern"
-              [(ngModel)]="survey.comment" [disabled]="lockdown">
+              [(ngModel)]="survey.comment">
             </md-input-container>
           </div>
 
@@ -31,8 +31,8 @@
 
           <div>
             <!-- USE ENGLISH? -->
-            <md-checkbox [(ngModel)]='englishEnabled' (change)="onSurveyChange()"
-            [disabled]="lockdown">{{ 'Enable English for this survey?' | translate }}</md-checkbox>
+            <md-checkbox [(ngModel)]='englishEnabled' (change)="onSurveyChange()">
+              {{ 'Enable English for this survey?' | translate }}</md-checkbox>
           </div>
         </md-card-content>
       </md-card>
@@ -64,15 +64,15 @@
           <div class="flexParent" [dragula]="'questionsBag'" [dragulaModel]="survey.questionlist">
             <!-- QUESTIONOBJECT -->
             <md-card ngClass="questionObject" *ngFor="let questionObject of survey.questionlist; let i = index" [@slideInOut]="">
-              <md-card-title [ngClass]="{'dragHandle': !lockdown }">{{ 'Question' | translate }} {{i+1}}</md-card-title>
+              <md-card-title [ngClass]="{'dragHandle': true }">{{ 'Question' | translate }} {{i+1}}</md-card-title>
               <md-card-content>
                 <!--Checkbox making a question required-->
-                <md-checkbox class="required-checkbox" [(ngModel)]="questionObject.required" [disabled]="lockdown">{{ 'Required question' | translate }}</md-checkbox>
+                <md-checkbox class="required-checkbox" [(ngModel)]="questionObject.required">{{ 'Required question' | translate }}</md-checkbox>
 
                 <!-- QUESTION MODE -->
                 <div class="modeSelect">
                   <!-- no placeholder set; there will never be an opportunity for it to be empty -->
-                  <md-select [(ngModel)]="questionObject.mode" (change)='onSurveyChange()' [disabled]="lockdown">
+                  <md-select [(ngModel)]="questionObject.mode" (change)='onSurveyChange()'>
                     <md-option *ngFor="let m of allowedModes" [value]="m">
                       {{ m | translate }}
                     </md-option>
@@ -112,7 +112,7 @@
               </md-card-content>
               <md-card-actions class="actionsBox">
                 <!-- delete question button -->
-                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)" [disabled]="lockdown || survey.questionlist.length == 1"
+                <button md-icon-button class="delete btn btn-success" color="warn" (click)="removeQuestion(i)" [disabled]="survey.questionlist.length == 1"
                 [mdTooltip]="'Deletes this particular question! Careful!' | translate" tooltip-position="above">
                   <md-icon>delete</md-icon>
                 </button>
@@ -127,7 +127,7 @@
           </div>
         </md-card-content>
         <md-card-actions>
-          <button md-raised-button class="btn btn-success" color="primary" (click)="addQuestion()" [disabled]="lockdown">
+          <button md-raised-button class="btn btn-success" color="primary" (click)="addQuestion()">
             <md-icon>add_box</md-icon> {{ 'Add a question' | translate }}
           </button>
         </md-card-actions>
