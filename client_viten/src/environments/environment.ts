@@ -23,5 +23,6 @@ export const environment = {
     exitSurvey: 'http://localhost:2000/api/center/escape',
     allNicknames: 'http://localhost:2000/api/survey/all_nicknames',
     allCenters: 'http://localhost:2000/api/center/',
+    folders: 'http://localhost:2000/api/folders/',
   }
 };

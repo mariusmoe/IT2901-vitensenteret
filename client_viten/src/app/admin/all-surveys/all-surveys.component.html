@@ -7,7 +7,8 @@
             md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">
     <span md-prefix><md-icon class="searchIcon">search</md-icon></span>
   </md-input-container>
-  <button md-mini-fab
+</div>
+<button md-mini-fab
   class="addButton"
   color="primary"
   routerLink="/admin/editsurvey"
@@ -15,33 +16,29 @@
   md-tooltip="{{ 'Create New Survey' | translate }}">
   <md-icon>add</md-icon>
 </button>
-</div>
-
 
 <md-progress-spinner *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
 
-<md-list class="list" *ngIf="!searchLoading">
-  <md-list-item
-    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum : false )"
-    [ngClass]="{'survey': true, 'selected': survey._id == route.snapshot.params['surveyId'],  'active': survey.active}"
-    (click)="select(survey._id)"> <!-- the pipe has "true" at the end as we want to NOT show post-surveys -->
-    <!-- <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon> -->
-    <div class="chip" *ngIf="survey.postKey">
-      <md-chip-list *ngIf="survey.postKey.length > 1">
-        <md-chip color="accent" selected="true" disabled="true">PRE - POST</md-chip>
-      </md-chip-list>
-    </div>
-    
-    <h4 md-line>{{survey.name}}</h4>
-    <div md-line class="date">
-      {{formatDate(survey.date)}}
-    </div>
 
-    <p md-line *ngIf="survey.comment">{{survey.comment}}</p>
-    <!-- <p md-line>ID: {{survey._id}}</p> -->
-  <!--  <div class="borderbottom"></div>-->
-  </md-list-item>
-</md-list>
+<tree
+  [tree]="tree"
+  [settings]="treeSettings"
+  (nodeSelected)="treeNodeSelected($event)">
+</tree>
+  <!--
+  <tree
+  [tree]="tree"
+    [settings]="settings"
+    (nodeRemoved)="handleRemoved($event)"
+    (nodeRenamed)="handleRenamed($event)"
+    (nodeSelected)="handleSelected($event)"
+    (nodeMoved)="handleMoved($event)"
+    (nodeCreated)="handleCreated($event)"
+    (nodeExpanded)="handleExpanded($event)"
+    (nodeCollapsed)="handleCollapsed($event)">
+  </tree>
+  -->
+
 <!-- loading circle -->
 <md-progress-spinner *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
 <span class="listComment"  *ngIf="!loading">

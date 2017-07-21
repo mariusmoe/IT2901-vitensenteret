@@ -5,8 +5,10 @@ const jwt = require('jsonwebtoken'),
       validator = require('validator'),
       config = require('config'),
       User = require('../models/user'),
-      status = require('../status'),
-      Referral = require('../models/referral');
+      Center = require('../models/center'),
+      UserFolder = require('../models/userFolder'),
+      Referral = require('../models/referral'),
+      status = require('../status');
 
 /**
  * getSecureRandomBytes in hex format
@@ -79,8 +81,7 @@ exports.login = (req, res, next) => {
 exports.register = (req, res, next) => {
   const password        = req.body.password,
         confirm_string  = req.body.referral_string;
-  let email           = req.body.email;
-
+  let   email           = req.body.email; // must be non-const
 
   if (validator.isEmpty(email)){
     return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
@@ -94,40 +95,50 @@ exports.register = (req, res, next) => {
 
   email = email.toLowerCase(); // use lower case to avoid case sensitivity issues later
 
-  Referral.findOne({referral: confirm_string}, (err, existingReferral) => {
-    if (err) { return next(err); }
+  User.findOne({email: email}, (err1, emailAlreadyExisting) => {
+    if (err1) { return next(err1); }
+    Referral.findOne({referral: confirm_string}, (err2, existingReferral) => {
+      if (err2) { return next(err2); }
 
-    if (!existingReferral) {
-      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
-    }
-    if (!existingReferral.active) {
-      return res.status(422).send( {error: status.NOT_AN_ACTIVE_REFERRAL.message} );
-    } else {
-      existingReferral.active = false;
-    }
-
-    existingReferral.save((err) => {
-      if (err) { return next(err); }
-      User.findOne({ email: email }, (err, existingUser) => {
-        if (err) { return next(err); }
-
-        if (existingUser) {
-          return res.status(422).send( {error: status.EMAIL_NOT_AVILIABLE.message} );
-        }
+      // check if the email is already in use first
+      if (emailAlreadyExisting) {
+        return res.status(401).send({ message: status.EMAIL_NOT_AVILIABLE.message, status: status.EMAIL_NOT_AVILIABLE.code });
+      }
+      // if we're good on the email, lets check the actual referral link
+      if (!existingReferral) {
+        return res.status(422).send( { message: status.REFERRAL_LINK_WRONG.message, status: status.REFERRAL_LINK_WRONG.code } );
+      }
+      if (!existingReferral.active) {
+        return res.status(401).send( { message: status.REFERRAL_LINK_USED.message, status: status.REFERRAL_LINK_USED.code } );
+      }
+      if (existingReferral.activeExpiration.getTime() <= new Date().getTime()) {
+        return res.status(422).send( { message: status.REFERRAL_LINK_EXPIRED.message, status: status.REFERRAL_LINK_EXPIRED.code } );
+      } else {
+        // set the active to false! important!
+        existingReferral.active = false;
+      }
+      // save
+      existingReferral.save((err3) => {
+        if (err3) { return next(err3); }
         let user = new User({
           email:      email,
           password:   password,
           role:       existingReferral.role,
           center:     existingReferral.center
         });
-        user.save((err, user) => {
-          if (err) {return next(err); }
-          res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+        user.save((err4, newUser) => {
+          if (err4) {return next(err4); }
+          let folder = new UserFolder({ user: newUser, isRoot: true, title: 'Root'});
+          folder.save((err5, f) => {
+            if (err5) { next(err5); }
+            res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+          });
         });
       });
-    })
+    });
   });
 }
+
 
 /**
  * get all users
@@ -146,7 +157,6 @@ exports.getAllUsers = (req, res, next) => {
 
 /**
  * development
- * TODO: DELETE ME
  */
  /**
   * Register a new user
@@ -174,15 +184,39 @@ exports.getAllUsers = (req, res, next) => {
        password: password,
        role: 'sysadmin'
      });
-     user.save((err, user) => {
-       if (err) {return next(err); }
-       res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+
+     user.save((err4, user) => {
+       if (err4) {return next(err4); }
+       let folder = new UserFolder({ user: user, isRoot: true, title: 'Root'});
+       folder.save((err5, f) => {
+         if (err5) { next(err5); }
+         res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+       });
      });
    });
-
-
  }
-
+ exports.register_testdata = (req, res, next) => {
+   let center = new Center({
+     "name": "Test testcenter",
+     "password": "0000",
+   });
+   center.save((err, center) => {
+     let user = new User({
+       email: 'testuser@test.test',
+       password: 'test',
+       role: 'vitenleader',
+       center: center
+     });
+     user.save((err4, user) => {
+       if (err4) {return next(err4); }
+       let folder = new UserFolder({ user: user, isRoot: true, title: 'Root'});
+       folder.save((err5, f) => {
+         if (err5) { next(err5); }
+         res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+       });
+     });
+   });
+ }
 
 /**
  * Get a new referral link

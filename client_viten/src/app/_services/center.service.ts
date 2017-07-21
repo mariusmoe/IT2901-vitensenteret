@@ -44,15 +44,14 @@ export class CenterService {
    * @param  {string}              password The password that is to match the exit survey password
    * @return {Observable<boolean>}          The server's response, as an Observable
    */
-  exitSurvey(password: string): Observable<boolean> {
+  exitSurvey(password: string, centerId: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-
-    return this.http.post(environment.URL.exitSurvey, {password: password}, options)
+    return this.http.post(environment.URL.exitSurvey + '/' + centerId, {password: password}, options)
     .map( response => {
-      return true;
+      return response.json().success || false;
     },
     error => {
       return false;
@@ -64,12 +63,12 @@ export class CenterService {
    * @param  {string}              password The new exit-survey password
    * @return {Observable<boolean>}          The server's response, as an Observable
    */
-  exitSurveyUpdatePassword(password: string): Observable<boolean> {
+  exitSurveyUpdatePassword(password: string, centerId: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${localStorage.getItem('token')}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
-
-    return this.http.patch(environment.URL.exitSurvey, {password: password}, options)
+    return this.http.patch(environment.URL.exitSurvey + '/' + centerId, {password: password}, options)
     .map( response => {
       return true;
     },

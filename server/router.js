@@ -2,6 +2,7 @@ const AuthenticationController = require('./controllers/authentication'),
       SurveyController = require('./controllers/surveys'),
       ErrorController = require('./controllers/error'),
       CenterController = require('./controllers/centers'),
+      FolderController = require('./controllers/folders'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport'),
@@ -24,11 +25,13 @@ module.exports = (app) => {
         authRoutes = express.Router(),
         surveyRoutes = express.Router(),
         angularRoutes = express.Router(),
+        folderRoutes = express.Router(),
         centerRoutes = express.Router();
   // Set auth and survey routes as subgroup to apiRoutes
   apiRoutes.use('/auth', authRoutes);
   apiRoutes.use('/survey', surveyRoutes);
   apiRoutes.use('/center', centerRoutes);
+  apiRoutes.use('/folders', folderRoutes);
   // Set a common fallback for /api/*; 404 for invalid route
   apiRoutes.all('*', ErrorController.error);
 
@@ -52,6 +55,7 @@ module.exports = (app) => {
 
  if (config.util.getEnv('NODE_ENV') !== 'production') {
      authRoutes.post('/register_developer', AuthenticationController.register_developer);
+     authRoutes.post('/register_testdata', AuthenticationController.register_testdata);
  }
 
   // Request a new token
@@ -97,10 +101,13 @@ module.exports = (app) => {
   //
   // change email for this account
   authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
-  //
-  //
 
 
+  /*
+   |--------------------------------------------------------------------------
+   | Survey routes
+   |--------------------------------------------------------------------------
+  */
 
   surveyRoutes.get('/all_nicknames/:surveyId', SurveyController.getNicknamesForOneSurvey);
 
@@ -111,14 +118,14 @@ module.exports = (app) => {
 
   surveyRoutes.post('/copy/:surveyId', requireAuth, SurveyController.copySurvey);
 
-  surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
+  surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
+  surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
+
 
   surveyRoutes.get('/all/:centerId', SurveyController.getAllSurveys);
 
-
-  surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
 
   // surveyRoutes.post('/linkPrePost', requireAuth, SurveyController.linkPrePost);
 
@@ -128,7 +135,7 @@ module.exports = (app) => {
                       SurveyController.deleteOneSurvey);
 
 
-  surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
+  surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
 
   /*
@@ -146,7 +153,9 @@ module.exports = (app) => {
   // centerRoutes.get('/:centerId',  CenterController.getCenter);
 
   // Add or update password
-  centerRoutes.patch('/escape/:centerId', requireAuth, CenterController.patchOneEscape);
+  centerRoutes.patch('/escape/:centerId', requireAuth,
+    AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
+    CenterController.patchOneEscape);
 
   //Check if password is correct
   centerRoutes.post('/escape/:centerId', CenterController.checkOneEscape);
@@ -157,6 +166,21 @@ module.exports = (app) => {
    |       See controllers/image.js
    |--------------------------------------------------------------------------
   */
+
+
+  /*
+   |--------------------------------------------------------------------------
+   | Folder routes
+   |--------------------------------------------------------------------------
+  */
+
+  folderRoutes.get('/', requireAuth, FolderController.getUserFolders);
+
+  folderRoutes.post('/', requireAuth, FolderController.createUserFolder);
+
+  folderRoutes.delete('/:folderId', requireAuth, FolderController.deleteUserFolder);
+
+
 
 
   // retrive one survey as a json object

@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/timeout';
 
 @Injectable()
 export class AuthenticationService {
@@ -218,7 +219,7 @@ export class AuthenticationService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${this.token}`);
     const options = new RequestOptions({ headers: headers });
-    return this.http.get(environment.URL.renewJWT, options)
+    return this.http.get(environment.URL.renewJWT, options).timeout(2000)
       .map(
         response => {
           if (response.status !== 200) {

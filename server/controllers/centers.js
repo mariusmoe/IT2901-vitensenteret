@@ -62,34 +62,36 @@ exports.getAllCenters = (req, res, next) => {
 exports.patchOneEscape = (req, res, next) => {
   const password = req.body.password;
   const centerId = req.params.centerId;
-  if (!password) {
-    return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
+
+  if (!password || typeof password !== 'string') {
+    return res.status(400).send({message: status.ESCAPE_MISSING_PASSWORD.message, status: status.ESCAPE_MISSING_PASSWORD.code} )
   }
-  // FIXME wrong status
   if (!centerId){
-    return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
+    return res.status(400).send({message: status.ESCAPE_MISSING_CENTER.message, status: status.ESCAPE_MISSING_CENTER.code} )
   }
-  // FIXME
-  Center.findOne({}, (err, escape) => {
-    if (err) {return next(err); }
-    if (!escape) {
-      const newEscape = new Center({
-        password: password
-      });
-        newEscape.save((err, escape) => {
-          if (err) {return next(err); }
-          return  res.status(200).send({message: 'SUCCESS - new password saved', status: 45678} )
-        });
-    } else {
-      escape.password = password;
-      escape.save((err, escape) => {
-        if (err) {return next(err); }
-        return res.status(200).send({message: 'SUCCESS - password saved', status: 45678} )
-      });
+  if (req.user.center != centerId) { // intentionally only one = in the comparison
+    if (req.user.role !== 'sysadmin') {
+      return res.status(401).send({message: status.INSUFFICIENT_PRIVILEGES.message, status: status.INSUFFICIENT_PRIVILEGES.code} )
     }
-  })
+  }
+
+  Center.findById(centerId, (err, center) => {
+    if (!center) {
+      return res.status(500).send({message: status.ESCAPE_PATCH_ERROR.message, status: status.ESCAPE_PATCH_ERROR.code});
+    }
+    if (err) { return next(err); }
+
+    center.password = password;
+    center.save((err2, centerNew) => {
+      if (!centerNew) {
+        return res.status(500).send({message: status.ESCAPE_PATCH_ERROR.message, status: status.ESCAPE_PATCH_ERROR.code});
+      }
+      if (err2) { return next(err2); }
+      return res.status(200).send({message: status.ESCAPE_PATCH_SUCCESSFUL.message, status: status.ESCAPE_PATCH_SUCCESSFUL.code })
+    });
 
 
+  });
 }
 
 // POST
@@ -100,20 +102,19 @@ exports.checkOneEscape = (req, res, next) => {
   const centerId = req.params.centerId;
   const password = req.body.password;
   if (!password || typeof password !== 'string') {
-    return res.status(401).send({message: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code} )
+    return res.status(400).send({message: status.ESCAPE_MISSING_PASSWORD.message, status: status.ESCAPE_MISSING_PASSWORD.code} )
   }
-  Center.findOne({}, (err, escape) => {
+  Center.findById( centerId, (err, escape) => {
     if (err) { return next(err); }
     if (!escape) {
-      return res.status(401).send({message: false, error: 'ERROR'});
+      return res.status(500).send({message: status.ESCAPE_PATCH_ERROR.message, status: status.ESCAPE_PATCH_ERROR.code});
     }
-    // FIXME name space
     escape.comparePassword(password, function(err, isMatch) {
       if (err) { return next(err); }
       if (isMatch) {
-        return res.status(200).send({message: true});
+        return res.status(200).send({message: status.ESCAPE_COMPARE_TRUE.message, status: status.ESCAPE_COMPARE_TRUE.code, success: true });
       } else {
-        return res.status(401).send({message: false});
+        return res.status(200).send({message: status.ESCAPE_COMPARE_FALSE.message, status: status.ESCAPE_COMPARE_FALSE.code, success: false });
       }
     });
   });

@@ -1,17 +1,21 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { SurveyList } from '../../_models/index';
 import { SurveyService } from '../../_services/survey.service';
+import { UserFolderService } from '../../_services/userFolder.service';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import {FormControl} from '@angular/forms';
+import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from 'ng2-tree';
 import 'rxjs/add/operator/debounceTime';
 
 
 @Component({
   selector: 'app-all-surveys',
   templateUrl: './all-surveys.component.html',
-  styleUrls: ['./all-surveys.component.scss']
+  styleUrls: [
+    './all-surveys.component.scss'
+  ]
 })
 export class AllSurveysComponent implements OnInit, OnDestroy {
     loading = false;
@@ -23,10 +27,36 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
 
     searchSubscription: Subscription;
 
+
+    tree: TreeModel;
+
+    treeSettings: Ng2TreeSettings = {
+      rootIsVisible: false,
+    };
+
+    private treeNodeSettings = {
+      'rightMenu': true,
+      // 'leftMenu': true,
+      'cssClasses': {
+        'expanded': 'fa fa-caret-down fa-lg',
+        'collapsed': 'fa fa-caret-right fa-lg',
+        'leaf': 'fa fa-lg',
+        'empty': 'fa fa-caret-right disabled'
+      },
+      'templates': {
+        'node': '<i class="fa fa-folder-o fa-lg"></i>',
+        'leaf': '<i class="fa fa-file-o fa-lg"></i>',
+        'leftMenu': '<i class="fa fa-navicon fa-lg"></i>'
+      },
+    };
+
+
+
     constructor(
       private router: Router,
       public route: ActivatedRoute,
-      public surveyService: SurveyService) {
+      public surveyService: SurveyService,
+      public userFolderService: UserFolderService) {
         // request fresh list of surveys
         this.getSurveys();
       }
@@ -35,19 +65,31 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       this.searchSubscription = this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
         this.searchInput = searchQuery;
       });
+      const folderSub = this.userFolderService.getAllFolders().subscribe(result => {
+        this.tree = result;
+        this.tree.settings = this.treeNodeSettings;
+        folderSub.unsubscribe();
+      },
+      error => {
+        folderSub.unsubscribe();
+        console.error(error);
+      });
     }
     ngOnDestroy() {
       this.searchSubscription.unsubscribe();
     }
 
+
     /**
-     * Select one survey form the list
-     * @param  {string} surveyId the survey ID
-     * Appends the surveyId to the router navigation.
+     * treeNodeSelected is executed when a node is selected in the tree
+     * @param  {NodeEvent} e the event that took place
      */
-    select(surveyId: string) {
-      this.router.navigate(['/admin', surveyId]);
+    treeNodeSelected(e: NodeEvent) {
+      if (e.node.isLeaf()) {
+        this.router.navigate(['/admin', e.node.value]);
+      }
     }
+
 
     /**
      * get all surveys as a list

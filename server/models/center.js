@@ -24,14 +24,14 @@ const centerSchema = new Schema({
 
 // Before saving do the following
 centerSchema.pre('save', function(next) {
-  const user = this,
+  const center = this,
         SALT_FACTOR = 10;
-  if (!user.isModified('password')) return next();
+  if (!center.isModified('password')) return next();
   bcrypt.genSalt(SALT_FACTOR, function(err, salt) {
     if (err) return next(err);
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
+    bcrypt.hash(center.password, salt, null, function(err, hash) {
       if (err) return next(err);
-      user.password = hash;
+      center.password = hash;
       next();
     });
   });

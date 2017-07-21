@@ -259,7 +259,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           delete qo.lang.en.options;
         }
       }
-      if (qo.imageLink.length === 0) {
+      if (qo.imageLink && qo.imageLink.length === 0) {
         delete qo.imageLink;
       }
     }

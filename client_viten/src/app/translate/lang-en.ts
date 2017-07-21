@@ -135,6 +135,7 @@ export const LANG_EN_TRANS = {
   'Log in': 'Log in',
   'Email and password are required': 'Email and password are required',
   'Email or password is incorrect': 'Email or password is incorrect',
+  'There was an issue connecting to the server': 'There was an issue connecting to the server',
 
   // New user component
   'You need to write the same pasword twice': 'You need to write the same pasword twice',

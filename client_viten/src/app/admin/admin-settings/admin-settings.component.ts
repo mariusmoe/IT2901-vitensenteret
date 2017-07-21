@@ -85,7 +85,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    * @param  {string} password new password
    */
   changeExitSurveyPassword(password: string) {
-    this.centerService.exitSurveyUpdatePassword(password)
+    this.centerService.exitSurveyUpdatePassword(password, localStorage.getItem('center'))
       .subscribe(result => {
         this.openSnackBar(this.languageService.instant('Password changed'), 'SUCCESS');
       },

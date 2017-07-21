@@ -18,10 +18,13 @@ import { HomepageUserComponent } from './user/homepage-user/homepage-user.compon
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { AuthenticationService } from './_services/authentication.service';
+import { UserFolderService } from './_services/userFolder.service';
 import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
 import { CenterService } from './_services/center.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
+
+import { TreeModule } from 'ng2-tree';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
@@ -100,6 +103,7 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     HttpModule,
     AppRoutingModule,
     ChartsModule,
+    TreeModule,
     ClipboardModule,
     DragulaModule,
     BrowserAnimationsModule,
@@ -120,6 +124,7 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     AuthGuard,
     AuthenticationService,
     SurveyService,
+    UserFolderService,
     CenterService,
     TRANSLATION_PROVIDERS,
     TranslateService,

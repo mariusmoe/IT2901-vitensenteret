@@ -1,7 +1,8 @@
 const mongoose = require('mongoose'),
       User = require('./models/user'),
-      Survey = require('./models/survey');
-      Response = require('./models/response');
+      Survey = require('./models/survey'),
+      Response = require('./models/response'),
+      Folder = require('./models/userFolder');
 
 if (process.env.NODE_ENV === 'test') { return; }
 
@@ -78,7 +79,7 @@ function generateQuestion() {
 
 module.exports = app => {
 
-  function executeSeeds() {
+  function executeSeeds(userId, centerId) {
     let numIterations = 200;
     let surveysPop = [];
 
@@ -120,6 +121,8 @@ module.exports = app => {
       let s = {
         name: funnify(),
         comment: funnify(),
+        center: centerId,
+        madeBy: userId,
         questionlist: questions,
         date: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
         activationDate: new Date().setDate(today.getDate()-getRandomInt(0,2*365)),
@@ -153,15 +156,27 @@ module.exports = app => {
           populateResponses(responsesPop, s);
         }
         Response.insertMany(responsesPop).then(function() {
-          const time = (new Date().getTime() - today.getTime());
-          console.log('seed complete: ' + time + 'ms');
+
+        }).then(function() {
+          Folder.findOne({user: userId, isRoot: true}).then(function(folder) {
+            folder.surveys = [];
+            preSurveys.forEach(s => { folder.surveys.push(s._id); })
+
+            folder.save().then(function() {
+              const time = (new Date().getTime() - today.getTime());
+              console.log('seed complete: ' + time + 'ms');
+            });
+          });
         });
       });
     });
   };
 
 
-  Response.remove({}, success => {}).lean().then(Survey.remove({}, success => {}).lean()).then(() => { executeSeeds() });
+  Response.remove({}, success => {}).lean().then(Survey.remove({}, success => {}).lean().then(
+    User.find({role: {'$ne': 'sysadmin'}}, (err, users) => {
+      users.forEach(u => {executeSeeds(u._id, u.center); });
+    }).lean()));
 
 
 }

@@ -136,6 +136,7 @@ export const LANG_NO_TRANS = {
   'Log in': 'Logg inn',
   'Email and password are required': 'Både epost og passord er påkrevd',
   'Email or password is incorrect': 'Epost eller passord er galt',
+  'There was an issue connecting to the server': 'Kunne ikke koble opp til servern',
 
   // New user component
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
