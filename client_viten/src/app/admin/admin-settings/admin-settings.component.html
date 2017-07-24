@@ -1,5 +1,5 @@
 <div>
-  <md-tab-group dynamicHeight="true">
+  <md-tab-group dynamicHeight="true" [(selectedIndex)]="tabIndex" (selectChange)="onTabChange($event)">
   <md-tab label="{{ 'User settings' | translate }}">
     <div class="tabContent">
       <md-card>

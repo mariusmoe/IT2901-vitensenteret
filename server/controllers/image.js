@@ -10,6 +10,7 @@ const AuthenticationController = require('./authentication'),
       passportService = require('../libs/passport'),
       passport = require('passport'),
       config = require('config'),
+      Center = require('../models/center'),
       path = require('path'),
       multer    = require('multer'),
       fs = require('fs');
@@ -63,13 +64,14 @@ function checkSignatureNumbers(signature) {
 
 imageRoutes.post('/center', requireAuth, function(req, res) {
   let centerId;
+
   var storage = multer.diskStorage({
   	destination: function(req, file, callback) {
   		callback(null, './uploads')
   	},
   	filename: function(req, file, callback) {
       if (typeof req.user.center == 'undefined') {
-        centerId = req.body.center + (path.extname(file.originalname), '');
+        centerId = req.body.center;
       } else {
         centerId = req.user.center;
       }
@@ -92,7 +94,7 @@ imageRoutes.post('/center', requireAuth, function(req, res) {
     }
 
 
-    var bitmap = fs.readFileSync('./uploads/' + req.files['file'][0].filename).toString('hex', 0, 4)
+    // var bitmap = fs.readFileSync('./uploads/' + req.files['file'][0].filename).toString('hex', 0, 4)
 		if (!checkSignatureNumbers(bitmap)) {
       if (typeof req.user.center == 'undefined') {
         fs.unlinkSync('./uploads/' + req.body.center + path.extname(req.files['file'][0].filename))
@@ -100,9 +102,20 @@ imageRoutes.post('/center', requireAuth, function(req, res) {
       } else {
         fs.unlinkSync('./uploads/' + req.files['file'][0].filename)
   			res.end('File is no valid')      }
-
 		}
-    return res.status(200).send( {message: status.UPLOAD_SUCCESS.message, status: status.UPLOAD_SUCCESS.code})
+
+    let fileName;
+    if (typeof req.user.center == 'undefined') {
+      centerId = req.body.center;
+      fileName = req.body.center + path.extname(req.files['file'][0].filename).toString('hex', 0, 4);
+    } else {
+      centerId = req.user.center;
+      fileName = req.files['file'][0].filename.toString('hex', 0, 4);
+    }
+    Center.findByIdAndUpdate(centerId, {pathToLogo: fileName}, (err, foundCenter) => {
+      if (err) { return next(err); }
+      return res.status(200).send( {message: status.UPLOAD_SUCCESS.message, status: status.UPLOAD_SUCCESS.code})
+    })
 	})
 })
 
