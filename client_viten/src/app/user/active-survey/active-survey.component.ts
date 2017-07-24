@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, HostListener } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { SurveyService } from '../../_services/survey.service';
 import { Response } from '../../_models/response';
@@ -9,6 +9,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'active-survey',
@@ -76,7 +77,7 @@ import { Title } from '@angular/platform-browser';
   ]
 })
 
-export class ActiveSurveyComponent implements OnInit {
+export class ActiveSurveyComponent implements OnInit, OnDestroy {
   @Input() alternative: number; // The answer- \input recieved from child components.
   properSurvey = false; // If the survey is valid, posting it to the database is possible.
   started = false; // If a survey is started, this is true.

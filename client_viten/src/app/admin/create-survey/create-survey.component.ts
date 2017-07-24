@@ -53,6 +53,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
 
 
+  public  dialogRef: MdDialogRef<WarnDeletionDialog>;
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
@@ -75,6 +76,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
     // Safe checking of url if last part is prepost
     if (typeof this.route.snapshot.url[2] !== 'undefined') {
+      console.log('Got here!')
+      console.log(this.route.snapshot.url[2])
       this.isPost = true;
     }
 
@@ -123,6 +126,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           this.survey.isPost = true;
 
           this.preSurvey = result.survey;
+          console.log('------------------------------------------------')
+          console.log(this.preSurvey)
         } else {
           this.survey = result.survey;
           this.isPatch = true;
@@ -295,7 +300,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // fashion as to avoid issues should the route name be altered.
       if (this.preSurvey && this.preSurvey._id) {
         this.router.navigate([this.route.parent.snapshot.url.join('/'), this.preSurvey._id]);
-      } else if (this.survey._id && !this.isPost) {
+      } else if (this.survey._id && (!this.isPost || !this.survey.isPost)) {
         this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
       } else {
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
@@ -381,6 +386,33 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       }
       sub.unsubscribe();
     });
+  }
+
+
+
+  /**
+   * Opens a promt if the user realy want to save the changes
+   */
+  openDialog() {
+    this.dialogRef = this.dialog.open(WarnDeletionDialog, {
+      disableClose: false
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result === 'yes') {
+        this.submitSurvey();
+      }
+      this.dialogRef = null;
+    });
+  }
+
+  saveChanges() {
+    if (this.isPatch) {
+      // Give a modal window that informs the user that all answers will be lost
+      this.openDialog();
+    } else {
+      this.submitSurvey();
+    }
   }
 }
 
@@ -618,4 +650,32 @@ export class SurveyPublishDialog {
     this.dialogRef.close();
   }
 
+}
+
+
+
+@Component({
+  selector: 'warn-responses-deletion',
+  styleUrls: ['./create-survey.component.scss'],
+  template: `
+  <h1 md-dialog-title class="alignCenter">{{ 'Warning!' | translate }}</h1>
+  <div md-dialog-content align="center">
+    <p>{{ 'All responses to this survey will be lost if you proceed.' | translate }}</p>
+    <br>
+    <p>{{ 'Do you wish to proceed?' | translate }}</p>
+  </div>
+  <div md-dialog-actions align="center">
+    <button md-raised-button color="warn" (click)="okay()">{{ 'yes' | translate }}</button>
+    <button md-raised-button color="primary" (click)="abort()">{{ 'no' | translate }}</button>
+  </div>
+  `
+})
+export class WarnDeletionDialog {
+  constructor(public dialogRef: MdDialogRef<WarnDeletionDialog>, @Inject(MD_DIALOG_DATA) public data: any) {}
+  okay() {
+    this.dialogRef.close('yes');
+  }
+  abort() {
+    this.dialogRef.close('no');
+  }
 }

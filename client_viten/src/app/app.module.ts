@@ -27,7 +27,8 @@ import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 import { TreeModule } from 'ng2-tree';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
+import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog,
+        WarnDeletionDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 import { AdminSettingsComponent, DeleteDialog, ReferDialog, CredentialDialog } from './admin/admin-settings/admin-settings.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
@@ -91,6 +92,7 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     QuitsurveyPromptComponent,
     DeleteSurveyDialog,
     NewCenterComponent,
+    WarnDeletionDialog,
     // FileDropDirective,
     // FileUploader,
     // FileSelectDirective
@@ -118,7 +120,8 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     SurveyPublishDialog,
     CredentialDialog,
     QuitsurveyPromptComponent,
-    DeleteSurveyDialog
+    DeleteSurveyDialog,
+    WarnDeletionDialog,
   ],
   providers: [
     AuthGuard,
