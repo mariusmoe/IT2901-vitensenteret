@@ -5,7 +5,7 @@ import { JwtHelper } from 'angular2-jwt';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
-import { TreeModel } from 'ng2-tree';
+import { TreeModel, RenamableNode } from 'ng2-tree';
 import { User } from '../_models/user';
 import { Folder } from '../_models/folder';
 import { Survey } from '../_models/survey';
@@ -36,15 +36,33 @@ export class UserFolderService {
     private router: Router ) {
   }
 
+
+  /**
+   * getToken()
+   *
+   * @return {string} user token if it exists in the local storage. undefined otherwise
+   */
+  private getToken(): string {
+    return localStorage.getItem('token');
+  }
+
+
   private treeGeneratorRecursive(currNode: Folder) {
     const newNode: TreeModel = {
       value: currNode.title,
       children: [],
     };
-    currNode.surveys.forEach( (s: string) => {
+    currNode.surveys.forEach( (s) => {
       // push surveys
       newNode.children.push({
-        'value': s,
+        value: <RenamableNode>{
+          survey: s,
+          setName(name: string): void {
+          },
+          toString(): string {
+            return this.survey.name;
+          },
+        }
       });
     });
     currNode.folders.forEach( (f: Folder) => {
@@ -55,7 +73,7 @@ export class UserFolderService {
     return newNode;
   }
 
-  getAllFolders(): Observable<TreeModel> {
+  getAllFolders(): Observable<Folder[]> {
 
     const token = this.getToken();
     const headers = new Headers();
@@ -63,9 +81,7 @@ export class UserFolderService {
     const options = new RequestOptions({ headers: headers }); // Create a request option
     return this.http.get(environment.URL.folders, options).map(
       response => {
-        const folders = response.json();
-        const root = folders.filter(x => x.isRoot = true)[0];
-        return this.treeGeneratorRecursive(root);
+        return response.json();
       },
       error => {
         console.log(error.text());
@@ -75,14 +91,23 @@ export class UserFolderService {
   }
 
 
+  createFolder(newFolder: Folder, parentFolder: Folder): Observable<Folder[]> {
+    const token = this.getToken();
+    const headers = new Headers();
+    headers.append('Authorization', `${token}`);
+    const options = new RequestOptions({ headers: headers }); // Create a request option
 
-  /**
-   * getToken()
-   *
-   * @return {string} user token if it exists in the local storage. undefined otherwise
-   */
-  private getToken(): string {
-    return localStorage.getItem('token');
+    const body = { folder: newFolder, parentFolderId: parentFolder._id };
+    return this.http.post(environment.URL.folders, body, options).map(
+      response => {
+        return response.json();
+      },
+      error => {
+        console.log(error.text());
+        return null;
+      }
+    );
   }
+
 
 }

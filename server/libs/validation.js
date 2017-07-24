@@ -4,6 +4,7 @@ const Validator = require('jsonschema').Validator;
 let surveyValidator = new Validator();
 let responseValidator = new Validator();
 let centerValidator = new Validator();
+let folderValidator = new Validator();
 
 // SURVEY VALIDATION
 
@@ -136,8 +137,31 @@ let centerSchema = {
 }
 
 
+// FOLDER VALIDATION
 
-
+let folderSchema = {
+  "type": "object",
+  "properties": {
+    "_id": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ }, // mongodb sends responses back to client with this property. Not required.
+    "user": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ },
+    "title": { "type": "string" },
+    "isRoot": { "type": "boolean" },
+    "folders": {
+      "type": "array",
+      "items": {
+        "type": "string", "pattern": /^[0-9a-fA-F]{24}$/
+      },
+    },
+    "surveys": {
+      "type": "array",
+      "items": {
+        "type": "string", "pattern": /^[0-9a-fA-F]{24}$/
+      },
+    },
+  },
+  "required": ["title", "user"],
+  "additionalProperties": false,
+}
 
 
 
@@ -166,6 +190,17 @@ exports.responseValidation = function(receivedResponse, debug) {
 // export our centerValidation function.
 exports.centerValidation = function(receivedCenter, debug) {
   let validation = centerValidator.validate(receivedCenter, centerSchema);
+  // undo comment below to get full debug stack of the validation
+  if (debug) {
+    console.log(validation);
+  }
+  //
+  return validation.valid;
+}
+
+// export our folderValidation function.
+exports.folderValidation = function(receivedFolder, debug) {
+  let validation = folderValidator.validate(receivedFolder, folderSchema);
   // undo comment below to get full debug stack of the validation
   if (debug) {
     console.log(validation);

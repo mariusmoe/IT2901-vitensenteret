@@ -19,25 +19,50 @@
 
 <md-progress-spinner *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
 
+<div class="treeArea">
+  <ul *ngIf="!loading" class="tree">
+    <ng-template #recursiveList let-node>
+      <li class="folder" [ngClass]="{ 'open': node.open, 'closed': !node.open }">
+        <a class="click" (click)="toggleFolderOpenState($event, node)"><md-icon class="icon">{{ node.open ? 'folder_open' : 'folder'}}</md-icon>{{node.title}}</a>
+        <md-icon class="dotdotdot" (click)="openContextMenu($event, node)">more_horiz</md-icon>
+        <ul class="surveys">
+          <li class="survey" *ngFor="let survey of node.surveys">
+            <a routerLink="/admin/{{survey._id}}" class="click"><md-icon class="icon">insert_chart</md-icon>{{survey.name}}</a>
+          </li>
+        </ul>
+        <ul class="folders" *ngIf="node.folders && node.folders.length > 0">
+          <ng-container *ngFor="let subfolder of node.folders">
+            <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: subfolder }"></ng-container>
+          </ng-container>
+        </ul>
+      </li>
+    </ng-template>
+    <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: root }"></ng-container>
+  </ul>
 
-<tree
+
+
+
+  <!-- <tree
   [tree]="tree"
   [settings]="treeSettings"
   (nodeSelected)="treeNodeSelected($event)">
+</tree> -->
+<!--
+<tree
+[tree]="tree"
+[settings]="settings"
+(nodeRemoved)="handleRemoved($event)"
+(nodeRenamed)="handleRenamed($event)"
+(nodeSelected)="handleSelected($event)"
+(nodeMoved)="handleMoved($event)"
+(nodeCreated)="handleCreated($event)"
+(nodeExpanded)="handleExpanded($event)"
+(nodeCollapsed)="handleCollapsed($event)">
 </tree>
-  <!--
-  <tree
-  [tree]="tree"
-    [settings]="settings"
-    (nodeRemoved)="handleRemoved($event)"
-    (nodeRenamed)="handleRenamed($event)"
-    (nodeSelected)="handleSelected($event)"
-    (nodeMoved)="handleMoved($event)"
-    (nodeCreated)="handleCreated($event)"
-    (nodeExpanded)="handleExpanded($event)"
-    (nodeCollapsed)="handleCollapsed($event)">
-  </tree>
-  -->
+
+-->
+</div>
 
 <!-- loading circle -->
 <md-progress-spinner *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>

@@ -22,4 +22,15 @@ const UserFolder = new Schema({
           required: true, }
 });
 
+
+
+var autoPopulate = function(next) {
+  this.populate('surveys');
+  this.populate('folders');
+  next();
+};
+
+UserFolder.pre('findOne', autoPopulate).pre('find', autoPopulate);
+
+
 module.exports = mongoose.model('UserFolder', UserFolder);
