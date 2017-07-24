@@ -41,6 +41,7 @@ export const LANG_EN_TRANS = {
   'User': 'User',
   'Nickname': 'Nickname',
   'Code': 'Code',
+  'Contributors': 'Contributors',
 
   // roles
   'admin': 'Superadmin',
@@ -166,9 +167,9 @@ export const LANG_EN_TRANS = {
   'Password changed': 'Password changed',
   'Admin settings': 'Admin settings',
   'Change password': 'Change password',
+  'Refer user': 'Refer user',
   'Change email': 'Change email',
   'User settings': 'User settings',
-  'Superadmin settings': 'Superadmin settings',
   'Refer admin': 'Refer admin',
   'Refer member': 'Refer member',
   'You need to write the same password twice': 'You need to write the same password twice',

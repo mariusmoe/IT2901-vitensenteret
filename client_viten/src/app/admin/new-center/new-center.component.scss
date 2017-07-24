@@ -8,3 +8,45 @@
   height: 40px; }
 .nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
 .another-file-over-class { border: dotted 3px green; }
+
+
+
+.half {
+  display: inline-block;
+  flex: 1 1;
+}
+
+
+.wrapper {
+  display: flex;
+  flex-wrap: wrap;
+
+}
+
+
+.table {
+  min-height: 200px;
+  height: 200px;
+  display: block;
+}
+
+.marginleft {
+  margin-left: 30px;
+}
+
+.marginbottom {
+  margin-bottom: 20px;
+}
+
+
+h1 {
+  text-align: center;
+  display: block;
+}
+
+
+.saveAll {
+  padding-top: 20px;
+  display: block;
+  text-align: center;
+}

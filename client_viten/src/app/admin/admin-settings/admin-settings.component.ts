@@ -50,7 +50,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       this.selectedRole = this.roles[2].value;
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
-      if (this.user.role === 'sysadmin') {
+      if (this.user.role === 'sysadmin' || this.user.role === 'vitenleader') {
         this.getUsers(); // TODO: if user ISN'T sysadmin, do not do execute getUsers()
       }
       this.newEmailForm = fb.group({
@@ -242,6 +242,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         this.dialogRef = null;
       });
     }
+  }
+
+
+  updateCenter(centerId: string) {
+    this.router.navigate(['/admin/center/' + centerId]);
   }
 
 

@@ -77,13 +77,33 @@ export class CenterService {
     });
   }
 
-  centerUpdateCenterName(name: string): Observable<boolean> {
-    const token = this.getToken();
-    const headers = new Headers({'content-type': 'application/json'});
-    headers.append('Authorization', `${token}`);
+  centerUpdateCenterName(name: string, centerId: string): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${localStorage.getItem('token')}`);
     const options = new RequestOptions({ headers: headers });
-    const data = { 'name': name };
-      return this.http.post(environment.URL.newPassword, JSON.stringify(data), options)
+    const data = { 'name': name, 'centerId': centerId };
+      return this.http.patch(environment.URL.newCenterName, JSON.stringify(data), options)
+      .map(
+        response => {
+          return true;
+        },
+        error => {
+          console.log(error.text());
+          return false;
+        }
+      );
+  }
+
+
+
+  newCenter(name: string, password: string): Observable<boolean> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${localStorage.getItem('token')}`);
+    const options = new RequestOptions({ headers: headers });
+    const data = { 'name': name, 'password': password };
+      return this.http.patch(environment.URL.newCenter, JSON.stringify(data), options)
       .map(
         response => {
           return true;

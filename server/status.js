@@ -177,5 +177,22 @@ module.exports = {
     message: 'The password did not match.',
     code: 1019,
   },
+  NO_NAME_PROVIDED: {
+    message: 'No name was provided',
+    code: 2065
+  },
+  NAME_CHANGED: {
+    message: 'Name changed successfully',
+    code: 1873
+  },
+  CENTER_ADDED: {
+    message: 'Center was added successfully',
+    code: 1467
+  },
+
+  WRONG_CENTER: {
+    message: 'You do not have sufficcient privileges for this center.',
+    code: 2088
+  },
 
 }

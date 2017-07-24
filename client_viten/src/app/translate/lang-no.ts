@@ -41,6 +41,7 @@ export const LANG_NO_TRANS = {
   'User': 'Bruker',
   'Nickname': 'Kallenavn',
   'Code': 'Kode',
+  'Contributors': 'Bidragsytere',
 
   // Roles
   'admin': 'Superadmin',
@@ -168,9 +169,9 @@ export const LANG_NO_TRANS = {
   'Password changed': 'Passord endret',
   'Admin settings': 'Admininstillinger',
   'Change password': 'Bytt passord',
+  'Refer user': 'Inviter bruker',
   'Change email': 'Bytt epostkonto',
   'User settings': 'Brukerinstillinger',
-  'Superadmin settings': 'Superadmin seksjon',
   'Refer admin': 'Generer invitasjonslink for superadmin',
   'Refer member': 'Generer invitasjonslink for adminbruker',
   'You need to write the same password twice': 'Du må skrive passordet to ganger',

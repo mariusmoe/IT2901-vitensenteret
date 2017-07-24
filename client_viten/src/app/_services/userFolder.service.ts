@@ -8,7 +8,7 @@ import { Router } from '@angular/router';
 import { TreeModel } from 'ng2-tree';
 import { User } from '../_models/user';
 import { Folder } from '../_models/folder';
-import { Survey } from '../_models/Survey';
+import { Survey } from '../_models/survey';
 
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';

@@ -1,126 +1,18 @@
-<!-- <div class="container">
+<h1>
+  Center options
+</h1>
+<div *ngIf="!isNewCenter">
 
-    <div class="navbar navbar-default">
-        <div class="navbar-header">
-            <a class="navbar-brand" href>Angular2 File Upload</a>
-        </div>
-    </div>
 
-    <div class="row">
-
-        <div class="col-md-3">
-
-            <h3>Select files</h3>
-
-            <div ng2FileDrop
-                 [ngClass]="{'nv-file-over': hasBaseDropZoneOver}"
-                 (fileOver)="fileOverBase($event)"
-                 [uploader]="uploader"
-                 class="well my-drop-zone">
-                Base drop zone
-            </div>
-
-            <div ng2FileDrop
-                 [ngClass]="{'another-file-over-class': hasAnotherDropZoneOver}"
-                 (fileOver)="fileOverAnother($event)"
-                 [uploader]="uploader"
-                 class="well my-drop-zone">
-                Another drop zone
-            </div>
-
-            Multiple
-            <input type="file" ng2FileSelect [uploader]="uploader" multiple  /><br/>
-
-            Single
-            <input type="file" ng2FileSelect [uploader]="uploader" />
-        </div>
-
-        <div class="col-md-9" style="margin-bottom: 40px">
-
-            <h3>Upload queue</h3>
-            <p>Queue length: {{ uploader?.queue?.length }}</p>
-
-            <table class="table">
-                <thead>
-                <tr>
-                    <th width="50%">Name</th>
-                    <th>Size</th>
-                    <th>Progress</th>
-                    <th>Status</th>
-                    <th>Actions</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr *ngFor="let item of uploader.queue">
-                    <td><strong>{{ item?.file?.name }}</strong></td>
-                    <td *ngIf="uploader.isHTML5" nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-                    <td *ngIf="uploader.isHTML5">
-                        <div class="progress" style="margin-bottom: 0;">
-                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
-                        </div>
-                    </td>
-                    <td class="text-center">
-                        <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-                        <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-                        <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-                    </td>
-                    <td nowrap>
-                        <button type="button" class="btn btn-success btn-xs"
-                                (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                            <span class="glyphicon glyphicon-upload"></span> Upload
-                        </button>
-                        <button type="button" class="btn btn-warning btn-xs"
-                                (click)="item.cancel()" [disabled]="!item.isUploading">
-                            <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-                        </button>
-                        <button type="button" class="btn btn-danger btn-xs"
-                                (click)="item.remove()">
-                            <span class="glyphicon glyphicon-trash"></span> Remove
-                        </button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-
-            <div>
-                <div>
-                    Queue progress:
-                    <div class="progress" style="">
-                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': uploader.progress + '%' }"></div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-success btn-s"
-                        (click)="uploader.uploadAll()" [disabled]="!uploader.getNotUploadedItems().length">
-                    <span class="glyphicon glyphicon-upload"></span> Upload all
-                </button>
-                <button type="button" class="btn btn-warning btn-s"
-                        (click)="uploader.cancelAll()" [disabled]="!uploader.isUploading">
-                    <span class="glyphicon glyphicon-ban-circle"></span> Cancel all
-                </button>
-                <button type="button" class="btn btn-danger btn-s"
-                        (click)="uploader.clearQueue()" [disabled]="!uploader.queue.length">
-                    <span class="glyphicon glyphicon-trash"></span> Remove all
-                </button>
-            </div>
-
-        </div>
-
-    </div>
-
-</div> -->
-<div>
-  <md-card>
-  <p>
-    Create or edit centers
-  </p>
-  <p>
-    Name
-  </p>
+<div class="wrapper">
+  <md-card class="half">
+<md-card-title>Change name</md-card-title>
   <md-input-container>
-    <input mdInput #centerName placeholder="Set name center" [value]="currentCenterName">
+    <input mdInput #centerName placeholder="Set center name" [value]="currentCenterName">
   </md-input-container>
   <button md-raised-button
     #changeCenterNameButton
+    class="marginleft"
     color="primary"
     minlength="3"
     md-visible="true"
@@ -129,68 +21,19 @@
     <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
     ('You need to write the same password twice' | translate ) : '' "
     mdTooltipPosition="below">
-      {{ 'Change password' | translate }}
+      Change name
     </div>
   </button>
   <!-- - -->
-  <md-select *ngIf="user.role=='sysadmin'" placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+  <!-- <md-select *ngIf="user.role=='sysadmin'" placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
     name="center" [disabled]="user.role != 'sysadmin'">
     <md-option *ngFor="let center of centers" [value]="center._id">
       {{center.name}}
     </md-option>
-  </md-select>
-  <p>
-    space
-  </p>
-  <input name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/>
-  <h3>Upload queue</h3>
-  <p>Queue length: {{ uploader?.queue?.length }}</p>
+  </md-select> -->
+</md-card>
 
-  <table class="table">
-      <thead>
-      <tr>
-          <th width="50%">Name</th>
-          <th>Size</th>
-          <th>Progress</th>
-          <th>Status</th>
-          <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr *ngFor="let item of uploader.queue">
-          <td><strong>{{ item?.file?.name }}</strong></td>
-          <td  nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
-          <td>
-              <div class="progress" style="margin-bottom: 0;">
-                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
-              </div>
-          </td>
-          <td class="text-center">
-              <span *ngIf="item.isSuccess"><i class="glyphicon glyphicon-ok"></i></span>
-              <span *ngIf="item.isCancel"><i class="glyphicon glyphicon-ban-circle"></i></span>
-              <span *ngIf="item.isError"><i class="glyphicon glyphicon-remove"></i></span>
-          </td>
-          <td nowrap>
-              <button type="button" class="btn btn-success btn-xs"
-                      (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                  <span class="glyphicon glyphicon-upload"></span> Upload
-              </button>
-              <button type="button" class="btn btn-warning btn-xs"
-                      (click)="item.cancel()" [disabled]="!item.isUploading">
-                  <span class="glyphicon glyphicon-ban-circle"></span> Cancel
-              </button>
-              <button type="button" class="btn btn-danger btn-xs"
-                      (click)="item.remove()">
-                  <span class="glyphicon glyphicon-trash"></span> Remove
-              </button>
-          </td>
-      </tr>
-      </tbody>
-  </table>
-
-  <br>
-
-
+<md-card class="half">
     <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
     <md-card-content>
       <md-input-container>
@@ -222,6 +65,7 @@
       <button md-raised-button
         #passwordShangeButton
         color="primary"
+        class="marginleft"
         minlength="3"
         md-visible="true"
         [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
@@ -238,8 +82,180 @@
       </button>
     </md-card-actions>
 
-  <p>
-    test
-  </p>
   </md-card>
+</div>
+
+
+<md-card ngClass="uploadCard">
+  <md-card-title>Change logo</md-card-title>
+  <!-- <input md-raised-button name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/> -->
+
+  <button (click)="fileInput.click()" md-raised-button     color="primary" class="marginbottom">
+    <md-icon>library_add</md-icon>
+    <span>Choose file</span>
+    <input #fileInput name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)" style="display:none;" />
+  </button>
+  <!-- <h3>Upload queue</h3>
+  <p>Queue length: {{ uploader?.queue?.length }}</p> -->
+
+  <table class="table">
+      <thead>
+      <tr>
+          <th width="160px">Name</th>
+          <th>Size</th>
+          <th width="160px">Progress</th>
+          <th>Status</th>
+          <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of uploader.queue">
+          <td><strong>{{ item?.file?.name }}</strong></td>
+          <td  nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+          <td>
+              <div class="progress" style="margin-bottom: 0;">
+                  <md-progress-bar mode="determinate" [value]="item.progress" ></md-progress-bar>
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+              </div>
+          </td>
+          <td class="text-center">
+              <md-icon *ngIf="item.isSuccess">done</md-icon>
+              <md-icon *ngIf="item.isCancel">remove_circle</md-icon>
+              <md-icon *ngIf="item.isError">remove_circle</md-icon>
+          </td>
+          <td nowrap>
+              <button md-raised-button class="btn btn-success btn-xs"
+                      (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                  <md-icon>file_upload</md-icon> Upload and change logo
+              </button>
+              <button md-raised-button class="btn btn-warning btn-xs"
+                      (click)="item.cancel()" [disabled]="!item.isUploading">
+                  <md-icon>cancel</md-icon> Cancel
+              </button>
+              <button md-raised-button class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                  <md-icon>delete</md-icon> Remove
+              </button>
+          </td>
+      </tr>
+      </tbody>
+  </table>
+
+</md-card>
+</div>
+
+
+
+
+
+<div *ngIf="isNewCenter">
+
+
+<div class="wrapper">
+  <md-card class="half">
+<md-card-title>Change name</md-card-title>
+  <md-input-container>
+    <input mdInput #centerName placeholder="Set center name" [value]="currentCenterName">
+  </md-input-container>
+
+  <!-- - -->
+  <!-- <md-select *ngIf="user.role=='sysadmin'" placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+    name="center" [disabled]="user.role != 'sysadmin'">
+    <md-option *ngFor="let center of centers" [value]="center._id">
+      {{center.name}}
+    </md-option>
+  </md-select> -->
+</md-card>
+
+<md-card class="half">
+    <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
+    <md-card-content>
+      <md-input-container>
+        <input mdInput
+          autocomplete="new-password"
+          type="number"
+          pattern="[0-9]+"
+          inputmode="numeric"
+          placeholder="{{ 'Minimum 4 numbers' | translate }}"
+          #newEscapePassword>
+          <md-hint align="end">{{newEscapePassword.value.length}} / 4++</md-hint>
+      </md-input-container>
+    </md-card-content>
+  </md-card>
+</div>
+
+
+<md-card ngClass="uploadCard">
+  <md-card-title>Change logo</md-card-title>
+  <!-- <input md-raised-button name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/> -->
+
+  <button (click)="fileInput.click()" md-raised-button     color="primary" class="marginbottom">
+    <md-icon>library_add</md-icon>
+    <span>Choose file</span>
+    <input #fileInput name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)" style="display:none;" />
+  </button>
+  <!-- <h3>Upload queue</h3>
+  <p>Queue length: {{ uploader?.queue?.length }}</p> -->
+
+  <table class="table">
+      <thead>
+      <tr>
+          <th width="160px">Name</th>
+          <th>Size</th>
+          <th width="160px">Progress</th>
+          <th>Status</th>
+          <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of uploader.queue">
+          <td><strong>{{ item?.file?.name }}</strong></td>
+          <td  nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+          <td>
+              <div class="progress" style="margin-bottom: 0;">
+                  <md-progress-bar mode="determinate" [value]="item.progress" ></md-progress-bar>
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+              </div>
+          </td>
+          <td class="text-center">
+              <md-icon *ngIf="item.isSuccess">done</md-icon>
+              <md-icon *ngIf="item.isCancel">remove_circle</md-icon>
+              <md-icon *ngIf="item.isError">remove_circle</md-icon>
+          </td>
+          <td nowrap>
+              <button md-raised-button class="btn btn-success btn-xs"
+                      (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                  <md-icon>file_upload</md-icon> Upload and change logo
+              </button>
+              <button md-raised-button class="btn btn-warning btn-xs"
+                      (click)="item.cancel()" [disabled]="!item.isUploading">
+                  <md-icon>cancel</md-icon> Cancel
+              </button>
+              <button md-raised-button class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                  <md-icon>delete</md-icon> Remove
+              </button>
+          </td>
+      </tr>
+      </tbody>
+  </table>
+
+
+
+  <div class="saveAll">
+    <button md-raised-button
+    #changeCenterNameButton
+    color="primary"
+    minlength="3"
+    md-visible="true"
+    mdTooltipPosition="below"
+    [disabled]="(newEscapePassword.value.length <= 3 )"
+    (click)="createNewCenter(centerName.value, newEscapePassword.value)"
+    >  Create new center
+
+
+</button>
+</div>
+</md-card>
+
 </div>

@@ -10,6 +10,8 @@ const jwt = require('jsonwebtoken'),
       Referral = require('../models/referral'),
       status = require('../status');
 
+const userTypes = ['sysadmin', 'vitenleader', 'user'];
+
 /**
  * getSecureRandomBytes in hex format
  * @return {String} A random string of text
@@ -55,10 +57,26 @@ exports.deleteAccount = (req, res, next) => {
   if (!id){
     res.status(400).send({message: status.USER_NOT_FOUND.message, status: status.USER_NOT_FOUND.code})
   }
-  User.findByIdAndRemove(id, (err) => {
-    if (err) { return next(err); }
-    res.status(200).send({message: "deleted user"})
-  })
+  if(req.user.role === userTypes[0]) {
+    User.findByIdAndRemove(id, (err) => {
+      if (err) { return next(err); }
+      res.status(200).send({message: "deleted user"})
+    })
+  } else {  // request belong to a vitenleader
+    // Check if the user that is to be deleted belongs to the same center as
+    // the leader
+    User.findById(id, (err, foundUser) => {
+      if (err) { return next(err); }
+      if (req.user.center.toString() !== foundUser.center.toString()) {
+        return res.status(401).send({message: status.WRONG_CENTER.message, status: status.WRONG_CENTER.code})
+      } else { // vitenleaders center is the same as the user that is to be deleted
+        foundUser.remove((err) => {
+          if (err) { return next(err); }
+          res.status(200).send({message: "deleted user"})
+        });
+      }
+    })
+  }
 }
 
 /**
@@ -144,15 +162,32 @@ exports.register = (req, res, next) => {
  * get all users
  */
 exports.getAllUsers = (req, res, next) => {
-  User.find({}, { 'email': true, 'role': true, 'center': true }, (err, users) => {
-    if (!users) {
-      // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
-      return res.status(200).send({message: status.ROUTE_USERS_VALID_NO_USERS.message, status: status.ROUTE_USERS_VALID_NO_USERS.code});
-    }
-    if (err) { return next(err); }
+  // Find only users that belong to the user's center. If the user is a sysadmin
+  // all users are to be returned.
 
-    return res.status(200).send(users);
-  }).lean();
+  // Check if user is sysadmin
+  if (req.user.role === userTypes[0]) {
+    User.find({}, { 'email': true, 'role': true, 'center': true }, (err, users) => {
+      if (!users) {
+        // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
+        return res.status(200).send({message: status.ROUTE_USERS_VALID_NO_USERS.message, status: status.ROUTE_USERS_VALID_NO_USERS.code});
+      }
+      if (err) { return next(err); }
+
+      return res.status(200).send(users);
+    }).lean();
+  } else { // User is a vitenleader
+    User.find({center: req.user.center}, { 'email': true, 'role': true, 'center': true }, (err, users) => {
+      if (!users) {
+        // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
+        return res.status(200).send({message: status.ROUTE_USERS_VALID_NO_USERS.message, status: status.ROUTE_USERS_VALID_NO_USERS.code});
+      }
+      if (err) { return next(err); }
+
+      return res.status(200).send(users);
+    }).lean();
+
+  }
 }
 
 /**
@@ -290,7 +325,7 @@ exports.roleAuthorization = function(role){
 
 exports.roleAuthorizationUp = function(role){
   return function(req,res,next){
-    const userTypes = ['sysadmin', 'vitenleader', 'user'];
+
     let id = req.user._id;
 
     User.findById(id, function(err,foundUser){

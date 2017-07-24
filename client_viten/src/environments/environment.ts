@@ -24,5 +24,7 @@ export const environment = {
     allNicknames: 'http://localhost:2000/api/survey/all_nicknames',
     allCenters: 'http://localhost:2000/api/center/',
     folders: 'http://localhost:2000/api/folders/',
+    newCenter: 'http://localhost:2000/api/center/new',
+    newCenterName: 'http://localhost:2000/api/center/name',
   }
 };
