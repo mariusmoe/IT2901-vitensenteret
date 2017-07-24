@@ -212,7 +212,13 @@ exports.getAllUsers = (req, res, next) => {
        let folder = new UserFolder({ user: user, isRoot: true, title: 'Root'});
        folder.save((err5, f) => {
          if (err5) { next(err5); }
-         res.status(200).send({message: status.ACCOUNT_CREATED.message, status: status.ACCOUNT_CREATED.code} )
+         res.status(200).send({
+           message: status.ACCOUNT_CREATED.message,
+           status: status.ACCOUNT_CREATED.code,
+           center: center,
+           user: user,
+           folder: f,
+         });
        });
      });
    });
