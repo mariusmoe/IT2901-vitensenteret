@@ -16,13 +16,7 @@ const status = require('../status'),
 
 // helper function
 const getUserFolders = (userId, callback) => {
-  UserFolder.find( {user: userId}).populate({
-     path: 'surveys',
-     model: 'Survey'
-  }).populate({
-    path: 'folders',
-    model: 'UserFolder'
-  }).exec(function(err, folders) {
+  UserFolder.find( {user: userId}).exec(function(err, folders) {
     if (!folders || folders.length === 0) {
       // FIXME wrong error message
       callback(true, {message: 'givemeamessage', status: '0000', });
@@ -55,13 +49,12 @@ exports.createUserFolder = (req, res, next) => {
   let parentFolderId = req.body.parentFolderId;
   const userId = req.user._id;
   receivedFolder.user = req.user._id + '';
-  console.log(receivedFolder)
 
   // make sure it isn't just an empty object.
   if (Object.keys(receivedFolder).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code});
   } // FIXME: Status needs updating above and below
-  if (!val.folderValidation(receivedFolder, true)){
+  if (!val.folderValidation(receivedFolder)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code});
   } // FIXME: !!!
   if (!parentFolderId) {
@@ -69,7 +62,6 @@ exports.createUserFolder = (req, res, next) => {
   }
 
   receivedFolder.isRoot = false;
-  console.log(receivedFolder);
   let newFolder = new UserFolder ( receivedFolder )
 
   // FIXME: change the "next(err)" so that it returns a json object akin to the above instead
