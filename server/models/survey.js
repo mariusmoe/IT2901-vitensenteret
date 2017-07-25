@@ -25,8 +25,7 @@ const SurveySchema = new Schema({
   comment: String,
 	date: Date,                // date created
   activationDate: {          // date survey became active
-    type: Date,
-    default: Date.now
+    type: Date
   },
   deactivationDate: Date,   // date survey became deactivated
   active: Boolean,

@@ -27,7 +27,7 @@
           <!-- SURVEY DATE -->
 
           <!-- SURVEY ACTIVE STATE -->
-          <md-checkbox [(ngModel)]="survey.active">{{ 'Active status' | translate }}</md-checkbox>
+          <!-- <md-checkbox [(ngModel)]="survey.active">{{ 'Active status' | translate }}</md-checkbox> -->
 
           <div>
             <!-- USE ENGLISH? -->
@@ -90,13 +90,13 @@
 
                 <!-- QUESTION TEXT -->
                 <md-input-container>
-                  <input mdInput type="text" placeholder="{{ 'Question (Norwegian)' | translate }}" [attr.maxlength]="maxQuestionLength"
-                  ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.no.txt" required (change)="onSurveyChange()">
+                  <textarea mdInput placeholder="{{ 'Question (Norwegian)' | translate }}" [attr.maxlength]="maxQuestionLength"
+                  ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.no.txt" required (change)="onSurveyChange()"></textarea>
                   <md-hint *ngIf="!fieldValidate(questionObject.lang.no.txt)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
                 </md-input-container>
                 <md-input-container *ngIf="englishEnabled">
-                  <input mdInput type="text" placeholder="{{ 'Question (English)' | translate }}" [attr.maxlength]="maxQuestionLength"
-                  ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.en.txt" required (change)="onSurveyChange()">
+                  <textarea mdInput placeholder="{{ 'Question (English)' | translate }}" [attr.maxlength]="maxQuestionLength"
+                  ng-pattern="stringPattern" [(ngModel)]="questionObject.lang.en.txt" required (change)="onSurveyChange()"></textarea>
                   <md-hint *ngIf="!fieldValidate(questionObject.lang.en.txt)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
                 </md-input-container>
 

@@ -30,7 +30,8 @@ exports.createSurvey = (req, res, next) => {
   }
   receivedSurvey.madeBy = req.user._id.toString();
   receivedSurvey.center = req.user.center.toString();
-  delete recievedSurvey.deactivationDate
+  delete receivedSurvey.deactivationDate
+
 
   if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
@@ -38,7 +39,8 @@ exports.createSurvey = (req, res, next) => {
 
   let newSurvey = new Survey ( receivedSurvey );
 
-
+  newSurvey.active = false;
+  newSurvey.date = new Date();
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
@@ -235,30 +237,42 @@ exports.patchOneSurvey = (req, res, next) => {
     if (foundSurvey.deactivationDate) {
       return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
     }
-    if (foundSurvey.active && !survey.active) {
-      survey.deactivationDate = Date.now;
+    if (foundSurvey.active && survey.active) {
+      return res.status(200).send({message: status.SURVEY_PUBLISHED.message, status: status.SURVEY_PUBLISHED.code, survey: savedSurvey})
     }
+    if (foundSurvey.active && !survey.active) {
+      foundSurvey.deactivationDate = new Date();
+      foundSurvey.active = false;
+      foundSurvey.save((err, savedSurvey) => {
+        if (err) { return next(err); }
+        return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: savedSurvey})
 
-  // TODO: delete previos responses
-  Response.remove({surveyId: surveyId}, (err) => {
-    if (err) { return next(err); }
-    Nickname.remove({surveyId: surveyId}, (err) => {
-      // Set ID
-      survey._id = surveyId;
-      // if we receive a __v property in our survey, mongodb will crash
-      // as it will attempt to SET and also INC the value at the same time (see below).
-      delete survey.__v; // DO NOT REMOVE THIS!!
-      // thus we delete the version here.
-
-        Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
-          if (!survey) {
-            return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-          }
-          if (err) { return next(err); }
-          return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
-        });
       })
-    })
+    } else {
+      // TODO: delete prev responses
+      Response.remove({surveyId: { $in: [surveyId, foundSurvey.postKey]}}, (err) => {
+        if (err) { return next(err); }
+        Nickname.remove({surveyId: surveyId}, (err) => {
+          // Set ID
+          survey._id = surveyId;
+          // if we receive a __v property in our survey, mongodb will crash
+          // as it will attempt to SET and also INC the value at the same time (see below).
+          delete survey.__v; // DO NOT REMOVE THIS!!
+          // thus we delete the version here.
+          survey.date = new Date();
+          if (survey.active) {
+            survey.activationDate = new Date();
+          }
+          Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
+            if (err) { return next(err); }
+            if (!survey) {
+              return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+            }
+            return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+          });
+        })
+      })
+    }
   })
 }
 

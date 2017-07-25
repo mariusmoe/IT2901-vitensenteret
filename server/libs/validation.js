@@ -88,7 +88,7 @@ let surveySchema = {
       "required": ["no"]
     }
   },
-  "required": ["name", "date", "active", "questionlist", "endMessage", "isPost", "madeBy", "center"],
+  "required": ["name", "questionlist", "endMessage", "isPost", "madeBy", "center"],
   "additionalProperties": false
 }
 
