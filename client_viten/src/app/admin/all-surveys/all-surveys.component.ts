@@ -40,7 +40,17 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       public surveyService: SurveyService,
       public userFolderService: UserFolderService,
       private dragulaService: DragulaService) {
-        const dragulaBagSettings = {
+        const dragulaFolderBagSettings = {
+          revertOnSpill: true,
+          direction: 'vertical',
+          accepts: (el: Element, target: Element, source: Element, sibling: Element): boolean => {
+            // elements can not be dropped within themselves or into their own children.
+            // They also should not be allowed to drop into the same folder they came from
+            //
+           return !el.contains(target) && !(target === source);
+          },
+        };
+        const dragulaSurveyBagSettings = {
           revertOnSpill: true,
           direction: 'vertical',
           accepts: (el: Element, target: Element, source: Element, sibling: Element): boolean => {
@@ -48,33 +58,11 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
            return !el.contains(target);
           },
         };
-        this.dragulaService.setOptions('folderBag', dragulaBagSettings);
-        // this.dragulaService.setOptions('surveyBag', dragulaBagSettings);
-        this.dragulaSubs.push(dragulaService.drop.subscribe((value) => {
-          console.log(value);
-          // this.userFolderService.updateFolders()
-        }));
-        //
-        // this.dragulaSubs.push(dragulaService.drag.subscribe((value) => {
-        // }));
-        // this.dragulaSubs.push(dragulaService.dragend.subscribe((value) => {
-        // }));
+        this.dragulaService.setOptions('folderBag', dragulaFolderBagSettings);
+        // this.dragulaService.setOptions('surveyBag', dragulaSurveyBagSettings);
+        this.dragulaSubs.push(dragulaService.drop.subscribe((value) => { this.onDragulaDrop(value); }));
 
-
-        this.loading = true;
-        const folderSub = this.userFolderService.getAllFolders().subscribe(result => {
-          this.tree = result;
-          this.root = this.tree.filter(x => x.isRoot = true)[0];
-          this.root.open = true;
-          this.loading = false;
-          console.log(this.root);
-          folderSub.unsubscribe();
-        },
-        error => {
-          console.error(error);
-          this.loading = false;
-          folderSub.unsubscribe();
-        });
+        this.refreshFolders();
     }
 
     ngOnInit() {
@@ -92,44 +80,95 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     }
 
 
+    onDragulaDrop(value: any) {
+      const bag = value[0];
+      const el: Element = value[1];
+      const targetFolderEl: Element = value[2];
+      const sourceFolderEl: Element = value[3];
+      const sibling: Element = value[4];
+
+      // target folder is the 'ul' element. We need the parent li element which holds said ul element.
+      console.log('step0');
+      if (targetFolderEl.parentElement && targetFolderEl.parentElement.id) {
+        console.log('step1');
+        if (sourceFolderEl.parentElement && sourceFolderEl.parentElement.id) {
+          console.log('step2');
+          if (targetFolderEl.parentElement.id !== sourceFolderEl.parentElement.id) {
+            const targetFolder = this.tree.filter(f => f._id === targetFolderEl.parentElement.id)[0];
+            const sourceFolder = this.tree.filter(f => f._id === sourceFolderEl.parentElement.id)[0];
+
+            const movedObjectWasASurvey = el.classList.contains('survey');
+            const data = {
+              targetFolderId: targetFolder._id,
+              sourceFolderId: sourceFolder._id,
+              isSurvey: movedObjectWasASurvey,
+              itemId: null,
+              isMultiFolder: true, // REQUIRED!!
+            };
+
+            if (movedObjectWasASurvey) {
+              console.log('step4 survey');
+              const survey = sourceFolder.surveys.filter(s => s._id === el.id)[0];
+              data.itemId = survey._id;
+            } else {
+              console.log('step4 folder');
+              // we assume its folders (duh) being moved here
+              const folder = sourceFolder.folders.filter(f => f._id === el.id)[0];
+              console.log(sourceFolder.folders);
+              console.log(folder);
+              data.itemId = folder._id;
+            }
+            console.log(data);
+            this.loading = true;
+            const updateSub = this.userFolderService.updateFolders(data).subscribe(
+              updateSuccess => {
+                console.log('step5');
+                updateSub.unsubscribe();
+                this.refreshFolders(); // loading set to false again in this one.
+              },
+              error => {
+                this.loading = false;
+                updateSub.unsubscribe();
+                console.log('hurr durr 2');
+              }
+            );
+          }
+        }
+      }
+    }
+
+
     toggleFolderOpenState(e: Event, folder: Folder) {
       e.stopPropagation();
       e.preventDefault();
 
       folder.open = !folder.open;
-      console.log(folder.open);
     }
 
-    openContextMenu(e: Event, parentFolder: Folder) {
-      e.stopPropagation();
-      e.preventDefault();
-
+    createNewFolder(parentFolder: Folder) {
       const testFolder: Folder = {
-        isRoot: false,
-        title: 'test!',
+        // title: 'ff',
       };
 
       const sub = this.userFolderService.createFolder(testFolder, parentFolder).subscribe(result => {
-        this.tree = result;
         sub.unsubscribe();
+        this.refreshFolders();
       });
     }
 
-
-
-    /**
-     * Takes a utc datestring and returns a local time datestring
-     * @param  {string} dateString the utc datestring
-     * @return {string}            local time datestring
-     */
-    formatDate(dateString: string): string {
-      return new Date(dateString).toLocaleDateString();
-    }
-
-    /**
-     * Load more surveys in menu on the left
-     */
-    loadMore() {
-      this.searchResultNum += this.loadMoreValue;
+    refreshFolders() {
+      this.loading = true;
+      const requestNewTreeSub = this.userFolderService.getAllFolders().subscribe(newTree => {
+        this.tree = newTree;
+        this.root = newTree.filter(x => x.isRoot === true)[0];
+        this.root.open = true;
+        requestNewTreeSub.unsubscribe();
+        this.loading = false;
+        console.log(this.root);
+      },
+      error2 => {
+        requestNewTreeSub.unsubscribe();
+        this.loading = false;
+      });
     }
 }

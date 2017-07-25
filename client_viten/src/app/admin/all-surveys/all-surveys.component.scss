@@ -67,19 +67,22 @@ md-icon.icon {
 }
 
 .item {
+  display: block;
+
   ul {
     padding-left: 6px;
   }
-  li {
-    &.folder {
-      &.closed {
-        .folders,
-        .surveys {
-          display: none;
-        }
-      }
-    }
-    &.survey {
+  &.closed {
+    ul {
+      display: none;
     }
   }
+}
+
+.items {
+  min-height: 20px; // NEEDED!!!!!!!! DO NOT REMOVE!!!!!!
+}
+
+.firstEntry {
+  position: absolute;
 }

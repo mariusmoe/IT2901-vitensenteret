@@ -66,6 +66,7 @@ export class UserFolderService {
   createFolder(newFolder: Folder, parentFolder: Folder): Observable<Folder[]> {
     const token = this.getToken();
     const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
@@ -85,6 +86,7 @@ export class UserFolderService {
   renameFolder(folder: Folder): Observable<Folder[]> {
     const token = this.getToken();
     const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
@@ -100,14 +102,15 @@ export class UserFolderService {
     );
   }
 
-  updateFolders(folder: Folder, secondaryFolder: Folder): Observable<Folder[]> {
+  updateFolders(data: any): Observable<Folder[]> {
+
     const token = this.getToken();
     const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    const body = { folder: folder, secondaryFolder: secondaryFolder };
-    return this.http.patch(environment.URL.folders, body, options).map(
+    return this.http.patch(environment.URL.folders, data, options).map(
       response => {
         return response.json();
       },

@@ -25,8 +25,18 @@ const UserFolder = new Schema({
 
 
 var autoPopulate = function(next) {
-  this.populate('surveys');
-  this.populate('folders');
+  this.populate({
+    path: 'surveys',
+    options: {
+      sort: { date: -1 }
+    }
+  });
+  this.populate({
+    path: 'folders',
+    options: {
+      sort: { title: 1 }
+    }
+  });
   next();
 };
 
