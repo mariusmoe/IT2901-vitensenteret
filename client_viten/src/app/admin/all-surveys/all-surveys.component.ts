@@ -160,7 +160,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       this.loading = true;
       const requestNewTreeSub = this.userFolderService.getAllFolders().subscribe(newTree => {
         this.tree = newTree;
-        this.root = newTree.filter(x => x.isRoot = true)[0];
+        this.root = newTree.filter(x => x.isRoot === true)[0];
         this.root.open = true;
         requestNewTreeSub.unsubscribe();
         this.loading = false;

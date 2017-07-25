@@ -30,7 +30,7 @@ exports.createSurvey = (req, res, next) => {
   }
   receivedSurvey.madeBy = req.user._id.toString();
   receivedSurvey.center = req.user.center.toString();
-  delete recievedSurvey.deactivationDate
+  delete receivedSurvey.deactivationDate
 
   if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
