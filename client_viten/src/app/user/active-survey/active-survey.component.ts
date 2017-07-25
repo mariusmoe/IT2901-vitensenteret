@@ -196,11 +196,16 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         if (this.survey && this.survey.active) {
           this.properSurvey = true;
         } else {
+          console.log(this.survey)
           console.error('Survey is not active or something else is wrong!');
         }
       });
       return;
     }
+  }
+
+  ngOnDestroy() {
+    this.timer.unsubscribe('refreshNicknames');
   }
   /**
    * This method starts the survey as well as the inactivity timer

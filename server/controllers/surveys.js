@@ -30,6 +30,7 @@ exports.createSurvey = (req, res, next) => {
   }
   receivedSurvey.madeBy = req.user._id.toString();
   receivedSurvey.center = req.user.center.toString();
+  delete recievedSurvey.deactivationDate
 
   if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
@@ -76,12 +77,19 @@ exports.getAllSurveys = (req, res, next) => {
   }).lean();
 }
 
-exports.getAllCenters = (req, res, next) => {
-  Survey.find( { 'name': true }, (err, centers) => {
-    if (err) { return next(err); }
-    return res.status(200).send(centers);
-  }).lean();
-}
+/**
+ * @depricated
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+// exports.getAllCenters = (req, res, next) => {
+//   Survey.find( { 'name': true }, (err, centers) => {
+//     if (err) { return next(err); }
+//     return res.status(200).send(centers);
+//   }).lean();
+// }
 
 exports.getOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
