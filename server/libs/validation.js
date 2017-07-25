@@ -159,7 +159,7 @@ let folderSchema = {
       },
     },
   },
-  "required": ["title", "user"],
+  "required": ["user"], // title is set to default value by MongoDB
   "additionalProperties": false,
 }
 

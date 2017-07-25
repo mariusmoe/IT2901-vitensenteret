@@ -171,6 +171,8 @@ module.exports = (app) => {
 
   folderRoutes.post('/', requireAuth, FolderController.createUserFolder);
 
+  folderRoutes.patch('/', requireAuth, FolderController.updateFolders);
+
   folderRoutes.delete('/:folderId', requireAuth, FolderController.deleteUserFolder);
 
 

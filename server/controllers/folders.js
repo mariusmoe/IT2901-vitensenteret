@@ -16,11 +16,12 @@ const status = require('../status'),
 
 // helper function
 const getUserFolders = (userId, callback) => {
-  UserFolder.find( {user: userId}).exec(function(err, folders) {
+  UserFolder.find( {user: userId}, null, { sort: { title: 1 } }).exec(function(err, folders) {
     if (!folders || folders.length === 0) {
       callback(true, {message: status.FOLDER_COULD_NOT_RETRIEVE_ALL.message, status: status.FOLDER_COULD_NOT_RETRIEVE_ALL.code, });
     }
     if (err) { return next(err); }
+    console.log(folders);
     callback(null, folders);
   });
 }
@@ -32,7 +33,7 @@ exports.getUserFolders = (req, res, next) => {
     if (err) {
       return res.status(500).send(message);
     } else {
-      console.log(message);
+      // console.log(message);
       return res.status(200).send(message);
     }
   });
@@ -78,43 +79,79 @@ exports.createUserFolder = (req, res, next) => {
 
 // PATCH
 exports.updateFolders = (req, res, next) => {
-  let updatedFolder = req.body.folder;
-  let secondaryUpdatedFolder = req.body.secondaryFolder; // used for MOVING folder or survey from one folder to another
-
+  const data = req.body;
   const userId = req.user._id;
 
   // make sure it isn't just an empty object.
-  if (Object.keys(updatedFolder).length === 0) {
+  if (Object.keys(data).length === 0) {
     return res.status(400).send( {message: status.FOLDER_OBJECT_MISSING.message, status: status.FOLDER_OBJECT_MISSING.code});
   }
-  if (!val.folderValidation(updatedFolder)){
-    return res.status(422).send( {message: status.FOLDER_UNPROCESSABLE.message, status: status.FOLDER_UNPROCESSABLE.code});
-  }
-  if (!updatedFolder._id){
-    return res.status(422).send( {message: status.FOLDER_ID_MISSING.message, status: status.FOLDER_ID_MISSING.code});
-  }
 
-  if (secondaryUpdatedFolder) {
-    if (!val.folderValidation(secondaryUpdatedFolder)){
-      return res.status(422).send( {message: status.FOLDER_UNPROCESSABLE.message, status: status.FOLDER_UNPROCESSABLE.code});
+  if (data.isMultiFolder) {
+    // targetFolderId: targetFolder._id,
+    // sourceFolderId: sourceFolder._id,
+    // isSurvey: movedObjectWasASurvey,
+    // itemId: null,
+
+    if (!data.targetFolderId || !data.sourceFolderId || !data.itemId) {
+      return res.status(422).send( {message: status.FOLDER_ID_MISSING.message, status: status.FOLDER_ID_MISSING.code});
     }
-    if (!secondaryUpdatedFolder._id){
-      return res.status(422).send( {message: status.FOLDER_SECONDARY_ID_MISSING.message, status: status.FOLDER_SECONDARY_ID_MISSING.code});
-    }
-  }
+    UserFolder.findById(data.targetFolderId, (err, targetFolder) => {
+      if (err) { next(err); }
+      UserFolder.findById(data.sourceFolderId, (err, sourceFolder) => {
+        if (data.isSurvey) {
+          targetFolder.surveys.push(data.itemId);
+          let sourceIndex = sourceFolder.surveys.indexOf(data.itemId);
+          console.log(sourceIndex);
+          sourceFolder.surveys.splice(sourceIndex, 1);
+        } else {
+          targetFolder.folders.push(data.itemId);
+          let sourceIndex = sourceFolder.folders.indexOf(data.itemId);
+          sourceFolder.folders.splice(sourceIndex, 1);
+        }
 
-
-
-  UserFolder.findByIdAndUpdate(updatedFolder._id, {$set: updatedFolder}, (err, folder) => {
-    if (err) { next(err); }
-    if (secondaryUpdatedFolder) {
-      UserFolder.findByIdAndUpdate(secondaryUpdatedFolder._id, {$set: updatedFolder}, (err2, folder2) => {
-        if (err2) { next(err2); }
-        return res.status(422).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
+        targetFolder.save((err2, f) => {
+          if (err2) { next(err2); }
+          sourceFolder.save((err3, f2) => {
+            if (err3) { next(err3); }
+            console.log(f);
+            console.log(f2);
+            return res.status(200).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
+          });
+        });
       });
-    }
-    return res.status(422).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
-  });
+
+
+
+
+
+
+    });
+
+  } else {
+    // WRITE RENAME FUNCTIONS HERE!
+
+  }
+
+  //
+  //
+  //
+  //
+  // UserFolder.findById(targetFolderId, (err, folder) => {
+  //
+  //   if
+  //
+  //
+  //   if (err) { next(err); }
+  //   if (secondaryUpdatedFolder) {
+  //     UserFolder.findByIdAndUpdate(secondaryUpdatedFolder._id, {$set: updatedFolder}, (err2, folder2) => {
+  //       if (err2) { next(err2); }
+  //       return res.status(200).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
+  //     });
+  //   } else {
+  //     return res.status(200).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
+  //   }
+  // });
 }
 
 
