@@ -451,7 +451,7 @@ exports.getNicknamesForOneSurvey = (req, res, next) => {
           // console.log(nicknames);
           if (err) { return next(err); }
           if (nicknames.length == 0) {
-            return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+            return res.status(200).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
           }
           return res.status(200).send( {nicknames: nicknames} );
         });

@@ -160,9 +160,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
           return;
         }
         this.survey = result.survey;
-        if (!this.survey.active) {
-          this.router.navigate(['/choosesurvey']);
-        }
+
         this.response = <Response> {
             nickname: undefined,
             questionlist: [],
@@ -193,7 +191,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
             );
         });
 
-        if (this.survey && this.survey.active) {
+        if (this.survey && this.survey._id) {
           this.properSurvey = true;
         } else {
           console.log(this.survey)
@@ -206,6 +204,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.timer.unsubscribe('refreshNicknames');
+    this.timer.delTimer('refreshNicknames');
   }
   /**
    * This method starts the survey as well as the inactivity timer
@@ -217,10 +216,6 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
 
         sub.unsubscribe();
 
-        if (!result.survey.active) {
-          this.showModal();
-          return;
-        }
         this.started = true;
         if (this.survey.isPost || this.survey.postKey !== undefined) {
           this.postDone = false;
@@ -273,7 +268,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         }
         this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
-        if (this.survey && this.survey.active) {
+        if (this.survey && this.survey._id) {
           this.properSurvey = true;
         }
       });
@@ -551,13 +546,5 @@ resetTimer() {
     } else if (this.playButtonActive === 'active') {
       this.playButtonActive = 'inactive';
     }
-  }
-
-  hideModal() {
-    this.showmodal = false;
-  }
-
-  showModal() {
-    this.showmodal = true;
   }
 }
