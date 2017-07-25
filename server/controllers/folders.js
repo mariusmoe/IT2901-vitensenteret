@@ -18,8 +18,7 @@ const status = require('../status'),
 const getUserFolders = (userId, callback) => {
   UserFolder.find( {user: userId}).exec(function(err, folders) {
     if (!folders || folders.length === 0) {
-      // FIXME wrong error message
-      callback(true, {message: 'givemeamessage', status: '0000', });
+      callback(true, {message: status.FOLDER_COULD_NOT_RETRIEVE_ALL.message, status: status.FOLDER_COULD_NOT_RETRIEVE_ALL.code, });
     }
     if (err) { return next(err); }
     callback(null, folders);
@@ -29,9 +28,6 @@ const getUserFolders = (userId, callback) => {
 // GET
 exports.getUserFolders = (req, res, next) => {
   const userId = req.user._id;
-  if (!userId) {
-    return res.status(401).send({message: 'fixme'});
-  }
   getUserFolders(userId, (err, message) => {
     if (err) {
       return res.status(500).send(message);
@@ -52,17 +48,17 @@ exports.createUserFolder = (req, res, next) => {
 
   // make sure it isn't just an empty object.
   if (Object.keys(receivedFolder).length === 0) {
-    return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code});
-  } // FIXME: Status needs updating above and below
+    return res.status(400).send( {message: status.FOLDER_OBJECT_MISSING.message, status: status.FOLDER_OBJECT_MISSING.code});
+  }
   if (!val.folderValidation(receivedFolder)){
-    return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code});
-  } // FIXME: !!!
+    return res.status(422).send( {message: status.FOLDER_UNPROCESSABLE.message, status: status.FOLDER_UNPROCESSABLE.code});
+  }
   if (!parentFolderId) {
-    return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code});
+    return res.status(400).send( {message: status.FOLDER_PARENT_FOLDERID_MISSING.message, status: status.FOLDER_PARENT_FOLDERID_MISSING.code});
   }
 
   receivedFolder.isRoot = false;
-  let newFolder = new UserFolder ( receivedFolder )
+  let newFolder = new UserFolder ( receivedFolder );
 
   // FIXME: change the "next(err)" so that it returns a json object akin to the above instead
   newFolder.save((err, newFolder) => {
@@ -79,6 +75,50 @@ exports.createUserFolder = (req, res, next) => {
     });
   })
 }
+
+// PATCH
+exports.updateFolders = (req, res, next) => {
+  let updatedFolder = req.body.folder;
+  let secondaryUpdatedFolder = req.body.secondaryFolder; // used for MOVING folder or survey from one folder to another
+
+  const userId = req.user._id;
+
+  // make sure it isn't just an empty object.
+  if (Object.keys(updatedFolder).length === 0) {
+    return res.status(400).send( {message: status.FOLDER_OBJECT_MISSING.message, status: status.FOLDER_OBJECT_MISSING.code});
+  }
+  if (!val.folderValidation(updatedFolder)){
+    return res.status(422).send( {message: status.FOLDER_UNPROCESSABLE.message, status: status.FOLDER_UNPROCESSABLE.code});
+  }
+  if (!updatedFolder._id){
+    return res.status(422).send( {message: status.FOLDER_ID_MISSING.message, status: status.FOLDER_ID_MISSING.code});
+  }
+
+  if (secondaryUpdatedFolder) {
+    if (!val.folderValidation(secondaryUpdatedFolder)){
+      return res.status(422).send( {message: status.FOLDER_UNPROCESSABLE.message, status: status.FOLDER_UNPROCESSABLE.code});
+    }
+    if (!secondaryUpdatedFolder._id){
+      return res.status(422).send( {message: status.FOLDER_SECONDARY_ID_MISSING.message, status: status.FOLDER_SECONDARY_ID_MISSING.code});
+    }
+  }
+
+
+
+  UserFolder.findByIdAndUpdate(updatedFolder._id, {$set: updatedFolder}, (err, folder) => {
+    if (err) { next(err); }
+    if (secondaryUpdatedFolder) {
+      UserFolder.findByIdAndUpdate(secondaryUpdatedFolder._id, {$set: updatedFolder}, (err2, folder2) => {
+        if (err2) { next(err2); }
+        return res.status(422).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
+      });
+    }
+    return res.status(422).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
+  });
+}
+
+
+
 
 // DELETE
 exports.deleteUserFolder = (req, res, next) => {

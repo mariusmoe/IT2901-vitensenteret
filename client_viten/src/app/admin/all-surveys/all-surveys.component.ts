@@ -3,11 +3,11 @@ import { SurveyList } from '../../_models/index';
 import { Folder } from '../../_models/folder';
 import { SurveyService } from '../../_services/survey.service';
 import { UserFolderService } from '../../_services/userFolder.service';
+import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
 import {FormControl} from '@angular/forms';
-import { NodeEvent, TreeModel, RenamableNode, Ng2TreeSettings } from 'ng2-tree';
 import 'rxjs/add/operator/debounceTime';
 
 
@@ -27,31 +27,40 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     loadMoreValue = 20;
 
     searchSubscription: Subscription;
+    dragulaSubs: Subscription[] = [];
 
 
     tree: Folder[];
     root: Folder;
-
-    // treeSettings: Ng2TreeSettings = {
-    //   rootIsVisible: false,
-    // };
-    //
-    // private treeNodeSettings = {
-    //   'rightMenu': true,
-    //   // 'leftMenu': true,
-    //   'templates': {
-    //     'node': '<i class="material-icons">folder</i>',
-    //     'leaf': '<i class="material-icons">insert_chart</i>',
-    //     'leftMenu': '<i class="fa fa-navicon fa-lg"></i>'
-    //   }
-    // };
 
 
     constructor(
       private router: Router,
       public route: ActivatedRoute,
       public surveyService: SurveyService,
-      public userFolderService: UserFolderService) {
+      public userFolderService: UserFolderService,
+      private dragulaService: DragulaService) {
+        const dragulaBagSettings = {
+          revertOnSpill: true,
+          direction: 'vertical',
+          accepts: (el: Element, target: Element, source: Element, sibling: Element): boolean => {
+            // elements can not be dropped within themselves or into their own children.
+           return !el.contains(target);
+          },
+        };
+        this.dragulaService.setOptions('folderBag', dragulaBagSettings);
+        // this.dragulaService.setOptions('surveyBag', dragulaBagSettings);
+        this.dragulaSubs.push(dragulaService.drop.subscribe((value) => {
+          console.log(value);
+          // this.userFolderService.updateFolders()
+        }));
+        //
+        // this.dragulaSubs.push(dragulaService.drag.subscribe((value) => {
+        // }));
+        // this.dragulaSubs.push(dragulaService.dragend.subscribe((value) => {
+        // }));
+
+
         this.loading = true;
         const folderSub = this.userFolderService.getAllFolders().subscribe(result => {
           this.tree = result;
@@ -66,7 +75,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
           this.loading = false;
           folderSub.unsubscribe();
         });
-      }
+    }
 
     ngOnInit() {
       this.searchSubscription = this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
@@ -75,6 +84,11 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     }
     ngOnDestroy() {
       this.searchSubscription.unsubscribe();
+      this.dragulaService.destroy('folderBag');
+      // this.dragulaService.destroy('surveyBag');
+      for (const sub of this.dragulaSubs) {
+        sub.unsubscribe();
+      }
     }
 
 
@@ -100,7 +114,6 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
         sub.unsubscribe();
       });
     }
-
 
 
 

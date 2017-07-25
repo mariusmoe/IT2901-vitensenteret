@@ -166,4 +166,39 @@ module.exports = {
     code: 1019,
   },
 
+  // FOLDER CODES
+
+  FOLDER_CREATED: {
+    message: 'The folder was successfully created.',
+    code: 3001,
+  },
+  FOLDER_OBJECT_MISSING: {
+    message: 'Could not find a folder.',
+    code: 3002,
+  },
+  FOLDER_UNPROCESSABLE: {
+    message: 'Folder could not be processed. Check validity.',
+    code: 3003,
+  },
+  FOLDER_PARENT_FOLDERID_MISSING: {
+    message: 'Could not find parent folderId.',
+    code: 3004,
+  },
+  FOLDER_COULD_NOT_RETRIEVE_ALL: {
+    message: 'Could not retrieve all folders.',
+    code: 3005,
+  },
+  FOLDER_ID_MISSING: {
+    message: 'Could not find the ID to update folder.',
+    code: 3006,
+  },
+  FOLDER_SECONDARY_ID_MISSING: {
+    message: 'Could not find the ID of the secondary folder to update folder.',
+    code: 3007,
+  },
+  FOLDER_SUCCESSFULLY_UPDATED: {
+    message: 'The folder(s) was successfuly updated.',
+    code: 3008,
+  },
+
 }
