@@ -194,5 +194,9 @@ module.exports = {
     message: 'You do not have sufficcient privileges for this center.',
     code: 2088
   },
+  SURVEY_DEACTIVATED: {
+    message: 'Survey has been deactivated',
+    code: 2865
+  },
 
 }

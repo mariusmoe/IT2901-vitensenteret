@@ -229,6 +229,16 @@ exports.patchOneSurvey = (req, res, next) => {
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
+
+
+  Survey.findById(surveyId, (err, foundSurvey) => {
+    if (foundSurvey.deactivationDate) {
+      return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
+    }
+    if (foundSurvey.active && !survey.active) {
+      survey.deactivationDate = Date.now;
+    }
+
   // TODO: delete previos responses
   Response.remove({surveyId: surveyId}, (err) => {
     if (err) { return next(err); }
@@ -240,13 +250,14 @@ exports.patchOneSurvey = (req, res, next) => {
       delete survey.__v; // DO NOT REMOVE THIS!!
       // thus we delete the version here.
 
-      Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
-        if (!survey) {
-          return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-        }
-        if (err) { return next(err); }
-        return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
-      });
+        Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
+          if (!survey) {
+            return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+          }
+          if (err) { return next(err); }
+          return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+        });
+      })
     })
   })
 }
@@ -353,6 +364,8 @@ exports.answerOneSurvey = (req, res, next) => {
   if (!val.responseValidation(responseObject)) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
+
+
   if (responseObject.nickname) {
     // Helper function for readability down below
     const setNickname = (surveyId, nickname, callback) => {
@@ -381,6 +394,9 @@ exports.answerOneSurvey = (req, res, next) => {
     }
 
     Survey.findById(surveyId, (err, survey) => {
+      if (survey.deactivationDate) {
+        return res.status(400).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
+      }
       if (survey.isPost) { // TODO: < --- if err, then this goes bad here!
 
         // ^ FIXME! (the surveyId is never verifed to exist)
