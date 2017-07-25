@@ -7,7 +7,6 @@ import { TranslateService } from './_services/translate.service';
   styleUrls: [
     './app.component.scss',
     '../../node_modules/dragula/dist/dragula.min.css',
-    '../../node_modules/ng2-tree/styles.css',
   ],
   encapsulation: ViewEncapsulation.None
 })

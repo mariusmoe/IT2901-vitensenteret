@@ -30,7 +30,7 @@ var autoPopulate = function(next) {
   next();
 };
 
-UserFolder.pre('findOne', autoPopulate).pre('find', autoPopulate);
+UserFolder.pre('find', autoPopulate);
 
 
 module.exports = mongoose.model('UserFolder', UserFolder);

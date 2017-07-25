@@ -24,8 +24,6 @@ import { SurveyService } from './_services/survey.service';
 import { CenterService } from './_services/center.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 
-import { TreeModule } from 'ng2-tree';
-
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog,
         WarnDeletionDialog } from './admin/create-survey/create-survey.component';
@@ -105,7 +103,6 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     HttpModule,
     AppRoutingModule,
     ChartsModule,
-    TreeModule,
     ClipboardModule,
     DragulaModule,
     BrowserAnimationsModule,

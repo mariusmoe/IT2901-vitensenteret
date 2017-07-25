@@ -5,7 +5,6 @@ import { JwtHelper } from 'angular2-jwt';
 import { environment } from '../../environments/environment';
 import { Router } from '@angular/router';
 
-import { TreeModel, RenamableNode } from 'ng2-tree';
 import { User } from '../_models/user';
 import { Folder } from '../_models/folder';
 import { Survey } from '../_models/survey';
@@ -46,33 +45,6 @@ export class UserFolderService {
     return localStorage.getItem('token');
   }
 
-
-  private treeGeneratorRecursive(currNode: Folder) {
-    const newNode: TreeModel = {
-      value: currNode.title,
-      children: [],
-    };
-    currNode.surveys.forEach( (s) => {
-      // push surveys
-      newNode.children.push({
-        value: <RenamableNode>{
-          survey: s,
-          setName(name: string): void {
-          },
-          toString(): string {
-            return this.survey.name;
-          },
-        }
-      });
-    });
-    currNode.folders.forEach( (f: Folder) => {
-      // push surveys
-      newNode.children.push(this.treeGeneratorRecursive(f));
-    });
-
-    return newNode;
-  }
-
   getAllFolders(): Observable<Folder[]> {
 
     const token = this.getToken();
@@ -109,5 +81,41 @@ export class UserFolderService {
     );
   }
 
+
+  renameFolder(folder: Folder): Observable<Folder[]> {
+    const token = this.getToken();
+    const headers = new Headers();
+    headers.append('Authorization', `${token}`);
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    const body = { folder: folder };
+    return this.http.patch(environment.URL.folders, body, options).map(
+      response => {
+        return response.json();
+      },
+      error => {
+        console.log(error.text());
+        return null;
+      }
+    );
+  }
+
+  updateFolders(folder: Folder, secondaryFolder: Folder): Observable<Folder[]> {
+    const token = this.getToken();
+    const headers = new Headers();
+    headers.append('Authorization', `${token}`);
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    const body = { folder: folder, secondaryFolder: secondaryFolder };
+    return this.http.patch(environment.URL.folders, body, options).map(
+      response => {
+        return response.json();
+      },
+      error => {
+        console.log(error.text());
+        return null;
+      }
+    );
+  }
 
 }
