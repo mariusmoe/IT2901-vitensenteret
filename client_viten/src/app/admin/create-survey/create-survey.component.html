@@ -134,7 +134,7 @@
       </md-card>
     </div>
     <div class="submitBox optionContainer">
-      <button *ngIf="!submitLoading" md-raised-button class="btn btn-success" color="primary" type="submit" (click)="submitSurvey()" [disabled]="!canPostSurvey">
+      <button *ngIf="!submitLoading" md-raised-button class="btn btn-success" color="primary" type="submit" (click)="saveChanges()" [disabled]="!canPostSurvey">
         <div [mdTooltip]="'Several fields are required. Verify that you have filled out all required fields.' | translate" tooltip-position="above">{{ 'Submit' | translate }}</div>
       </button>
       <div *ngIf="submitLoading" class="submitLoading">

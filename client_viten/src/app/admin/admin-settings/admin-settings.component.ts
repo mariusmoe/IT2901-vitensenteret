@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdTabChangeEvent } from '@angular/material';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
@@ -25,6 +25,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private selectedRow: number;
   private referralURL = '';
   private emailSub: Subscription;
+  public tabIndex: number;
   selectedLanguage;
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
@@ -50,7 +51,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       this.selectedRole = this.roles[2].value;
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
-      if (this.user.role === 'sysadmin') {
+      if (this.user.role === 'sysadmin' || this.user.role === 'vitenleader') {
         this.getUsers(); // TODO: if user ISN'T sysadmin, do not do execute getUsers()
       }
       this.newEmailForm = fb.group({
@@ -60,6 +61,9 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         this.centers = result;
         this.selectedCenter = localStorage.getItem('center');
       });
+      if (localStorage.getItem('activesettingstab')) {
+        this.tabIndex = Number(localStorage.getItem('activesettingstab'));
+      }
     }
 
 
@@ -71,6 +75,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // this.emailSub.unsubscribe();
+  }
+
+  onTabChange(e: MdTabChangeEvent) {
+    localStorage.setItem('activesettingstab', e.index.toString());
   }
 
   /**
@@ -242,6 +250,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         this.dialogRef = null;
       });
     }
+  }
+
+
+  updateCenter(centerId: string) {
+    this.router.navigate(['/admin/center/' + centerId]);
   }
 
 
