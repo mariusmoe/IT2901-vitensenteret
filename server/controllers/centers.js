@@ -54,6 +54,46 @@ exports.getAllCenters = (req, res, next) => {
   }).lean();
 }
 
+exports.patchCenterName = (req, res, next) => {
+  const name = req.body.name;
+  let centerId = '';
+  console.log(name);
+  if (!name) {
+    return res.status(400).send({message: status.NO_NAME_PROVIDED.message, status: status.NO_NAME_PROVIDED.code});
+  }
+  if (req.user.role == 'sysadmin') {
+    centerId = req.body.centerId;
+  } else {
+    centerId = req.user.center;
+  }
+  Center.findByIdAndUpdate(centerId, {name: name}, (err, center) => {
+    return res.status(200).send({message: status.NAME_CHANGED.message, status: status.NAME_CHANGED.code})
+  })
+
+
+}
+
+
+
+exports.postCenter = (req, res, next) => {
+  const name = req.body.name;
+  const password = req.body.password;
+
+  if(!name) {
+    // respond no name
+  }
+  if(!password) {
+    //respond no password
+  }
+  let newCenter = new Center({
+    name: name,
+    password: password
+  })
+  newCenter.save((err, center) => {
+    if(err) { return next(err); }
+    return res.status(200).send({message: status.CENTER_ADDED.message, status: status.CENTER_ADDED.code})
+  })
+}
 
 // Patch
 /**

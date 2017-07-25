@@ -41,6 +41,7 @@ export const LANG_EN_TRANS = {
   'User': 'User',
   'Nickname': 'Nickname',
   'Code': 'Code',
+  'Contributors': 'Contributors',
 
   // roles
   'admin': 'Superadmin',
@@ -125,6 +126,9 @@ export const LANG_EN_TRANS = {
   'Could not post your survey. Error:': 'Could not post your survey. The server replied:',
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
   'Required question': 'Required question',
+  'Warning!': 'Warning!',
+  'All responses to this survey will be lost if you proceed.': 'All responses to this survey will be lost if you proceed.',
+  'Do you wish to proceed?': 'Do you wish to proceed?',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
@@ -166,9 +170,9 @@ export const LANG_EN_TRANS = {
   'Password changed': 'Password changed',
   'Admin settings': 'Admin settings',
   'Change password': 'Change password',
+  'Refer user': 'Refer user',
   'Change email': 'Change email',
   'User settings': 'User settings',
-  'Superadmin settings': 'Superadmin settings',
   'Refer admin': 'Refer admin',
   'Refer member': 'Refer member',
   'You need to write the same password twice': 'You need to write the same password twice',

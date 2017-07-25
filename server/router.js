@@ -160,6 +160,20 @@ module.exports = (app) => {
   //Check if password is correct
   centerRoutes.post('/escape/:centerId', CenterController.checkOneEscape);
 
+  centerRoutes.patch('/name', requireAuth, CenterController.patchCenterName)
+
+  // Add a new center
+  centerRoutes.patch('/new', requireAuth,
+                     AuthenticationController.roleAuthorization(REQUIRE_SYSADMIN),
+                     CenterController.postCenter)
+
+  /*
+   |--------------------------------------------------------------------------
+   | Image routes is in a separate controller
+   |       See controllers/image.js
+   |--------------------------------------------------------------------------
+  */
+
 
   /*
    |--------------------------------------------------------------------------

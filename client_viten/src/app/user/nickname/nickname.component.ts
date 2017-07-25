@@ -1,16 +1,17 @@
-import { Component, OnInit, Output, Input, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, Input, EventEmitter } from '@angular/core';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { Response } from '../../_models/response';
 import { FormControl } from '@angular/forms';
 import { SurveyService } from '../../_services/survey.service';
 import 'rxjs/add/operator/startWith';
+import {Subscription} from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-nickname',
   templateUrl: './nickname.component.html',
   styleUrls: ['./nickname.component.scss']
 })
-export class NicknameComponent implements OnInit {
+export class NicknameComponent implements OnInit, OnDestroy {
   @Input() questionObject: QuestionObject;
   @Input() response: Response;
   @Input() survey: Survey;
@@ -23,7 +24,7 @@ export class NicknameComponent implements OnInit {
   taken; // Testvariable for whether a nickname is taken or not
 
   nickCtrl = new FormControl();
-
+  subscription: Subscription;
   nickNameNotRegistered = false;
 
 
@@ -43,7 +44,7 @@ export class NicknameComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.nickCtrl.valueChanges.subscribe(value => {
+    this.subscription = this.nickCtrl.valueChanges.subscribe(value => {
       // do something with value here
       if (this.nicknamesForSurvey.indexOf(value) === -1 && this.survey.isPost) {
         // tell the user to do the pre survey first
@@ -56,6 +57,10 @@ export class NicknameComponent implements OnInit {
       this.answer.emit(value);
       this.nickNameNotRegistered = false;
     });
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   /**

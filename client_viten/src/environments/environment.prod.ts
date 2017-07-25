@@ -36,5 +36,8 @@ export const environment = {
       allNicknames: 'https://vitensurvey.party/api/survey/all_nicknames',
       allCenters: 'https://vitensurvey.party/api/center/',
       folders: 'https://vitensurvey.party/api/folders/',
+      newCenter: 'https://vitensurvey.party/api/center/new',
+      newCenterName: 'https://vitensurvey.party/api/center/name',
+
     }
 };

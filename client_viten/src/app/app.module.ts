@@ -10,6 +10,7 @@ import { SimpleTimer } from 'ng2-simple-timer';
 import { HostListener } from '@angular/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
 import { HomepageAdminComponent, DeleteSurveyDialog } from './admin/homepage-admin/homepage-admin.component';
@@ -24,7 +25,8 @@ import { CenterService } from './_services/center.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
-import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog } from './admin/create-survey/create-survey.component';
+import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog,
+        WarnDeletionDialog } from './admin/create-survey/create-survey.component';
 import { AdminOutletComponent } from './admin/admin-outlet/admin-outlet.component';
 import { AdminSettingsComponent, DeleteDialog, ReferDialog, CredentialDialog } from './admin/admin-settings/admin-settings.component';
 import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrieval.component';
@@ -52,6 +54,7 @@ import { LogoComponentComponent } from './logo-component/logo-component.componen
 import { SinglechoiceComponent } from './user/singlechoice/singlechoice.component';
 import { NicknameComponent } from './user/nickname/nickname.component';
 import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-prompt.component';
+import { NewCenterComponent } from './admin/new-center/new-center.component';
 
 @NgModule({
   declarations: [
@@ -85,7 +88,12 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     SinglechoiceComponent,
     NicknameComponent,
     QuitsurveyPromptComponent,
-    DeleteSurveyDialog
+    DeleteSurveyDialog,
+    NewCenterComponent,
+    WarnDeletionDialog,
+    // FileDropDirective,
+    // FileUploader,
+    // FileSelectDirective
 
   ],
   imports: [
@@ -98,7 +106,8 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     ClipboardModule,
     DragulaModule,
     BrowserAnimationsModule,
-    MaterialModule
+    MaterialModule,
+    FileUploadModule
   ],
   entryComponents: [
     SurveyAlternativesDialog,
@@ -108,7 +117,8 @@ import { QuitsurveyPromptComponent } from './user/active-survey/quitsurvey-promp
     SurveyPublishDialog,
     CredentialDialog,
     QuitsurveyPromptComponent,
-    DeleteSurveyDialog
+    DeleteSurveyDialog,
+    WarnDeletionDialog,
   ],
   providers: [
     AuthGuard,

@@ -12,6 +12,7 @@ import { SurveyRetrievalComponent } from './admin/survey-retrieval/survey-retrie
 import { AdminSettingsComponent } from './admin/admin-settings/admin-settings.component';
 import { NewUserComponent } from './admin/new-user/new-user.component';
 import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
+import { NewCenterComponent } from './admin/new-center/new-center.component';
 
 
 const appRoutes: Routes = [
@@ -21,6 +22,8 @@ const appRoutes: Routes = [
   { path: 'admin', component: AdminOutletComponent, canActivate: [AuthGuard],
     children: [
       { path: 'settings', component: AdminSettingsComponent, canActivate: [AuthGuard] },
+      { path: 'center', component: NewCenterComponent, canActivate: [AuthGuard] },
+      { path: 'center/:centerId', component: NewCenterComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey/:surveyId', component: CreateSurveyComponent, canActivate: [AuthGuard] },
       { path: 'editsurvey/:surveyId/prepost', component: CreateSurveyComponent, canActivate: [AuthGuard] },
