@@ -163,6 +163,8 @@ export const LANG_NO_TRANS = {
   'Go to survey': 'Gå til undersøkelsen',
   'Go to post survey': 'Gå til post undersøkelse',
   'The survey is not active': 'Undersøkelsen er ikke aktiv',
+  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
+  'Undersøkelsen er over og kan ikke publiseres på nytt. Hvis du ønsker å kjøre undersøkelsen på nytt, prøv å kopiere den.',
 
 
   // Admin settings component
@@ -216,8 +218,9 @@ export const LANG_NO_TRANS = {
   'Start survey': 'Start undersøkelse',
 
   // PDF download lines
-  'Date created: d': 'Dato laget: %0',
-  'Date printed: d': 'Dato printet: %0',
+  'Last modified: d': 'Sist oppdatert: %0',
+  'Published: d': 'Publisert: %0',
+  'Completed: d': 'Avsluttet: %0',
   'Figure: n': 'Figur: %0',
   'Table: n': 'Tabell: %0',
 

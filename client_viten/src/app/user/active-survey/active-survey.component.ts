@@ -10,6 +10,8 @@ import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
 import { Subscription } from 'rxjs/Subscription';
+import { MdSnackBar } from '@angular/material';
+
 
 @Component({
   selector: 'active-survey',
@@ -137,6 +139,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private timer: SimpleTimer,
     public dialog: MdDialog,
+      public snackBar: MdSnackBar,
     public translateService: TranslateService,
     private title: Title) {
       title.setTitle(translateService.instant('Vitensenteret - Survey'));
@@ -160,9 +163,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
           return;
         }
         this.survey = result.survey;
-        if (!this.survey.active) {
-          this.router.navigate(['/choosesurvey']);
-        }
+
         this.response = <Response> {
             nickname: undefined,
             questionlist: [],
@@ -193,7 +194,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
             );
         });
 
-        if (this.survey && this.survey.active) {
+        if (this.survey && this.survey._id) {
           this.properSurvey = true;
         } else {
           console.log(this.survey)
@@ -206,6 +207,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.timer.unsubscribe('refreshNicknames');
+    this.timer.delTimer('refreshNicknames');
   }
   /**
    * This method starts the survey as well as the inactivity timer
@@ -217,10 +219,6 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
 
         sub.unsubscribe();
 
-        if (!result.survey.active) {
-          this.showModal();
-          return;
-        }
         this.started = true;
         if (this.survey.isPost || this.survey.postKey !== undefined) {
           this.postDone = false;
@@ -273,7 +271,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         }
         this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
-        if (this.survey && this.survey.active) {
+        if (this.survey && this.survey._id) {
           this.properSurvey = true;
         }
       });
@@ -446,6 +444,9 @@ addOrChangeAnswer(alternative: any) {
  * The timer-methods update the counters accordingly to realtime seconds, and aborts survey if time has passed over threshold
  */
  listenCallback() {
+   if (!this.survey.active) {
+     return;
+   }
    this.abortCounter++;
    if (this.abortCounter >= 60) {
      this.exitSurvey();
@@ -460,6 +461,17 @@ addOrChangeAnswer(alternative: any) {
  */
 resetTimer() {
   this.abortCounter = 0;
+}
+
+/**
+ * Opens a snackbar with the given message and action message
+ * @param  {string} message The message that is to be displayed
+ * @param  {string} action  the action message that is to be displayed
+ */
+openSnackBar(message: string, action: string) {
+  this.snackBar.open(message, action, {
+    duration: 5000,
+  });
 }
 
 /**
@@ -487,7 +499,11 @@ resetTimer() {
         }
       },
       error => {
-          console.error('Error when posting survey');
+          console.error(error._body);
+          if (error._body){
+            const error_message = JSON.parse(error._body)
+              this.openSnackBar(error_message['message'], 'FAILURE ');
+          }
           this.postDone = false;
           this.isNicknameTaken = true;
       });
@@ -551,13 +567,5 @@ resetTimer() {
     } else if (this.playButtonActive === 'active') {
       this.playButtonActive = 'inactive';
     }
-  }
-
-  hideModal() {
-    this.showmodal = false;
-  }
-
-  showModal() {
-    this.showmodal = true;
   }
 }

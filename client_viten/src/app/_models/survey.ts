@@ -28,10 +28,10 @@ export interface Survey {
   isPost: boolean;
   postKey?: string;
   comment?: string;
-  date: string;
-  activationDate: string;
+  date?: string;
+  activationDate?: string;
   deactivationDate?: string;
-  active: boolean;
+  active?: boolean;
   questionlist?: QuestionObject[];
   endMessage: {
     no: string;

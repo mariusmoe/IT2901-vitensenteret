@@ -32,7 +32,7 @@ export class SurveyService {
       return true;
     },
     error => {
-      return false;
+      return error;
     });
   }
 

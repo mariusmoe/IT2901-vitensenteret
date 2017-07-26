@@ -194,6 +194,10 @@ module.exports = {
     message: 'You do not have sufficcient privileges for this center.',
     code: 2088
   },
+  SURVEY_DEACTIVATED: {
+    message: 'Survey has been deactivated',
+    code: 2865
+  },
 
   // FOLDER CODES
 
@@ -228,6 +232,10 @@ module.exports = {
   FOLDER_SUCCESSFULLY_UPDATED: {
     message: 'The folder(s) was successfuly updated.',
     code: 3008,
+  },
+  SURVEY_PUBLISHED: {
+    message: 'Survey is published and cannot be changed. Try to copy this survey if you want to make changes.',
+    code: 2075
   },
 
 }

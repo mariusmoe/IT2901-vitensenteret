@@ -32,13 +32,15 @@ exports.createSurvey = (req, res, next) => {
   receivedSurvey.center = req.user.center.toString();
   delete receivedSurvey.deactivationDate
 
+
   if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
   let newSurvey = new Survey ( receivedSurvey );
 
-
+  newSurvey.active = false;
+  newSurvey.date = new Date();
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
@@ -229,25 +231,48 @@ exports.patchOneSurvey = (req, res, next) => {
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
-  // TODO: delete previos responses
-  Response.remove({surveyId: surveyId}, (err) => {
-    if (err) { return next(err); }
-    Nickname.remove({surveyId: surveyId}, (err) => {
-      // Set ID
-      survey._id = surveyId;
-      // if we receive a __v property in our survey, mongodb will crash
-      // as it will attempt to SET and also INC the value at the same time (see below).
-      delete survey.__v; // DO NOT REMOVE THIS!!
-      // thus we delete the version here.
 
-      Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
-        if (!survey) {
-          return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-        }
+
+  Survey.findById(surveyId, (err, foundSurvey) => {
+    if (foundSurvey.deactivationDate) {
+      return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
+    }
+    if (foundSurvey.active && survey.active) {
+      return res.status(200).send({message: status.SURVEY_PUBLISHED.message, status: status.SURVEY_PUBLISHED.code, survey: savedSurvey})
+    }
+    if (foundSurvey.active && !survey.active) {
+      foundSurvey.deactivationDate = new Date();
+      foundSurvey.active = false;
+      foundSurvey.save((err, savedSurvey) => {
         if (err) { return next(err); }
-        return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
-      });
-    })
+        return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: savedSurvey})
+
+      })
+    } else {
+      // TODO: delete prev responses
+      Response.remove({surveyId: { $in: [surveyId, foundSurvey.postKey]}}, (err) => {
+        if (err) { return next(err); }
+        Nickname.remove({surveyId: surveyId}, (err) => {
+          // Set ID
+          survey._id = surveyId;
+          // if we receive a __v property in our survey, mongodb will crash
+          // as it will attempt to SET and also INC the value at the same time (see below).
+          delete survey.__v; // DO NOT REMOVE THIS!!
+          // thus we delete the version here.
+          survey.date = new Date();
+          if (survey.active) {
+            survey.activationDate = new Date();
+          }
+          Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
+            if (err) { return next(err); }
+            if (!survey) {
+              return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+            }
+            return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+          });
+        })
+      })
+    }
   })
 }
 
@@ -353,6 +378,8 @@ exports.answerOneSurvey = (req, res, next) => {
   if (!val.responseValidation(responseObject)) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
+
+
   if (responseObject.nickname) {
     // Helper function for readability down below
     const setNickname = (surveyId, nickname, callback) => {
@@ -381,6 +408,9 @@ exports.answerOneSurvey = (req, res, next) => {
     }
 
     Survey.findById(surveyId, (err, survey) => {
+      if (survey.deactivationDate) {
+        return res.status(400).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
+      }
       if (survey.isPost) { // TODO: < --- if err, then this goes bad here!
 
         // ^ FIXME! (the surveyId is never verifed to exist)
@@ -451,7 +481,7 @@ exports.getNicknamesForOneSurvey = (req, res, next) => {
           // console.log(nicknames);
           if (err) { return next(err); }
           if (nicknames.length == 0) {
-            return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+            return res.status(200).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
           }
           return res.status(200).send( {nicknames: nicknames} );
         });

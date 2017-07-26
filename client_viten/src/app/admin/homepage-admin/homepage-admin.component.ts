@@ -78,16 +78,17 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     this.postResponses = undefined;
 
     this.loadingSurvey = true;
-    this.surveyService.getSurvey(surveyId).subscribe( (response) => {
+    const sub = this.surveyService.getSurvey(surveyId).subscribe( (response) => {
       this.responses = <Response[]>response.responses;
       this.survey = <Survey>response.survey;
-
+      sub.unsubscribe();
       if (this.survey.postKey && this.survey.postKey.length > 0) {
         this.loadingPostSurvey = true;
-        this.surveyService.getSurvey(this.survey.postKey).subscribe( (postResponse) => {
+        const sub2 = this.surveyService.getSurvey(this.survey.postKey).subscribe( (postResponse) => {
           this.postResponses = <Response[]>postResponse.responses;
           this.postSurvey = <Survey>postResponse.survey;
           this.loadingPostSurvey = false;
+          sub2.unsubscribe();
         });
       }
       this.loadingSurvey = false;
@@ -133,7 +134,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     // patch the survey
     const sub1 = this.surveyService.patchSurvey(this.survey._id, this.survey).subscribe(result => {
       // update the all surveys list as well
-      const sub2 = this.surveyService.getAllSurveys().subscribe(r => sub2.unsubscribe() );
+      const sub2 = this.surveyService.getAllSurveys().subscribe(r => {
+        this.getSurvey(this.survey._id);
+        sub2.unsubscribe();
+      } );
 
       sub1.unsubscribe();
     }, error => {
@@ -232,15 +236,20 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     pdf.setFontSize(8);
     pdf.text(25, 44, this.survey.comment);
     // Dates and num answers are right-aligned (Logo added at the very bottom)
-    rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
-    rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
+    rightAlignedText(25, 34, this.translateService.instant('Last modified: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
+    if(this.survey.activationDate) {
+      rightAlignedText(25, 39, this.translateService.instant('Published: d', this.datePipe.transform(this.survey.activationDate, 'yyyy-MM-dd')));
+      if (this.survey.deactivationDate) {
+        rightAlignedText(25, 44, this.translateService.instant('Completed: d', this.datePipe.transform(this.survey.deactivationDate, 'yyyy-MM-dd')));
+      }
+    }
     const responses = this.responses.length;
     const postResponses = this.responses.length;
     if (this.postSurvey) {
-      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n, m',
+      rightAlignedText(25, 49, this.translateService.instant('Number of responses: n, m',
         [responses.toString(), postResponses.toString()]));
     } else {
-      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n',
+      rightAlignedText(25, 49, this.translateService.instant('Number of responses: n',
         responses.toString()));
     }
 

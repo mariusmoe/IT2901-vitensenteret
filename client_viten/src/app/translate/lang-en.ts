@@ -129,6 +129,8 @@ export const LANG_EN_TRANS = {
   'Warning!': 'Warning!',
   'All responses to this survey will be lost if you proceed.': 'All responses to this survey will be lost if you proceed.',
   'Do you wish to proceed?': 'Do you wish to proceed?',
+  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
+  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
@@ -214,8 +216,9 @@ export const LANG_EN_TRANS = {
   'Start survey': 'Start survey',
 
   // PDF download lines
-  'Date created: d': 'Date created: %0',
-  'Date printed: d': 'Date printed: %0',
+  'Last modified: d': 'Last modified: %0',
+  'Published: d': 'Published: %0',
+  'Completed: d': 'Completed: %0',
   'Figure: n': 'Figure: %0',
   'Table: n': 'Table: %0',
 

@@ -93,16 +93,11 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       if (sessionSurveyObject && (<Survey>sessionSurveyObject)._id === undefined) {
         this.survey = sessionSurveyObject;
         // though we should update some bits of information;
-        this.survey.date = new Date().toISOString();
-        this.survey.activationDate = new Date().toISOString();
       } else {
         // Do not remove the following lines!
         this.survey = {
           'name': '',
           'comment': '',
-          'date': new Date().toISOString(),
-          'activationDate': new Date().toISOString(), // intentionally not iso string
-          'deactivationDate': undefined,
           'active': true,
           'isPost': false,
           'questionlist': [],
@@ -371,7 +366,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       data: {
         questionObject: qo,
         englishEnabled: this.englishEnabled,
-      }
+      },
+      disableClose: true,
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
     const sub = dialogRef.afterClosed().subscribe( () => {
