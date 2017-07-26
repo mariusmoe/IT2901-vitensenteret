@@ -1,21 +1,17 @@
+
 .searchBox {
-  padding-right: 8px;
   margin-top: 10px;
 }
 .search {
 }
 
 .addButton {
-  max-width: 33px;
-  min-width: 33px; // down from 40px
-  max-height: 33px;
-  min-height: 33px;
-  display:inline-block;
-  margin-top: 6px;
-  margin-left: 4px;
+  display: block;
+  width: 98%;
   .mat-icon {
     line-height: 18px; // down from 24px
   }
+  margin-bottom: 10px;
 }
 
 
@@ -26,7 +22,10 @@
 
 .treeArea {
   max-height: 700px;
-  overflow: scroll;
+  overflow-y: scroll;
+  text-overflow: ellipsis;
+  padding-right: 5px;
+  padding-bottom: 50px;
 }
 
 .tree {
@@ -36,6 +35,11 @@
 
 .click {
   cursor: pointer;
+  display: block;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  height: 30px;
 
   &:link,
   &:hover,
@@ -50,18 +54,23 @@
 li.survey,
 li.folder {
   position: relative;
+  vertical-align: middle;
   list-style-type: none;
 }
 
-md-icon.icon {
-  font-size: 0.95em;
-  top: 2px;
-  left: 2px;
+li {
+  md-icon.icon {
+    font-size: 0.95em;
+    position: relative;
+    top: 2px;
+    left: 2px;
+  }
 }
 .dotdotdot {
   position: absolute;
   right: 4px;
-  top: 1px;
+  height: 100%;
+  top: 0;
 
   cursor: pointer;
 }
@@ -71,6 +80,7 @@ md-icon.icon {
 
   ul {
     padding-left: 6px;
+    background: rgba(0,0,0,0.025);
   }
   &.closed {
     ul {
@@ -80,9 +90,18 @@ md-icon.icon {
 }
 
 .items {
-  min-height: 20px; // NEEDED!!!!!!!! DO NOT REMOVE!!!!!!
+  min-height: 40px; // NEEDED!!!!!!!! DO NOT REMOVE!!!!!!
 }
 
 .firstEntry {
   position: absolute;
+}
+
+.selectedUnderline {
+  height: 2px;
+  position: absolute;
+  background: #000;
+  width: 90%;
+  bottom: 7px;
+  left: 20px;
 }

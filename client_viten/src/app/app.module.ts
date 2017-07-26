@@ -23,6 +23,7 @@ import { LoginComponent } from './admin/login/login.component';
 import { SurveyService } from './_services/survey.service';
 import { CenterService } from './_services/center.service';
 import { AllSurveysComponent } from './admin/all-surveys/all-surveys.component';
+import { FolderOptionsDialog } from './admin/all-surveys/all-surveys.component';
 
 import { ReactiveFormsModule } from '@angular/forms';
 import { CreateSurveyComponent, SurveyAlternativesDialog, SurveyPublishDialog,
@@ -81,6 +82,7 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     YesNoComponent,
     ReferDialog,
     CredentialDialog,
+    FolderOptionsDialog,
     AdminSurveysPipe,
     TranslatePipe,
     MultiplechoiceComponent,
@@ -119,6 +121,7 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     QuitsurveyPromptComponent,
     DeleteSurveyDialog,
     WarnDeletionDialog,
+    FolderOptionsDialog,
   ],
   providers: [
     AuthGuard,
