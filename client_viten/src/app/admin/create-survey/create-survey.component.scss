@@ -17,6 +17,11 @@ h2.alignCenter {
 md-card {
   md-input-container {
     width: 100%;
+    max-width: 100%;
+    textarea {
+      resize: vertical;
+      max-height: 100px;
+    }
   }
   md-input-container.small {
     width: initial;

@@ -76,8 +76,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
 
     // Safe checking of url if last part is prepost
     if (typeof this.route.snapshot.url[2] !== 'undefined') {
-      console.log('Got here!')
-      console.log(this.route.snapshot.url[2])
       this.isPost = true;
     }
 
@@ -121,8 +119,6 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           this.survey.isPost = true;
 
           this.preSurvey = result.survey;
-          console.log('------------------------------------------------')
-          console.log(this.preSurvey)
         } else {
           this.survey = result.survey;
           this.isPatch = true;
