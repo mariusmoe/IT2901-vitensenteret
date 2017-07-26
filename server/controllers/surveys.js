@@ -543,246 +543,257 @@ exports.getSurveyAsCSV = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-    let questionAnswar = []
+    // let questionAnswar = []
     let csv = "";
-    // const numOptions = {
-    //   smiley: 3,
-    //   binary: 2,
-    //   text: 1,
-    //   star: 5
-    // }
+    const multipleChoiceQestion = (_options, _responses, i, callback) => {
+      let questionOutput = "";
+      _options.forEach( (x) =>{questionOutput += x + ','});
+      questionOutput += '\n'
+      _options.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          response.questionlist[i].forEach((multiOption, n) => {
+            if (response.questionlist[i][n] == y) {
+              totalResponse++
+            }
+          })
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const starQuestion = (_responses, i, callback) => {
+      let questionOutput = "";
+      let starList = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
+      starList.forEach( (x) =>{questionOutput += x + ','});
+      questionOutput += '\n'
+      starList.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const smileyQuestion = (_responses, i, callback) => {
+      let questionOutput = "";
+      questionOutput += 'Sad,Neutral,Happy'
+      questionOutput += '\n'
+      let smileyList = ['Sad','Neutral','Happy']
+      smileyList.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const binaryQuestion = (_responses, i, callback) => {
+      let questionOutput = "";
+
+      questionOutput += 'No,Yes'
+      questionOutput += '\n'
+      let binaryList = ['Nei', 'Ja']
+      binaryList.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const defaultQuestion = (_options, _responses, i, callback) => {
+      let questionOutput = "";
+
+      _options.forEach( (x) =>{questionOutput += x + ','});
+      questionOutput += '\n'
+      _options.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const getSummary = (responses, callback) => {
+      let summary = "";
+      survey.questionlist.forEach((question, i) => {
+        // Add question number for readability; Add question to csv
+        summary += String(i) + '. ' + question.lang.no.txt + '\n'
+        switch (question.mode) {
+          case 'multi':
+            multipleChoiceQestion(question.lang.no.options, responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          case 'text':
+            responses.forEach((response) => {
+              summary += response.questionlist[i] + '\n'
+            })
+            break;
+          case 'star':
+            starQuestion(responses, i, (questionOutput) => {
+              summary += questionOutput;
+            })
+            break;
+          case 'smiley':
+            smileyQuestion(responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          case 'binary':
+            binaryQuestion(responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          default:
+            defaultQuestion(question.lang.no.options, responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          }
+        });
+      callback(summary);
+    }
+
+    const getDetailedSummary = (responses, callback) => {
+      let summary = "";
+      survey.questionlist.forEach((question, i) => {
+        // Add question number for readability; Add question to csv
+        summary += String(i) + '. ' + question.lang.no.txt + '\nBrukerID,'
+        switch (question.mode) {
+          case 'multi':
+            question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
+            summary += '\n'
+            responses.forEach( (response) => {
+              summary += response.nickname + ', '
+              summary += response.questionlist[i].toString() + '\n'
+            });
+            break;
+          case 'text':
+            summary += ', Tekst\n'
+            responses.forEach((response) => {
+              summary += response.nickname + ', '
+              summary += response.questionlist[i] + '\n'
+            })
+            break;
+          case 'star':
+            let starList = ['1 stjerne', '2 stjerner', '3 stjerner', '4 stjerner', '5 stjerner']
+            starList.forEach( (x) => {summary +=  x + ','});
+            summary += '\n'
+            responses.forEach( (response) => {
+              summary += response.nickname + ', '
+              summary += response.questionlist[i].toString() + '\n'
+            });
+            break;
+          case 'smiley':
+            let smileyList = ['Trist','Nøytral','Glad']
+            smileyList.forEach( (x) => {summary +=  x + ','});
+            summary += '\n'
+            responses.forEach( (response) => {
+              summary += response.nickname + ', '
+              summary += response.questionlist[i].toString() + '\n'
+            });
+            break;
+          case 'binary':
+            let binaryList = ['Nei','Ja']
+            binaryList.forEach( (x) => {summary +=  x + ','});
+            summary += '\n'
+            responses.forEach( (response) => {
+              summary += response.nickname + ', '
+              summary += response.questionlist[i].toString() + '\n'
+            });
+            break;
+          default:
+            question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
+            summary += '\n'
+            responses.forEach( (response) => {
+              summary += response.nickname + ', '
+              summary += response.questionlist[i].toString() + '\n'
+            });
+            break;
+          }
+        });
+      callback(summary);
+    }
+
     Response.find({surveyId: surveyId}, (err, responses) => {
       if (err) { return next(err); }
+      // console.log(survey);
       if (survey.postKey) {
         csv += 'PRE survey\n'
       }
       // for every question in the survey
       csv += survey.name + '\n'
-      survey.questionlist.forEach((question, i) => {
-        // Add question number for readability; Add question to csv
-        csv += String(i) + '. ' + question.lang.no.txt + '\n'
-        switch (question.mode) {
-          case 'multi':
-            question.lang.no.options.forEach( (x) =>{csv += x + ','});
-            csv += '\n'
-            question.lang.no.options.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                console.log(response);
-                console.log("-------------");
-                console.log(i);
-                response.questionlist[i].forEach((multiOption, n) => {
-                  if (response.questionlist[i][n] == y) {
-                    totalResponse++
-                  }
-                })
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          case 'text':
-            responses.forEach((response) => {
-              csv += response.questionlist[i] + '\n'
-            })
-            break;
-          case 'star':
-            let starList = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
-            starList.forEach( (x) =>{csv += x + ','});
-            csv += '\n'
-            starList.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          case 'smiley':
-            csv += 'Sad,Neutral,Happy'
-            csv += '\n'
-            let smileyList = ['Sad','Neutral','Happy']
-            smileyList.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          case 'binary':
-            csv += 'No,Yes'
-            csv += '\n'
-            let binaryList = ['No', 'Yes']
-            binaryList.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          default:
-            question.lang.no.options.forEach( (x) =>{csv += x + ','});
-            csv += '\n'
-            question.lang.no.options.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
+      getSummary(responses, (summary) => {
+        csv += summary
+      });
+
+      if (survey.postKey) {
+        csv += 'POST survey\n';
+        const postKey = survey.postKey;
+        Survey.findById(postKey, (err, postSurvey) => {
+        if (!postSurvey) {
+          return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
         }
-      })
+        if (err) { return next(err); }
 
+        Response.find({surveyId: postKey}, (err, postResponses) => {
+          if (err) { return next(err); }
+          csv += postSurvey.name + '\n'
+          getSummary(postResponses, (summary) => {
+            csv += summary
+          });
 
-            if (survey.postKey) {
-              csv += 'POST survey\n';
-              const postKey = survey.postKey;
-              Survey.findById(postKey, (err, survey) => {
-              if (!survey) {
-                return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-              }
-              if (err) { return next(err); }
+        // TODO: Add detaild prepost view
+        csv += "\n\nDETAILS\nPRE\n"+postSurvey.name + '\n'
+        getDetailedSummary(responses, (detailedSummary) => {
+          csv += detailedSummary
+        });
+        csv += "\nPOST\n"
+        getDetailedSummary(postResponses, (detailedSummary) => {
+          csv += detailedSummary
+        });
 
-              let questionAnswar = []
-
-              // const numOptions = {
-              //   smiley: 3,
-              //   binary: 2,
-              //   text: 1,
-              //   star: 5
-              // }
-              Response.find({surveyId: postKey}, (err, responses) => {
-                if (err) { return next(err); }
-                if (survey.postKey) {
-                  csv += 'PRE survey\n'
-                }
-                // for every question in the survey
-                csv += survey.name + '\n'
-                survey.questionlist.forEach((question, i) => {
-                  // Add question number for readability; Add question to csv
-                  csv += String(i) + '. ' + question.lang.no.txt + '\n'
-                  switch (question.mode) {
-                    case 'multi':
-                      question.lang.no.options.forEach( (x) =>{csv += x + ','});
-                      csv += '\n'
-                      question.lang.no.options.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response) {
-                            console.log(response);
-                            console.log("-------------");
-                            console.log(i);
-                            response.questionlist[i].forEach((multiOption, n) => {
-                              if (response.questionlist[i][n] == y) {
-                                totalResponse++
-                              }
-                            })
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    case 'text':
-                      responses.forEach((response) => {
-                        csv += response.questionlist[i] + '\n'
-                      })
-                      break;
-                    case 'star':
-                      let starList = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
-                      starList.forEach( (x) =>{csv += x + ','});
-                      csv += '\n'
-                      starList.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    case 'smiley':
-                      csv += 'Sad,Neutral,Happy'
-                      csv += '\n'
-                      let smileyList = ['Sad','Neutral','Happy']
-                      smileyList.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    case 'binary':
-                      csv += 'No,Yes'
-                      csv += '\n'
-                      let binaryList = ['No', 'Yes']
-                      binaryList.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    default:
-                      question.lang.no.options.forEach( (x) =>{csv += x + ','});
-                      csv += '\n'
-                      question.lang.no.options.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                  }
-                })
-
-
-                // Open a gate to the temp directory
-                temp.open('myprefix', function(err, info) {
-                  if (!err) {
-                    fs.write(info.fd, csv, function(err){
-                      if (err) {console.error(err);}
-                    });
-                    // close file system operation (it is now safe to read from file)
-                    fs.close(info.fd, function(err) {
-                      res.download(info.path, 'data.csv', function(err){
-                        if (err) {console.error(err);}
-                      })
-                    });
-                  }
-                });
+          // Open a gate to the temp directory
+          temp.open('myprefix', function(err, info) {
+            if (!err) {
+              fs.write(info.fd, csv, function(err){
+                if (err) {console.error(err);}
               });
-            });
-          } else {
+              // close file system operation (it is now safe to read from file)
+              fs.close(info.fd, function(err) {
+                res.download(info.path, 'data.csv', function(err){
+                  if (err) {console.error(err);}
+                })
+              });
+            }
+          });
+        });
+      });
+    } else {
 
       // Open a gate to the temp directory
       temp.open('myprefix', function(err, info) {
@@ -795,10 +806,10 @@ exports.getSurveyAsCSV = (req, res, next) => {
             res.download(info.path, 'data.csv', function(err){
               if (err) {console.error(err);}
             })
-          });
-        }
-      });
-    }
+           });
+          }
+        });
+      }
     });
   });
 }

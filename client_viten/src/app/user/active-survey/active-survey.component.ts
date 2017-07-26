@@ -284,11 +284,11 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
  * @param  {any} alternative a list of numbers to send to survey
  */
 addOrChangeAnswer(alternative: any) {
+  this.response.questionlist[this.page] = alternative;
   if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null && alternative != null) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
   }
-  this.response.questionlist[this.page] = alternative;
 
   // This method checks if a qestion is required and has been answered
   if (this.survey.questionlist[this.page].required) {
@@ -482,7 +482,7 @@ openSnackBar(message: string, action: string) {
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
       const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-      console.log(responseClone);
+      // console.log(responseClone);
       this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
         if (proper) {
           const indexOfNickname = this.nicknamesForSurvey.indexOf(this.response.nickname);
