@@ -7,4 +7,5 @@ export interface Folder {
     folders?: [Folder];
     surveys?: [Survey];
     open?: boolean;
+    user?: string; // userId
 }

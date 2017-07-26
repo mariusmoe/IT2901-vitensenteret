@@ -185,7 +185,9 @@ module.exports = (app) => {
 
   folderRoutes.post('/', requireAuth, FolderController.createUserFolder);
 
-  folderRoutes.patch('/', requireAuth, FolderController.updateFolders);
+  folderRoutes.patch('/', requireAuth, FolderController.updateFolders); // updates two folders (drag'n'drop to/from folders)
+
+  folderRoutes.patch('/:folderId', requireAuth, FolderController.updateFolderSingular);
 
   folderRoutes.delete('/:folderId', requireAuth, FolderController.deleteUserFolder);
 

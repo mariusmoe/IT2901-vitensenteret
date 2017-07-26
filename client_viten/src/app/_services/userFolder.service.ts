@@ -83,15 +83,15 @@ export class UserFolderService {
   }
 
 
-  renameFolder(folder: Folder): Observable<Folder[]> {
+  patchFolder(updatedFolder: Folder): Observable<Folder[]> {
     const token = this.getToken();
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
-    const body = { folder: folder };
-    return this.http.patch(environment.URL.folders, body, options).map(
+    const body = { folder: updatedFolder };
+    return this.http.patch(environment.URL.folders + updatedFolder._id, body, options).map(
       response => {
         return response.json();
       },
@@ -111,6 +111,24 @@ export class UserFolderService {
     const options = new RequestOptions({ headers: headers }); // Create a request option
 
     return this.http.patch(environment.URL.folders, data, options).map(
+      response => {
+        return response.json();
+      },
+      error => {
+        console.log(error.text());
+        return null;
+      }
+    );
+  }
+
+  deleteFolder(folderId: string) {
+    const token = this.getToken();
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+    headers.append('Authorization', `${token}`);
+    const options = new RequestOptions({ headers: headers }); // Create a request option
+
+    return this.http.delete(environment.URL.folders + folderId, options).map(
       response => {
         return response.json();
       },

@@ -57,7 +57,7 @@ module.exports = {
     code: 1017
   },
   INSUFFICIENT_PRIVILEGES: {
-    message: 'INSUFFICIENT PRIVILEGES',
+    message: 'Insufficient privileges.',
     code: 2050
   },
 
@@ -98,6 +98,15 @@ module.exports = {
   SURVEY_DELETED: {
     message: 'Survey has been deleted',
     code: 2025
+  },
+  SURVEY_DEACTIVATED: {
+    message: 'Survey has been deactivated',
+    code: 2865
+  },
+
+  SURVEY_PUBLISHED: {
+    message: 'Survey is published and cannot be changed. Try to copy this survey if you want to make changes.',
+    code: 2075
   },
   NO_NICKNAME_PROVIDED: {
     message: 'No nickname provided',
@@ -194,10 +203,7 @@ module.exports = {
     message: 'You do not have sufficcient privileges for this center.',
     code: 2088
   },
-  SURVEY_DEACTIVATED: {
-    message: 'Survey has been deactivated',
-    code: 2865
-  },
+
 
   // FOLDER CODES
 
@@ -233,9 +239,16 @@ module.exports = {
     message: 'The folder(s) was successfuly updated.',
     code: 3008,
   },
-  SURVEY_PUBLISHED: {
-    message: 'Survey is published and cannot be changed. Try to copy this survey if you want to make changes.',
-    code: 2075
+  FOLDER_NOT_FOUND: {
+    message: 'Could not find the requested folder.',
+    code: 3009
   },
+  FOLDER_DELETED: {
+    message: 'The folder and all its content was successfully deleted.',
+    code: 3010
+  }
+
+
+
 
 }
