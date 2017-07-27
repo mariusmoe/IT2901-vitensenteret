@@ -27,6 +27,9 @@ const AuthenticationController = require('./authentication'),
 // var upload = multer({ storage: _storage });
 
 
+const UPLOAD_FOLDER = __dirname +'/../../client_viten/src/assets/uploads/'
+// const UPLOAD_FOLDER = './uploads'
+
 // Require login/auth
 const requireAuth   = passport.authenticate('jwt', { session: false });
 // const requireLogin  = passport.authenticate('local', { session: false });
@@ -67,7 +70,7 @@ imageRoutes.post('/center', requireAuth, function(req, res) {
 
   var storage = multer.diskStorage({
   	destination: function(req, file, callback) {
-  		callback(null, './uploads')
+  		callback(null, UPLOAD_FOLDER)
   	},
   	filename: function(req, file, callback) {
       if (typeof req.user.center == 'undefined') {
@@ -83,24 +86,26 @@ imageRoutes.post('/center', requireAuth, function(req, res) {
 	}).fields([{ name: 'file', maxCount: 1 }, { name: 'center', maxCount: 1 }])
 	upload(req, res, function(err) {
     if (err) {
+      console.log(UPLOAD_FOLDER);
+      console.log(err);
       return res.status(400).send( {message: status.FAILED_UPLOAD.message, status: status.FAILED_UPLOAD.code})
     }
 
     if (typeof req.user.center == 'undefined') {
-      var bitmap = fs.readFileSync('./uploads/' + req.body.center + path.extname(req.files['file'][0].filename)).toString('hex', 0, 4)
+      var bitmap = fs.readFileSync(UPLOAD_FOLDER + req.body.center + path.extname(req.files['file'][0].filename)).toString('hex', 0, 4)
       // console.log(file);
     } else {
-      var bitmap = fs.readFileSync('./uploads/' + req.files['file'][0].filename).toString('hex', 0, 4)
+      var bitmap = fs.readFileSync(UPLOAD_FOLDER + req.files['file'][0].filename).toString('hex', 0, 4)
     }
 
 
     // var bitmap = fs.readFileSync('./uploads/' + req.files['file'][0].filename).toString('hex', 0, 4)
 		if (!checkSignatureNumbers(bitmap)) {
       if (typeof req.user.center == 'undefined') {
-        fs.unlinkSync('./uploads/' + req.body.center + path.extname(req.files['file'][0].filename))
+        fs.unlinkSync(UPLOAD_FOLDER + req.body.center + path.extname(req.files['file'][0].filename))
         res.end('File is no valid')
       } else {
-        fs.unlinkSync('./uploads/' + req.files['file'][0].filename)
+        fs.unlinkSync(UPLOAD_FOLDER + req.files['file'][0].filename)
   			res.end('File is no valid')      }
 		}
 

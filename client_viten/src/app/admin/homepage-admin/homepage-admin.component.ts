@@ -38,6 +38,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
   private routerSub: Subscription;
   public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
+  private center: string;
 
 
   // constructor
@@ -59,6 +60,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       const newParam = this.route.snapshot.params['surveyId'];
       if (newParam) { this.getSurvey(newParam); }
     });
+    this.center = localStorage.getItem('center');
   }
 
   ngOnDestroy() {
@@ -332,7 +334,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     pdf.setPage(1);
     const img = new Image();
-    img.src = '../../assets/images/vitenlogo.png';
+    if (this.center == null) {
+      img.src = '../../assets/images/vitenlogo.png';
+    } else {
+      img.src = '../../assets/uploads/' + this.center.toString() + '.jpg';
+    }
     const self = this;
     const logoSize = 15;
     img.onload = function() {
@@ -340,6 +346,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         canvas.width = img.width;
         canvas.height = img.height;
         canvas.getContext('2d').drawImage(img, 0, 0);
+        // pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
         pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
           pdf.internal.pageSize.width - logoSize - 23, 12, logoSize, logoSize
         );

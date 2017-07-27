@@ -202,6 +202,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           }
         }
       }
+      if (!this.imageLinkValidate(questionObject.imageLink)) {
+        status = false;
+      }
     }
     // and finally set the status
     this.canPostSurvey = status;
@@ -253,7 +256,8 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           delete qo.lang.en.options;
         }
       }
-      if (qo.imageLink && qo.imageLink.length === 0) {
+
+      if ((typeof qo.imageLink === 'string' ) && qo.imageLink.length === 0) {
         delete qo.imageLink;
       }
     }
