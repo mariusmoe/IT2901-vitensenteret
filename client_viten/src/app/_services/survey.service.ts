@@ -6,7 +6,7 @@ import { Response } from '../_models/response';
 import { SurveyList } from '../_models/index';
 import { TranslateService } from './translate.service';
 import { environment } from '../../environments/environment';
-import 'rxjs/add/operator/map'
+import 'rxjs/add/operator/map';
 
 
 @Injectable()
@@ -16,45 +16,6 @@ export class SurveyService {
 
   constructor(private http: Http, private translateService: TranslateService) {
 
-  }
-
-  /**
-   * Requests to exit a survey
-   * @param  {string}              password The password that is to match the exit survey password
-   * @return {Observable<boolean>}          The server's response, as an Observable
-   */
-  checkChoosesurvey(password: string): Observable<boolean> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-
-
-    return this.http.post(environment.URL.checkChoosesurvey, {password: password}, options)
-    .map( response => {
-      return true;
-    },
-    error => {
-      return false;
-    });
-  }
-
-  /**
-   * Requests to change the exit-survey password
-   * @param  {string}              password The new exit-survey password
-   * @return {Observable<boolean>}          The server's response, as an Observable
-   */
-  changeChoosesurvey(password: string): Observable<boolean> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-    const options = new RequestOptions({ headers: headers }); // Create a request option
-
-    return this.http.patch(environment.URL.checkChoosesurvey, {password: password}, options)
-    .map( response => {
-      return true;
-    },
-    error => {
-      return false;
-    });
   }
 
   /**
@@ -71,7 +32,7 @@ export class SurveyService {
       return true;
     },
     error => {
-      return false;
+      return error;
     });
   }
 
@@ -109,9 +70,11 @@ export class SurveyService {
    * @return {Observable<any>} returns an observable holding the requested survey and responses
    */
    getSurvey(idString: String): Observable<any> {
+     console.log(idString);
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
        const json = response.json();
+       console.log(json);
        const survey = this.correctSurveyValidity(json.survey);
        return { survey: survey, responses: json.responses };
      },
@@ -231,8 +194,9 @@ export class SurveyService {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
+    const center = localStorage.getItem('center');
 
-    return this.http.get(environment.URL.survey, { headers })
+    return this.http.get(environment.URL.surveyAll + '/' + center, { headers })
       .map(
         response => {
           // only update our list for status in the 200 range. If we get status 304

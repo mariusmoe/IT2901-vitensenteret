@@ -15,11 +15,16 @@ export const environment = {
     newEmail:     'http://localhost:2000/api/auth/change_email/',
     newPassword:  'http://localhost:2000/api/auth/change_password/',
     survey:       'http://localhost:2000/api/survey',
+    surveyAll:       'http://localhost:2000/api/survey/all',
     surveyCopy:   'http://localhost:2000/api/survey/copy',
     surveyAsJson: 'http://localhost:2000/api/survey/json',
     surveyAsCSV: 'http://localhost:2000/api/survey/csv',
     newUser: 'http://localhost:2000/api/auth/register',
-    checkChoosesurvey: 'http://localhost:2000/api/survey/escape',
-    allNicknames: 'http://localhost:2000/api/survey/all_nicknames'
+    exitSurvey: 'http://localhost:2000/api/center/escape',
+    allNicknames: 'http://localhost:2000/api/survey/all_nicknames',
+    allCenters: 'http://localhost:2000/api/center/',
+    folders: 'http://localhost:2000/api/folders/',
+    newCenter: 'http://localhost:2000/api/center/new',
+    newCenterName: 'http://localhost:2000/api/center/name',
   }
 };

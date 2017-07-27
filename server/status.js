@@ -56,6 +56,10 @@ module.exports = {
     message: 'Password changed',
     code: 1017
   },
+  INSUFFICIENT_PRIVILEGES: {
+    message: 'Insufficient privileges.',
+    code: 2050
+  },
 
 
   // SURVEY CODES
@@ -95,6 +99,15 @@ module.exports = {
     message: 'Survey has been deleted',
     code: 2025
   },
+  SURVEY_DEACTIVATED: {
+    message: 'Survey has been deactivated',
+    code: 2865
+  },
+
+  SURVEY_PUBLISHED: {
+    message: 'Survey is published and cannot be changed. Try to copy this survey if you want to make changes.',
+    code: 2075
+  },
   NO_NICKNAME_PROVIDED: {
     message: 'No nickname provided',
     code: 2026
@@ -111,6 +124,10 @@ module.exports = {
     message: 'Could not find any nicknames',
     code: 2029
   },
+  NEED_CENTER: {
+    message: 'Need center to store image',
+    code: 6789
+  },
 
   // ROUTER CODES
   ROUTE_INVALID: {
@@ -120,6 +137,14 @@ module.exports = {
   ROUTE_SURVEYS_VALID_NO_SURVEYS: {
     message: "Request successful, but no surveys exist.",
     code: 1015
+  },
+  FAILED_UPLOAD: {
+    message: "Failed to upload. Maybe the key is wrong?.",
+    code: 2019
+  },
+  UPLOAD_SUCCESS: {
+    message: 'Uploaded image successfully.',
+    code: 1017
   },
 
   // SURVEY RESPONSES CODES
@@ -134,5 +159,96 @@ module.exports = {
   SURVEY_RESPONSE_OBJECT_MISSING: {
     message: 'Could not find a response.',
     code: 2032
+  },
+
+  // ESCAPE SURVEY CODES
+  ESCAPE_MISSING_PASSWORD: {
+    message: 'The request requires a password to be set.',
+    code: 2033,
+  },
+  ESCAPE_MISSING_CENTER: {
+    message: 'The request parameter center is invalid.',
+    code: 2033,
+  },
+  ESCAPE_PATCH_ERROR: {
+    message: 'There was an error updating the password.',
+    code: 2033,
+  },
+  ESCAPE_PATCH_SUCCESSFUL: {
+    message: 'The password has been successfully updated.',
+    code: 1017,
+  },
+  ESCAPE_COMPARE_TRUE: {
+    message: 'The password was matched successfully.',
+    code: 1018,
+  },
+  ESCAPE_COMPARE_FALSE: {
+    message: 'The password did not match.',
+    code: 1019,
+  },
+  NO_NAME_PROVIDED: {
+    message: 'No name was provided',
+    code: 2065
+  },
+  NAME_CHANGED: {
+    message: 'Name changed successfully',
+    code: 1873
+  },
+  CENTER_ADDED: {
+    message: 'Center was added successfully',
+    code: 1467
+  },
+
+  WRONG_CENTER: {
+    message: 'You do not have sufficcient privileges for this center.',
+    code: 2088
+  },
+
+
+  // FOLDER CODES
+
+  FOLDER_CREATED: {
+    message: 'The folder was successfully created.',
+    code: 3001,
+  },
+  FOLDER_OBJECT_MISSING: {
+    message: 'Could not find a folder.',
+    code: 3002,
+  },
+  FOLDER_UNPROCESSABLE: {
+    message: 'Folder could not be processed. Check validity.',
+    code: 3003,
+  },
+  FOLDER_PARENT_FOLDERID_MISSING: {
+    message: 'Could not find parent folderId.',
+    code: 3004,
+  },
+  FOLDER_COULD_NOT_RETRIEVE_ALL: {
+    message: 'Could not retrieve all folders.',
+    code: 3005,
+  },
+  FOLDER_ID_MISSING: {
+    message: 'Could not find the ID to update folder.',
+    code: 3006,
+  },
+  FOLDER_SECONDARY_ID_MISSING: {
+    message: 'Could not find the ID of the secondary folder to update folder.',
+    code: 3007,
+  },
+  FOLDER_SUCCESSFULLY_UPDATED: {
+    message: 'The folder(s) was successfuly updated.',
+    code: 3008,
+  },
+  FOLDER_NOT_FOUND: {
+    message: 'Could not find the requested folder.',
+    code: 3009
+  },
+  FOLDER_DELETED: {
+    message: 'The folder and all its content was successfully deleted.',
+    code: 3010
   }
+
+
+
+
 }

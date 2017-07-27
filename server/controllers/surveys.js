@@ -5,6 +5,7 @@ const validator = require('validator'),
       Survey  = require('../models/survey'),
       Response = require('../models/response'),
       Nickname = require('../models/nickname'),
+      UserFolder = require('../models/userFolder'),
       jsonfile = require('jsonfile'),
       crypto = require('crypto'),
       fs = require('fs'),
@@ -27,22 +28,44 @@ exports.createSurvey = (req, res, next) => {
   if (Object.keys(receivedSurvey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
   }
+  receivedSurvey.madeBy = req.user._id.toString();
+  receivedSurvey.center = req.user.center.toString();
+  delete receivedSurvey.deactivationDate
+
+
   if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
-  let newSurvey = new Survey ( receivedSurvey )
+  let newSurvey = new Survey ( receivedSurvey );
+
+  newSurvey.active = false;
+  newSurvey.date = new Date();
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
-    return res.status(200).send( survey );
-  })
+    // only PRE-surveys and non-prepost surveys should go in the folders!
+    if(survey.isPost === false) {
+      UserFolder.findOne({ user: req.user, isRoot: true }, (err2, rootFolder) => {
+        if (err2) { return next(err2); }
+        rootFolder.surveys.push(survey);
+        rootFolder.save((err3, savedRoot) => {
+          if (err3) { return next(err3); }
+          return res.status(200).send( survey );
+        });
+      });
+    } else {
+      // its a post-survey, return without creating a folder entry for it.
+      return res.status(200).send( survey );
+    }
+  });
 }
 
 
 // GET
 exports.getAllSurveys = (req, res, next) => {
-  Survey.find( { 'isPost': false }, { 'name': true, 'active': true, 'date': true, 'comment': true, 'postKey': true }, (err, surveys) => {
+  const centerId = req.params.centerId;
+  Survey.find( { 'isPost': false, 'center': centerId }, { 'name': true, 'active': true, 'date': true, 'comment': true, 'postKey': true }, (err, surveys) => {
     if (!surveys || surveys.length === 0) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
@@ -55,6 +78,20 @@ exports.getAllSurveys = (req, res, next) => {
     return res.status(200).send(surveys);
   }).lean();
 }
+
+/**
+ * @depricated
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+// exports.getAllCenters = (req, res, next) => {
+//   Survey.find( { 'name': true }, (err, centers) => {
+//     if (err) { return next(err); }
+//     return res.status(200).send(centers);
+//   }).lean();
+// }
 
 exports.getOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
@@ -69,6 +106,8 @@ exports.getOneSurvey = (req, res, next) => {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
     if (err) { return next(err); }
+
+
 
     // Need to send answers too
     Response.find({surveyId: surveyId}, (err, responses) => {
@@ -191,20 +230,50 @@ exports.patchOneSurvey = (req, res, next) => {
   if (!val.surveyValidation(survey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
-  // Set ID
-  survey._id = surveyId;
-  // if we receive a __v property in our survey, mongodb will crash
-  // as it will attempt to SET and also INC the value at the same time (see below).
-  delete survey.__v; // DO NOT REMOVE THIS!!
-  // thus we delete the version here.
 
-  Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
-    if (!survey) {
-      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+
+
+  Survey.findById(surveyId, (err, foundSurvey) => {
+    if (foundSurvey.deactivationDate) {
+      return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
     }
-    if (err) { return next(err); }
-    return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
-  });
+    if (foundSurvey.active && survey.active) {
+      return res.status(200).send({message: status.SURVEY_PUBLISHED.message, status: status.SURVEY_PUBLISHED.code, survey: savedSurvey})
+    }
+    if (foundSurvey.active && !survey.active) {
+      foundSurvey.deactivationDate = new Date();
+      foundSurvey.active = false;
+      foundSurvey.save((err, savedSurvey) => {
+        if (err) { return next(err); }
+        return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: savedSurvey})
+
+      })
+    } else {
+      // TODO: delete prev responses
+      Response.remove({surveyId: { $in: [surveyId, foundSurvey.postKey]}}, (err) => {
+        if (err) { return next(err); }
+        Nickname.remove({surveyId: surveyId}, (err) => {
+          // Set ID
+          survey._id = surveyId;
+          // if we receive a __v property in our survey, mongodb will crash
+          // as it will attempt to SET and also INC the value at the same time (see below).
+          delete survey.__v; // DO NOT REMOVE THIS!!
+          // thus we delete the version here.
+          survey.date = new Date();
+          if (survey.active) {
+            survey.activationDate = new Date();
+          }
+          Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
+            if (err) { return next(err); }
+            if (!survey) {
+              return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+            }
+            return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+          });
+        })
+      })
+    }
+  })
 }
 
 // DELETE
@@ -309,6 +378,8 @@ exports.answerOneSurvey = (req, res, next) => {
   if (!val.responseValidation(responseObject)) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
+
+
   if (responseObject.nickname) {
     // Helper function for readability down below
     const setNickname = (surveyId, nickname, callback) => {
@@ -337,6 +408,9 @@ exports.answerOneSurvey = (req, res, next) => {
     }
 
     Survey.findById(surveyId, (err, survey) => {
+      if (survey.deactivationDate) {
+        return res.status(400).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
+      }
       if (survey.isPost) { // TODO: < --- if err, then this goes bad here!
 
         // ^ FIXME! (the surveyId is never verifed to exist)
@@ -370,7 +444,6 @@ exports.answerOneSurvey = (req, res, next) => {
       } else {
         setNickname(surveyId, responseObject.nickname, (err5, nickname) => {
           if(err5) {
-            // console.log(status.NICKNAME_TAKEN.message);
             return res.status(400).send( {message: status.NICKNAME_TAKEN.message, status: status.NICKNAME_TAKEN.code})
           }
           let newResponse = new Response({
@@ -408,7 +481,7 @@ exports.getNicknamesForOneSurvey = (req, res, next) => {
           // console.log(nicknames);
           if (err) { return next(err); }
           if (nicknames.length == 0) {
-            return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+            return res.status(200).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
           }
           return res.status(200).send( {nicknames: nicknames} );
         });

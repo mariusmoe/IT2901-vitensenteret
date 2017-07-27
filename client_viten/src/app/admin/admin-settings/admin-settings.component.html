@@ -1,5 +1,5 @@
 <div>
-  <md-tab-group dynamicHeight="true">
+  <md-tab-group dynamicHeight="true" [(selectedIndex)]="tabIndex" (selectChange)="onTabChange($event)">
   <md-tab label="{{ 'User settings' | translate }}">
     <div class="tabContent">
       <md-card>
@@ -78,22 +78,50 @@
       </md-card>
     </div>
   </md-tab>
-  <md-tab *ngIf="user.role=='admin'" label="{{ 'Admin settings' | translate }}">
+  <md-tab *ngIf="user.role==='vitenleader' || user.role==='sysadmin'" label="{{ 'Admin settings' | translate }}">
     <div class="tabContent">
       <md-card>
-        <md-card-title>{{ 'Superadmin settings' | translate }}</md-card-title>
-        <md-card-subtitle>{{user.role | translate }}</md-card-subtitle>
+        <md-card-title>{{ 'Refer user' | translate }}</md-card-title>
+        <md-card-subtitle>Current role: {{user.role | translate }}</md-card-subtitle>
+        <md-card-content>
+
+          <md-select placeholder="Role" class="dropdown" [(ngModel)]="selectedRole" name="role">
+            <md-option *ngFor="let role of roles" [value]="role.value"
+              [disabled]="(role.value==='sysadmin' && user.role != 'sysadmin')">
+              {{role.value}}
+            </md-option>
+          </md-select>
+
+
+          <md-select placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+            name="center" [disabled]="user.role != 'sysadmin'">
+            <md-option *ngFor="let center of centers" [value]="center._id">
+              {{center.name}}
+            </md-option>
+          </md-select>
+
+          <button md-raised-button class="dropdown" color="primary" minlength="3"
+            (click)="requestReferral(selectedRole, selectedCenter)"
+            [disabled]="(selectedCenter == 'undefined')">
+            {{ 'Refer user' | translate}}
+          </button>
+
+        </md-card-content>
+
         <md-card-actions>
-          <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
+
+
+
+          <!-- <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
             {{ 'Refer admin' | translate }}
           </button>
           <button md-raised-button color="primary" minlength="3" (click)="requestReferral('member')">
             {{ 'Refer member' | translate }}
-          </button>
+          </button> -->
         </md-card-actions>
         <br>
 
-
+<!--
           <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
           <md-card-content>
             <md-input-container>
@@ -139,29 +167,71 @@
                 {{ 'Change password' | translate }}
               </div>
             </button>
-          </md-card-actions>
+          </md-card-actions> -->
 
 
 
       </md-card>
+      <md-card class="centerSettings">
+        <md-card-content>
+          <button md-menu-item routerLink="/admin/center" *ngIf="user.role !== 'sysadmin'">
+            <md-icon>settings</md-icon>
+            Center {{ 'Settings' | translate }}
+          </button>
+
+          <div *ngIf="user.role==='sysadmin'">
+
+
+            <md-card-title>Change center</md-card-title>
+            <md-card-content>
+              <div class="tableHolder">
+                <table class="userTable">
+                  <tr>
+                    <th>Center Name</th>
+                    <th>Action</th>
+                  </tr>
+                  <tr *ngFor="let center of centers;  let i=index; let odd=odd; let even=even;"
+                  (click)="updateCenter(center._id)"
+                  [ngClass]="{ odd: odd, even: even }">
+                  <td>{{center.name}}</td>
+                  <td><md-icon>edit</md-icon></td>
+                </tr>
+              </table>
+            </div>
+            <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
+            <br />
+            <button md-menu-item routerLink="/admin/center/addcenter" >
+              <md-icon>add</md-icon>
+              New center
+            </button>
+          </md-card-content>
+        </div>
+      </md-card-content>
+    </md-card>
+
+
+
       <md-card>
         <md-card-title>{{ 'Delete account' | translate }}</md-card-title>
         <md-card-content>
+          <div class="tableHolder">
+
           <table class="userTable">
             <tr>
-              <th>{{ 'User ID' | translate }}</th>
+
               <th>{{ 'Email' | translate }}</th>
               <th>{{ 'Role' | translate }}</th>
             </tr>
             <tr *ngFor="let user of userList;  let i=index; let odd=odd; let even=even;"
             (click)="openDialog(user._id)"
             [ngClass]="{ odd: odd, even: even }">
-            <td>{{user._id}}</td>
+
             <td>{{user.email}}</td>
             <td>{{ user.role | translate }}</td>
             <td><md-icon>delete_forever</md-icon></td>
           </tr>
         </table>
+      </div>
         <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
       </md-card-content>
     </md-card>

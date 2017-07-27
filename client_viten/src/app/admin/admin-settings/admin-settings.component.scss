@@ -33,8 +33,8 @@
 
 .userTable {
   border-collapse: collapse;
-  max-height: 150px;
-  overflow-y: scroll;
+
+  width: 100%;
   .odd {
     background: rgba(0, 0, 0, 0.1);
   }
@@ -47,6 +47,24 @@
   td {
     padding: 10px;
   }
+}
+
+.tableHolder {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.centerSettings {
+  min-width: 300px;
+}
+
+.changeCenter {
+  min-width: 100%;
+  width: 100%;
+}
+
+.dropdown {
+  display: inline-block;
 }
 
 

@@ -1,9 +1,9 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, Inject } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SurveyService } from '../../_services/survey.service';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
+import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
-import { MdDialogRef } from '@angular/material';
 import { MdSnackBar } from '@angular/material';
 import { SimpleTimer } from 'ng2-simple-timer';
 
@@ -18,14 +18,14 @@ export class QuitsurveyPromptComponent {
 
   abortTimer: string;
   abortCounter = 0;
-
   constructor(
-    private surveyService: SurveyService,
+    private centerService: CenterService,
     private translateService: TranslateService,
     public dialogRef: MdDialogRef<QuitsurveyPromptComponent>,
     private router: Router,
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
+    @Inject(MD_DIALOG_DATA) public data: any,
     private timer: SimpleTimer ) {
       this.timer.newTimer('1sec', 1);
       this.subscribePromptTimer();
@@ -36,12 +36,15 @@ export class QuitsurveyPromptComponent {
 
   quitSurvey(code: string) {
 
-    const sub = this.surveyService.checkChoosesurvey(code)
+    const sub = this.centerService.exitSurvey(code, this.data.survey.center)
         .subscribe(result => {
           if (result === true) {
             this.router.navigate(['/choosesurvey']);
             this.dialogRef.close();
             sub.unsubscribe();
+          } else {
+            sub.unsubscribe();
+            this.openSnackBar(this.translateService.instant('Incorrect code'), 'OK');
           }
         },
         error => {

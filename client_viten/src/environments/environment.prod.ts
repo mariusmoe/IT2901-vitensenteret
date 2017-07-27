@@ -27,11 +27,17 @@ export const environment = {
       newEmail: 'https://vitensurvey.party/api/auth/change_email/',
       newPassword: 'https://vitensurvey.party/api/auth/change_password/',
       survey: 'https://vitensurvey.party/api/survey',
+      surveyAll: 'https://vitensurvey.party/api/survey/all',
       surveyAsJson: 'https://vitensurvey.party/api/survey/json',
       surveyAsCSV: 'https://vitensurvey.party/api/survey/csv',
       newUser: 'https://vitensurvey.party/api/auth/register',
-      checkChoosesurvey: 'https://vitensurvey.party/api/survey/escape',
+      exitSurvey: 'https://vitensurvey.party/api/center/escape',
       surveyCopy:   'https://vitensurvey.party/api/survey/copy',
       allNicknames: 'https://vitensurvey.party/api/survey/all_nicknames',
+      allCenters: 'https://vitensurvey.party/api/center/',
+      folders: 'https://vitensurvey.party/api/folders/',
+      newCenter: 'https://vitensurvey.party/api/center/new',
+      newCenterName: 'https://vitensurvey.party/api/center/name',
+
     }
 };

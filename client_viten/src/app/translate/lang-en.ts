@@ -41,6 +41,7 @@ export const LANG_EN_TRANS = {
   'User': 'User',
   'Nickname': 'Nickname',
   'Code': 'Code',
+  'Contributors': 'Contributors',
 
   // roles
   'admin': 'Superadmin',
@@ -56,6 +57,8 @@ export const LANG_EN_TRANS = {
   // Forms
   'This field is required.': 'This field is required.',
   'This field is a duplicate.': 'This field is a duplicate.',
+  'This field is invalid.': 'This field is invalid.',
+  'Bad format': 'Bad format',
 
   // Survey Question modes
   'binary': 'Yes/No',
@@ -64,6 +67,10 @@ export const LANG_EN_TRANS = {
   'multi': 'Multiple Choice',
   'smiley': 'Smiley',
   'text': 'Free Text',
+
+  // Image URL in create survey
+  'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.':
+    'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.',
 
   // Survey Pre post labels
   'Pre': 'Pre',
@@ -110,6 +117,7 @@ export const LANG_EN_TRANS = {
   'Alternatives: n/m': 'Alternatives: %0/%1',
   'Set Alternatives': 'Set Alternatives',
   'Add a question': 'Add a question',
+  'Image URL (not requrired)': 'Image URL (not required)',
   'At least two alternatives must be set, with a maximum of 6.': 'At least two alternatives must be set, with a maximum of 6.',
   'Deletes this particular question! Careful!': 'Deletes this particular question! Careful!',
   'Several fields are required. Verify that you have filled out all required fields.':
@@ -119,6 +127,11 @@ export const LANG_EN_TRANS = {
   'Could not post your survey. Error:': 'Could not post your survey. The server replied:',
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
   'Required question': 'Required question',
+  'Warning!': 'Warning!',
+  'All responses to this survey will be lost if you proceed.': 'All responses to this survey will be lost if you proceed.',
+  'Do you wish to proceed?': 'Do you wish to proceed?',
+  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
+  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
@@ -129,12 +142,12 @@ export const LANG_EN_TRANS = {
   'Log in': 'Log in',
   'Email and password are required': 'Email and password are required',
   'Email or password is incorrect': 'Email or password is incorrect',
+  'There was an issue connecting to the server': 'There was an issue connecting to the server',
 
   // New user component
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
   'Register New User': 'Register New User',
   'Could not register account': 'Could not register account',
-  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
@@ -159,9 +172,9 @@ export const LANG_EN_TRANS = {
   'Password changed': 'Password changed',
   'Admin settings': 'Admin settings',
   'Change password': 'Change password',
+  'Refer user': 'Refer user',
   'Change email': 'Change email',
   'User settings': 'User settings',
-  'Superadmin settings': 'Superadmin settings',
   'Refer admin': 'Refer admin',
   'Refer member': 'Refer member',
   'You need to write the same password twice': 'You need to write the same password twice',
@@ -203,8 +216,9 @@ export const LANG_EN_TRANS = {
   'Start survey': 'Start survey',
 
   // PDF download lines
-  'Date created: d': 'Date created: %0',
-  'Date printed: d': 'Date printed: %0',
+  'Last modified: d': 'Last modified: %0',
+  'Published: d': 'Published: %0',
+  'Completed: d': 'Completed: %0',
   'Figure: n': 'Figure: %0',
   'Table: n': 'Table: %0',
 
@@ -225,7 +239,15 @@ export const LANG_EN_TRANS = {
   'Max 255 characters': 'Max 255 characters',
   'Your answer': 'Your answer',
 
-    // Footer
-    'Group n': 'Group %0',
-    'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
+  // Footer
+  'Group n': 'Group %0',
+  'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
+
+  // Folder system
+  'Warning! This will delete the folder along with ALL surveys inside!':
+    'Warning! This will delete the folder along with ALL surveys inside!',
+  'Rename folder': 'Rename folder',
+  'Delete folder': 'Delete folder',
+  'Create subfolder': 'Create subfolder',
+  'Folder Options': 'Folder Options',
 };

@@ -41,6 +41,7 @@ export const LANG_NO_TRANS = {
   'User': 'Bruker',
   'Nickname': 'Kallenavn',
   'Code': 'Kode',
+  'Contributors': 'Bidragsytere',
 
   // Roles
   'admin': 'Superadmin',
@@ -56,6 +57,8 @@ export const LANG_NO_TRANS = {
   // Forms
   'This field is required.': 'Dette feltet er påkrevd.',
   'This field is a duplicate.': 'Dette feltet er et duplikat.',
+  'This field is invalid.': 'Dette feltet er ugyldig.',
+  'Bad format': 'Feil format',
 
   // Survey Question modes
   'binary': 'Ja/Nei',
@@ -64,6 +67,10 @@ export const LANG_NO_TRANS = {
   'multi': 'Flervalgs',
   'smiley': 'Smiley',
   'text': 'Tekst',
+
+  // Image URL in create survey
+  'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.':
+    'Dette feltet er VALGFRITT. Feltet tar en hel URL. Eksempel: https://www.myWebsite.com/myImage.png. www.imgur.com er en bilde-delingstjeneste du kan bruke.',
 
   // Survey Pre post labels
   'Pre': 'Pre',
@@ -83,7 +90,7 @@ export const LANG_NO_TRANS = {
   '2 Stars': '2 Stjerner',
   '3 Stars': '3 Stjerner',
   '4 Stars': '4 Stjerner',
-  '5 Stars': '5 Stars',
+  '5 Stars': '5 Stjerner',
   'Sad': 'Trist',
   'Neutral': 'Nøytral',
   'Happy': 'Glad',
@@ -110,6 +117,7 @@ export const LANG_NO_TRANS = {
   'Alternatives: n/m': 'Alternativer: %0/%1',
   'Set Alternatives': 'Sett alternativer',
   'Add a question': 'Legg til spørsmål',
+  'Image URL (not requrired)': 'URL til bilde (om ønskelig)',
   'At least two alternatives must be set, with a maximum of 6.':
     'Minst to av alternativene må være satt. Det kan settes opp til 6 alternativer.',
   'Deletes this particular question! Careful!': 'Forsiktig! Spørsmålet blir slettet!',
@@ -120,6 +128,9 @@ export const LANG_NO_TRANS = {
   'Could not post your survey. Error:': 'Kunne ikke lagre undersøkelsen. Feilmelding:',
   'The system cannot proceed until the issue has been resolved.': 'Systemet kan ikke fortsette før feilen har blitt rettet opp.',
   'Required question': 'Må besvares',
+  'Warning!': 'Advarsel!',
+  'All responses to this survey will be lost if you proceed.': 'Alle svar til denne undersøkelsen vil bli slettet om du fortsetter.',
+  'Do you wish to proceed?': 'Ønsker du å fortsette?',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 totalt antall undersøkelser. Maksimum %1 er vist samtidig.',
@@ -130,12 +141,12 @@ export const LANG_NO_TRANS = {
   'Log in': 'Logg inn',
   'Email and password are required': 'Både epost og passord er påkrevd',
   'Email or password is incorrect': 'Epost eller passord er galt',
+  'There was an issue connecting to the server': 'Kunne ikke koble opp til servern',
 
   // New user component
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
   'Register New User': 'Register New User',
   'Could not register account': 'Kunne ikke registrere brukeren',
-  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
@@ -152,6 +163,8 @@ export const LANG_NO_TRANS = {
   'Go to survey': 'Gå til undersøkelsen',
   'Go to post survey': 'Gå til post undersøkelse',
   'The survey is not active': 'Undersøkelsen er ikke aktiv',
+  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
+  'Undersøkelsen er over og kan ikke publiseres på nytt. Hvis du ønsker å kjøre undersøkelsen på nytt, prøv å kopiere den.',
 
 
   // Admin settings component
@@ -161,9 +174,9 @@ export const LANG_NO_TRANS = {
   'Password changed': 'Passord endret',
   'Admin settings': 'Admininstillinger',
   'Change password': 'Bytt passord',
+  'Refer user': 'Inviter bruker',
   'Change email': 'Bytt epostkonto',
   'User settings': 'Brukerinstillinger',
-  'Superadmin settings': 'Superadmin seksjon',
   'Refer admin': 'Generer invitasjonslink for superadmin',
   'Refer member': 'Generer invitasjonslink for adminbruker',
   'You need to write the same password twice': 'Du må skrive passordet to ganger',
@@ -205,8 +218,9 @@ export const LANG_NO_TRANS = {
   'Start survey': 'Start undersøkelse',
 
   // PDF download lines
-  'Date created: d': 'Dato laget: %0',
-  'Date printed: d': 'Dato printet: %0',
+  'Last modified: d': 'Sist oppdatert: %0',
+  'Published: d': 'Publisert: %0',
+  'Completed: d': 'Avsluttet: %0',
   'Figure: n': 'Figur: %0',
   'Table: n': 'Tabell: %0',
 
@@ -231,4 +245,12 @@ export const LANG_NO_TRANS = {
   // Footer
   'Group n': 'Gruppe %0',
   'IT2901 - Informatics Project II': 'IT2901 - Informatikk Prosjektarbeid II',
+
+  // Folder system
+  'Warning! This will delete the folder along with ALL surveys inside!':
+    'Advarsel! Dette vil slette mappen samt ALLE undersøkelser i mappen!',
+  'Rename folder': 'Gi nytt navn',
+  'Delete folder': 'Slett mappen',
+  'Create subfolder': 'Lag ny undermappe',
+  'Folder Options': 'Mappealternativer',
 };
