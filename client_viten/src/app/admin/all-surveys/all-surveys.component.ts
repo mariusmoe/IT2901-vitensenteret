@@ -280,7 +280,7 @@ export class FolderOptionsDialog {
   deleteFolder() {
     const sub = this.userFolderService.deleteFolder(this.data.folder._id).subscribe(
       result => {
-        console.log(result);
+        // console.log(result);
         sub.unsubscribe();
         this.data.callbackSuccess(result);
         this.close();
@@ -303,7 +303,7 @@ export class FolderOptionsDialog {
     };
     const sub = this.userFolderService.patchFolder(updatedFolder).subscribe(
       result => {
-        console.log(result);
+        // console.log(result);
         sub.unsubscribe();
         this.data.callbackSuccess(result);
         this.close();
