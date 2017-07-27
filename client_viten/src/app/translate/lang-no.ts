@@ -4,8 +4,9 @@ export const LANG_NO_NAME = 'no';
 
 export const LANG_NO_TRANS = {
   // Application
-  'Vitensenteret - AdminPortal': 'Vitensenteret - AdminPortal',
-  'Vitensenteret - Survey': 'Vitensenteret - Undersøkelse',
+  'Center - AdminPortal': '%0 - AdminPortal',
+  'Center - Survey': '%0 - Undersøkelse',
+
 
   // Generic
   'Edit': 'Endre',

@@ -142,7 +142,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
       public snackBar: MdSnackBar,
     public translateService: TranslateService,
     private title: Title) {
-      title.setTitle(translateService.instant('Vitensenteret - Survey'));
+      title.setTitle(translateService.instant('Center - Survey', 'Center'));
   }
 
   /**

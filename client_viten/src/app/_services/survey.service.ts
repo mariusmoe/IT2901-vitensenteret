@@ -70,7 +70,7 @@ export class SurveyService {
    * @return {Observable<any>} returns an observable holding the requested survey and responses
    */
    getSurvey(idString: String): Observable<any> {
-     console.log(idString);
+    //  console.log(idString);
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
        const json = response.json();

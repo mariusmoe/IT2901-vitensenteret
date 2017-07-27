@@ -1,15 +1,17 @@
 <div class="adminPortal">
-  <div class="constuctionWarning">
-    <p>Site is under construction!</p>
-  </div>
-  <md-toolbar color="primary">
-    <div class="flexchild">
-      <a routerLink="/admin" routerLinkActive="active"
-      ><app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true" height="100%" width="80px"></app-logo-component></a>
+  <md-toolbar color="primary" ngClass="topHeader">
+      <!-- <a routerLink="/admin" routerLinkActive="active">
+      <div class="flexchild">
+        <! <app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true" height="100%" width="80px"></app-logo-component>
+      </a>
     </div>
+  -->
+  <div class="flexchild logoBox"><img *ngIf="logoPath" class="logo" height="64" [src]="logoPath"/></div>
     <div class="flexchild alignCenter">
-      <a routerLink="/admin" routerLinkActive="active"
-      ><app-logo-component logoVariant="text" color="primary" [useColorContrast]="true" height="100%" width="400px"></app-logo-component></a>
+      <a routerLink="/admin" routerLinkActive="active" class="centerTitle">
+        <!-- <app-logo-component logoVariant="text" color="primary" [useColorContrast]="true" height="100%" width="400px"></app-logo-component> -->
+        {{center}}
+      </a>
     </div>
     <div class="flexchild alignRight">
       <button md-button [mdMenuTriggerFor]="menu">

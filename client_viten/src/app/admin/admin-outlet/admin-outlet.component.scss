@@ -6,6 +6,7 @@
 
 .flexchild {
   flex: 1 1;
+  vertical-align: middle;
 }
 .alignCenter {
   text-align: center;
@@ -13,6 +14,25 @@
 .alignRight {
   text-align: right;
 }
+
+.topHeader {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: nowrap;
+
+}
+
+.logo {
+  width: auto !important;
+  padding: 0;
+  margin: 0;
+  object-fit: contain;
+}
+
+.logobox {
+
+}
+
 
 .navbar {
   display: flex;
@@ -79,4 +99,18 @@
   padding: 0px;
   color: #efe52b;
   background-color: #404247;
+}
+
+.centerTitle {
+  padding-top: 7px;
+  color: inherit;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.75);
+  font-size: 2em;
+  &:active,
+  &:visited,
+  &:hover,
+  &:link {
+    text-decoration: none;
+    color: inherit;
+  }
 }

@@ -4,8 +4,8 @@ export const LANG_EN_NAME = 'en';
 
 export const LANG_EN_TRANS = {
   // Application
-  'Vitensenteret - AdminPortal': 'Vitensenteret - AdminPortal',
-  'Vitensenteret - Survey': 'Vitensenteret - Survey',
+  'Center - AdminPortal': '%0 - AdminPortal',
+  'Center - Survey': '%0 - Survey',
 
   // Generic
   'Edit': 'Edit',
