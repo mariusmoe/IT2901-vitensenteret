@@ -1,7 +1,7 @@
   <md-radio-group class = "radioOptions" [(ngModel)] = "selectedOption">
     <div class="choice" *ngFor = "let option of options">
       <md-radio-button class="child" [value] = "option" (change) = "updateAnswers(option)">
-        {{option}}
+        <span>{{option}}</span>
       </md-radio-button>
     </div>
   </md-radio-group>

@@ -372,7 +372,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // dialog window
       if (output != null && output !== undefined) {
         qo.lang.no.options = output.lang.no.options;
-        qo.lang.en.options = output.lang.en.options;
+        if (qo.lang.en && qo.lang.en.options && output.lang.en && output.lang.en.options) {
+          qo.lang.en.options = output.lang.en.options;
+        }
         // Do not remove the following line!
         this.onSurveyChange();
       }
@@ -511,11 +513,15 @@ export class SurveyAlternativesDialog implements OnInit, OnDestroy {
     const newOptionsNO = [], newOptionsEN = [];
     for (const i of this.numAlternatives) {
       newOptionsNO.push(this.qoEditObj.lang.no.options[i]);
-      newOptionsEN.push(this.qoEditObj.lang.en.options[i]);
+      if (this.qoEditObj.lang.en && this.qoEditObj.lang.en.options) {
+        newOptionsEN.push(this.qoEditObj.lang.en.options[i]);
+      }
     }
     for (let i = 0; i < this.numAlternatives.length; i++) {
       this.qoEditObj.lang.no.options[i] = newOptionsNO[i];
-      this.qoEditObj.lang.en.options[i] = newOptionsEN[i];
+      if (this.qoEditObj.lang.en && this.qoEditObj.lang.en.options) {
+        this.qoEditObj.lang.en.options[i] = newOptionsEN[i];
+      }
     }
 
 
@@ -576,7 +582,9 @@ export class SurveyAlternativesDialog implements OnInit, OnDestroy {
       qo.lang.en.options = [];
     }
     qo.lang.no.options.push('');
-    qo.lang.en.options.push('');
+    if (qo.lang.en && qo.lang.en.options) {
+      qo.lang.en.options.push('');
+    }
     // this is required! Do NOT remove!
     this.numAlternatives = Array(this.qoEditObj.lang.no.options.length).fill(0).map((x, i) => i);
     this.setSaveReadyStatus();
