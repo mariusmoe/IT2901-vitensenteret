@@ -58,6 +58,7 @@ export const LANG_NO_TRANS = {
   // Forms
   'This field is required.': 'Dette feltet er påkrevd.',
   'This field is a duplicate.': 'Dette feltet er et duplikat.',
+  'This field is invalid.': 'Dette feltet er ugyldig.',
   'Bad format': 'Feil format',
 
   // Survey Question modes
@@ -147,7 +148,6 @@ export const LANG_NO_TRANS = {
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
   'Register New User': 'Register New User',
   'Could not register account': 'Kunne ikke registrere brukeren',
-  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Last ned som PDF',
@@ -157,7 +157,6 @@ export const LANG_NO_TRANS = {
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
   'Create post-survey': 'Lag post-undersøkelse',
   'Edit post-survey': 'Endre post-undersøkelse',
-  'Copy with responses': 'Kopier med svarene',
   'Survey deleted': 'Undersøkelse slettet',
   'Are you sure you want to delete this survey?': 'Er du sikker på at du vil slette denne undersøkelsen?',
   'The survey will be deleted! This action is permanent!': 'Undersøkelsen vil bli slettet! Denne handlingen er permanent!',
@@ -246,4 +245,12 @@ export const LANG_NO_TRANS = {
   // Footer
   'Group n': 'Gruppe %0',
   'IT2901 - Informatics Project II': 'IT2901 - Informatikk Prosjektarbeid II',
+
+  // Folder system
+  'Warning! This will delete the folder along with ALL surveys inside!':
+    'Advarsel! Dette vil slette mappen samt ALLE undersøkelser i mappen!',
+  'Rename folder': 'Gi nytt navn',
+  'Delete folder': 'Slett mappen',
+  'Create subfolder': 'Lag ny undermappe',
+  'Folder Options': 'Mappealternativer',
 };

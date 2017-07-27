@@ -215,15 +215,15 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
   selector: 'folder-options-dialog',
   styleUrls: ['./all-surveys.component.scss'],
   template: `
-  <h1 md-dialog-title class="alignCenter">fixme: Folder Options</h1>
+  <h1 md-dialog-title class="alignCenter">{{ 'Folder Options' | translate }}</h1>
   <div md-dialog-content align="center">
 
 
     <!-- DELETE FOLDER CONTENTS -->
     <div *ngIf="!data.isRename">
-      <p>Translate me: Warning! This will delete the folder along with ALL surveys inside!</p>
+      <p>{{ 'Warning! This will delete the folder along with ALL surveys inside!' | translate}}</p>
       <button md-raised-button (click)="deleteFolder()" color="warn">
-        fixme: delete
+        {{ 'Delete' | translate }}
       </button>
     </div>
     <!-- DELETE FOLDER CONTENTS END -->
@@ -234,12 +234,13 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     <!-- RENAME FOLDER CONTENTS -->
     <form [formGroup]="renameForm" (ngSubmit)="submitForm(loginForm.value)" *ngIf="data && data.isRename">
       <md-input-container md-block>
-        <input mdInput class="form-control" type="text" pattern="noWhitespacePattern"
+        <input mdInput class="form-control" type="text" autocomplete="off"
         placeholder="fixme: New name" [formControl]="renameForm.controls['rename']" required>
-        <md-hint *ngIf="renameForm.controls['rename'].hasError('required') && renameForm.controls['rename'].touched">
+        <md-hint ngClass="{'warning': true}" *ngIf="renameForm.controls['rename'].hasError('required') &&
+          renameForm.controls['rename'].touched">
           {{ 'This field is required.' | translate }}
         </md-hint>
-        <md-hint class="warning" *ngIf="!renameForm.controls['rename'].hasError('required') &&
+        <md-hint ngClass="{'warning': true}" *ngIf="!renameForm.controls['rename'].hasError('required') &&
             renameForm.controls['rename'].invalid && renameForm.controls['rename'].touched">
           {{ 'This field is invalid.' | translate }}
         </md-hint>
@@ -248,7 +249,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       <button md-raised-button #submitRenameForm type="submit" class="btn btn-success" [disabled]="!renameForm.valid"
         color="primary">
         <div [mdTooltip]="(!renameForm.valid) ? 'waffles' : 'no waffles for you' " tooltip-position="above">
-          fixme: submit
+          {{ 'Submit' | translate }}
         </div>
       </button>
     </form>
@@ -263,7 +264,6 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
 })
 export class FolderOptionsDialog {
   renameForm: FormGroup;
-  noWhitespacePattern = /\S/;
 
   constructor(
     private fb: FormBuilder,
@@ -272,7 +272,7 @@ export class FolderOptionsDialog {
     @Inject(MD_DIALOG_DATA) public data: any,
     ) {
       this.renameForm = fb.group({
-      'rename': [null, Validators.required],
+      'rename': [null, Validators.pattern('.*\\S.*')],
     });
   }
 
@@ -280,7 +280,7 @@ export class FolderOptionsDialog {
   deleteFolder() {
     const sub = this.userFolderService.deleteFolder(this.data.folder._id).subscribe(
       result => {
-        console.log(result);
+        // console.log(result);
         sub.unsubscribe();
         this.data.callbackSuccess(result);
         this.close();
@@ -303,7 +303,7 @@ export class FolderOptionsDialog {
     };
     const sub = this.userFolderService.patchFolder(updatedFolder).subscribe(
       result => {
-        console.log(result);
+        // console.log(result);
         sub.unsubscribe();
         this.data.callbackSuccess(result);
         this.close();

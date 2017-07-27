@@ -21,15 +21,6 @@
 
 
 
-    <md-menu #copyMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
-      <button md-menu-item  (click)="copySurvey(false)" [disabled]="generatingPDF">
-        {{ 'Copy' | translate }}
-      </button>
-      <button md-menu-item (click)="copySurvey(true)" [disabled] = "(responses ? responses.length : 0) == 0">
-        {{ 'Copy with responses' | translate }}
-      </button>
-    </md-menu>
-
 
 
     <ng-template #surveyButtons>
@@ -66,7 +57,7 @@
         <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active" [disabled]="survey.active || survey.deactivationDate">
           <md-icon>build</md-icon> {{ 'Edit' | translate }}
         </button>
-        <button md-raised-button color="primary" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
+        <button md-raised-button color="primary" (click)="copySurvey()"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
         <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
             <md-icon>delete</md-icon> {{ 'Delete' | translate }}
         </button>

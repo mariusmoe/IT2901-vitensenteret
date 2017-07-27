@@ -363,12 +363,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    * Copies a survey
    * @param  {boolean} includeResponses whether to include the responses for the survey
    */
-  copySurvey(includeResponses: boolean) {
-    this.surveyService.copySurvey(this.survey._id, includeResponses).subscribe(survey => {
-      // force redraw by doing 2 redirects
-      this.router.navigate([this.route.parent.snapshot.url.join('/')]).then((success) => {
-        this.router.navigate([this.route.parent.snapshot.url.join('/'), survey._id]);
-      });
+  copySurvey() {
+    this.surveyService.copySurvey(this.survey._id).subscribe(survey => {
+      // force redraw by going to just /admin/
+      this.router.navigate([this.route.parent.snapshot.url.join('/')],
+        {skipLocationChange: true});
     },
     error => {
       // TODO: add informational box to user explaining why it failed.
