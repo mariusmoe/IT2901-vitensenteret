@@ -119,7 +119,6 @@ exports.getOneSurvey = (req, res, next) => {
 
 exports.copySurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
-  const includeResponses = req.body.includeResponses;
   const copyLabel = req.body.copyLabel;
 
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
@@ -137,8 +136,16 @@ exports.copySurvey = (req, res, next) => {
       const copyObject = survey.toObject();
       copyObject.name = (copyLabel ? copyLabel : '') + ' ' + copyObject.name;
       copyObject.date = new Date().toISOString();
+
+      // reset id and version fields
       delete copyObject._id;
       delete copyObject.__v;
+      // reset ALL publish data
+      delete copyObject.activationDate;
+      delete copyObject.deactivationDate;
+      copyObject.active = false;
+      copyObject.date = new Date();
+      // then copy the survey
       const copy = new Survey(copyObject);
 
       // save the copy
@@ -151,64 +158,29 @@ exports.copySurvey = (req, res, next) => {
     });
   }
 
-  const doResponseCopy = (id, postSurveyCopyId, callback) => {
-    Response.find( { surveyId: id }, { _id: false, }, (err, responses) => {
-      if (err) {
-        next(err);
-      }
-      if (!responses) {
-        return res.status(500).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
-      }
-
-      const copy = responses.slice();
-      copy.forEach(response => {
-        response.surveyId = postSurveyCopyId;
-        response.timestamp = new Date().toISOString();
-        delete response._id;
-      });
-      Response.insertMany(copy, (err, responsesCopy) => {
-        if (err) {
-          next(err);
-        }
-        if (!responsesCopy) {
-          return res.status(500).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
-        }
-        callback(responses, responsesCopy);
-      })
-    });
-  }
-
   // First we deal with the surveys. The responses are dealt with below.
   doSurveyCopy(surveyId, (origSurvey, newSurvey) => {
-    // we might also need to copy a post survey
-    if (origSurvey.postKey) {
-      doSurveyCopy(origSurvey.postKey, (origPostSurvey, newPostSurvey) => {
-        // update the copied PRE survey with the new key to the POST survey
-        newSurvey.postKey = newPostSurvey._id;
-        newSurvey.save( (err, savedCopyOfOriginalSurvey) => {
-          if (!includeResponses) {
-            return res.status(200).send(newSurvey);
-          } else {
-            // copy responses (pre, then post)
-            doResponseCopy(surveyId, savedCopyOfOriginalSurvey._id, (responsesCopy) => {
-              doResponseCopy(origSurvey.postKey, newPostSurvey._id, (responsesCopy) => {
-                return res.status(200).send(newSurvey);
-              });
+    // place it in the right folder now
+    UserFolder.findOne({ surveys: { $all: [origSurvey._id] } }, (err, folder) => {
+      if (err) { next(err); }
+
+      folder.surveys.push(newSurvey._id);
+      folder.save((err) => {
+
+        // we might also need to copy a post survey
+        if (origSurvey.postKey) {
+          doSurveyCopy(origSurvey.postKey, (origPostSurvey, newPostSurvey) => {
+            // update the copied PRE survey with the new key to the POST survey
+            newSurvey.postKey = newPostSurvey._id;
+            newSurvey.save( (err, savedCopyOfOriginalSurvey) => {
+              return res.status(200).send(newSurvey);
             });
-          }
-        });
-      });
-    } else {
-      // if there were not post survey to bother about...
-      if (!includeResponses) {
-        return res.status(200).send(newSurvey);
-      } else {
-        // copy responses
-        doResponseCopy(surveyId, newSurvey, (responsesCopy) => {
+          });
+        } else {
           return res.status(200).send(newSurvey);
-        });
-      }
-    }
+        }
+      });
+    });
   });
 }
 
