@@ -67,7 +67,7 @@
       </div>
 
       <!-- Childcomponents that handle each answer-type -->
-      <div class="answerTypes">
+      <div class="answerTypes" *ngIf="!this.done">
         <app-nickname *ngIf = "(this.survey.isPost || !this.survey.postKey!==undefined) && this.nicknamePage && !this.postDone" [isNicknameTaken] = isNicknameTaken [survey] = survey [questionObject] = survey.questionlist[page] [nicknamesForSurvey] = nicknamesForSurvey (answer) = 'updateNick($event)'></app-nickname>
         <app-stars *ngIf = "survey.questionlist[page].mode == 'star' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-stars>
         <app-smiley *ngIf = "survey.questionlist[page].mode == 'smiley' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-smiley>
