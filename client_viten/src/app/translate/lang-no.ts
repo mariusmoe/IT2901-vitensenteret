@@ -156,7 +156,6 @@ export const LANG_NO_TRANS = {
     'Ingen svar har blitt registrert, så det finnes ingen data som kan vises ennå.',
   'Create post-survey': 'Lag post-undersøkelse',
   'Edit post-survey': 'Endre post-undersøkelse',
-  'Copy with responses': 'Kopier med svarene',
   'Survey deleted': 'Undersøkelse slettet',
   'Are you sure you want to delete this survey?': 'Er du sikker på at du vil slette denne undersøkelsen?',
   'The survey will be deleted! This action is permanent!': 'Undersøkelsen vil bli slettet! Denne handlingen er permanent!',

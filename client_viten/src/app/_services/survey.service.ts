@@ -162,7 +162,7 @@ export class SurveyService {
    * @param  {boolean}       includeResponses whether to also copy responses
    * @return Observable<any>                  the copied survey object
    */
-  copySurvey(surveyId: string, includeResponses: boolean): Observable<any> {
+  copySurvey(surveyId: string): Observable<any> {
     const token = this.getToken();
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -173,7 +173,7 @@ export class SurveyService {
     const copyLabel = this.translateService.instant('CopyLabel');
 
     return this.http.post(environment.URL.surveyCopy + '/' + surveyId,
-      { includeResponses: includeResponses, copyLabel: copyLabel }, options)
+      { copyLabel: copyLabel }, options)
     .map( response => {
       return this.correctSurveyValidity(response.json());
     },
