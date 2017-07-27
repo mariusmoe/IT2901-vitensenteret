@@ -57,6 +57,7 @@ export const LANG_EN_TRANS = {
   // Forms
   'This field is required.': 'This field is required.',
   'This field is a duplicate.': 'This field is a duplicate.',
+  'This field is invalid.': 'This field is invalid.',
   'Bad format': 'Bad format',
 
   // Survey Question modes
@@ -147,7 +148,6 @@ export const LANG_EN_TRANS = {
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
   'Register New User': 'Register New User',
   'Could not register account': 'Could not register account',
-  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
@@ -239,7 +239,15 @@ export const LANG_EN_TRANS = {
   'Max 255 characters': 'Max 255 characters',
   'Your answer': 'Your answer',
 
-    // Footer
-    'Group n': 'Group %0',
-    'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
+  // Footer
+  'Group n': 'Group %0',
+  'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
+
+  // Folder system
+  'Warning! This will delete the folder along with ALL surveys inside!':
+    'Warning! This will delete the folder along with ALL surveys inside!',
+  'Rename folder': 'Rename folder',
+  'Delete folder': 'Delete folder',
+  'Create subfolder': 'Create subfolder',
+  'Folder Options': 'Folder Options',
 };

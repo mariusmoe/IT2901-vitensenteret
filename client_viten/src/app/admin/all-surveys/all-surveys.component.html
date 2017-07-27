@@ -34,13 +34,13 @@
 
           <md-menu #folderTasksMenu="mdMenu"  xPosition="after" yPosition="below" [overlapTrigger]="true">
             <button md-menu-item (click)="openRenameFolderDialog(node)" [disabled]="node.isRoot">
-              translateme: Renmame
+              {{ 'Rename folder' | translate }}
             </button>
             <button md-menu-item (click)="openDeleteFolderDialog(node)" [disabled]="node.isRoot">
-              translateme: Delete
+              {{ 'Delete folder' | translate }}
             </button>
             <button md-menu-item (click)="createNewFolder(node)">
-              translateme: Create subfolder here
+              {{ 'Create subfolder' | translate }}
             </button>
           </md-menu>
 
