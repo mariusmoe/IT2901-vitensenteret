@@ -12,8 +12,6 @@ import 'rxjs/add/operator/map';
 @Injectable()
 export class SurveyService {
 
-  surveyList: SurveyList[] = [];
-
   constructor(private http: Http, private translateService: TranslateService) {
 
   }
@@ -184,36 +182,34 @@ export class SurveyService {
 
 
   /**
-   * getAllSurveys()
+   * getAllPublishedSurveys()
    *
    * @return {Observable<SurveyList[]>} returns an observable with a list of
    * objects with survey names, ids, active status and date.
    */
-  getAllSurveys(): Observable<SurveyList[]> {
+  getAllPublishedSurveys(center: string): Observable<SurveyList[]> {
     const token = this.getToken();
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${token}`);
-    const center = localStorage.getItem('center');
 
     return this.http.get(environment.URL.surveyAll + '/' + center, { headers })
       .map(
         response => {
+          const json = response.json();
           // only update our list for status in the 200 range. If we get status 304
           // everything is good and there is no need to update our list either.
           if (response.status >= 200 && response.status < 300) {
-            const json = response.json();
              // status 200, a statuscode and a message means that the request
              // was successful, but there were no surveys to fetch.
             if (json.status && json.message) {
-              return this.surveyList;
+              return <SurveyList[]>[];
             }
-            this.surveyList = <SurveyList[]>json;
           }
-          return this.surveyList;
+          return <SurveyList[]>json;
         },
         error => {
-          return this.surveyList;
+          return <SurveyList[]>[];
         });
   }
 

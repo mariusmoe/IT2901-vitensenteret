@@ -216,6 +216,8 @@ export const LANG_NO_TRANS = {
   'Start': 'Start',
   'Start POST': 'Start POST',
   'Start survey': 'Start undersøkelse',
+  'Choose center': 'Velg senter',
+  'Could not find any published surveys at this time.': 'Tjenesten kunne ikke finne noen publiserte undersøkelser på dette tidspunktet.',
 
   // PDF download lines
   'Last modified: d': 'Sist oppdatert: %0',

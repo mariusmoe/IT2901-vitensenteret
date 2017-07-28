@@ -36,25 +36,21 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
     this.routerSub = this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
       this.breadcrumbs = this.getBreadcrumbs();
     });
-    function checkImage(imageSrc, good, bad) {
-        const img = new Image();
-        img.onload = good;
-        img.onerror = bad;
-        img.src = imageSrc;
-    }
-    this.centerService.getAllCenters().subscribe(result => {
+    const sub = this.centerService.getAllCenters().subscribe(result => {
       if (result) {
         const currentCenter = localStorage.getItem('center');
-        console.log(currentCenter);
-        const center = result.filter(c => { return c['_id'] === currentCenter})[0];
-            this.center = center['name'];
-            this.title.setTitle(this.translateService.instant('Center - AdminPortal', this.center));
-            console.log(this.center)
-            if (center.pathToLogo) {
-              this.logoPath = '/assets/uploads/' + center.pathToLogo;
-            }
-
+        const center = result.filter(c => { return c['_id'] === currentCenter })[0];
+        if (center) {
+          this.center = center['name'];
+          this.title.setTitle(this.translateService.instant('Center - AdminPortal', this.center));
+          if (center.pathToLogo) {
+            this.logoPath = '/assets/uploads/' + center.pathToLogo;
+          }
+        } else {
+          this.title.setTitle(this.translateService.instant('Center - AdminPortal', 'Sysadmin'));
+        }
       }
+      sub.unsubscribe();
     });
 
 
