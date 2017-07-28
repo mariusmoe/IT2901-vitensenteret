@@ -78,6 +78,8 @@ export const LANG_EN_TRANS = {
   // Image URL in create survey
   'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.':
     'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.',
+  'Bad format. This field requires a full URL to an image, beginning with https://':
+    'Bad format. This field requires a full URL to an image, beginning with https://',
 
   // Survey Pre post labels
   'Pre': 'Pre',
@@ -261,6 +263,9 @@ export const LANG_EN_TRANS = {
   // play-survey - Free text
   'Max 255 characters': 'Max 255 characters',
   'Your answer': 'Your answer',
+
+  // play survey
+  'Show image': 'Show image',
 
   // Footer
   'Group n': 'Group %0',

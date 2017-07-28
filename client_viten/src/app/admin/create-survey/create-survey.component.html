@@ -101,12 +101,15 @@
                 </md-input-container>
 
                 <!-- IMAGE LINK -->
-                <md-input-container [mdTooltip]="
-                'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.'
-                  | translate" mdTooltipPosition="above">
+                <md-input-container>
                   <input mdInput type="text" placeholder="{{ 'Image URL (not requrired)' | translate }}"
-                  pattern="imageLinkPattern" [(ngModel)]="questionObject.imageLink" (change)="onSurveyChange()">
-                  <md-hint *ngIf="!imageLinkValidate(questionObject.imageLink)" color="warn">{{ 'Bad format' | translate }}</md-hint>
+                  [mdTooltip]="
+                  'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.'
+                    | translate" mdTooltipPosition="above"
+                   [(ngModel)]="questionObject.imageLink" (change)="onSurveyChange()">
+                  <md-hint *ngIf="!imageLinkValidate(questionObject.imageLink)" color="warn">
+                    {{ 'Bad format. This field requires a full URL to an image, beginning with https://' | translate }}
+                  </md-hint>
                 </md-input-container>
 
               </md-card-content>

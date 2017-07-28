@@ -66,6 +66,8 @@
         <div class="surveyDone" *ngIf="this.done" (click)="exitSurvey()"><span>{{survey.endMessage.no}}</span></div>
       </div>
 
+
+
       <!-- Childcomponents that handle each answer-type -->
       <div class="answerTypes" *ngIf="!this.done">
         <app-nickname *ngIf = "(this.survey.isPost || !this.survey.postKey!==undefined) && this.nicknamePage && !this.postDone" [isNicknameTaken] = isNicknameTaken [survey] = survey [questionObject] = survey.questionlist[page] [nicknamesForSurvey] = nicknamesForSurvey (answer) = 'updateNick($event)'></app-nickname>
@@ -75,6 +77,17 @@
         <app-multiplechoice *ngIf = "survey.questionlist[page].mode == 'multi' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event);'></app-multiplechoice>
         <app-yes-no *ngIf = "survey.questionlist[page].mode == 'binary' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event); autoAdvance()'></app-yes-no>
         <app-freetxt *ngIf = "survey.questionlist[page].mode == 'text' && !this.done && !this.nicknamePage" [questionObject] = survey.questionlist[page] [currentAnswer] = response.questionlist[page] (answer) = 'addOrChangeAnswer($event)'></app-freetxt>
+      </div>
+
+      <div class="imageButtonBox" *ngIf="survey.questionlist[page].imageLink && !this.done && !this.nicknamePage">
+        <button md-raised-button color="primary" (click)="toggleImageBox()">
+          {{ 'Show image' | translate }}
+        </button>
+      </div>
+
+      <div class="imageBox" *ngIf="survey.questionlist[page].imageLink && !this.done && !this.nicknamePage" (click)="toggleImageBox()"
+          [ngClass]="{ 'show': showImage }" >
+        <img src="{{survey.questionlist[page].imageLink}}" alt="image" class="questionImage" (click)="toggleImageBox()" />
       </div>
 
     </div>
