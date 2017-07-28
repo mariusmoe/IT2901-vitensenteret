@@ -213,6 +213,8 @@ export const LANG_EN_TRANS = {
   'Start': 'Start',
   'Start POST': 'Start POST',
   'Start survey': 'Start survey',
+  'Choose center': 'Choose center',
+  'Could not find any published surveys at this time.': 'Could not find any published surveys at this time.',
 
   // PDF download lines
   'Last modified: d': 'Last modified: %0',
