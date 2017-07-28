@@ -111,6 +111,8 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
   animLoop = false;
   playButtonActive = 'inactive';
 
+  showImage = false;
+
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
@@ -567,5 +569,11 @@ openSnackBar(message: string, action: string) {
     } else if (this.playButtonActive === 'active') {
       this.playButtonActive = 'inactive';
     }
+  }
+
+
+
+  toggleImageBox() {
+    this.showImage = !this.showImage;
   }
 }

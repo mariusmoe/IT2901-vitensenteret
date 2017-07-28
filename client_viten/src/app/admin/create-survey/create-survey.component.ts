@@ -225,12 +225,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
    * imageLinkValidate(s: string)
    *
    * @param {string} s a string to check
-   * returns true if the input string matches an url
+   * returns true if the input string matches an image url
    */
   imageLinkValidate(s: string) {
-    return s === undefined || (s && s.length > 0
-      && /(https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/.test(s)
-      || s.length === 0);
+    return s === undefined || (s && s.length > 0 && this.imageLinkPattern.test(s) || s.length === 0);
   }
 
 
