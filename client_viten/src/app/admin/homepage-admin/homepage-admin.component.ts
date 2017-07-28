@@ -135,12 +135,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     this.survey.active = !this.survey.active;
     // patch the survey
     const sub1 = this.surveyService.patchSurvey(this.survey._id, this.survey).subscribe(result => {
-      // update the all surveys list as well
-      const sub2 = this.surveyService.getAllSurveys().subscribe(r => {
-        this.getSurvey(this.survey._id);
-        sub2.unsubscribe();
-      } );
-
+      this.getSurvey(this.survey._id);
       sub1.unsubscribe();
     }, error => {
       // reset if things went bad

@@ -69,12 +69,12 @@ export class NewCenterComponent implements OnInit {
       if (typeof this.route.snapshot.params['centerId'] !== 'undefined' &&
           this.route.snapshot.params['centerId'] !== 'addcenter' ) {
         this.selectedCenter = this.route.snapshot.params['centerId'];
-        console.log('FOUND center ID: ' + this.route.snapshot.params['centerId']);
-        console.log(this.centers);
+        // console.log('FOUND center ID: ' + this.route.snapshot.params['centerId']);
+        // console.log(this.centers);
         this.centers.forEach(center => {
           if (center['_id'] === this.selectedCenter) {
             this.currentCenterName = center['name'];
-            console.log('Current center should have changed!')
+            // console.log('Current center should have changed!')
           }
         });
       }
@@ -93,22 +93,22 @@ export class NewCenterComponent implements OnInit {
 
   public _onChange(files: any) {
     // this.user = this.authenticationService.getUser();
-    console.log(this.uploader.queue);
+    // console.log(this.uploader.queue);
     this.uploader.onBuildItemForm = (item, form) => {
-      form.append("center", this.selectedCenter);
+      form.append('center', this.selectedCenter);
     };
-    this.uploader.queue[0].formData = {'center': ' myval'}
-    console.log(this.uploader);
+    this.uploader.queue[0].formData = {'center': ' myval'};
+    // console.log(this.uploader);
     if (files && files.length > 0) {
-     let file: File = files.item(0);
+     const file: File = files.item(0);
      if (this.user.role == 'sysadmin') {
         // this.uploader.queue[0]._file.name = this.user.role;
-        console.log('Admin posting image')
+        // console.log('Admin posting image')
      }
      // Now you can get
-     console.log(file.name);
-     console.log(file.size);
-     console.log(file.type);
+    //  console.log(file.name);
+    //  console.log(file.size);
+    //  console.log(file.type);
    }
    if (this.uploader.queue.length > 1) {
      this.uploader.queue.shift();
@@ -122,10 +122,10 @@ export class NewCenterComponent implements OnInit {
   public changeCenterName(name: string) {
     this.centerService.centerUpdateCenterName(name, this.selectedCenter)
       .subscribe(result => {
-        this.openSnackBar('Name Changed', 'SUCCESS');
+        this.openSnackBar(this.languageService.instant('Center title updated'), 'SUCCESS');
       },
       error => {
-        this.openSnackBar('Could not change name at this time', 'FAILURE');
+        this.openSnackBar(this.languageService.instant('Could not change center title at this time'), 'FAILURE');
         console.error(error);
     });
   }
