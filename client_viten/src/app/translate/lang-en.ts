@@ -42,6 +42,7 @@ export const LANG_EN_TRANS = {
   'Nickname': 'Nickname',
   'Code': 'Code',
   'Contributors': 'Contributors',
+  'Help': 'Help',
   'Center': 'Center',
   'Action': 'Action',
   'Actions': 'Actions',

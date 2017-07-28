@@ -39,6 +39,8 @@ export class AuthGuard implements CanActivate {
               if (result === true) {
                 return true;
               } else {
+                // Session expired
+                // TODO Give feedback
                 this.router.navigate(['/login']);
                 return false;
               }
