@@ -43,6 +43,7 @@ export const LANG_NO_TRANS = {
   'Nickname': 'Kallenavn',
   'Code': 'Kode',
   'Contributors': 'Bidragsytere',
+  'Help': 'Hjelp',
   'Center': 'Senter',
   'Action': 'Handling',
   'Actions': 'Handlinger',

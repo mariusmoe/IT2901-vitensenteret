@@ -7,6 +7,7 @@ export const environment = {
   production: false,
 
   URL: {
+    base:        'http://localhost:2000',
     login:        'http://localhost:2000/api/auth/login',
     allUsers:     'http://localhost:2000/api/auth/all_users',
     delete:       'http://localhost:2000/api/auth/delete_account',

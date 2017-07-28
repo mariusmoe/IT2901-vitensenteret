@@ -6,6 +6,7 @@ import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
 import { CenterService } from '../../_services/center.service';
 
+
 import 'rxjs/add/operator/filter';
 
 @Component({
@@ -56,8 +57,13 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
 
   }
 
+
   ngOnDestroy() {
     this.routerSub.unsubscribe();
+  }
+
+  openUserManual() {
+    window.open('/assets/manuals/manual-usermanual-2.pdf', '_blank');
   }
 
   /**

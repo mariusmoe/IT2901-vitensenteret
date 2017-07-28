@@ -525,7 +525,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
         let totalResponse = 0;
         _responses.forEach((response) => {
           if (response.questionlist[i] instanceof Array){
-            console.log(response.questionlist[i]);
+            // console.log(response.questionlist[i]);
             response.questionlist[i].forEach((multiOption, n) => {
               if (response.questionlist[i][n] == y) {
                 totalResponse++
@@ -653,64 +653,50 @@ exports.getSurveyAsCSV = (req, res, next) => {
       callback(summary);
     }
 
-    const getDetailedSummary = (responses, callback) => {
+    const getDetailedSummary = (survey, responses, callback) => {
       let summary = "";
-      survey.questionlist.forEach((question, i) => {
-        // Add question number for readability; Add question to csv
-        summary += String(i) + '. ' + question.lang.no.txt + '\nBrukerID,'
-        switch (question.mode) {
-          case 'multi':
+      responses.forEach( (response, i) => {
+        summary += '\nUserID,'+response.nickname + '\n'
+
+        survey.questionlist.forEach((question, i) => {
+          summary += String(i) + '. ' + question.lang.no.txt + '\n'
+          // Add question number for readability; Add question to csv
+          switch (question.mode) {
+            case 'multi':
             question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
             summary += '\n'
-            responses.forEach( (response) => {
-              summary += response.nickname + ', '
               summary += response.questionlist[i].toString() + '\n'
-            });
             break;
-          case 'text':
+            case 'text':
             summary += ', Tekst\n'
-            responses.forEach((response) => {
-              summary += response.nickname + ', '
               summary += response.questionlist[i] + '\n'
-            })
             break;
-          case 'star':
+            case 'star':
             let starList = ['1 stjerne', '2 stjerner', '3 stjerner', '4 stjerner', '5 stjerner']
             starList.forEach( (x) => {summary +=  x + ','});
             summary += '\n'
-            responses.forEach( (response) => {
-              summary += response.nickname + ', '
               summary += response.questionlist[i].toString() + '\n'
-            });
             break;
-          case 'smiley':
+            case 'smiley':
             let smileyList = ['Trist','Nøytral','Glad']
             smileyList.forEach( (x) => {summary +=  x + ','});
             summary += '\n'
-            responses.forEach( (response) => {
-              summary += response.nickname + ', '
               summary += response.questionlist[i].toString() + '\n'
-            });
             break;
-          case 'binary':
+            case 'binary':
             let binaryList = ['Nei','Ja']
             binaryList.forEach( (x) => {summary +=  x + ','});
             summary += '\n'
-            responses.forEach( (response) => {
-              summary += response.nickname + ', '
               summary += response.questionlist[i].toString() + '\n'
-            });
             break;
-          default:
+            default:
             question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
             summary += '\n'
-            responses.forEach( (response) => {
-              summary += response.nickname + ', '
               summary += response.questionlist[i].toString() + '\n'
-            });
             break;
           }
         });
+      })
       callback(summary);
     }
 
@@ -744,11 +730,11 @@ exports.getSurveyAsCSV = (req, res, next) => {
 
         // TODO: Add detaild prepost view
         csv += "\n\nDETAILS\nPRE\n"+postSurvey.name + '\n'
-        getDetailedSummary(responses, (detailedSummary) => {
+        getDetailedSummary(survey, responses, (detailedSummary) => {
           csv += detailedSummary
         });
         csv += "\nPOST\n"
-        getDetailedSummary(postResponses, (detailedSummary) => {
+        getDetailedSummary(postSurvey, postResponses, (detailedSummary) => {
           csv += detailedSummary
         });
 

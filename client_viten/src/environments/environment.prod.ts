@@ -19,6 +19,7 @@ export const environment = {
 
 
     URL: {
+      base: 'https://vitensurvey.party',
       login: 'https://vitensurvey.party/api/auth/login',
       allUsers: 'https://vitensurvey.party/api/auth/all_users',
       delete: 'https://vitensurvey.party/api/auth/delete_account',
