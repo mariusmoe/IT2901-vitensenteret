@@ -2,11 +2,10 @@
 
 <div class="headderWrapper">
   <button md-menu-item routerLink="/admin/settings" class="backButton">
-    <md-icon>arrow_back</md-icon>
-    Back
+    <md-icon>arrow_back</md-icon> {{ 'Back' | translate }}
   </button>
   <h1>
-    Center options
+    {{ 'Center settings' | translate }}
   </h1>
 </div>
 <div *ngIf="!isNewCenter">
@@ -14,22 +13,17 @@
 
 <div class="wrapper">
   <md-card class="half">
-<md-card-title>Change name</md-card-title>
+<md-card-title>{{ 'Change title' | translate }}</md-card-title>
   <md-input-container>
-    <input mdInput #centerName placeholder="Set center name" [value]="currentCenterName">
+    <input mdInput #centerName placeholder="{{ 'Title' | translate }}" [value]="currentCenterName">
   </md-input-container>
-  <button md-raised-button
-    #changeCenterNameButton
-    class="marginleft"
-    color="primary"
-    minlength="3"
-    md-visible="true"
-    (click)="changeCenterName(centerName.value)"
-    >
+  <button md-raised-button #changeCenterNameButton
+    class="marginleft" color="primary" minlength="3"
+    md-visible="true" (click)="changeCenterName(centerName.value)">
     <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
     ('You need to write the same password twice' | translate ) : '' "
     mdTooltipPosition="below">
-      Change name
+      {{ 'Change title' | translate }}
     </div>
   </button>
   <!-- - -->
@@ -67,7 +61,7 @@
           <md-hint align="end">
             {{newEscapePassword2.value.length}} / 4++</md-hint>
       </md-input-container>
-      <md-icon class="done" *ngIf="newEscapePassword.value === newEscapePassword2.value && !(newEscapePassword.value === '') ">done all</md-icon>
+      <md-icon class="done" *ngIf="newEscapePassword.value === newEscapePassword2.value && !(newEscapePassword.value === '') ">done_all</md-icon>
     </md-card-content>
     <md-card-actions>
       <button md-raised-button
@@ -95,12 +89,12 @@
 
 
 <md-card ngClass="uploadCard">
-  <md-card-title>Change logo</md-card-title>
+  <md-card-title>{{ 'Logo settings' | translate }}</md-card-title>
   <!-- <input md-raised-button name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/> -->
 
   <button (click)="fileInput.click()" md-raised-button     color="primary" class="marginbottom">
     <md-icon>library_add</md-icon>
-    <span>Choose file</span>
+    <span>{{ 'Choose file' | translate }}</span>
     <input #fileInput name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)" style="display:none;" />
   </button>
   <!-- <h3>Upload queue</h3>
@@ -109,11 +103,11 @@
   <table class="table">
       <thead>
       <tr>
-          <th width="160px">Name</th>
-          <th>Size</th>
-          <th width="160px">Progress</th>
-          <th>Status</th>
-          <th>Actions</th>
+          <th width="160px">{{ 'Filename' | translate }}</th>
+          <th>{{ 'Size' | translate }}</th>
+          <th width="160px">{{ 'Progress' | translate }}</th>
+          <th>{{ 'Status' | translate }}</th>
+          <th>{{ 'Actions' | translate }}</th>
       </tr>
       </thead>
       <tbody>
@@ -134,15 +128,15 @@
           <td nowrap>
               <button md-raised-button class="btn btn-success btn-xs"
                       (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                  <md-icon>file_upload</md-icon> Upload and change logo
+                  <md-icon>file_upload</md-icon> {{ 'Upload and replace logo' | translate }}
               </button>
               <button md-raised-button class="btn btn-warning btn-xs"
                       (click)="item.cancel()" [disabled]="!item.isUploading">
-                  <md-icon>cancel</md-icon> Cancel
+                  <md-icon>cancel</md-icon> {{ 'Cancel' | translate }}
               </button>
               <button md-raised-button class="btn btn-danger btn-xs"
                       (click)="item.remove()">
-                  <md-icon>delete</md-icon> Remove
+                  <md-icon>delete</md-icon> {{ 'Remove' | translate }}
               </button>
           </td>
       </tr>

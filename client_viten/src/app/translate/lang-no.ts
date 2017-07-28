@@ -43,10 +43,16 @@ export const LANG_NO_TRANS = {
   'Nickname': 'Kallenavn',
   'Code': 'Kode',
   'Contributors': 'Bidragsytere',
-
-  // Roles
-  'admin': 'Superadmin',
-  'member': 'Adminbruker',
+  'Center': 'Senter',
+  'Action': 'Handling',
+  'Actions': 'Handlinger',
+  'Back': 'Tilbake',
+  'Progress': 'Progressjon',
+  'Filesize': 'Filstørrelse',
+  'Filename': 'Filnavn',
+  'Status': 'Status',
+  'Publish': 'Publiser',
+  'Unpublish': 'Avpubliser',
 
   // Permissions
   'You do not have the required permissions for this action!': 'Du har ikke de nødvendige rettighetene for dette!',
@@ -164,7 +170,8 @@ export const LANG_NO_TRANS = {
   'Go to post survey': 'Gå til post undersøkelse',
   'The survey is not active': 'Undersøkelsen er ikke aktiv',
   'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
-  'Undersøkelsen er over og kan ikke publiseres på nytt. Hvis du ønsker å kjøre undersøkelsen på nytt, prøv å kopiere den.',
+    'Undersøkelsen er over og kan ikke publiseres på nytt. Hvis du ønsker å kjøre undersøkelsen på nytt, prøv å kopiere den.',
+  'Survey completed': 'Undersøkelse avsluttet',
 
 
   // Admin settings component
@@ -196,6 +203,18 @@ export const LANG_NO_TRANS = {
   'You will now be logged out': 'Du blir nå logget ut',
   'Referral link': 'Referral link',
   'Code to exit survey': 'kode for å komme ut av undersøkelsen',
+  'Current role: role': 'Din rolle: %0',
+  'Center settings': 'Senterinstillinger',
+  'Update center': 'Endre senter',
+  'New center': 'Nytt senter',
+
+  // New center component
+  'Change title': 'Bytt navn',
+  'Logo settings': 'Logoinnstillinger',
+  'Choose file': 'Velg bildefil',
+  'Upload and replace logo': 'Last opp og bytt logo',
+  'Center title updated': 'Senterets navn er oppdatert',
+  'Could not change center title at this time': 'Kunne ikke endre navnet på senteret på dette tidspunktet',
 
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',

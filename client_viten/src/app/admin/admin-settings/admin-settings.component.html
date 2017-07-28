@@ -42,7 +42,7 @@
               <md-hint align="end">
                 {{newPassword2.value.length}} / 4++</md-hint>
           </md-input-container>
-          <md-icon class="done" *ngIf="newPassword.value === newPassword2.value && !(newPassword.value === '') ">done all</md-icon>
+          <md-icon class="done" *ngIf="newPassword.value === newPassword2.value && !(newPassword.value === '') ">done_all</md-icon>
         </md-card-content>
         <md-card-actions>
           <button md-raised-button
@@ -82,10 +82,10 @@
     <div class="tabContent">
       <md-card>
         <md-card-title>{{ 'Refer user' | translate }}</md-card-title>
-        <md-card-subtitle>Current role: {{user.role | translate }}</md-card-subtitle>
+        <md-card-subtitle>{{ 'Current role: role' | translate: user.role }}</md-card-subtitle>
         <md-card-content>
 
-          <md-select placeholder="Role" class="dropdown" [(ngModel)]="selectedRole" name="role">
+          <md-select placeholder="{{ 'Role' | translate }}" class="dropdown" [(ngModel)]="selectedRole" name="role">
             <md-option *ngFor="let role of roles" [value]="role.value"
               [disabled]="(role.value==='sysadmin' && user.role != 'sysadmin')">
               {{role.value}}
@@ -93,7 +93,7 @@
           </md-select>
 
 
-          <md-select placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+          <md-select placeholder="{{ 'Center' | translate }}" class="dropdown" [(ngModel)]="selectedCenter"
             name="center" [disabled]="user.role != 'sysadmin'">
             <md-option *ngFor="let center of centers" [value]="center._id">
               {{center.name}}
@@ -105,13 +105,8 @@
             [disabled]="(selectedCenter == 'undefined')">
             {{ 'Refer user' | translate}}
           </button>
-
         </md-card-content>
-
         <md-card-actions>
-
-
-
           <!-- <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
             {{ 'Refer admin' | translate }}
           </button>
@@ -119,7 +114,6 @@
             {{ 'Refer member' | translate }}
           </button> -->
         </md-card-actions>
-        <br>
 
 <!--
           <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
@@ -170,25 +164,23 @@
           </md-card-actions> -->
 
 
-
       </md-card>
       <md-card class="centerSettings">
         <md-card-content>
           <button md-menu-item routerLink="/admin/center" *ngIf="user.role !== 'sysadmin'">
-            <md-icon>settings</md-icon>
-            Center {{ 'Settings' | translate }}
+            <md-icon>settings</md-icon> {{ 'Center settings' | translate }}
           </button>
 
           <div *ngIf="user.role==='sysadmin'">
 
 
-            <md-card-title>Change center</md-card-title>
+            <md-card-title>{{ 'Update center' | translate }}</md-card-title>
             <md-card-content>
               <div class="tableHolder">
                 <table class="userTable">
                   <tr>
-                    <th>Center Name</th>
-                    <th>Action</th>
+                    <th>{{ 'Center' | translate }}</th>
+                    <th>{{ 'Action' | translate }}</th>
                   </tr>
                   <tr *ngFor="let center of centers;  let i=index; let odd=odd; let even=even;"
                   (click)="updateCenter(center._id)"
@@ -202,7 +194,7 @@
             <br />
             <button md-menu-item routerLink="/admin/center/addcenter" >
               <md-icon>add</md-icon>
-              New center
+              {{ 'New center' | translate }}
             </button>
           </md-card-content>
         </div>
@@ -227,7 +219,7 @@
             [ngClass]="{ odd: odd, even: even }">
 
             <td>{{user.email}}</td>
-            <td>{{ user.role | translate }}</td>
+            <td>{{user.role}}</td>
             <td><md-icon>delete_forever</md-icon></td>
           </tr>
         </table>

@@ -42,10 +42,16 @@ export const LANG_EN_TRANS = {
   'Nickname': 'Nickname',
   'Code': 'Code',
   'Contributors': 'Contributors',
-
-  // roles
-  'admin': 'Superadmin',
-  'member': 'Admin',
+  'Center': 'Center',
+  'Action': 'Action',
+  'Actions': 'Actions',
+  'Back': 'Back',
+  'Progress': 'Progress',
+  'Filesize': 'Filesize',
+  'Filename': 'Filename',
+  'Status': 'Status',
+  'Publish': 'Publish',
+  'Unpublish': 'Unpublish',
 
   // Permissions
   'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
@@ -131,7 +137,8 @@ export const LANG_EN_TRANS = {
   'All responses to this survey will be lost if you proceed.': 'All responses to this survey will be lost if you proceed.',
   'Do you wish to proceed?': 'Do you wish to proceed?',
   'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
-  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.',
+    'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.',
+  'Survey completed': 'Survey completed',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
@@ -193,6 +200,20 @@ export const LANG_EN_TRANS = {
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
   'Code to exit survey': 'Code to exit survey',
+  'Current role: role': 'Current role: %0',
+  'Center settings': 'Center settings',
+  'Update center': 'Update center',
+  'New center': 'New center',
+
+  // New center component
+  'Change title': 'Change title',
+  'Logo settings': 'Logo settings',
+  'Choose file': 'Choose file',
+  'Upload and replace logo': 'Upload and replace logo',
+  'Center title updated': 'Center title updated',
+  'Could not change center title at this time': 'Could not change center title at this time',
+
+
 
   // survey retrieval chart component
   'Download as PNG': 'Download as PNG',
