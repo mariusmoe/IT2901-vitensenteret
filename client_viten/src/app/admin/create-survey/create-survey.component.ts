@@ -425,7 +425,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       <div *ngFor="let i of numAlternatives; let in = index">
         <md-input-container>
           <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(in+1)}} ({{ 'Norwegian' | translate }})"
-          [(ngModel)]="qoEditObj.lang.no.options[i]" required (input)='setSaveReadyStatus()'>
+          [(ngModel)]="qoEditObj.lang.no.options[i]" required (input)='setSaveReadyStatus()' autocomplete="off">
           <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])
             || fieldCheckDup(qoEditObj.lang.no.options[i], qoEditObj.lang.no.options)"
             >{{ !fieldValidate(qoEditObj.lang.no.options[i]) ? ('This field is required.' | translate)
@@ -433,7 +433,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         </md-input-container>
         <md-input-container *ngIf="data.englishEnabled">
           <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(in+1)}} ({{ 'English' | translate }})"
-          [(ngModel)]="qoEditObj.lang.en.options[i]" required (input)='setSaveReadyStatus()'>
+          [(ngModel)]="qoEditObj.lang.en.options[i]" required (input)='setSaveReadyStatus()' autocomplete="off">
           <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])
             || fieldCheckDup(qoEditObj.lang.en.options[i], qoEditObj.lang.en.options)"
             >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
