@@ -67,6 +67,10 @@ export class LoginComponent implements OnInit, OnDestroy {
       );
   }
 
+  openUserManual() {
+    window.open('/assets/manuals/manual-usermanual-2.pdf', '_blank');
+  }
+
   /**
    * Opens a snackbar with the given message and action message
    * @param  {string} message The message that is to be displayed
