@@ -98,24 +98,21 @@
               <span [mdTooltip]="(survey.deactivationDate) ?
               ('The survey ' | translate ) : '' "
               mdTooltipPosition="below">
-              <md-icon class="openInBrowser">cloud_up</md-icon>
-              Publish
+              <md-icon class="openInBrowser">cloud_up</md-icon> {{ 'Publish' | translate }}
             </span>
             </button>
             <button md-raised-button *ngIf="survey.active" color="accent" (click)="toggleActive()" >
               <span [mdTooltip]="(survey.deactivationDate) ?
               ('The survey ' | translate ) : '' "
               mdTooltipPosition="below">
-              <md-icon class="openInBrowser">cloud_down</md-icon>
-              Unpublish
+              <md-icon class="openInBrowser">cloud_down</md-icon> {{ 'Unpublish' | translate }}
             </span>
             </button>
             <button md-raised-button *ngIf="!survey.active && survey.deactivationDate" color="accent" (click)="toggleActive()" [disabled]="survey.deactivationDate" >
               <span [mdTooltip]="(survey.deactivationDate) ?
               ('The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.' | translate ) : '' "
               mdTooltipPosition="below">
-              <md-icon class="openInBrowser">cloud_done</md-icon>
-              Survey completed
+              <md-icon class="openInBrowser">cloud_done</md-icon> {{ 'Survey completed' | translate }}
             </span>
             </button>
 
