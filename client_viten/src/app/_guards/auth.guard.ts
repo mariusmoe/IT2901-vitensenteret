@@ -45,6 +45,8 @@ export class AuthGuard implements CanActivate {
               } else {
                 // Session expired
                 // TODO Give feedback
+                localStorage.removeItem('token');
+                localStorage.removeItem('center');
                 this.openSnackBar(this.translateService.instant('Session expired'), '');
 
                 this.router.navigate(['/login']);
