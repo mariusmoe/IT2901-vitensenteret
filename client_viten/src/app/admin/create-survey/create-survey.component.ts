@@ -91,6 +91,22 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       if (sessionSurveyObject && (<Survey>sessionSurveyObject)._id === undefined) {
         this.survey = sessionSurveyObject;
         // though we should update some bits of information;
+
+        // somewhat hacky way to determine english state.
+        if (this.survey.questionlist[0].lang.en
+          && this.survey.questionlist[0].lang.en.txt
+          && this.survey.questionlist[0].lang.en.txt.length > 0) {
+          this.englishEnabled = true;
+        }
+        // re-add english if it isn't there. It's then stripped again upon saving if english still isn't enabled.
+        if (!this.survey.questionlist[0].lang.en) {
+          for (const qo of this.survey.questionlist) {
+            qo.lang.en = {
+              txt: '',
+              options: [],
+            };
+          }
+        }
       } else {
         // Do not remove the following lines!
         this.survey = {
@@ -131,6 +147,16 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           this.englishEnabled = true;
         }
 
+        // re-add english if it isn't there. It's then stripped again upon saving if english still isn't enabled.
+        if (!this.survey.questionlist[0].lang.en) {
+          for (const qo of this.survey.questionlist) {
+            qo.lang.en = {
+              txt: '',
+              options: [],
+            };
+          }
+        }
+
         // Do not remove the following lines!
         this.onSurveyChange();
         this.startupLoading = false;
@@ -158,6 +184,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   private setupInitialSurveyStateFrom(survey: Survey) {
     this.survey = JSON.parse(JSON.stringify(survey)); // Initiate the survey with an exact duplicate.
     delete this.survey._id;
+
   }
 
   /**
