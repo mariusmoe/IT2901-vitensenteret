@@ -2,6 +2,7 @@
   <md-input-container class="search">
     <input mdInput type="search"
             placeholder="{{'Search' | translate}}"
+            autocomplete="off"
             [formControl]="searchFormControl"
             [(value)]="searchInput"
             md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">

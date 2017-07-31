@@ -79,6 +79,8 @@ export const LANG_NO_TRANS = {
   // Image URL in create survey
   'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.':
     'Dette feltet er VALGFRITT. Feltet tar en hel URL. Eksempel: https://www.myWebsite.com/myImage.png. www.imgur.com er en bilde-delingstjeneste du kan bruke.',
+  'Bad format. This field requires a full URL to an image, beginning with https://':
+    'Feil format. Dette feltet krever en hel URL til et bilde, og den må starte med https://',
 
   // Survey Pre post labels
   'Pre': 'Pre',
@@ -248,7 +250,6 @@ export const LANG_NO_TRANS = {
 
   // Nickname component
   'Name': 'Hva heter du?',
-  // PLay survey
   'You need to answer the pre survey first': 'Du må svare på pre undersøkelsen først',
   'This nickname is taken, choose another one': 'Dette kallenavnet er tatt, velg et annet',
 
@@ -263,6 +264,9 @@ export const LANG_NO_TRANS = {
   // play-survey - Free text
   'Max 255 characters': 'Maks 255 bokstaver',
   'Your answer': 'Ditt svar',
+
+  // play survey
+  'Show image': 'Vis bilde',
 
   // Footer
   'Group n': 'Gruppe %0',
