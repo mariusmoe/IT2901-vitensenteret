@@ -38,7 +38,7 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
       this.breadcrumbs = this.getBreadcrumbs();
     });
     const sub = this.centerService.getAllCenters().subscribe(result => {
-      if (result) {
+      if (result && result[0]) { // if there is no array we instead get the 'route exists but no centers..' thing
         const currentCenter = localStorage.getItem('center');
         const center = result.filter(c => { return c['_id'] === currentCenter })[0];
         if (center) {
