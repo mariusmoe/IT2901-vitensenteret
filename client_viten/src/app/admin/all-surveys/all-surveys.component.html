@@ -19,7 +19,8 @@
     color="primary"
     routerLink="/admin/editsurvey"
     routerLinkActive="active"
-    md-tooltip="{{ 'Create New Survey' | translate }}">
+    md-tooltip="{{ 'Create New Survey' | translate }}"
+    [disabled]="user.role == 'sysadmin'">
     <md-icon>add</md-icon> {{ 'Create New Survey' | translate }}
   </button>
 
