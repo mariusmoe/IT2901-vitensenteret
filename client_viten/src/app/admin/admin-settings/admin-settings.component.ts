@@ -59,7 +59,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       const sub = this.centerService.getAllCenters().subscribe(result => {
         if (result && result[0]) {  // if there is no array we instead get the 'route exists but no centers..' thing
           this.centers = result;
-          if (result.indexOf(localStorage.getItem('center')) !== -1) {
+          if (result.filter( c => {return c._id === localStorage.getItem('center'); })) {
             this.selectedCenter = localStorage.getItem('center');
           }
         }
