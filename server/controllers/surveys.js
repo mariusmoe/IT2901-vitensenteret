@@ -206,6 +206,9 @@ exports.patchOneSurvey = (req, res, next) => {
 
 
   Survey.findById(surveyId, (err, foundSurvey) => {
+    if (!foundSurvey) {
+      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+    }
     if (foundSurvey.deactivationDate) {
       return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
     }
