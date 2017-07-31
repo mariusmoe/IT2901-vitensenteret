@@ -12,13 +12,20 @@ const SurveySchema = new Schema({
     type: String,
     required: true
   },
+  center: {
+    type: mongoose.Schema.Types.ObjectId, ref: 'Center',
+    required: true
+  },
+  madeBy: {
+    type: mongoose.Schema.Types.ObjectId, ref: 'User',
+    required: true
+  },
   isPost: Boolean,
   postKey: { type: mongoose.Schema.Types.ObjectId, ref: 'Survey'},
   comment: String,
 	date: Date,                // date created
   activationDate: {          // date survey became active
-    type: Date,
-    default: Date.now
+    type: Date
   },
   deactivationDate: Date,   // date survey became deactivated
   active: Boolean,
@@ -43,6 +50,7 @@ const SurveySchema = new Schema({
         options: [String]
       },
     },
+    imageLink: { type: String },
     required: { type: Boolean, default: true }
   }]
 });

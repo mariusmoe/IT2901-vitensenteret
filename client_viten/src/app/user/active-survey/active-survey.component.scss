@@ -8,8 +8,9 @@ $main-background-color: #F5F5F5;
       margin: auto auto;
       height: 60vh;
     }
-    height: 100vh;
-    width: 100vw;
+    height: 100%;
+    width: 100%;
+    overflow: hidden;
   }
 }
 
@@ -35,6 +36,7 @@ $main-background-color: #F5F5F5;
   width: 10vh;
   opacity: 0.4;
   border-radius: 10vh;
+  z-index: 99999;
 }
 .exitButton:hover {
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
@@ -160,14 +162,20 @@ $main-background-color: #F5F5F5;
   width: 100vw;
 }
 .answerTypes {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  top: 0;
+  left: 0;
   display: flex;
+  align-items: center;
   justify-content: center;
+  overflow: hidden;
 }
 .txt {
   text-align: center;
   max-width: 75vw;
   margin-top: 5vh;
-  margin-bottom: 10vh;
 }
 
 h1 {
@@ -186,6 +194,7 @@ h3 {
   color: #263238;
   font-size: 4vw;
   line-height: 4vw;
+  white-space: pre-line;
 }
 
 .qtext {
@@ -221,6 +230,7 @@ h3 {
   width: 5vh;
   opacity: 0;
   cursor: default;
+  z-index: 99999;
 }
 
 #qButton {
@@ -314,6 +324,48 @@ input[type=image]:disabled {
 
   }
 }
+
+
+.imageButtonBox {
+  z-index: 9999;
+  position: absolute;
+  bottom: 20vh;
+  width: 100%;
+  left: 0;
+  display: flex;
+  justify-content: center;
+}
+
+.imageBox {
+  z-index: 99999;
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+  width: 100%;
+  display: none;
+  background: rgba(0,0,0,0.5);
+
+  &.show {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+
+  .questionImage {
+    pointer-events: none;
+    width: 80%;
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+  }
+}
+
+
+
+
+
 
 
 // Disable highlights

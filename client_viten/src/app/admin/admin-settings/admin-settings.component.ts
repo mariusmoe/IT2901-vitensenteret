@@ -1,11 +1,11 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdTabChangeEvent } from '@angular/material';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { SurveyService } from '../../_services/survey.service';
+import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdSnackBar } from '@angular/material';
 
@@ -25,28 +25,48 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private selectedRow: number;
   private referralURL = '';
   private emailSub: Subscription;
+  public tabIndex: number;
   selectedLanguage;
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
 
+  public selectedRole: string;
+  public selectedCenter: string;
+
+  roles = [
+    {value: 'sysadmin'},
+    {value: 'vitenleader'},
+    {value: 'user'}
+  ];
+  public centers: Object[] = [];
+
   constructor(
     private router: Router,
     private service: AuthenticationService,
-    private surveyService: SurveyService,
+    private centerService: CenterService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
     public languageService: TranslateService) {
+      this.selectedRole = this.roles[2].value;
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
-      if (this.user.role === 'admin') {
-        this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
+      if (this.user.role === 'sysadmin' || this.user.role === 'vitenleader') {
+        this.getUsers(); // TODO: if user ISN'T sysadmin, do not do execute getUsers()
       }
       this.newEmailForm = fb.group({
         'newEmail': [null, Validators.required],
       });
-
+      this.centerService.getAllCenters().subscribe(result => {
+        this.centers = result;
+        this.selectedCenter = localStorage.getItem('center');
+      });
+      if (localStorage.getItem('activesettingstab')) {
+        this.tabIndex = Number(localStorage.getItem('activesettingstab'));
+      }
     }
+
+
 
 
 
@@ -55,6 +75,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // this.emailSub.unsubscribe();
+  }
+
+  onTabChange(e: MdTabChangeEvent) {
+    localStorage.setItem('activesettingstab', e.index.toString());
   }
 
   /**
@@ -69,7 +93,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    * @param  {string} password new password
    */
   changeExitSurveyPassword(password: string) {
-    this.surveyService.changeChoosesurvey(password)
+    this.centerService.exitSurveyUpdatePassword(password, localStorage.getItem('center'))
       .subscribe(result => {
         this.openSnackBar(this.languageService.instant('Password changed'), 'SUCCESS');
       },
@@ -150,8 +174,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    * requests a referral link
    * @param  {string} role The role of the user that is to be referred
    */
-  requestReferral(role: string) {
-    this.service.getReferral(role)
+  requestReferral(role: string, center: string) {
+    this.service.getReferral(role, center)
         .subscribe(result => {
           const config: MdDialogConfig = {
             data: {
@@ -226,6 +250,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         this.dialogRef = null;
       });
     }
+  }
+
+
+  updateCenter(centerId: string) {
+    this.router.navigate(['/admin/center/' + centerId]);
   }
 
 

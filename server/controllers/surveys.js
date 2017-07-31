@@ -5,6 +5,7 @@ const validator = require('validator'),
       Survey  = require('../models/survey'),
       Response = require('../models/response'),
       Nickname = require('../models/nickname'),
+      UserFolder = require('../models/userFolder'),
       jsonfile = require('jsonfile'),
       crypto = require('crypto'),
       fs = require('fs'),
@@ -27,22 +28,44 @@ exports.createSurvey = (req, res, next) => {
   if (Object.keys(receivedSurvey).length === 0) {
     return res.status(400).send( {message: status.SURVEY_OBJECT_MISSING.message, status: status.SURVEY_OBJECT_MISSING.code})
   }
+  receivedSurvey.madeBy = req.user._id.toString();
+  receivedSurvey.center = req.user.center.toString();
+  delete receivedSurvey.deactivationDate
+
+
   if (!val.surveyValidation(receivedSurvey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
 
-  let newSurvey = new Survey ( receivedSurvey )
+  let newSurvey = new Survey ( receivedSurvey );
+
+  newSurvey.active = false;
+  newSurvey.date = new Date();
 
   newSurvey.save((err, survey) => {
     if (err) {return next(err); }
-    return res.status(200).send( survey );
-  })
+    // only PRE-surveys and non-prepost surveys should go in the folders!
+    if(survey.isPost === false) {
+      UserFolder.findOne({ user: req.user, isRoot: true }, (err2, rootFolder) => {
+        if (err2) { return next(err2); }
+        rootFolder.surveys.push(survey);
+        rootFolder.save((err3, savedRoot) => {
+          if (err3) { return next(err3); }
+          return res.status(200).send( survey );
+        });
+      });
+    } else {
+      // its a post-survey, return without creating a folder entry for it.
+      return res.status(200).send( survey );
+    }
+  });
 }
 
 
 // GET
 exports.getAllSurveys = (req, res, next) => {
-  Survey.find( { 'isPost': false }, { 'name': true, 'active': true, 'date': true, 'comment': true, 'postKey': true }, (err, surveys) => {
+  const centerId = req.params.centerId;
+  Survey.find( { 'isPost': false, 'center': centerId, active: true, }, { 'name': true, 'active': true, 'date': true, 'comment': true, 'postKey': true }, (err, surveys) => {
     if (!surveys || surveys.length === 0) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
@@ -55,6 +78,20 @@ exports.getAllSurveys = (req, res, next) => {
     return res.status(200).send(surveys);
   }).lean();
 }
+
+/**
+ * @depricated
+ * @param  {[type]}   req  [description]
+ * @param  {[type]}   res  [description]
+ * @param  {Function} next [description]
+ * @return {[type]}        [description]
+ */
+// exports.getAllCenters = (req, res, next) => {
+//   Survey.find( { 'name': true }, (err, centers) => {
+//     if (err) { return next(err); }
+//     return res.status(200).send(centers);
+//   }).lean();
+// }
 
 exports.getOneSurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
@@ -70,6 +107,8 @@ exports.getOneSurvey = (req, res, next) => {
     }
     if (err) { return next(err); }
 
+
+
     // Need to send answers too
     Response.find({surveyId: surveyId}, (err, responses) => {
       if (err) { return next(err); }
@@ -80,7 +119,6 @@ exports.getOneSurvey = (req, res, next) => {
 
 exports.copySurvey = (req, res, next) => {
   const surveyId = req.params.surveyId;
-  const includeResponses = req.body.includeResponses;
   const copyLabel = req.body.copyLabel;
 
   // ROUTER checks for existence of surveyId. no need to have a check here as well.
@@ -98,8 +136,16 @@ exports.copySurvey = (req, res, next) => {
       const copyObject = survey.toObject();
       copyObject.name = (copyLabel ? copyLabel : '') + ' ' + copyObject.name;
       copyObject.date = new Date().toISOString();
+
+      // reset id and version fields
       delete copyObject._id;
       delete copyObject.__v;
+      // reset ALL publish data
+      delete copyObject.activationDate;
+      delete copyObject.deactivationDate;
+      copyObject.active = false;
+      copyObject.date = new Date();
+      // then copy the survey
       const copy = new Survey(copyObject);
 
       // save the copy
@@ -112,64 +158,29 @@ exports.copySurvey = (req, res, next) => {
     });
   }
 
-  const doResponseCopy = (id, postSurveyCopyId, callback) => {
-    Response.find( { surveyId: id }, { _id: false, }, (err, responses) => {
-      if (err) {
-        next(err);
-      }
-      if (!responses) {
-        return res.status(500).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
-      }
-
-      const copy = responses.slice();
-      copy.forEach(response => {
-        response.surveyId = postSurveyCopyId;
-        response.timestamp = new Date().toISOString();
-        delete response._id;
-      });
-      Response.insertMany(copy, (err, responsesCopy) => {
-        if (err) {
-          next(err);
-        }
-        if (!responsesCopy) {
-          return res.status(500).send({ message: status.SURVEY_COPY_FAILED_RESPONSES.message, status: status.SURVEY_COPY_FAILED_RESPONSES.code });
-        }
-        callback(responses, responsesCopy);
-      })
-    });
-  }
-
   // First we deal with the surveys. The responses are dealt with below.
   doSurveyCopy(surveyId, (origSurvey, newSurvey) => {
-    // we might also need to copy a post survey
-    if (origSurvey.postKey) {
-      doSurveyCopy(origSurvey.postKey, (origPostSurvey, newPostSurvey) => {
-        // update the copied PRE survey with the new key to the POST survey
-        newSurvey.postKey = newPostSurvey._id;
-        newSurvey.save( (err, savedCopyOfOriginalSurvey) => {
-          if (!includeResponses) {
-            return res.status(200).send(newSurvey);
-          } else {
-            // copy responses (pre, then post)
-            doResponseCopy(surveyId, savedCopyOfOriginalSurvey._id, (responsesCopy) => {
-              doResponseCopy(origSurvey.postKey, newPostSurvey._id, (responsesCopy) => {
-                return res.status(200).send(newSurvey);
-              });
+    // place it in the right folder now
+    UserFolder.findOne({ surveys: { $all: [origSurvey._id] } }, (err, folder) => {
+      if (err) { next(err); }
+
+      folder.surveys.push(newSurvey._id);
+      folder.save((err) => {
+
+        // we might also need to copy a post survey
+        if (origSurvey.postKey) {
+          doSurveyCopy(origSurvey.postKey, (origPostSurvey, newPostSurvey) => {
+            // update the copied PRE survey with the new key to the POST survey
+            newSurvey.postKey = newPostSurvey._id;
+            newSurvey.save( (err, savedCopyOfOriginalSurvey) => {
+              return res.status(200).send(newSurvey);
             });
-          }
-        });
-      });
-    } else {
-      // if there were not post survey to bother about...
-      if (!includeResponses) {
-        return res.status(200).send(newSurvey);
-      } else {
-        // copy responses
-        doResponseCopy(surveyId, newSurvey, (responsesCopy) => {
+          });
+        } else {
           return res.status(200).send(newSurvey);
-        });
-      }
-    }
+        }
+      });
+    });
   });
 }
 
@@ -192,30 +203,55 @@ exports.patchOneSurvey = (req, res, next) => {
   if (!val.surveyValidation(survey)){
     return res.status(422).send( {message: status.SURVEY_UNPROCESSABLE.message, status: status.SURVEY_UNPROCESSABLE.code})
   }
-  // Set ID
-  survey._id = surveyId;
-  // if we receive a __v property in our survey, mongodb will crash
-  // as it will attempt to SET and also INC the value at the same time (see below).
-  delete survey.__v; // DO NOT REMOVE THIS!!
-  // thus we delete the version here.
 
-  Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
-    if (!survey) {
+
+
+  Survey.findById(surveyId, (err, foundSurvey) => {
+    if (!foundSurvey) {
       return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
     }
-    if (err) { return next(err); }
-    if (newSurveyActiveMode == true) {
-      Response.remove({surveyId: surveyId}, (err1, r1) => {
-        Response.remove({surveyId: survey.postKey}, (err2, r2) => {
-          if (err1 || err2) { return next(err1 || err2); }
-          return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
-        }).lean();
-      }).lean();
-    } else {
-      return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+    if (foundSurvey.deactivationDate) {
+      return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
     }
 
-  });
+    if (foundSurvey.active && survey.active) {
+      return res.status(200).send({message: status.SURVEY_PUBLISHED.message, status: status.SURVEY_PUBLISHED.code, survey: savedSurvey})
+    }
+    if (foundSurvey.active && !survey.active) {
+      foundSurvey.deactivationDate = new Date();
+      foundSurvey.active = false;
+      foundSurvey.save((err, savedSurvey) => {
+        if (err) { return next(err); }
+        return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: savedSurvey})
+
+      })
+    } else {
+      // TODO: delete prev responses
+      Response.remove({surveyId: { $in: [surveyId, foundSurvey.postKey]}}, (err) => {
+        if (err) { return next(err); }
+        Nickname.remove({surveyId: surveyId}, (err) => {
+          // Set ID
+          survey._id = surveyId;
+          // if we receive a __v property in our survey, mongodb will crash
+          // as it will attempt to SET and also INC the value at the same time (see below).
+          delete survey.__v; // DO NOT REMOVE THIS!!
+          // thus we delete the version here.
+          survey.date = new Date();
+          if (survey.active) {
+            survey.activationDate = new Date();
+          }
+          Survey.findByIdAndUpdate( surveyId, {$inc: { __v: 1 }, $set: survey}, {new: true, }, (err, survey) => {
+            if (err) { return next(err); }
+            if (!survey) {
+              return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+            }
+            return res.status(200).send({message: status.SURVEY_UPDATED.message, status: status.SURVEY_UPDATED.code, survey: survey})
+          });
+        })
+      })
+    }
+  })
+
 }
 
 // DELETE
@@ -320,6 +356,8 @@ exports.answerOneSurvey = (req, res, next) => {
   if (!val.responseValidation(responseObject)) {
     return res.status(400).send({ message: status.SURVEY_RESPONSE_UNPROCESSABLE.message, status: status.SURVEY_RESPONSE_UNPROCESSABLE.code });
   }
+
+
   if (responseObject.nickname) {
     // Helper function for readability down below
     const setNickname = (surveyId, nickname, callback) => {
@@ -348,6 +386,9 @@ exports.answerOneSurvey = (req, res, next) => {
     }
 
     Survey.findById(surveyId, (err, survey) => {
+      if (survey.deactivationDate) {
+        return res.status(400).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
+      }
       if (survey.isPost) { // TODO: < --- if err, then this goes bad here!
 
         // ^ FIXME! (the surveyId is never verifed to exist)
@@ -381,7 +422,6 @@ exports.answerOneSurvey = (req, res, next) => {
       } else {
         setNickname(surveyId, responseObject.nickname, (err5, nickname) => {
           if(err5) {
-            // console.log(status.NICKNAME_TAKEN.message);
             return res.status(400).send( {message: status.NICKNAME_TAKEN.message, status: status.NICKNAME_TAKEN.code})
           }
           let newResponse = new Response({
@@ -419,7 +459,7 @@ exports.getNicknamesForOneSurvey = (req, res, next) => {
           // console.log(nicknames);
           if (err) { return next(err); }
           if (nicknames.length == 0) {
-            return res.status(400).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+            return res.status(200).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
           }
           return res.status(200).send( {nicknames: nicknames} );
         });
@@ -481,246 +521,246 @@ exports.getSurveyAsCSV = (req, res, next) => {
     }
     if (err) { return next(err); }
 
-    let questionAnswar = []
+    // let questionAnswar = []
     let csv = "";
-    // const numOptions = {
-    //   smiley: 3,
-    //   binary: 2,
-    //   text: 1,
-    //   star: 5
-    // }
+    const multipleChoiceQestion = (_options, _responses, i, callback) => {
+      let questionOutput = "";
+      _options.forEach( (x) =>{questionOutput += x + ','});
+      questionOutput += '\n'
+      _options.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] instanceof Array){
+            // console.log(response.questionlist[i]);
+            response.questionlist[i].forEach((multiOption, n) => {
+              if (response.questionlist[i][n] == y) {
+                totalResponse++
+              }
+            })
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const starQuestion = (_responses, i, callback) => {
+      let questionOutput = "";
+      let starList = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
+      starList.forEach( (x) =>{questionOutput += x + ','});
+      questionOutput += '\n'
+      starList.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const smileyQuestion = (_responses, i, callback) => {
+      let questionOutput = "";
+      questionOutput += 'Sad,Neutral,Happy'
+      questionOutput += '\n'
+      let smileyList = ['Sad','Neutral','Happy']
+      smileyList.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const binaryQuestion = (_responses, i, callback) => {
+      let questionOutput = "";
+
+      questionOutput += 'No,Yes'
+      questionOutput += '\n'
+      let binaryList = ['Nei', 'Ja']
+      binaryList.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const defaultQuestion = (_options, _responses, i, callback) => {
+      let questionOutput = "";
+
+      _options.forEach( (x) =>{questionOutput += x + ','});
+      questionOutput += '\n'
+      _options.forEach( (x,y) => {
+        let totalResponse = 0;
+        _responses.forEach((response) => {
+          if (response.questionlist[i] == y) {
+            totalResponse++
+          }
+        })
+        questionOutput += totalResponse + ','
+      })
+      questionOutput += '\n'
+      callback(questionOutput);
+    }
+
+    const getSummary = (responses, callback) => {
+      let summary = "";
+      survey.questionlist.forEach((question, i) => {
+        // Add question number for readability; Add question to csv
+        summary += String(i) + '. ' + question.lang.no.txt + '\n'
+        switch (question.mode) {
+          case 'multi':
+            multipleChoiceQestion(question.lang.no.options, responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          case 'text':
+            responses.forEach((response) => {
+              summary += response.questionlist[i] + '\n'
+            })
+            break;
+          case 'star':
+            starQuestion(responses, i, (questionOutput) => {
+              summary += questionOutput;
+            })
+            break;
+          case 'smiley':
+            smileyQuestion(responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          case 'binary':
+            binaryQuestion(responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          default:
+            defaultQuestion(question.lang.no.options, responses, i, (questionOutput) => {
+              summary += questionOutput
+            })
+            break;
+          }
+        });
+      callback(summary);
+    }
+
+    const getDetailedSummary = (survey, responses, callback) => {
+      let summary = "";
+      responses.forEach( (response, i) => {
+        summary += '\nUserID,'+response.nickname + '\n'
+
+        survey.questionlist.forEach((question, i) => {
+          summary += String(i) + '. ' + question.lang.no.txt + '\n'
+          // Add question number for readability; Add question to csv
+          switch (question.mode) {
+            case 'multi':
+            question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
+            summary += '\n'
+              summary += response.questionlist[i].toString() + '\n'
+            break;
+            case 'text':
+            summary += ', Tekst\n'
+              summary += response.questionlist[i] + '\n'
+            break;
+            case 'star':
+            let starList = ['1 stjerne', '2 stjerner', '3 stjerner', '4 stjerner', '5 stjerner']
+            starList.forEach( (x) => {summary +=  x + ','});
+            summary += '\n'
+              summary += response.questionlist[i].toString() + '\n'
+            break;
+            case 'smiley':
+            let smileyList = ['Trist','Nøytral','Glad']
+            smileyList.forEach( (x) => {summary +=  x + ','});
+            summary += '\n'
+              summary += response.questionlist[i].toString() + '\n'
+            break;
+            case 'binary':
+            let binaryList = ['Nei','Ja']
+            binaryList.forEach( (x) => {summary +=  x + ','});
+            summary += '\n'
+              summary += response.questionlist[i].toString() + '\n'
+            break;
+            default:
+            question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
+            summary += '\n'
+              summary += response.questionlist[i].toString() + '\n'
+            break;
+          }
+        });
+      })
+      callback(summary);
+    }
+
     Response.find({surveyId: surveyId}, (err, responses) => {
       if (err) { return next(err); }
+      // console.log(survey);
       if (survey.postKey) {
         csv += 'PRE survey\n'
       }
       // for every question in the survey
       csv += survey.name + '\n'
-      survey.questionlist.forEach((question, i) => {
-        // Add question number for readability; Add question to csv
-        csv += String(i) + '. ' + question.lang.no.txt + '\n'
-        switch (question.mode) {
-          case 'multi':
-            question.lang.no.options.forEach( (x) =>{csv += x + ','});
-            csv += '\n'
-            question.lang.no.options.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                console.log(response);
-                console.log("-------------");
-                console.log(i);
-                response.questionlist[i].forEach((multiOption, n) => {
-                  if (response.questionlist[i][n] == y) {
-                    totalResponse++
-                  }
-                })
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          case 'text':
-            responses.forEach((response) => {
-              csv += response.questionlist[i] + '\n'
-            })
-            break;
-          case 'star':
-            let starList = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
-            starList.forEach( (x) =>{csv += x + ','});
-            csv += '\n'
-            starList.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          case 'smiley':
-            csv += 'Sad,Neutral,Happy'
-            csv += '\n'
-            let smileyList = ['Sad','Neutral','Happy']
-            smileyList.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          case 'binary':
-            csv += 'No,Yes'
-            csv += '\n'
-            let binaryList = ['No', 'Yes']
-            binaryList.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
-          default:
-            question.lang.no.options.forEach( (x) =>{csv += x + ','});
-            csv += '\n'
-            question.lang.no.options.forEach( (x,y) => {
-              let totalResponse = 0;
-              responses.forEach((response) => {
-                if (response.questionlist[i] == y) {
-                  totalResponse++
-                }
-              })
-              csv += totalResponse + ','
-            })
-            csv += '\n'
-            break;
+      getSummary(responses, (summary) => {
+        csv += summary
+      });
+
+      if (survey.postKey) {
+        csv += 'POST survey\n';
+        const postKey = survey.postKey;
+        Survey.findById(postKey, (err, postSurvey) => {
+        if (!postSurvey) {
+          return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
         }
-      })
+        if (err) { return next(err); }
 
+        Response.find({surveyId: postKey}, (err, postResponses) => {
+          if (err) { return next(err); }
+          csv += postSurvey.name + '\n'
+          getSummary(postResponses, (summary) => {
+            csv += summary
+          });
 
-            if (survey.postKey) {
-              csv += 'POST survey\n';
-              const postKey = survey.postKey;
-              Survey.findById(postKey, (err, survey) => {
-              if (!survey) {
-                return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
-              }
-              if (err) { return next(err); }
+        // TODO: Add detaild prepost view
+        csv += "\n\nDETAILS\nPRE\n"+postSurvey.name + '\n'
+        getDetailedSummary(survey, responses, (detailedSummary) => {
+          csv += detailedSummary
+        });
+        csv += "\nPOST\n"
+        getDetailedSummary(postSurvey, postResponses, (detailedSummary) => {
+          csv += detailedSummary
+        });
 
-              let questionAnswar = []
-
-              // const numOptions = {
-              //   smiley: 3,
-              //   binary: 2,
-              //   text: 1,
-              //   star: 5
-              // }
-              Response.find({surveyId: postKey}, (err, responses) => {
-                if (err) { return next(err); }
-                if (survey.postKey) {
-                  csv += 'PRE survey\n'
-                }
-                // for every question in the survey
-                csv += survey.name + '\n'
-                survey.questionlist.forEach((question, i) => {
-                  // Add question number for readability; Add question to csv
-                  csv += String(i) + '. ' + question.lang.no.txt + '\n'
-                  switch (question.mode) {
-                    case 'multi':
-                      question.lang.no.options.forEach( (x) =>{csv += x + ','});
-                      csv += '\n'
-                      question.lang.no.options.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response) {
-                            console.log(response);
-                            console.log("-------------");
-                            console.log(i);
-                            response.questionlist[i].forEach((multiOption, n) => {
-                              if (response.questionlist[i][n] == y) {
-                                totalResponse++
-                              }
-                            })
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    case 'text':
-                      responses.forEach((response) => {
-                        csv += response.questionlist[i] + '\n'
-                      })
-                      break;
-                    case 'star':
-                      let starList = ['1 star', '2 stars', '3 stars', '4 stars', '5 stars']
-                      starList.forEach( (x) =>{csv += x + ','});
-                      csv += '\n'
-                      starList.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    case 'smiley':
-                      csv += 'Sad,Neutral,Happy'
-                      csv += '\n'
-                      let smileyList = ['Sad','Neutral','Happy']
-                      smileyList.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    case 'binary':
-                      csv += 'No,Yes'
-                      csv += '\n'
-                      let binaryList = ['No', 'Yes']
-                      binaryList.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                    default:
-                      question.lang.no.options.forEach( (x) =>{csv += x + ','});
-                      csv += '\n'
-                      question.lang.no.options.forEach( (x,y) => {
-                        let totalResponse = 0;
-                        responses.forEach((response) => {
-                          if (response.questionlist[i] == y) {
-                            totalResponse++
-                          }
-                        })
-                        csv += totalResponse + ','
-                      })
-                      csv += '\n'
-                      break;
-                  }
-                })
-
-
-                // Open a gate to the temp directory
-                temp.open('myprefix', function(err, info) {
-                  if (!err) {
-                    fs.write(info.fd, csv, function(err){
-                      if (err) {console.error(err);}
-                    });
-                    // close file system operation (it is now safe to read from file)
-                    fs.close(info.fd, function(err) {
-                      res.download(info.path, 'data.csv', function(err){
-                        if (err) {console.error(err);}
-                      })
-                    });
-                  }
-                });
+          // Open a gate to the temp directory
+          temp.open('myprefix', function(err, info) {
+            if (!err) {
+              fs.write(info.fd, csv, function(err){
+                if (err) {console.error(err);}
               });
-            });
-          } else {
+              // close file system operation (it is now safe to read from file)
+              fs.close(info.fd, function(err) {
+                res.download(info.path, 'data.csv', function(err){
+                  if (err) {console.error(err);}
+                })
+              });
+            }
+          });
+        });
+      });
+    } else {
 
       // Open a gate to the temp directory
       temp.open('myprefix', function(err, info) {
@@ -733,10 +773,10 @@ exports.getSurveyAsCSV = (req, res, next) => {
             res.download(info.path, 'data.csv', function(err){
               if (err) {console.error(err);}
             })
-          });
-        }
-      });
-    }
+           });
+          }
+        });
+      }
     });
   });
 }

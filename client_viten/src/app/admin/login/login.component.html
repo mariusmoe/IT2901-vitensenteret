@@ -22,9 +22,6 @@
             {{ 'This field is required.' | translate }}
           </md-hint>
         </md-input-container>
-        <div class="error" *ngIf="error != '' ">
-          {{error | translate }}
-        </div>
         <div class="actions">
             <button md-raised-button
             #submitLoginForm
@@ -44,4 +41,10 @@
       </form>
     </md-card-content>
   </md-card>
+  <div class="helpBox">
+    <button md-button (click)="openUserManual()">
+      <md-icon>help_outline</md-icon>
+      {{ 'Help' | translate }}
+    </button>
+  </div>
 </div>

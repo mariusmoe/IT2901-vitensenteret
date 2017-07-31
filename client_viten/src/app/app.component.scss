@@ -39,3 +39,26 @@ html {
   // copy paste all the above into this one, and change.
   // to use it, change the html body to have .my-other-style class
 }
+
+// ADMIN NG2 TREE styles
+.surveyList {
+  tree-internal {
+    .tree {
+      .node-value .node-name {
+        text-overflow: clip;
+      }
+      .folding {
+        width: 0;
+        &.node-leaf:before {
+          content: none !important;
+        }
+      }
+    }
+    ul {
+      //padding: 0 !important;
+    }
+  }
+  .node-template i.material-icons {
+    font-size: inherit;
+  }
+}

@@ -28,7 +28,9 @@
 
 .languageSelection {
   button {
+    outline: none;
     input {
+      outline: none;
       opacity: 0.5;
     }
     &.active input {
@@ -89,4 +91,29 @@ md-card {
 .loadMoreButton {
   display: block;
   margin: 20px auto;
+}
+
+.centerTitle {
+  padding-top: 7px;
+  color: inherit;
+  text-shadow: 1px 1px 5px rgba(0,0,0,0.75);
+  font-size: 2em;
+}
+
+
+.centerSelectionParent {
+  display: flex;
+  align-items:  center;
+  justify-content: center;
+  padding: 10px;
+
+  .centerSelect {
+    width: 200px;
+  }
+}
+
+.emptySurveyList {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }

@@ -16,19 +16,22 @@ export interface QuestionObject {
       options?: string[];
     };
   };
+  imageLink?: string;
 }
 
 
 export interface Survey {
   _id?: string;
   name: string;
+  madeBy?: string;
+  center?: string;
   isPost: boolean;
   postKey?: string;
   comment?: string;
-  date: string;
-  activationDate: string;
+  date?: string;
+  activationDate?: string;
   deactivationDate?: string;
-  active: boolean;
+  active?: boolean;
   questionlist?: QuestionObject[];
   endMessage: {
     no: string;

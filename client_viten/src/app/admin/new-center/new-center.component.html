@@ -1,0 +1,265 @@
+<div>
+
+<div class="headderWrapper">
+  <button md-menu-item routerLink="/admin/settings" class="backButton">
+    <md-icon>arrow_back</md-icon> {{ 'Back' | translate }}
+  </button>
+  <h1>
+    {{ 'Center settings' | translate }}
+  </h1>
+</div>
+<div *ngIf="!isNewCenter">
+
+
+<div class="wrapper">
+  <md-card class="half">
+<md-card-title>{{ 'Change title' | translate }}</md-card-title>
+  <md-input-container>
+    <input mdInput #centerName placeholder="{{ 'Title' | translate }}" [value]="currentCenterName">
+  </md-input-container>
+  <button md-raised-button #changeCenterNameButton
+    class="marginleft" color="primary" minlength="3"
+    md-visible="true" (click)="changeCenterName(centerName.value)">
+    <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
+    ('You need to write the same password twice' | translate ) : '' "
+    mdTooltipPosition="below">
+      {{ 'Change title' | translate }}
+    </div>
+  </button>
+  <!-- - -->
+  <!-- <md-select *ngIf="user.role=='sysadmin'" placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+    name="center" [disabled]="user.role != 'sysadmin'">
+    <md-option *ngFor="let center of centers" [value]="center._id">
+      {{center.name}}
+    </md-option>
+  </md-select> -->
+</md-card>
+
+<md-card class="half">
+    <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
+    <md-card-content>
+      <md-input-container>
+        <input mdInput
+          autocomplete="new-password"
+          type="number"
+          pattern="[0-9]+"
+          inputmode="numeric"
+          placeholder="{{ 'Minimum 4 numbers' | translate }}"
+          #newEscapePassword>
+          <md-hint align="end">{{newEscapePassword.value.length}} / 4++</md-hint>
+      </md-input-container>
+      <br>
+      <p>{{ 'Retype password' | translate }}</p>
+      <md-input-container>
+        <input mdInput
+          [disabled]='newEscapePassword.value.length <= 3 || newEscapePassword.value === "" '
+          type="number"
+          pattern="[0-9]+"
+          inputmode="numeric"
+          placeholder="{{ 'Minimum 4 numbers' | translate }}"
+          #newEscapePassword2>
+          <md-hint align="end">
+            {{newEscapePassword2.value.length}} / 4++</md-hint>
+      </md-input-container>
+      <md-icon class="done" *ngIf="newEscapePassword.value === newEscapePassword2.value && !(newEscapePassword.value === '') ">done_all</md-icon>
+    </md-card-content>
+    <md-card-actions>
+      <button md-raised-button
+        #passwordShangeButton
+        color="primary"
+        class="marginleft"
+        minlength="3"
+        md-visible="true"
+        [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
+          ('You need to write the same password twice' | translate ) : '' "
+        mdTooltipPosition="below"
+        [disabled]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === ''))"
+        (click)="changeExitSurveyPassword(newEscapePassword.value); newEscapePassword.value = ''; newEscapePassword2.value = ''"
+        >
+        <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
+        ('You need to write the same password twice' | translate ) : '' "
+        mdTooltipPosition="below">
+          {{ 'Change password' | translate }}
+        </div>
+      </button>
+    </md-card-actions>
+
+  </md-card>
+</div>
+
+
+<md-card ngClass="uploadCard">
+  <md-card-title>{{ 'Logo settings' | translate }}</md-card-title>
+  <!-- <input md-raised-button name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/> -->
+
+  <button (click)="fileInput.click()" md-raised-button     color="primary" class="marginbottom">
+    <md-icon>library_add</md-icon>
+    <span>{{ 'Choose file' | translate }}</span>
+    <input #fileInput name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)" style="display:none;" />
+  </button>
+  <!-- <h3>Upload queue</h3>
+  <p>Queue length: {{ uploader?.queue?.length }}</p> -->
+
+  <table class="table">
+      <thead>
+      <tr>
+          <th width="160px">{{ 'Filename' | translate }}</th>
+          <th>{{ 'Size' | translate }}</th>
+          <th width="160px">{{ 'Progress' | translate }}</th>
+          <th>{{ 'Status' | translate }}</th>
+          <th>{{ 'Actions' | translate }}</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of uploader.queue">
+          <td><strong>{{ item?.file?.name }}</strong></td>
+          <td  nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+          <td>
+              <div class="progress" style="margin-bottom: 0;">
+                  <md-progress-bar mode="determinate" [value]="item.progress" ></md-progress-bar>
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+              </div>
+          </td>
+          <td class="text-center">
+              <md-icon *ngIf="item.isSuccess">done</md-icon>
+              <md-icon *ngIf="item.isCancel">remove_circle</md-icon>
+              <md-icon *ngIf="item.isError">remove_circle</md-icon>
+          </td>
+          <td nowrap>
+              <button md-raised-button class="btn btn-success btn-xs"
+                      (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                  <md-icon>file_upload</md-icon> {{ 'Upload and replace logo' | translate }}
+              </button>
+              <button md-raised-button class="btn btn-warning btn-xs"
+                      (click)="item.cancel()" [disabled]="!item.isUploading">
+                  <md-icon>cancel</md-icon> {{ 'Cancel' | translate }}
+              </button>
+              <button md-raised-button class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                  <md-icon>delete</md-icon> {{ 'Remove' | translate }}
+              </button>
+          </td>
+      </tr>
+      </tbody>
+  </table>
+
+</md-card>
+</div>
+
+
+
+
+
+<div *ngIf="isNewCenter">
+
+
+<div class="wrapper">
+  <md-card class="half">
+<md-card-title>Change name</md-card-title>
+  <md-input-container>
+    <input mdInput #centerName placeholder="Set center name" [value]="currentCenterName">
+  </md-input-container>
+
+  <!-- - -->
+  <!-- <md-select *ngIf="user.role=='sysadmin'" placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
+    name="center" [disabled]="user.role != 'sysadmin'">
+    <md-option *ngFor="let center of centers" [value]="center._id">
+      {{center.name}}
+    </md-option>
+  </md-select> -->
+</md-card>
+
+<md-card class="half">
+    <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
+    <md-card-content>
+      <md-input-container>
+        <input mdInput
+          autocomplete="new-password"
+          type="number"
+          pattern="[0-9]+"
+          inputmode="numeric"
+          placeholder="{{ 'Minimum 4 numbers' | translate }}"
+          #newEscapePassword>
+          <md-hint align="end">{{newEscapePassword.value.length}} / 4++</md-hint>
+      </md-input-container>
+    </md-card-content>
+  </md-card>
+</div>
+
+
+<md-card ngClass="uploadCard">
+  <md-card-title>Change logo</md-card-title>
+  <!-- <input md-raised-button name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/> -->
+
+  <button (click)="fileInput.click()" md-raised-button     color="primary" class="marginbottom">
+    <md-icon>library_add</md-icon>
+    <span>Choose file</span>
+    <input #fileInput name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)" style="display:none;" />
+  </button>
+  <!-- <h3>Upload queue</h3>
+  <p>Queue length: {{ uploader?.queue?.length }}</p> -->
+
+  <table class="table">
+      <thead>
+      <tr>
+          <th width="160px">Name</th>
+          <th>Size</th>
+          <th width="160px">Progress</th>
+          <th>Status</th>
+          <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let item of uploader.queue">
+          <td><strong>{{ item?.file?.name }}</strong></td>
+          <td  nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+          <td>
+              <div class="progress" style="margin-bottom: 0;">
+                  <md-progress-bar mode="determinate" [value]="item.progress" ></md-progress-bar>
+                  <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+              </div>
+          </td>
+          <td class="text-center">
+              <md-icon *ngIf="item.isSuccess">done</md-icon>
+              <md-icon *ngIf="item.isCancel">remove_circle</md-icon>
+              <md-icon *ngIf="item.isError">remove_circle</md-icon>
+          </td>
+          <td nowrap>
+              <button md-raised-button class="btn btn-success btn-xs"
+                      (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                  <md-icon>file_upload</md-icon> Upload and change logo
+              </button>
+              <button md-raised-button class="btn btn-warning btn-xs"
+                      (click)="item.cancel()" [disabled]="!item.isUploading">
+                  <md-icon>cancel</md-icon> Cancel
+              </button>
+              <button md-raised-button class="btn btn-danger btn-xs"
+                      (click)="item.remove()">
+                  <md-icon>delete</md-icon> Remove
+              </button>
+          </td>
+      </tr>
+      </tbody>
+  </table>
+
+
+
+  <div class="saveAll">
+    <button md-raised-button
+    #changeCenterNameButton
+    color="primary"
+    minlength="3"
+    md-visible="true"
+    mdTooltipPosition="below"
+    [disabled]="(newEscapePassword.value.length <= 3 )"
+    (click)="createNewCenter(centerName.value, newEscapePassword.value)"
+    >  Create new center
+
+
+</button>
+</div>
+</md-card>
+
+</div>
+
+</div>

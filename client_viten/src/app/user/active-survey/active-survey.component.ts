@@ -1,14 +1,17 @@
-import { Component, OnInit, Input, Output, HostListener } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, HostListener } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { SurveyService } from '../../_services/survey.service';
 import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { SimpleTimer } from 'ng2-simple-timer';
-import { MdDialog } from '@angular/material';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
+import { Subscription } from 'rxjs/Subscription';
+import { MdSnackBar } from '@angular/material';
+
 
 @Component({
   selector: 'active-survey',
@@ -76,7 +79,7 @@ import { Title } from '@angular/platform-browser';
   ]
 })
 
-export class ActiveSurveyComponent implements OnInit {
+export class ActiveSurveyComponent implements OnInit, OnDestroy {
   @Input() alternative: number; // The answer- \input recieved from child components.
   properSurvey = false; // If the survey is valid, posting it to the database is possible.
   started = false; // If a survey is started, this is true.
@@ -108,6 +111,8 @@ export class ActiveSurveyComponent implements OnInit {
   animLoop = false;
   playButtonActive = 'inactive';
 
+  showImage = false;
+
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
@@ -136,9 +141,10 @@ export class ActiveSurveyComponent implements OnInit {
     private route: ActivatedRoute,
     private timer: SimpleTimer,
     public dialog: MdDialog,
+      public snackBar: MdSnackBar,
     public translateService: TranslateService,
     private title: Title) {
-      title.setTitle(translateService.instant('Vitensenteret - Survey'));
+      title.setTitle(translateService.instant('Center - Survey', 'Center'));
   }
 
   /**
@@ -159,9 +165,7 @@ export class ActiveSurveyComponent implements OnInit {
           return;
         }
         this.survey = result.survey;
-        if (!this.survey.active) {
-          this.router.navigate(['/choosesurvey']);
-        }
+
         this.response = <Response> {
             nickname: undefined,
             questionlist: [],
@@ -192,14 +196,20 @@ export class ActiveSurveyComponent implements OnInit {
             );
         });
 
-        if (this.survey && this.survey.active) {
+        if (this.survey && this.survey._id) {
           this.properSurvey = true;
         } else {
+          console.log(this.survey)
           console.error('Survey is not active or something else is wrong!');
         }
       });
       return;
     }
+  }
+
+  ngOnDestroy() {
+    this.timer.unsubscribe('refreshNicknames');
+    this.timer.delTimer('refreshNicknames');
   }
   /**
    * This method starts the survey as well as the inactivity timer
@@ -211,10 +221,6 @@ export class ActiveSurveyComponent implements OnInit {
 
         sub.unsubscribe();
 
-        if (!result.survey.active) {
-          this.showModal();
-          return;
-        }
         this.started = true;
         if (this.survey.isPost || this.survey.postKey !== undefined) {
           this.postDone = false;
@@ -267,7 +273,7 @@ export class ActiveSurveyComponent implements OnInit {
         }
         this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
-        if (this.survey && this.survey.active) {
+        if (this.survey && this.survey._id) {
           this.properSurvey = true;
         }
       });
@@ -280,11 +286,11 @@ export class ActiveSurveyComponent implements OnInit {
  * @param  {any} alternative a list of numbers to send to survey
  */
 addOrChangeAnswer(alternative: any) {
+  this.response.questionlist[this.page] = alternative;
   if (this.page + 1 === this.totalPages && this.response.questionlist[this.page] == null && alternative != null) {
     this.animLoop = true;
     this.lastQuestionAnswered = 'active';
   }
-  this.response.questionlist[this.page] = alternative;
 
   // This method checks if a qestion is required and has been answered
   if (this.survey.questionlist[this.page].required) {
@@ -440,6 +446,9 @@ addOrChangeAnswer(alternative: any) {
  * The timer-methods update the counters accordingly to realtime seconds, and aborts survey if time has passed over threshold
  */
  listenCallback() {
+   if (!this.survey.active) {
+     return;
+   }
    this.abortCounter++;
    if (this.abortCounter >= 60) {
      this.exitSurvey();
@@ -457,6 +466,17 @@ resetTimer() {
 }
 
 /**
+ * Opens a snackbar with the given message and action message
+ * @param  {string} message The message that is to be displayed
+ * @param  {string} action  the action message that is to be displayed
+ */
+openSnackBar(message: string, action: string) {
+  this.snackBar.open(message, action, {
+    duration: 5000,
+  });
+}
+
+/**
  * This method finishes the survey if the user clicks the END button
  */
   endSurvey() {
@@ -464,7 +484,7 @@ resetTimer() {
     if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
       const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-      console.log(responseClone);
+      // console.log(responseClone);
       this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
         if (proper) {
           const indexOfNickname = this.nicknamesForSurvey.indexOf(this.response.nickname);
@@ -481,7 +501,11 @@ resetTimer() {
         }
       },
       error => {
-          console.error('Error when posting survey');
+          console.error(error._body);
+          if (error._body){
+            const error_message = JSON.parse(error._body)
+              this.openSnackBar(error_message['message'], 'FAILURE ');
+          }
           this.postDone = false;
           this.isNicknameTaken = true;
       });
@@ -501,7 +525,12 @@ resetTimer() {
  * This method quits the survey and routes it to the choose-survey component
  */
   quitSurvey() {
-    const dialogRef = this.dialog.open(QuitsurveyPromptComponent);
+    const config: MdDialogConfig = {
+      data: {
+        survey: this.survey,
+      }
+    };
+    const dialogRef = this.dialog.open(QuitsurveyPromptComponent, config);
   }
 
 
@@ -542,11 +571,9 @@ resetTimer() {
     }
   }
 
-  hideModal() {
-    this.showmodal = false;
-  }
 
-  showModal() {
-    this.showmodal = true;
+
+  toggleImageBox() {
+    this.showImage = !this.showImage;
   }
 }

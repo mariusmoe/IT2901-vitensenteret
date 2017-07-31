@@ -11,6 +11,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/observable/of';
+import 'rxjs/add/operator/timeout';
 
 @Injectable()
 export class AuthenticationService {
@@ -82,7 +83,7 @@ export class AuthenticationService {
    * @param  {string}             role The role of the user that is to be referred
    * @return {Observable<string>}      The referral link, as an Observable
    */
-  getReferral(role: string): Observable<string> {
+  getReferral(role: string, center: string): Observable<string> {
     const token = this.getToken();
     if (!token) {
       return Observable.throw('jwt not found'); // TODO: fix me.
@@ -90,7 +91,7 @@ export class AuthenticationService {
     const headers = new Headers();
     headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers });
-      return this.http.get(environment.URL.refer + role, options)
+      return this.http.get(environment.URL.refer + role + '/' + center, options)
       .map(
         response => {
           const jsonResponse = response.json();
@@ -218,7 +219,7 @@ export class AuthenticationService {
     headers.append('Content-Type', 'application/json');
     headers.append('Authorization', `${this.token}`);
     const options = new RequestOptions({ headers: headers });
-    return this.http.get(environment.URL.renewJWT, options)
+    return this.http.get(environment.URL.renewJWT, options).timeout(2000)
       .map(
         response => {
           if (response.status !== 200) {
@@ -229,8 +230,7 @@ export class AuthenticationService {
             const jsonResponse = response.json();
             if (jsonResponse) {
               localStorage.setItem('token', jsonResponse.token);
-              // TODO: set user info? no dont to this!!!
-              //
+              localStorage.setItem('center', jsonResponse.center);
               return true;
             } else {
               return false;
@@ -262,7 +262,7 @@ export class AuthenticationService {
             const jsonResponse = response.json();
             if (jsonResponse) {
               localStorage.setItem('token', jsonResponse.token);
-              // TODO: set user info? no dont to this!!!
+              localStorage.setItem('center', jsonResponse.center);
               //
               return true;
             } else {

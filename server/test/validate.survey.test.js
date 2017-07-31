@@ -6,6 +6,8 @@ let val = require('../libs/validation.js');
 // MAKE SURE THIS ONE IS ACTUALLY VALID!
 let validJsonObject = {
   "name": "måneraketten3",
+  "madeBy": "aaaaaaaaaaaaaaaaaaaaaaaa",
+  "center": "aaaaaaaaaaaaaaaaaaaaaaaa",
   "date": "2012-04-23T18:25:43.511Z",
   "activationDate": "2012-04-23T18:25:43.511Z",
   "deactivationDate": "2012-04-23T18:25:43.511Z",
@@ -224,7 +226,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.date = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true); // automatically set by controller
 
     // check null
     clone.date = null;
@@ -234,7 +236,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.date;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
     done();
   });
@@ -273,7 +275,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.activationDate = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true); // atuomatically set by the controller
 
     // check null
     clone.activationDate = null;
@@ -283,7 +285,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.activationDate;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
     done();
   });
@@ -352,7 +354,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.active = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true); // set by controller
 
     // check null
     clone.active = null;
@@ -362,7 +364,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.active;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
 
     done();
@@ -518,6 +520,49 @@ describe('Survey validation', () => {
     delete clone.questionlist[0].mode;
     IsItValid = val.surveyValidation(clone);
     expect(IsItValid).to.equal(false);
+
+    done();
+  });
+
+  it('should not validate on bad questionlist imageLink property', (done) => {
+    // make sure clone validates correctly.
+    let IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check valid format but not accepted value
+    clone.questionlist[0].imageLink = "tooth";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check valid format
+    clone.questionlist[0].imageLink = "https://i.imgur.com/aaaaaaa7.jpg";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check emtpy string
+    clone.questionlist[0].imageLink = "";
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check whitespace
+    clone.questionlist[0].imageLink = " "
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check undefined
+    clone.questionlist[0].imageLink = undefined;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true);
+
+    // check null
+    clone.questionlist[0].imageLink = null;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(false);
+
+    // check nonexistant
+    delete clone.questionlist[0].imageLink;
+    IsItValid = val.surveyValidation(clone);
+    expect(IsItValid).to.equal(true); // valid
 
     done();
   });

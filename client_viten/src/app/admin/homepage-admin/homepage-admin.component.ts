@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { SurveyService } from '../../_services/survey.service';
@@ -37,9 +37,12 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   generatingPDF = false;
 
   private routerSub: Subscription;
+  public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
+  public  dialogRef2: MdDialogRef<PublishDialog>;
+  private center: string;
 
-    public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
 
+  // constructor
   constructor(private surveyService: SurveyService,
     private router: Router,
     private route: ActivatedRoute,
@@ -58,6 +61,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       const newParam = this.route.snapshot.params['surveyId'];
       if (newParam) { this.getSurvey(newParam); }
     });
+    this.center = localStorage.getItem('center');
   }
 
   ngOnDestroy() {
@@ -77,16 +81,17 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     this.postResponses = undefined;
 
     this.loadingSurvey = true;
-    this.surveyService.getSurvey(surveyId).subscribe( (response) => {
+    const sub = this.surveyService.getSurvey(surveyId).subscribe( (response) => {
       this.responses = <Response[]>response.responses;
       this.survey = <Survey>response.survey;
-
+      sub.unsubscribe();
       if (this.survey.postKey && this.survey.postKey.length > 0) {
         this.loadingPostSurvey = true;
-        this.surveyService.getSurvey(this.survey.postKey).subscribe( (postResponse) => {
+        const sub2 = this.surveyService.getSurvey(this.survey.postKey).subscribe( (postResponse) => {
           this.postResponses = <Response[]>postResponse.responses;
           this.postSurvey = <Survey>postResponse.survey;
           this.loadingPostSurvey = false;
+          sub2.unsubscribe();
         });
       }
       this.loadingSurvey = false;
@@ -121,19 +126,33 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       });
   }
 
+  openPublishWarning(isPublish: boolean) {
+    const config: MdDialogConfig = {
+      data: {
+        isPublish: isPublish,
+      }
+    };
+    this.dialogRef2 = this.dialog.open(PublishDialog, config);
+    this.dialogRef2.afterClosed().subscribe(result => {
+      if (result === 'yes') {
+        this.toggleActive();
+      }
+      this.dialogRef2 = null;
+    });
+  }
+
   /**
    * Toggles the active state of the survey
    */
   toggleActive() {
+
     // store current state
     const toggleStateBeforePatch = this.survey.active;
     // set new state
     this.survey.active = !this.survey.active;
     // patch the survey
     const sub1 = this.surveyService.patchSurvey(this.survey._id, this.survey).subscribe(result => {
-      // update the all surveys list as well
-      const sub2 = this.surveyService.getAllSurveys().subscribe(r => sub2.unsubscribe() );
-
+      this.getSurvey(this.survey._id);
       sub1.unsubscribe();
     }, error => {
       // reset if things went bad
@@ -231,15 +250,20 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     pdf.setFontSize(8);
     pdf.text(25, 44, this.survey.comment);
     // Dates and num answers are right-aligned (Logo added at the very bottom)
-    rightAlignedText(25, 34, this.translateService.instant('Date created: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
-    rightAlignedText(25, 39, this.translateService.instant('Date printed: d', todayFormatted));
+    rightAlignedText(25, 34, this.translateService.instant('Last modified: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
+    if(this.survey.activationDate) {
+      rightAlignedText(25, 39, this.translateService.instant('Published: d', this.datePipe.transform(this.survey.activationDate, 'yyyy-MM-dd')));
+      if (this.survey.deactivationDate) {
+        rightAlignedText(25, 44, this.translateService.instant('Completed: d', this.datePipe.transform(this.survey.deactivationDate, 'yyyy-MM-dd')));
+      }
+    }
     const responses = this.responses.length;
     const postResponses = this.responses.length;
     if (this.postSurvey) {
-      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n, m',
+      rightAlignedText(25, 49, this.translateService.instant('Number of responses: n, m',
         [responses.toString(), postResponses.toString()]));
     } else {
-      rightAlignedText(25, 44, this.translateService.instant('Number of responses: n',
+      rightAlignedText(25, 49, this.translateService.instant('Number of responses: n',
         responses.toString()));
     }
 
@@ -322,7 +346,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     pdf.setPage(1);
     const img = new Image();
-    img.src = '../../assets/images/vitenlogo.png';
+    if (this.center == null) {
+      img.src = '../../assets/images/vitenlogo.png';
+    } else {
+      img.src = '../../assets/uploads/' + this.center.toString() + '.jpg';
+    }
     const self = this;
     const logoSize = 15;
     img.onload = function() {
@@ -330,6 +358,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         canvas.width = img.width;
         canvas.height = img.height;
         canvas.getContext('2d').drawImage(img, 0, 0);
+        // pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
         pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
           pdf.internal.pageSize.width - logoSize - 23, 12, logoSize, logoSize
         );
@@ -346,12 +375,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    * Copies a survey
    * @param  {boolean} includeResponses whether to include the responses for the survey
    */
-  copySurvey(includeResponses: boolean) {
-    this.surveyService.copySurvey(this.survey._id, includeResponses).subscribe(survey => {
-      // force redraw by doing 2 redirects
-      this.router.navigate([this.route.parent.snapshot.url.join('/')]).then((success) => {
-        this.router.navigate([this.route.parent.snapshot.url.join('/'), survey._id]);
-      });
+  copySurvey() {
+    this.surveyService.copySurvey(this.survey._id).subscribe(survey => {
+      // force redraw by going to just /admin/
+      this.router.navigate([this.route.parent.snapshot.url.join('/')],
+        {skipLocationChange: true});
     },
     error => {
       // TODO: add informational box to user explaining why it failed.
@@ -383,4 +411,37 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 })
 export class DeleteSurveyDialog {
   constructor(public dialogRef: MdDialogRef<DeleteSurveyDialog>) { }
+}
+
+
+
+@Component({
+  selector: 'publish-dialog',
+  template: `
+  <h1 md-dialog-title>{{ 'Warning' | translate }}</h1>
+  <div md-dialog-content>
+    <div *ngIf="data.isPublish == true">
+      <p>{{ 'A survey can only be published once. When it is published it cannot be changed.' | translate }}</p>
+      <br>
+      <p>{{ 'All responses up until this point in time will be deleted.' | translate }}</p>
+    </div>
+    <div *ngIf="data.isPublish == false">
+      <p>{{ 'When a survey is unpublished it will no logner accept responses.' | translate }}</p>
+      <br>
+      <p>{{ 'To run the survey again, try to copy it.' | translate }}</p>
+    </div>
+  </div>
+  <div md-dialog-actions align="center">
+  <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">
+  {{(data.isPublish ? 'Publish' : 'Unpublish') | translate }}</button>
+  <button md-raised-button md-dialog-close color="primary">{{ 'Cancel' | translate }}</button>
+  </div>
+  `,
+  styleUrls: ['./homepage-admin.component.scss']
+})
+export class PublishDialog {
+  public isCopied = false;
+  public text = '';
+  constructor(public dialogRef: MdDialogRef<PublishDialog>, @Inject(MD_DIALOG_DATA) public data: any) { }
+
 }
