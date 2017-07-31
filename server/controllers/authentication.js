@@ -240,7 +240,7 @@ exports.getAllUsers = (req, res, next) => {
        email: 'testuser@test.test',
        password: 'test',
        role: 'vitenleader',
-       center: center
+       center: center._id
      });
      user.save((err4, user) => {
        if (err4) {return next(err4); }

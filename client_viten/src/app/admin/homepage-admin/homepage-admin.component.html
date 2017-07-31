@@ -69,7 +69,9 @@
 
     <div *ngIf="survey && responses && !loadingSurvey && !loadingPostSurvey" class="selectedSurveyArea" [@fadeIn]="">
       <md-toolbar style = "background: none !important;">
+
         <ng-container *ngTemplateOutlet="surveyButtons"></ng-container>
+
       </md-toolbar>
 
       <md-card>
@@ -136,7 +138,9 @@
           <!-- file_download // Icon for download -->
         </md-card-content>
         <md-card-actions align="right">
+
           <ng-container *ngTemplateOutlet="surveyButtons"></ng-container>
+
         </md-card-actions>
       </md-card>
     </div>
