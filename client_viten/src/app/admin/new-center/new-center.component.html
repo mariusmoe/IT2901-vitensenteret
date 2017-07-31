@@ -20,11 +20,7 @@
   <button md-raised-button #changeCenterNameButton
     class="marginleft" color="primary" minlength="3"
     md-visible="true" (click)="changeCenterName(centerName.value)">
-    <div [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
-    ('You need to write the same password twice' | translate ) : '' "
-    mdTooltipPosition="below">
-      {{ 'Change title' | translate }}
-    </div>
+    {{ 'Change title' | translate }}
   </button>
   <!-- - -->
   <!-- <md-select *ngIf="user.role=='sysadmin'" placeholder="Center" class="dropdown" [(ngModel)]="selectedCenter"
@@ -70,8 +66,6 @@
         class="marginleft"
         minlength="3"
         md-visible="true"
-        [mdTooltip]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === '')) ?
-          ('You need to write the same password twice' | translate ) : '' "
         mdTooltipPosition="below"
         [disabled]="(newEscapePassword.value.length <= 3 || !(newEscapePassword.value === newEscapePassword2.value) || (newEscapePassword.value === ''))"
         (click)="changeExitSurveyPassword(newEscapePassword.value); newEscapePassword.value = ''; newEscapePassword2.value = ''"
@@ -197,7 +191,6 @@
     color="primary"
     minlength="3"
     md-visible="true"
-    mdTooltipPosition="below"
     [disabled]="(newEscapePassword.value.length <= 3 )"
     (click)="createNewCenter(centerName.value, newEscapePassword.value)"
     >  {{'Create new center' | translate}}
