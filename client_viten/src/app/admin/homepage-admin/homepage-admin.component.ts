@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild, Inject } from '@angular/core';
 import { trigger, state, style, transition, animate } from '@angular/animations';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { SurveyService } from '../../_services/survey.service';
@@ -38,6 +38,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
   private routerSub: Subscription;
   public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
+  public  dialogRef2: MdDialogRef<PublishDialog>;
   private center: string;
 
 
@@ -125,10 +126,26 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       });
   }
 
+  openPublishWarning(isPublish: boolean) {
+    const config: MdDialogConfig = {
+      data: {
+        isPublish: isPublish,
+      }
+    };
+    this.dialogRef2 = this.dialog.open(PublishDialog, config);
+    this.dialogRef2.afterClosed().subscribe(result => {
+      if (result === 'yes') {
+        this.toggleActive();
+      }
+      this.dialogRef2 = null;
+    });
+  }
+
   /**
    * Toggles the active state of the survey
    */
   toggleActive() {
+
     // store current state
     const toggleStateBeforePatch = this.survey.active;
     // set new state
@@ -394,4 +411,37 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 })
 export class DeleteSurveyDialog {
   constructor(public dialogRef: MdDialogRef<DeleteSurveyDialog>) { }
+}
+
+
+
+@Component({
+  selector: 'publish-dialog',
+  template: `
+  <h1 md-dialog-title>{{ 'Warning' | translate }}</h1>
+  <div md-dialog-content>
+    <div *ngIf="data.isPublish == true">
+      <p>{{ 'A survey can only be published once. When it is published it cannot be changed.' | translate }}</p>
+      <br>
+      <p>{{ 'All responses up until this point in time will be deleted.' | translate }}</p>
+    </div>
+    <div *ngIf="data.isPublish == false">
+      <p>{{ 'When a survey is unpublished it will no logner accept responses.' | translate }}</p>
+      <br>
+      <p>{{ 'To run the survey again, try to copy it.' | translate }}</p>
+    </div>
+  </div>
+  <div md-dialog-actions align="center">
+  <button md-raised-button color="warn"  (click)="dialogRef.close('yes')">
+  {{(data.isPublish ? 'Publish' : 'Unpublish') | translate }}</button>
+  <button md-raised-button md-dialog-close color="primary">{{ 'Cancel' | translate }}</button>
+  </div>
+  `,
+  styleUrls: ['./homepage-admin.component.scss']
+})
+export class PublishDialog {
+  public isCopied = false;
+  public text = '';
+  constructor(public dialogRef: MdDialogRef<PublishDialog>, @Inject(MD_DIALOG_DATA) public data: any) { }
+
 }

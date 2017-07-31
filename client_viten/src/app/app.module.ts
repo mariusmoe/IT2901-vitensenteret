@@ -13,7 +13,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FileUploadModule } from 'ng2-file-upload';
 
 import { AppComponent } from './app.component';
-import { HomepageAdminComponent, DeleteSurveyDialog } from './admin/homepage-admin/homepage-admin.component';
+import { HomepageAdminComponent, DeleteSurveyDialog, PublishDialog } from './admin/homepage-admin/homepage-admin.component';
 import { HomepageUserComponent } from './user/homepage-user/homepage-user.component';
 import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { AuthGuard } from './_guards/auth.guard';
@@ -91,6 +91,7 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     NicknameComponent,
     QuitsurveyPromptComponent,
     DeleteSurveyDialog,
+    PublishDialog,
     NewCenterComponent,
     WarnDeletionDialog,
     // FileDropDirective,
@@ -122,6 +123,7 @@ import { NewCenterComponent } from './admin/new-center/new-center.component';
     DeleteSurveyDialog,
     WarnDeletionDialog,
     FolderOptionsDialog,
+    PublishDialog,
   ],
   providers: [
     AuthGuard,

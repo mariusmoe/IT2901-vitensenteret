@@ -53,6 +53,7 @@ export const LANG_EN_TRANS = {
   'Status': 'Status',
   'Publish': 'Publish',
   'Unpublish': 'Unpublish',
+  'Warning': 'Warning',
 
   // Permissions
   'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
@@ -173,6 +174,14 @@ export const LANG_EN_TRANS = {
   'Go to survey': 'Go to survey',
   'Go to post survey': 'Go to post survey',
   'The survey is not active': 'The survey is not active',
+  'A survey can only be published once. When it is published it cannot be changed.':
+  'A survey can only be published once. When it is published it cannot be changed.',
+  'All responses up until this point in time will be deleted.':
+  'All responses up until this point in time will be deleted.',
+  'When a survey is unpublished it will no logner accept responses.':
+  'When a survey is unpublished it will no logner accept responses.',
+  'To run the survey again, try to copy it.':
+  'To run the survey again, try to copy it.',
 
   // Admin settings component
   'Retype password': 'Retype password',

@@ -54,6 +54,7 @@ export const LANG_NO_TRANS = {
   'Status': 'Status',
   'Publish': 'Publiser',
   'Unpublish': 'Avpubliser',
+  'Warning': 'Advarsel',
 
   // Permissions
   'You do not have the required permissions for this action!': 'Du har ikke de nødvendige rettighetene for dette!',
@@ -175,6 +176,14 @@ export const LANG_NO_TRANS = {
   'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
     'Undersøkelsen er over og kan ikke publiseres på nytt. Hvis du ønsker å kjøre undersøkelsen på nytt, prøv å kopiere den.',
   'Survey completed': 'Undersøkelse avsluttet',
+  'A survey can only be published once. When it is published it cannot be changed.':
+  'En undersøkelse kan kun publiseres èn gang. Når den er publisert kan den ikke endres',
+  'All responses up until this point in time will be deleted.':
+  'Alle svar på undersøkelsen til nå vil bli slettet.',
+  'When a survey is unpublished it will no logner accept responses.':
+  'Når en undersøkelse avpubliseres vil den ikke lengre akseptere svar',
+  'To run the survey again, try to copy it.':
+  'For å kjøre undersøkelsen igjen, prøv å kopiere den.',
 
 
   // Admin settings component
