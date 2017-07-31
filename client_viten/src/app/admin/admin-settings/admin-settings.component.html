@@ -1,5 +1,8 @@
 <div>
   <md-tab-group dynamicHeight="true" [(selectedIndex)]="tabIndex" (selectChange)="onTabChange($event)">
+
+
+
   <md-tab label="{{ 'User settings' | translate }}">
     <div class="tabContent">
       <md-card>
@@ -78,6 +81,12 @@
       </md-card>
     </div>
   </md-tab>
+
+
+
+
+  <!-- ADMIN SETTINGS START HERE!!! -->
+
   <md-tab *ngIf="user.role==='vitenleader' || user.role==='sysadmin'" label="{{ 'Admin settings' | translate }}">
     <div class="tabContent">
       <md-card>
@@ -87,14 +96,14 @@
 
           <md-select placeholder="{{ 'Role' | translate }}" class="dropdown" [(ngModel)]="selectedRole" name="role">
             <md-option *ngFor="let role of roles" [value]="role.value"
-              [disabled]="(role.value==='sysadmin' && user.role != 'sysadmin')">
+              [disabled]="(role.value==='sysadmin' && user.role != 'sysadmin') || ((!centers || centers.length == 0) && role.value != 'sysadmin')">
               {{role.value}}
             </md-option>
           </md-select>
 
 
           <md-select placeholder="{{ 'Center' | translate }}" class="dropdown" [(ngModel)]="selectedCenter"
-            name="center" [disabled]="user.role != 'sysadmin'">
+            name="center" [disabled]="user.role != 'sysadmin' || (!centers || centers.length == 0)">
             <md-option *ngFor="let center of centers" [value]="center._id">
               {{center.name}}
             </md-option>
@@ -102,7 +111,7 @@
 
           <button md-raised-button class="dropdown" color="primary" minlength="3"
             (click)="requestReferral(selectedRole, selectedCenter)"
-            [disabled]="(selectedCenter == 'undefined')">
+            [disabled]="(!selectedCenter && selectedRole !== 'sysadmin') || !selectedRole">
             {{ 'Refer user' | translate}}
           </button>
         </md-card-content>
@@ -186,7 +195,7 @@
                   (click)="updateCenter(center._id)"
                   [ngClass]="{ odd: odd, even: even }">
                   <td>{{center.name}}</td>
-                  <td><md-icon>edit</md-icon></td>
+                  <td class="editCell"><md-icon>edit</md-icon></td>
                 </tr>
               </table>
             </div>
