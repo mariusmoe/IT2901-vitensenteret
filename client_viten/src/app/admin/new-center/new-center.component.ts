@@ -57,13 +57,15 @@ export class NewCenterComponent implements OnInit {
     this.user = this.authenticationService.getUser();
 
     this.centerService.getAllCenters().subscribe(result => {
-      this.centers = result;
-      this.selectedCenter = localStorage.getItem('center');
-      this.centers.forEach(center => {
-        if (center['_id'] === this.selectedCenter) {
-          this.currentCenterName = center['name'];
-        }
-      });
+      if (result && result[0]) {  // if there is no array we instead get the 'route exists but no centers..' thing
+        this.centers = result;
+        this.selectedCenter = localStorage.getItem('center');
+        this.centers.forEach(center => {
+          if (center['_id'] === this.selectedCenter) {
+            this.currentCenterName = center['name'];
+          }
+        });
+      }
 
       // Safe checking of url if last part is prepost
       if (typeof this.route.snapshot.params['centerId'] !== 'undefined' &&

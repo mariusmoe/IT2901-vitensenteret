@@ -58,8 +58,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         'newEmail': [null, Validators.required],
       });
       this.centerService.getAllCenters().subscribe(result => {
-        this.centers = result;
-        this.selectedCenter = localStorage.getItem('center');
+        if (result && result[0]) {  // if there is no array we instead get the 'route exists but no centers..' thing
+          this.centers = result;
+          this.selectedCenter = localStorage.getItem('center');
+        }
       });
       if (localStorage.getItem('activesettingstab')) {
         this.tabIndex = Number(localStorage.getItem('activesettingstab'));
