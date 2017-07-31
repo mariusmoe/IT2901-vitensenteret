@@ -65,7 +65,7 @@ function checkSignatureNumbers(signature) {
 	if (signature == IMAGE_SIGNATURES.jpg || signature == IMAGE_SIGNATURES.jpg1 || signature == IMAGE_SIGNATURES.png || signature == IMAGE_SIGNATURES.gif) return true
 }
 
-imageRoutes.post('/center', requireAuth, function(req, res) {
+imageRoutes.post('/center', requireAuth, function(req, res, next) {
   let centerId;
 
   var storage = multer.diskStorage({

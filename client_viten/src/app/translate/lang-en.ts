@@ -227,6 +227,7 @@ export const LANG_EN_TRANS = {
   'Upload and replace logo': 'Upload and replace logo',
   'Center title updated': 'Center title updated',
   'Could not change center title at this time': 'Could not change center title at this time',
+  'Create new center': 'Create new center',
 
 
 

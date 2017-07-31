@@ -230,6 +230,7 @@ export const LANG_NO_TRANS = {
   'Upload and replace logo': 'Last opp og bytt logo',
   'Center title updated': 'Senterets navn er oppdatert',
   'Could not change center title at this time': 'Kunne ikke endre navnet på senteret på dette tidspunktet',
+  'Create new center': 'Lag nytt senter',
 
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
