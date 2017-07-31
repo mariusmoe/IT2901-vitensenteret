@@ -56,6 +56,9 @@ export const LANG_NO_TRANS = {
   'Unpublish': 'Avpubliser',
   'Warning': 'Advarsel',
 
+  // guard
+  'Session expired': 'Økten er utgått',
+
   // Permissions
   'You do not have the required permissions for this action!': 'Du har ikke de nødvendige rettighetene for dette!',
 

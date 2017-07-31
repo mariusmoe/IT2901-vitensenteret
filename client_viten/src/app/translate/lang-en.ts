@@ -55,6 +55,9 @@ export const LANG_EN_TRANS = {
   'Unpublish': 'Unpublish',
   'Warning': 'Warning',
 
+  // guard
+  'Session expired': 'Session expired',
+
   // Permissions
   'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
 
