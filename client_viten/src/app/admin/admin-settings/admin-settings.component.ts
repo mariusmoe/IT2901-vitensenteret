@@ -48,23 +48,28 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
     public languageService: TranslateService) {
-      this.selectedRole = this.roles[2].value;
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
       if (this.user.role === 'sysadmin' || this.user.role === 'vitenleader') {
-        this.getUsers(); // TODO: if user ISN'T sysadmin, do not do execute getUsers()
+        this.getUsers();
       }
       this.newEmailForm = fb.group({
         'newEmail': [null, Validators.required],
       });
-      this.centerService.getAllCenters().subscribe(result => {
+      const sub = this.centerService.getAllCenters().subscribe(result => {
         if (result && result[0]) {  // if there is no array we instead get the 'route exists but no centers..' thing
           this.centers = result;
-          this.selectedCenter = localStorage.getItem('center');
+          if (result.indexOf(localStorage.getItem('center')) !== -1) {
+            this.selectedCenter = localStorage.getItem('center');
+          }
         }
+        sub.unsubscribe();
       });
       if (localStorage.getItem('activesettingstab')) {
         this.tabIndex = Number(localStorage.getItem('activesettingstab'));
+      }
+      if (this.user.role !== 'sysadmin') {
+        this.selectedRole = this.roles[2].value;
       }
     }
 
