@@ -194,6 +194,7 @@ exports.patchOneSurvey = (req, res, next) => {
   }
 
   let survey = req.body;
+  let newSurveyActiveMode = survey.active;
 
   // make sure it isn't just an empty object.
   if (Object.keys(survey).length === 0) {
@@ -209,6 +210,7 @@ exports.patchOneSurvey = (req, res, next) => {
     if (foundSurvey.deactivationDate) {
       return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
     }
+
     if (foundSurvey.active && survey.active) {
       return res.status(200).send({message: status.SURVEY_PUBLISHED.message, status: status.SURVEY_PUBLISHED.code, survey: savedSurvey})
     }
@@ -246,6 +248,7 @@ exports.patchOneSurvey = (req, res, next) => {
       })
     }
   })
+
 }
 
 // DELETE

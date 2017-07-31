@@ -48,7 +48,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   // SURVEY VARIABLES
   survey: Survey;
   preSurvey: Survey;
+
   maxQuestionLength = 150; // TODO: arbitrary chosen! discuss!
+
   isPatch = false;
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
 
@@ -391,8 +393,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       data: {
         questionObject: qo,
         englishEnabled: this.englishEnabled,
+
       },
       disableClose: true,
+
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
     const sub = dialogRef.afterClosed().subscribe( () => {
@@ -448,6 +452,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   <h1 md-dialog-title>{{ 'Set Alternatives' | translate }}</h1>
   <div md-dialog-content>
     <span>{{ 'At least two alternatives must be set, with a maximum of 6.' | translate }}</span>
+
     <div [dragula]="'alterativesBag'" [dragulaModel]="numAlternatives" class="alternativesBag">
       <div *ngFor="let i of numAlternatives; let in = index">
         <md-input-container>
@@ -469,6 +474,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         <button md-icon-button color="warn" [disabled]="(in < 2)" class="alignRight"
         (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
       </div>
+
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
     (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
