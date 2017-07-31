@@ -95,13 +95,15 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         // though we should update some bits of information;
 
         // somewhat hacky way to determine english state.
-        if (this.survey.questionlist[0].lang.en
+        if (this.survey.questionlist
+          && this.survey.questionlist[0]
+          && this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
         }
         // re-add english if it isn't there. It's then stripped again upon saving if english still isn't enabled.
-        if (!this.survey.questionlist[0].lang.en) {
+        if (this.survey.questionlist[0] && !this.survey.questionlist[0].lang.en) {
           for (const qo of this.survey.questionlist) {
             qo.lang.en = {
               txt: '',
