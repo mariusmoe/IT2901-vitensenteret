@@ -94,14 +94,14 @@
           <div class="activeToggle">
             <!-- <md-slide-toggle color="primary" [checked]="survey.active" (change)="toggleActive()">
             </md-slide-toggle> -->
-            <button md-raised-button *ngIf="!survey.active && !survey.deactivationDate" color="accent" (click)="toggleActive()" >
+            <button md-raised-button *ngIf="!survey.active && !survey.deactivationDate" color="accent" (click)="openPublishWarning(true)" >
               <span [mdTooltip]="(survey.deactivationDate) ?
               ('The survey ' | translate ) : '' "
               mdTooltipPosition="below">
               <md-icon class="openInBrowser">cloud_up</md-icon> {{ 'Publish' | translate }}
             </span>
             </button>
-            <button md-raised-button *ngIf="survey.active" color="accent" (click)="toggleActive()" >
+            <button md-raised-button *ngIf="survey.active" color="accent" (click)="openPublishWarning(false)" >
               <span [mdTooltip]="(survey.deactivationDate) ?
               ('The survey ' | translate ) : '' "
               mdTooltipPosition="below">
