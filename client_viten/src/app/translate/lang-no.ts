@@ -89,6 +89,8 @@ export const LANG_NO_TRANS = {
   // Survey Pre post labels
   'Pre': 'Pre',
   'Post': 'Post',
+  'Pre survey': 'Pre-undersøkelse',
+  'Post survey': 'Post-undersøkelse',
 
   // Survey response numbers
   'Number of responses: n': 'Antall svar: %0',
@@ -186,7 +188,9 @@ export const LANG_NO_TRANS = {
   'When a survey is unpublished it will no logner accept responses.':
   'Når en undersøkelse avpubliseres vil den ikke lengre akseptere svar',
   'To run the survey again, try to copy it.':
-  'For å kjøre undersøkelsen igjen, prøv å kopiere den.',
+    'For å kjøre undersøkelsen igjen, prøv å kopiere den.',
+  'The pre and post survevys do not match, so they have been separated.':
+    'For- og etterundersøkelsene stemmer ikke overens, og har derfor blitt separert.',
 
 
   // Admin settings component

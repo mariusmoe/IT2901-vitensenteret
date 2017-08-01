@@ -119,28 +119,12 @@
             </button>
 
           </div>
-          <app-survey-retrieval *ngIf="responses && responses.length > 0"
-          [survey] = "survey" [responses] = "responses" [postSurvey] = "postSurvey"
+          <app-survey-retrieval [survey] = "survey" [responses] = "responses" [postSurvey] = "postSurvey"
           [postResponses] = "postResponses" class="surveyRetrieval">
           </app-survey-retrieval>
-          <div *ngIf="responses.length == 0">
-
-              <div *ngFor="let qo of survey.questionlist; let i = index">
-                <div *ngIf="translateService.getCurrentLang() == 'no'">
-                  <h2 >{{i+1}}. {{qo.lang.no.txt}}</h2>
-                </div>
-                <div *ngIf="translateService.getCurrentLang() == 'en'">
-                  <h2 >{{i+1}}. {{qo.lang.no.txt}}</h2>
-                </div>
-                <h3 class="questionMode">{{qo.mode | translate}}</h3>
-              </div>
-          </div>
-          <!-- file_download // Icon for download -->
         </md-card-content>
         <md-card-actions align="right">
-
           <ng-container *ngTemplateOutlet="surveyButtons"></ng-container>
-
         </md-card-actions>
       </md-card>
     </div>

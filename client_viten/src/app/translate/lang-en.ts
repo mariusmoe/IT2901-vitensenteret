@@ -88,6 +88,8 @@ export const LANG_EN_TRANS = {
   // Survey Pre post labels
   'Pre': 'Pre',
   'Post': 'Post',
+  'Pre survey': 'Pre survey',
+  'Post survey': 'Post survey',
 
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
@@ -184,7 +186,9 @@ export const LANG_EN_TRANS = {
   'When a survey is unpublished it will no logner accept responses.':
   'When a survey is unpublished it will no logner accept responses.',
   'To run the survey again, try to copy it.':
-  'To run the survey again, try to copy it.',
+    'To run the survey again, try to copy it.',
+  'The pre and post survevys do not match, so they have been separated.':
+    'The pre and post survevys do not match, so they have been separated.',
 
   // Admin settings component
   'Retype password': 'Retype password',
