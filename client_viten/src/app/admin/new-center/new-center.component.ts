@@ -125,6 +125,7 @@ export class NewCenterComponent implements OnInit {
     this.centerService.centerUpdateCenterName(name, this.selectedCenter)
       .subscribe(result => {
         this.openSnackBar(this.languageService.instant('Center title updated'), 'SUCCESS');
+        setTimeout( () => { window.location.reload(); }, 2000);
       },
       error => {
         this.openSnackBar(this.languageService.instant('Could not change center title at this time'), 'FAILURE');

@@ -324,10 +324,19 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // fashion as to avoid issues should the route name be altered.
       if (this.preSurvey && this.preSurvey._id) {
         this.router.navigate([this.route.parent.snapshot.url.join('/'), this.preSurvey._id]);
+        console.log('PRE found; PRE._id found');
       } else if (this.survey._id && (!this.isPost || !this.survey.isPost)) {
-        this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
+        // FIXME BUG this happens when editing post survey;
+        console.log(this.survey);
+        if (this.survey.isPost) {
+          console.log('IS edit of POST survey');
+          this.router.navigate([this.route.parent.snapshot.url.join('/')]);
+        } else {
+          this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
+        }
       } else {
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
+        console.log('Navigate to home');
       }
     };
 

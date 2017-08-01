@@ -52,6 +52,7 @@ export class SurveyService {
     return this.http.get(environment.URL.allNicknames + '/' + surveyId)
     .map( response => {
       const json = response.json();
+      console.log(json);
       return json.nicknames;
     },
     error => {
