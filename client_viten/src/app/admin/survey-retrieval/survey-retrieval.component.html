@@ -1,17 +1,29 @@
 <div class="container">
-  <div *ngFor="let qo of chartsToDisplay; let i = index">
-    <div *ngIf="qo.mode === 'text'" class="noChartDisplayed">
-      <!-- If English language is selected AND an english question txt is defined
-           then show that. Else show norwegian.
-      -->
-      <div class="questionHeader">
-        <h1>{{ (languageService.getCurrentLang() === 'en' && qo.lang.en && qo.lang.en.txt ) ?
-              qo.lang.en.txt : qo.lang.no.txt }}</h1>
-      </div>
-      <p>
-        {{ 'Text based question. Download raw data to extract this.' | translate }}
-      </p>
+
+  <ng-template #textQuestion let-qo let-responses="responses" let-index="index">
+
+  </ng-template>
+
+  <!-- <ng-container *ngTemplateOutlet="textQuestion; context:{ $implicit: qo, responses: responses, index: i }"></ng-container> -->
+
+
+  <div *ngIf="prePostEqual">
+    <div *ngFor="let qo of chartsToDisplay; let i = index">
+      <app-chart [questionObject] = "qo" [responses] = "responses" [postResponses]="postResponses" [index] = "i"></app-chart>
     </div>
-    <app-chart *ngIf="qo.mode !== 'text'" [questionObject] = "qo" [responses] = "responses" [postResponses]="postResponses" [index] = "i"></app-chart>
   </div>
+
+  <div *ngIf="!prePostEqual">
+    <p>{{ 'The pre and post survevys do not match, so they have been separated.' | translate }}</p>
+    <h1>{{ 'Pre survey' | translate }}</h1>
+    <div *ngFor="let qo of chartsToDisplay; let i = index">
+      <app-chart [questionObject] = "qo" [responses] = "responses" [index] = "i"></app-chart>
+    </div>
+    <hr />
+    <h1>{{ 'Post survey' | translate }}</h1>
+    <div *ngFor="let qo of chartsToDisplay2; let i = index">
+      <app-chart [questionObject] = "qo" [responses] = "postResponses" [index] = "i"></app-chart>
+    </div>
+  </div>
+
 </div>

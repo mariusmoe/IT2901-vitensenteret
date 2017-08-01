@@ -4,6 +4,7 @@ import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdSnackBar } fro
 import { SurveyService } from '../../_services/survey.service';
 import { TranslateService } from '../../_services/translate.service';
 import { AuthenticationService } from '../../_services/authentication.service';
+import { CenterService } from '../../_services/center.service';
 import { Survey } from '../../_models/survey';
 import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
@@ -40,6 +41,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
   public  dialogRef2: MdDialogRef<PublishDialog>;
   private center: string;
+  private centerName: string;
 
 
   // constructor
@@ -50,6 +52,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
     public authenticationService: AuthenticationService,
+    public centerService: CenterService,
     private translateService: TranslateService) {
   }
 
@@ -62,6 +65,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       if (newParam) { this.getSurvey(newParam); }
     });
     this.center = localStorage.getItem('center');
+    const sub = this.centerService.getCenter(this.center).subscribe((center) => {
+      this.centerName = center['name'];
+      sub.unsubscribe();
+    });
   }
 
   ngOnDestroy() {
@@ -244,17 +251,20 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     // start writing data to the PDF.
     pdf.setFontSize(30);
-    centeredText(22, 'Vitensenteret');
+    centeredText(22, this.centerName);
     pdf.setFontSize(18);
     pdf.text(25, 35, this.survey.name);
     pdf.setFontSize(8);
     pdf.text(25, 44, this.survey.comment);
     // Dates and num answers are right-aligned (Logo added at the very bottom)
-    rightAlignedText(25, 34, this.translateService.instant('Last modified: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
-    if(this.survey.activationDate) {
-      rightAlignedText(25, 39, this.translateService.instant('Published: d', this.datePipe.transform(this.survey.activationDate, 'yyyy-MM-dd')));
+    rightAlignedText(25, 34, this.translateService.instant('Last modified: d',
+      this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
+    if (this.survey.activationDate) {
+      rightAlignedText(25, 39, this.translateService.instant('Published: d',
+        this.datePipe.transform(this.survey.activationDate, 'yyyy-MM-dd')));
       if (this.survey.deactivationDate) {
-        rightAlignedText(25, 44, this.translateService.instant('Completed: d', this.datePipe.transform(this.survey.deactivationDate, 'yyyy-MM-dd')));
+        rightAlignedText(25, 44, this.translateService.instant('Completed: d',
+        this.datePipe.transform(this.survey.deactivationDate, 'yyyy-MM-dd')));
       }
     }
     const responses = this.responses.length;
