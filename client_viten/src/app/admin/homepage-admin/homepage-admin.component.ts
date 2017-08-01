@@ -367,10 +367,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         const canvas = document.createElement('canvas') as any;
         canvas.width = img.width;
         canvas.height = img.height;
+        const imageWidth = (img.width / img.height) * 15;
         canvas.getContext('2d').drawImage(img, 0, 0);
         // pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
         pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
-          pdf.internal.pageSize.width - logoSize - 23, 12, logoSize, logoSize
+          pdf.internal.pageSize.width - imageWidth - 23, 12, imageWidth, logoSize
         );
 
         // save our doc with a OS-friendly filename that is related to the survey at hand
