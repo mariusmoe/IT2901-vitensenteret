@@ -618,7 +618,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
       callback(questionOutput);
     }
 
-    const getSummary = (responses, callback) => {
+    const getSummary = (survey, responses, callback) => {
       let summary = "";
       survey.questionlist.forEach((question, i) => {
         // Add question number for readability; Add question to csv
@@ -714,7 +714,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
       }
       // for every question in the survey
       csv += survey.name + '\n'
-      getSummary(responses, (summary) => {
+      getSummary(survey, responses, (summary) => {
         csv += summary
       });
 
@@ -730,7 +730,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
         Response.find({surveyId: postKey}, (err, postResponses) => {
           if (err) { return next(err); }
           csv += postSurvey.name + '\n'
-          getSummary(postResponses, (summary) => {
+          getSummary(postSurvey, postResponses, (summary) => {
             csv += summary
           });
 
