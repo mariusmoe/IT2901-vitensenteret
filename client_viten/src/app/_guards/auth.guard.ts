@@ -71,7 +71,7 @@ export class AuthGuard implements CanActivate {
    */
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
-      duration: 2000,
+      duration: 7000,
     });
   }
 

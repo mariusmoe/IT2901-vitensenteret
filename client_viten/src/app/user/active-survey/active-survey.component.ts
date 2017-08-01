@@ -186,6 +186,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         this.timer.subscribe('refreshNicknames', e => {
           const sub2 = this.surveyService.getNicknames(this.survey._id)
             .subscribe( result2 => {
+                console.log(result2);
                 this.nicknamesForSurvey = [];
                 result2.forEach((x) => { this.nicknamesForSurvey.push(x.nickname); });
                 sub2.unsubscribe();
