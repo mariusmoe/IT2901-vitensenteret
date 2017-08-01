@@ -194,6 +194,7 @@ exports.patchOneSurvey = (req, res, next) => {
   }
 
   let survey = req.body;
+  let newSurveyActiveMode = survey.active;
 
   // make sure it isn't just an empty object.
   if (Object.keys(survey).length === 0) {
@@ -206,9 +207,13 @@ exports.patchOneSurvey = (req, res, next) => {
 
 
   Survey.findById(surveyId, (err, foundSurvey) => {
+    if (!foundSurvey) {
+      return res.status(404).send({message: status.SURVEY_NOT_FOUND.message, status: status.SURVEY_NOT_FOUND.code});
+    }
     if (foundSurvey.deactivationDate) {
       return res.status(422).send( {message: status.SURVEY_DEACTIVATED.message, status: status.SURVEY_DEACTIVATED.code})
     }
+
     if (foundSurvey.active && survey.active) {
       return res.status(200).send({message: status.SURVEY_PUBLISHED.message, status: status.SURVEY_PUBLISHED.code, survey: savedSurvey})
     }
@@ -246,6 +251,7 @@ exports.patchOneSurvey = (req, res, next) => {
       })
     }
   })
+
 }
 
 // DELETE
@@ -453,7 +459,7 @@ exports.getNicknamesForOneSurvey = (req, res, next) => {
           // console.log(nicknames);
           if (err) { return next(err); }
           if (nicknames.length == 0) {
-            return res.status(200).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
+            return res.status(404).send( {message: status.NO_NICKNAMES_FOUND.message, status: status.NO_NICKNAMES_FOUND.code})
           }
           return res.status(200).send( {nicknames: nicknames} );
         });
@@ -612,7 +618,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
       callback(questionOutput);
     }
 
-    const getSummary = (responses, callback) => {
+    const getSummary = (survey, responses, callback) => {
       let summary = "";
       survey.questionlist.forEach((question, i) => {
         // Add question number for readability; Add question to csv
@@ -708,7 +714,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
       }
       // for every question in the survey
       csv += survey.name + '\n'
-      getSummary(responses, (summary) => {
+      getSummary(survey, responses, (summary) => {
         csv += summary
       });
 
@@ -724,7 +730,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
         Response.find({surveyId: postKey}, (err, postResponses) => {
           if (err) { return next(err); }
           csv += postSurvey.name + '\n'
-          getSummary(postResponses, (summary) => {
+          getSummary(postSurvey, postResponses, (summary) => {
             csv += summary
           });
 

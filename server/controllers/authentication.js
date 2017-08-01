@@ -240,7 +240,7 @@ exports.getAllUsers = (req, res, next) => {
        email: 'testuser@test.test',
        password: 'test',
        role: 'vitenleader',
-       center: center
+       center: center._id
      });
      user.save((err4, user) => {
        if (err4) {return next(err4); }
@@ -278,7 +278,7 @@ exports.getReferralLink = (req, res, next) => {
     let centerId;
     // prevent roles from refering users with greater powers
     if (userTypes.indexOf(foundUser.role) > userTypes.indexOf(role)) {
-      return res.status(422).json({error: status.INSUFFICIENT_PRIVILEGES .message, status: status.INSUFFICIENT_PRIVILEGES.code});
+      return res.status(422).json({error: status.INSUFFICIENT_PRIVILEGES.message, status: status.INSUFFICIENT_PRIVILEGES.code});
     }
     if (foundUser.role ==='vitenleader') {
       // set center to same as creator
@@ -297,7 +297,7 @@ exports.getReferralLink = (req, res, next) => {
         let referralString = new Referral({
           referral:  token,
           role:      role,
-          center: centerId
+          center: role==='sysadmin' ? undefined : centerId
         })
         referralString.save((err, referral) => {
           if (err) {return next(err); }

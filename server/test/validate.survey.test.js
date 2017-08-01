@@ -226,7 +226,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.date = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true); // automatically set by controller
 
     // check null
     clone.date = null;
@@ -236,7 +236,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.date;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
     done();
   });
@@ -275,7 +275,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.activationDate = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true); // atuomatically set by the controller
 
     // check null
     clone.activationDate = null;
@@ -285,7 +285,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.activationDate;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
     done();
   });
@@ -354,7 +354,7 @@ describe('Survey validation', () => {
     // check undefined
     clone.active = undefined;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true); // set by controller
 
     // check null
     clone.active = null;
@@ -364,7 +364,7 @@ describe('Survey validation', () => {
     // check nonexistant
     delete clone.active;
     IsItValid = val.surveyValidation(clone);
-    expect(IsItValid).to.equal(false);
+    expect(IsItValid).to.equal(true);
 
 
     done();

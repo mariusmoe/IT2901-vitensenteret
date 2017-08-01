@@ -38,14 +38,14 @@
     <input class="svgButton" type="image" src="../../assets/images/PlayButton.svg" (click)="startSurvey()" [@playGrow]="playButtonActive" (@playGrow.done)="playCycle()">
   </div>
   <div class="startTextContainer" *ngIf="!started">
-    <div class="startText">{{'Start survey' | translate }} </div>
+    <div class="startText">{{'Start survey' | translate }}</div>
   </div>
   <div class="logoContainer" *ngIf="!started">
     <div class="vitenContainer">
-      <img class="vitenlogo" src="../../assets/images/vitenlogo.png" alt="Vitensenteret"/>
+      <!-- <img class="vitenlogo" src="../../assets/images/vitenlogo.png" alt="Vitensenteret"/> -->
     </div>
     <div class="robotContainer">
-      <img class="robotlogo" src="../../assets/images/robotlogo.png" alt="Vitensenteret"/>
+      <!-- <img class="robotlogo" src="../../assets/images/robotlogo.png" alt="Vitensenteret"/> -->
     </div>
   </div>
 

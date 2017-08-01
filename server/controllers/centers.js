@@ -43,7 +43,7 @@ exports.getAllCenters = (req, res, next) => {
     if (!centers || centers.length === 0) {
       // essentially means not one survey exists that match {} - i.e. 0 surveys in db? should be status: 200, empty list then?
       // FIXME wrong error message
-      return res.status(200).send({message: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message, status: status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code});
+      return res.status(200).send({message: status.ROUTE_CENTERS_VALID_NO_CENTERS.message, status: status.ROUTE_CENTERS_VALID_NO_CENTERS.code});
     }
     if (err) { return next(err); }
 

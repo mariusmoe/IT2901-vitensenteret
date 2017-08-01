@@ -48,7 +48,9 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   // SURVEY VARIABLES
   survey: Survey;
   preSurvey: Survey;
+
   maxQuestionLength = 150; // TODO: arbitrary chosen! discuss!
+
   isPatch = false;
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
 
@@ -93,13 +95,15 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         // though we should update some bits of information;
 
         // somewhat hacky way to determine english state.
-        if (this.survey.questionlist[0].lang.en
+        if (this.survey.questionlist
+          && this.survey.questionlist[0]
+          && this.survey.questionlist[0].lang.en
           && this.survey.questionlist[0].lang.en.txt
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
         }
         // re-add english if it isn't there. It's then stripped again upon saving if english still isn't enabled.
-        if (!this.survey.questionlist[0].lang.en) {
+        if (this.survey.questionlist[0] && !this.survey.questionlist[0].lang.en) {
           for (const qo of this.survey.questionlist) {
             qo.lang.en = {
               txt: '',
@@ -320,10 +324,19 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // fashion as to avoid issues should the route name be altered.
       if (this.preSurvey && this.preSurvey._id) {
         this.router.navigate([this.route.parent.snapshot.url.join('/'), this.preSurvey._id]);
+        console.log('PRE found; PRE._id found');
       } else if (this.survey._id && (!this.isPost || !this.survey.isPost)) {
-        this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
+        // FIXME BUG this happens when editing post survey;
+        console.log(this.survey);
+        if (this.survey.isPost) {
+          console.log('IS edit of POST survey');
+          this.router.navigate([this.route.parent.snapshot.url.join('/')]);
+        } else {
+          this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
+        }
       } else {
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
+        console.log('Navigate to home');
       }
     };
 
@@ -391,8 +404,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       data: {
         questionObject: qo,
         englishEnabled: this.englishEnabled,
+
       },
       disableClose: true,
+
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
     const sub = dialogRef.afterClosed().subscribe( () => {
@@ -448,6 +463,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   <h1 md-dialog-title>{{ 'Set Alternatives' | translate }}</h1>
   <div md-dialog-content>
     <span>{{ 'At least two alternatives must be set, with a maximum of 6.' | translate }}</span>
+
     <div [dragula]="'alterativesBag'" [dragulaModel]="numAlternatives" class="alternativesBag">
       <div *ngFor="let i of numAlternatives; let in = index">
         <md-input-container>
@@ -469,6 +485,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         <button md-icon-button color="warn" [disabled]="(in < 2)" class="alignRight"
         (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
       </div>
+
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
     (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>

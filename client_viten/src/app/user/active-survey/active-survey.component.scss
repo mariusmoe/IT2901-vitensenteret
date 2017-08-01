@@ -2,15 +2,17 @@ $main-background-color: #F5F5F5;
 
 .active_survey_window {
   background-color: $main-background-color;
-  .surveyView{
+
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+
+  .surveyView {
     display: flex;
-    .playbutton{
+    .playbutton {
       margin: auto auto;
       height: 60vh;
     }
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
   }
 }
 
@@ -327,7 +329,7 @@ input[type=image]:disabled {
 
 
 .imageButtonBox {
-  z-index: 9999;
+  z-index: 10;
   position: absolute;
   bottom: 20vh;
   width: 100%;

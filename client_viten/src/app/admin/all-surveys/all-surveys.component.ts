@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
 import { SurveyList } from '../../_models/index';
 import { Folder } from '../../_models/folder';
+import { User } from '../../_models/user';
 import { SurveyService } from '../../_services/survey.service';
 import { UserFolderService } from '../../_services/userFolder.service';
+import { AuthenticationService } from '../../_services/authentication.service';
 import { TranslateService } from '../../_services/translate.service';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
@@ -34,6 +36,8 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     tree: Folder[];
     root: Folder;
 
+    user: User;
+
     selectedSurvey: string;
     routerSub: Subscription;
 
@@ -44,7 +48,10 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       public route: ActivatedRoute,
       public surveyService: SurveyService,
       public userFolderService: UserFolderService,
+      private authenticationService: AuthenticationService,
       private dragulaService: DragulaService) {
+        this.user = authenticationService.getUser();
+
         const dragulaFolderBagSettings = {
           revertOnSpill: true,
           direction: 'vertical',

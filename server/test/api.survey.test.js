@@ -242,17 +242,17 @@ describe('Survey API', () => {
 
   describe('/api/survey/ GET',() => {
     // GET: LIST OF SURVEYS
-    it('should retrieve all surveys /api/survey/all/[centerId] GET', (done) => {
+    it('should return message that the route is okay, but no surveys was found /api/survey/all/[centerId] GET', (done) => {
     chai.request(server)
       .get('/api/survey/all/' + centerId)
       .end((err, res) => {
         // verify that the returned object (containing surveys) is valid
-        let listOfSurveys = res.body;
-        listOfSurveys.should.not.be.empty;
-        listOfSurveys[0].should.have.property('_id');
-        listOfSurveys[0].should.have.property('name');
-        listOfSurveys[0].should.have.property('date');
-        listOfSurveys[0].should.have.property('active');
+        let messageObject = res.body;
+        messageObject.should.not.be.empty;
+        messageObject.should.have.property('message');
+        res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
+        messageObject.should.have.property('status');
+        res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
         res.should.have.status(200);
         done();
       });
@@ -376,6 +376,8 @@ describe('Survey API', () => {
       // alter our object
       let clone = JSON.parse(JSON.stringify(validJsonObject));
       clone.name = 'plutorakett';
+      clone.active = true;
+      clone.activationDate = new Date();
     chai.request(server)
       .patch('/api/survey/' + surveyId)
       .set('Authorization', jwt)
@@ -500,6 +502,23 @@ describe('Survey API', () => {
     });
   }); // end describe /api/survey/ PATCH
 
+  describe('/api/survey/ GET ALL',() => {
+    it('should return all active surveys /api/survey/all/[centerId] GET', (done) => {
+      chai.request(server)
+        .get('/api/survey/all/' + centerId)
+        .end((err, res) => {
+          // verify that the returned object (containing surveys) is valid
+          let listOfSurveys = res.body;
+          listOfSurveys.should.not.be.empty;
+          listOfSurveys[0].should.have.property('_id');
+          listOfSurveys[0].should.have.property('name');
+          listOfSurveys[0].should.have.property('date');
+          listOfSurveys[0].should.have.property('active');
+          res.should.have.status(200);
+          done();
+        });
+    });
+  });
 
   describe('/api/survey/ DELETE',() => {
     // DELETE: NO AUTHORIZATION
@@ -727,5 +746,8 @@ describe('Survey API', () => {
         });
       });
     });
-  }); // end describe /api/survey/ DELETE
+  });  // end describe /api/survey/ prepost
+
+
+
 });

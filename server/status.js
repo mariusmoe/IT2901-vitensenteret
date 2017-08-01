@@ -198,6 +198,10 @@ module.exports = {
     message: 'Center was added successfully',
     code: 1467
   },
+  ROUTE_CENTERS_VALID_NO_CENTERS: {
+    message: "Request successful, but no centers exist.",
+    code: 1367
+  },
 
   WRONG_CENTER: {
     message: 'You do not have sufficcient privileges for this center.',
