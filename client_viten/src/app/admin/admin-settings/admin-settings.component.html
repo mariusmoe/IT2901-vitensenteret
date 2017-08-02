@@ -236,11 +236,70 @@
         <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
       </md-card-content>
     </md-card>
+  </div>
 
+<!-- Upload starts here !-->
+    <div *ngIf="user.role == 'sysadmin'" >
+      <md-card ngClass="uploadCard uploadDocWrapper">
+        <md-card-title>{{ 'Documentation settings' | translate }}</md-card-title>
+        <!-- <input md-raised-button name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/> -->
 
+        <button (click)="fileInput.click()" md-raised-button     color="primary" class="marginbottom">
+          <md-icon>library_add</md-icon>
+          <span>{{ 'Choose documentation pdf' | translate }}</span>
+          <input #fileInput name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)" style="display:none;" />
+        </button>
+        <!-- <h3>Upload queue</h3>
+        <p>Queue length: {{ uploader?.queue?.length }}</p> -->
 
+        <table class="table">
+            <thead>
+            <tr>
+                <th width="160px">{{ 'Filename' | translate }}</th>
+                <th>{{ 'Size' | translate }}</th>
+                <th width="160px">{{ 'Progress' | translate }}</th>
+                <th>{{ 'Status' | translate }}</th>
+                <th>{{ 'Actions' | translate }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of uploader.queue">
+                <td><strong>{{ item?.file?.name }}</strong></td>
+                <td  nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                <td>
+                    <div class="progress" style="margin-bottom: 0;">
+                        <md-progress-bar mode="determinate" [value]="item.progress" ></md-progress-bar>
+                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <md-icon *ngIf="item.isSuccess">done</md-icon>
+                    <md-icon *ngIf="item.isCancel">remove_circle</md-icon>
+                    <md-icon *ngIf="item.isError">remove_circle</md-icon>
+                </td>
+                <td nowrap>
+                    <button md-raised-button color="primary" class="btn btn-success btn-xs" [ngClass]="{'success' : item.isSuccess, 'error' : (item.isError || item.isCancel)}"
+                            (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                        <md-icon>file_upload</md-icon> {{ 'Upload and replace logo' | translate }}
+                    </button>
+                    <button md-raised-button class="btn btn-warning btn-xs"
+                            (click)="item.cancel()" [disabled]="!item.isUploading">
+                        <md-icon>cancel</md-icon> {{ 'Cancel' | translate }}
+                    </button>
+                    <button md-raised-button class="btn btn-danger btn-xs"
+                            (click)="item.remove()">
+                        <md-icon>delete</md-icon> {{ 'Remove' | translate }}
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
+      </md-card>
     </div>
+
+
+
   </md-tab>
 </md-tab-group>
 </div>
