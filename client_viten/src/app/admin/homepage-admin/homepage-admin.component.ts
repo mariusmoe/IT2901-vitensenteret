@@ -321,10 +321,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     if (this.postSurvey && !prePostEqual) {
       allQuestions = allQuestions.concat(this.postSurvey.questionlist);
     }
+    let canvasIterator = 0;
     allQuestions.forEach((question, i) => {
       let canvas;
       if (question.mode !== 'text') {
-        canvas = canvases[i];
+        canvas = canvases[canvasIterator];
 
         if (i === 1 || counter === 2) {
           pageNr += 1;
@@ -336,6 +337,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         if (!prePostEqual && !postIsSet && (i > this.survey.questionlist.length)) {
           pdf.setFontSize(18);
           pdf.text(25, 18, 'POST');
+          console.log('Pinted POST on survey!');
           pdf.setFontSize(8);
           postIsSet = true;
         }
@@ -354,7 +356,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         // Modify our table slightly, as to make it pretty for the PDF.
         // This circumvents the fact that the autoTableHtmlToJson does not deal with
         // html cell attribute colspan.
-        const tableClone = tables[i].cloneNode(true); // true => copy children.
+        const tableClone = tables[canvasIterator].cloneNode(true); // true => copy children.
         const prepostRow = tableClone.querySelector('tr.prepost');
         const prepostRowHeaders = tableClone.querySelectorAll('tr.prepost th');
         if (prepostRowHeaders && prepostRowHeaders.length > 0) {
@@ -380,25 +382,55 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         centeredText(pdf.autoTable.previous.finalY + 3, this.translateService.instant('Table: n', (i + 1).toString()));
         // <-- END TABLE
         counter++;
+        canvasIterator++;
       } else {
+
+        if (!prePostEqual && !postIsSet && (i > this.survey.questionlist.length)) {
+          pdf.setFontSize(18);
+          pdf.text(25, 18, 'POST');
+          console.log('Pinted POST on survey!');
+          pdf.setFontSize(8);
+          postIsSet = true;
+        }
 
         pdf.setFontSize(12);
         const activePageWidth = pdf.internal.pageSize.width - 25 * 2;
         console.log(activePageWidth);
         console.log('not a canvas');
-        pdf.addPage();
+        if (i !== 0) {
+          pageNr++;
+          pdf.addPage();
+         }
         pdf.setLineWidth(50);
         const addTextAnswers = (_responses: Response[], index) => {
-          pdf.text(25, 22, index.toString() + '. ' + question.lang.no.txt);
+          let _counter = 1;
+          let textQuestionHeight = 30;
+          if (i === 0) {
+            textQuestionHeight = 60;
+          }
+          const questionText = (question.lang.en
+            && this.translateService.getCurrentLang() === 'en') ? question.lang.en.txt : question.lang.no.txt;
+          pdf.text(25, textQuestionHeight, index.toString() + '. ' + questionText);
           _responses.forEach((response) => {
             // console.log(response.questionlist, index);
             if (response.questionlist[index]) {
-              pdf.text(25, 44, pdf.splitTextToSize(response.questionlist[index], activePageWidth) );
-              pdf.addPage();
+              if (_counter % 3 === 0) {
+                pageNr++;
+                pdf.addPage();
+              }
+              pdf.text(25, 44 + ((_counter % 3) * 60), pdf.splitTextToSize(
+                this.translateService.instant('Response: ') +
+                response.questionlist[index], activePageWidth
+              ) );
+              _counter++;
             }
           });
+          // pageNr++;
+          // pdf.addPage();
+          counter = 2;
+
         };
-        if (!prePostEqual && (i > this.survey.questionlist.length)) {
+        if (!prePostEqual && (i >= this.survey.questionlist.length)) {
           addTextAnswers(this.postResponses, i - this.survey.questionlist.length);
         } else if (!prePostEqual && (i < this.survey.questionlist.length)) {
           addTextAnswers(this.responses, i);

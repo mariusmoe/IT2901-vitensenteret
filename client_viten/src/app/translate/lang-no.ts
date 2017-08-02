@@ -39,6 +39,7 @@ export const LANG_NO_TRANS = {
   'Option': 'Valg',
   'Percentage': 'Prosent',
   'Responses': 'Svar',
+  'Response: ': 'Svar: ',
   'User': 'Bruker',
   'Nickname': 'Kallenavn',
   'Code': 'Kode',
