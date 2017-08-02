@@ -13,17 +13,15 @@
             <md-input-container>
               <!-- SURVEY NAME -->
               <input mdInput type="text" placeholder="{{ 'Title' | translate }}" ng-pattern="stringPattern"
-
+              [attr.maxlength]="maxOtherInputsLength"
               [(ngModel)]="survey.name" required (change)="onSurveyChange()" autocomplete="off">
-
               <md-hint *ngIf="!fieldValidate(survey.name)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
             </md-input-container>
 
             <md-input-container>
               <!-- SURVEY COMMENT (not required) -->
               <input mdInput type="text" placeholder="{{ 'Admin-only Comment' | translate }}" ng-pattern="stringPattern"
-
-              [(ngModel)]="survey.comment" autocomplete="off">
+              [attr.maxlength]="maxOtherInputsLength" [(ngModel)]="survey.comment" autocomplete="off">
             </md-input-container>
           </div>
 
@@ -34,10 +32,8 @@
 
           <div>
             <!-- USE ENGLISH? -->
-
             <md-checkbox [(ngModel)]='englishEnabled' (change)="onSurveyChange()">
               {{ 'Enable English for this survey?' | translate }}</md-checkbox>
-
           </div>
         </md-card-content>
       </md-card>
@@ -49,13 +45,13 @@
           <md-input-container>
             <!-- SURVEY ENDMESSAGE NO -->
             <input mdInput type="text" placeholder="{{ 'Message (Norwegian)' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.no"
-            autocomplete="off" required (change)="onSurveyChange()">
+            autocomplete="off" required (change)="onSurveyChange()" [attr.maxlength]="maxOtherInputsLength">
             <md-hint *ngIf="!fieldValidate(survey.endMessage.no)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
           </md-input-container>
           <md-input-container *ngIf="englishEnabled">
             <!-- SURVEY ENDMESSAGE EN -->
             <input mdInput type="text" placeholder="{{ 'Message (English)' | translate }}" ng-pattern="stringPattern" [(ngModel)]="survey.endMessage.en"
-            autocomplete="off" required (change)="onSurveyChange()">
+            autocomplete="off" required (change)="onSurveyChange()" [attr.maxlength]="maxOtherInputsLength">
             <md-hint *ngIf="!fieldValidate(survey.endMessage.en)" color="warn">{{ 'This field is required.' | translate }}</md-hint>
           </md-input-container>
         </md-card-content>

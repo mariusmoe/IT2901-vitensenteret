@@ -50,6 +50,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   preSurvey: Survey;
 
   maxQuestionLength = 150; // TODO: arbitrary chosen! discuss!
+  maxOtherInputsLength = 250;
 
   isPatch = false;
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
