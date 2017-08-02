@@ -73,7 +73,7 @@ export class SurveyService {
      return this.http.get(environment.URL.survey + '/' + idString)
      .map( response => {
        const json = response.json();
-       console.log(json);
+      //  console.log(json);
        const survey = this.correctSurveyValidity(json.survey);
        return { survey: survey, responses: json.responses };
      },

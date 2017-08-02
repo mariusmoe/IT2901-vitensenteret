@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject, ViewChild, ElementRef } from '@angular/core';
 import { SurveyList } from '../../_models/index';
 import { Folder } from '../../_models/folder';
 import { User } from '../../_models/user';
@@ -13,7 +13,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import 'rxjs/add/operator/debounceTime';
-
+// import { autoScroll } from 'dom-autoscroller';
+import * as autoScroll from 'dom-autoscroller';
 
 @Component({
   selector: 'app-all-surveys',
@@ -24,10 +25,10 @@ import 'rxjs/add/operator/debounceTime';
 })
 export class AllSurveysComponent implements OnInit, OnDestroy {
     loading = false;
-    searchInput = '';
-    searchFormControl = new FormControl();
-    searchLoading = false;
-    searchResultNum = 20;
+    // searchInput = '';
+    // searchFormControl = new FormControl();
+    // searchLoading = false;
+    // searchResultNum = 20;
 
     searchSubscription: Subscription;
     dragulaSubs: Subscription[] = [];
@@ -35,11 +36,13 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
 
     tree: Folder[];
     root: Folder;
+    @ViewChild('autoscroll') autoscroll: ElementRef;
 
     user: User;
 
     selectedSurvey: string;
     routerSub: Subscription;
+
 
 
     constructor(
@@ -73,14 +76,16 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
         this.dragulaService.setOptions('folderBag', dragulaFolderBagSettings);
         // this.dragulaService.setOptions('surveyBag', dragulaSurveyBagSettings);
         this.dragulaSubs.push(dragulaService.drop.subscribe((value) => { this.onDragulaDrop(value); }));
+        this.dragulaSubs.push(dragulaService.drag.subscribe((value) => { this.onDragulaDrag(value); }));
+        this.dragulaSubs.push(dragulaService.dragend.subscribe((value) => { this.onDragulaDragEnd(value); }));
 
         this.refreshFolders();
     }
 
     ngOnInit() {
-      this.searchSubscription = this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
-        this.searchInput = searchQuery;
-      });
+      // this.searchSubscription = this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
+      //   this.searchInput = searchQuery;
+      // });
 
       // whenever we navigate, we should update the survey ID to match for our selected survey
       this.selectedSurvey = this.route.snapshot.params['surveyId'];
@@ -88,15 +93,37 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
         const newParam = this.route.snapshot.params['surveyId'];
         if (newParam) { this.selectedSurvey = newParam; }
       });
+
+
+      const scroll = autoScroll([
+        this.autoscroll.nativeElement
+      ], {
+        margin: 20,
+        maxSpeed: 10,
+        scrollWhenOutside: true,
+        autoScroll: function(){
+          return this.down; // when mouse pressed
+        }
+      });
     }
+
     ngOnDestroy() {
-      this.searchSubscription.unsubscribe();
+      // this.searchSubscription.unsubscribe();
       this.dragulaService.destroy('folderBag');
       // this.dragulaService.destroy('surveyBag');
       for (const sub of this.dragulaSubs) {
         sub.unsubscribe();
       }
     }
+
+
+    onDragulaDrag(value: any) {
+      document.getElementById('folderTree').classList.add('over');
+    }
+    onDragulaDragEnd(value: any) {
+      document.getElementById('folderTree').classList.remove('over');
+    }
+
 
 
     onDragulaDrop(value: any) {
@@ -107,42 +134,41 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       const sibling: Element = value[4];
 
       // target folder is the 'ul' element. We need the parent li element which holds said ul element.
-      if (targetFolderEl.parentElement && targetFolderEl.parentElement.id) {
-        if (sourceFolderEl.parentElement && sourceFolderEl.parentElement.id) {
-          if (targetFolderEl.parentElement.id !== sourceFolderEl.parentElement.id) {
-            const targetFolder = this.tree.filter(f => f._id === targetFolderEl.parentElement.id)[0];
-            const sourceFolder = this.tree.filter(f => f._id === sourceFolderEl.parentElement.id)[0];
+      if (targetFolderEl.parentElement && targetFolderEl.parentElement.id &&
+        sourceFolderEl.parentElement && sourceFolderEl.parentElement.id &&
+        targetFolderEl.parentElement.id !== sourceFolderEl.parentElement.id) {
 
-            const movedObjectWasASurvey = el.classList.contains('survey');
-            const data = {
-              targetFolderId: targetFolder._id,
-              sourceFolderId: sourceFolder._id,
-              isSurvey: movedObjectWasASurvey,
-              itemId: null,
-              isMultiFolder: true, // REQUIRED!!
-            };
+        const targetFolder = this.tree.filter(f => f._id === targetFolderEl.parentElement.id)[0];
+        const sourceFolder = this.tree.filter(f => f._id === sourceFolderEl.parentElement.id)[0];
 
-            if (movedObjectWasASurvey) {
-              const survey = sourceFolder.surveys.filter(s => s._id === el.id)[0];
-              data.itemId = survey._id;
-            } else {
-              // we assume its folders (duh) being moved here
-              const folder = sourceFolder.folders.filter(f => f._id === el.id)[0];
-              data.itemId = folder._id;
-            }
-            this.loading = true;
-            const updateSub = this.userFolderService.updateFolders(data).subscribe(
-              updateSuccess => {
-                updateSub.unsubscribe();
-                this.refreshFolders(); // loading set to false again in this one.
-              },
-              error => {
-                this.loading = false;
-                updateSub.unsubscribe();
-              }
-            );
-          }
+        const movedObjectWasASurvey = el.classList.contains('survey');
+        const data = {
+          targetFolderId: targetFolder._id,
+          sourceFolderId: sourceFolder._id,
+          isSurvey: movedObjectWasASurvey,
+          itemId: null,
+          isMultiFolder: true, // REQUIRED!!
+        };
+
+        if (movedObjectWasASurvey) {
+          const survey = sourceFolder.surveys.filter(s => s._id === el.id)[0];
+          data.itemId = survey._id;
+        } else {
+          // we assume its folders (duh) being moved here
+          const folder = sourceFolder.folders.filter(f => f._id === el.id)[0];
+          data.itemId = folder._id;
         }
+        this.loading = true;
+        const updateSub = this.userFolderService.updateFolders(data).subscribe(
+          updateSuccess => {
+            updateSub.unsubscribe();
+            this.refreshFolders(); // loading set to false again in this one.
+          },
+          error => {
+            this.loading = false;
+            updateSub.unsubscribe();
+          }
+        );
       }
     }
 
@@ -153,6 +179,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
         this.tree = newTree;
         this.root = newTree.filter(x => x.isRoot === true)[0];
         this.root.open = true;
+
         requestNewTreeSub.unsubscribe();
         this.loading = false;
       },
@@ -162,19 +189,35 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       });
     }
 
-
-
-
     toggleFolderOpenState(e: Event, folder: Folder) {
       e.stopPropagation();
       e.preventDefault();
 
       folder.open = !folder.open;
+
+      if (folder.isRoot) {
+        return;
+      }
+
+      const updatedFolder: Folder = {
+        _id: folder._id,
+        title: folder.title,
+        user: folder.user,
+        open: folder.open,
+      };
+
+      const updateSub = this.userFolderService.patchFolder(updatedFolder).subscribe(
+        updateSuccess => {
+          updateSub.unsubscribe();
+        },
+        error => {
+          updateSub.unsubscribe();
+        }
+      );
     }
 
     createNewFolder(folder: Folder) {
       const newFolder: Folder = {
-        // title: 'ff',
       };
 
       const sub = this.userFolderService.createFolder(newFolder, folder).subscribe(
@@ -239,10 +282,10 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
 
 
     <!-- RENAME FOLDER CONTENTS -->
-    <form [formGroup]="renameForm" (ngSubmit)="submitForm(loginForm.value)" *ngIf="data && data.isRename">
+    <form [formGroup]="renameForm" (ngSubmit)="submitForm()" *ngIf="data && data.isRename">
       <md-input-container md-block>
         <input mdInput class="form-control" type="text" autocomplete="off"
-        placeholder="fixme: New name" [formControl]="renameForm.controls['rename']" required>
+        placeholder="{{'New name' | translate }}" [formControl]="renameForm.controls['rename']" required>
         <md-hint ngClass="{'warning': true}" *ngIf="renameForm.controls['rename'].hasError('required') &&
           renameForm.controls['rename'].touched">
           {{ 'This field is required.' | translate }}
@@ -255,9 +298,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
 
       <button md-raised-button #submitRenameForm type="submit" class="btn btn-success" [disabled]="!renameForm.valid"
         color="primary">
-        <div [mdTooltip]="(!renameForm.valid) ? 'waffles' : 'no waffles for you' " tooltip-position="above">
-          {{ 'Submit' | translate }}
-        </div>
+        {{ 'Submit' | translate }}
       </button>
     </form>
     <!-- RENAME FOLDER CONTENTS END-->
@@ -284,6 +325,15 @@ export class FolderOptionsDialog {
   }
 
 
+  submitForm() {
+    if (this.data.isRename) {
+      this.renameFolder();
+    } else {
+      this.deleteFolder();
+    }
+  }
+
+
   deleteFolder() {
     const sub = this.userFolderService.deleteFolder(this.data.folder._id).subscribe(
       result => {
@@ -305,8 +355,9 @@ export class FolderOptionsDialog {
     this.data.folder.title = this.renameForm.value;
     const updatedFolder: Folder = {
       _id: this.data.folder._id,
-      title: this.renameForm.value,
+      title: this.renameForm.value.rename,
       user: this.data.folder.user,
+      open: this.data.folder.open,
     };
     const sub = this.userFolderService.patchFolder(updatedFolder).subscribe(
       result => {

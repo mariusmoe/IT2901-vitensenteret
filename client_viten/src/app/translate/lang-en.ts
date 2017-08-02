@@ -296,4 +296,6 @@ export const LANG_EN_TRANS = {
   'Delete folder': 'Delete folder',
   'Create subfolder': 'Create subfolder',
   'Folder Options': 'Folder Options',
+  'New name': 'New name',
+
 };

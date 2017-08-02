@@ -127,7 +127,7 @@ exports.updateFolderSingular = (req, res, next) => {
   if (Object.keys(receivedFolder).length === 0) {
     return res.status(400).send( {message: status.FOLDER_OBJECT_MISSING.message, status: status.FOLDER_OBJECT_MISSING.code});
   }
-  if (!val.folderValidation(receivedFolder)){
+  if (!val.folderValidation(receivedFolder, true)){
     return res.status(422).send( {message: status.FOLDER_UNPROCESSABLE.message, status: status.FOLDER_UNPROCESSABLE.code});
   }
   if (receivedFolder.user != userId) {
@@ -141,6 +141,7 @@ exports.updateFolderSingular = (req, res, next) => {
     }
     // ONLY updating title at the moment. Maybe add surveys and subfolders as well?
     folder.title = receivedFolder.title;
+    folder.open = receivedFolder.open;
     folder.save((err2, savedFolder) => {
       if (err2) { next(err2); }
       return res.status(200).send( {message: status.FOLDER_SUCCESSFULLY_UPDATED.message, status: status.FOLDER_SUCCESSFULLY_UPDATED.code});
