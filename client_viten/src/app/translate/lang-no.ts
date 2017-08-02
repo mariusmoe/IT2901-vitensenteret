@@ -292,8 +292,9 @@ export const LANG_NO_TRANS = {
   // Folder system
   'Warning! This will delete the folder along with ALL surveys inside!':
     'Advarsel! Dette vil slette mappen samt ALLE undersøkelser i mappen!',
-  'Rename folder': 'Gi nytt navn',
+  'Rename folder': 'Endre mappenavn',
   'Delete folder': 'Slett mappen',
   'Create subfolder': 'Lag ny undermappe',
   'Folder Options': 'Mappealternativer',
+  'New name': 'Nytt mappenavn',
 };

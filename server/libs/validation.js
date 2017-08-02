@@ -146,6 +146,7 @@ let folderSchema = {
     "user": { "type": "string", "pattern": /^[0-9a-fA-F]{24}$/ },
     "title": { "type": "string" },
     "isRoot": { "type": "boolean" },
+    "open": { "type": "boolean" },
     "folders": {
       "type": "array",
       "items": {

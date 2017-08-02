@@ -234,7 +234,7 @@ export class ChartComponent implements OnInit {
 
     // SetOptions, setting title text and legend if Legend is needed
     this.chartOptions = {
-      responsive: true,
+      responsive: false,
       title: {
           display: true,
           text: titleText,
