@@ -216,9 +216,10 @@ export class AuthenticationService {
    * @return {boolean} true if JWT was successfully renewed else false
    */
   getNewJWT(): Observable<boolean> {
+    const token = this.getToken();
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
-    headers.append('Authorization', `${this.token}`);
+    headers.append('Authorization', `${token}`);
     const options = new RequestOptions({ headers: headers });
     return this.http.get(environment.URL.renewJWT, options).timeout(2000)
       .map(
@@ -272,7 +273,7 @@ export class AuthenticationService {
           },
           error => {
             console.log(error.text());
-            return false;
+            return error.json();
           }
         );
   }

@@ -234,7 +234,7 @@ export class ChartComponent implements OnInit {
 
     // SetOptions, setting title text and legend if Legend is needed
     this.chartOptions = {
-      responsive: true,
+      responsive: false,
       title: {
           display: true,
           text: titleText,
@@ -296,6 +296,23 @@ export class ChartComponent implements OnInit {
     if (typeof value !== 'number') {
       return '0.00';
     }
-    return value.toFixed(2);
+    return value.toFixed(decimals);
+  }
+
+
+  getPercentageNotAnswered(responsesLength: number, questionObjectMode: any, decimals: number) {
+    if (responsesLength === 0) {
+      return '0.00';
+    } else {
+      const value = ((responsesLength - (questionObjectMode === 'multi' ? this.total : this.total)) / (responsesLength) * 100);
+      return value.toFixed(decimals);
+    }
+  }
+
+  getPercentage(chartData, responsesLength, decimals) {
+    if (responsesLength === 0) {
+      return '0.00';
+    }
+    return ((chartData / responsesLength) * 100).toFixed(decimals);
   }
 }

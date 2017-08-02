@@ -1,4 +1,9 @@
 
+
+.wrapper {
+  padding-top: 64px;
+}
+
 .warning {
   color: red;
 }
@@ -55,12 +60,20 @@
   }
 }
 
-
 li.survey,
 li.folder {
   position: relative;
   vertical-align: middle;
   list-style-type: none;
+}
+
+li.folder .click {
+  margin-right: 30px;
+}
+
+
+li.survey:hover .hoverUnderline {
+  display: block;
 }
 
 li {
@@ -84,28 +97,47 @@ li {
   display: block;
 
   ul {
-    padding-left: 6px;
+    padding-left: 0;
+    & > li {
+      padding-left: 10px;
+    }
   }
   &.closed {
-    ul {
+    ul > li {
       display: none;
     }
   }
 }
 
+.tree.over {
+  .item {
+    &.closed {
+      ul > li {
+        display: block;
+      }
+    }
+  }
+}
+
 .items {
-  min-height: 40px; // NEEDED!!!!!!!! DO NOT REMOVE!!!!!!
+  min-height: 20px; // NEEDED!!!!!!!! DO NOT REMOVE!!!!!!
 }
 
 .firstEntry {
   position: absolute;
 }
 
+.hoverUnderline,
 .selectedUnderline {
   height: 2px;
   position: absolute;
   background: #000;
   width: 90%;
   bottom: 7px;
-  left: 20px;
+  left: 10px;
+}
+
+.hoverUnderline {
+  opacity: 0.3;
+  display: none;
 }

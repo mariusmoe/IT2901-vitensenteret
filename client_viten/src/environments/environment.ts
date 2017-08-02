@@ -27,5 +27,7 @@ export const environment = {
     folders: 'http://localhost:2000/api/folders/',
     newCenter: 'http://localhost:2000/api/center/new',
     newCenterName: 'http://localhost:2000/api/center/name',
+    newLogo: 'http://localhost:2000/api/image/center',
+    newDoc: 'http://localhost:2000/api/image/doc',
   }
 };

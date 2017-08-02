@@ -62,7 +62,11 @@ export class LoginComponent implements OnInit, OnDestroy {
           sub.unsubscribe();
           user.password = '';
           this.loading = false;
-          this.openSnackBar(this.languageService.instant('There was an issue connecting to the server'), 'OK');
+          if (error.status && (error.status === 401 || error.status === 400)) {
+            this.openSnackBar(this.languageService.instant('Email or password is incorrect'), 'OK');
+          } else {
+            this.openSnackBar(this.languageService.instant('There was an issue connecting to the server'), 'OK');
+          }
         }
       );
   }

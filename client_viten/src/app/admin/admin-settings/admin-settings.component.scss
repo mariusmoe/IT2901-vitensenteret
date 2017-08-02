@@ -26,9 +26,13 @@
 .btn {
   margin-left: 10px;
 }
-.btn-success {
+.btn.success {
   background-color: green;
   color: white;
+}
+
+.btn.error {
+  background-color: #f44336;
 }
 
 .userTable {
@@ -78,4 +82,8 @@ input[type=number]::-webkit-outer-spin-button {
     -moz-appearance: none;
     appearance: none;
     margin: 0;
+}
+
+.uploadDocWrapper {
+  min-height: 250px;
 }

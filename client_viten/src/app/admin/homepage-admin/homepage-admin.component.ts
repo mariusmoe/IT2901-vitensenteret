@@ -4,6 +4,7 @@ import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdSnackBar } fro
 import { SurveyService } from '../../_services/survey.service';
 import { TranslateService } from '../../_services/translate.service';
 import { AuthenticationService } from '../../_services/authentication.service';
+import { CenterService } from '../../_services/center.service';
 import { Survey } from '../../_models/survey';
 import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params, NavigationEnd } from '@angular/router';
@@ -40,6 +41,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
   public  dialogRef2: MdDialogRef<PublishDialog>;
   private center: string;
+  private centerName: string;
 
 
   // constructor
@@ -50,6 +52,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
     public authenticationService: AuthenticationService,
+    public centerService: CenterService,
     private translateService: TranslateService) {
   }
 
@@ -62,6 +65,10 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       if (newParam) { this.getSurvey(newParam); }
     });
     this.center = localStorage.getItem('center');
+    const sub = this.centerService.getCenter(this.center).subscribe((center) => {
+      this.centerName = center['name'];
+      sub.unsubscribe();
+    });
   }
 
   ngOnDestroy() {
@@ -242,19 +249,40 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       pdf.text(textOffset, y, text);
     };
 
+    let prePostEqual = true;
+    if (this.survey && this.postSurvey) {
+      if (this.survey.questionlist.length === this.postSurvey.questionlist.length) {
+        prePostEqual = !this.survey.questionlist.some((qo, i, array) => {
+          const qo2 = this.postSurvey.questionlist[i];
+          return (qo.mode !== qo2.mode);
+        });
+      } else {
+        prePostEqual = false;
+      }
+    }
+
     // start writing data to the PDF.
     pdf.setFontSize(30);
-    centeredText(22, 'Vitensenteret');
+    centeredText(22, this.centerName);
     pdf.setFontSize(18);
     pdf.text(25, 35, this.survey.name);
     pdf.setFontSize(8);
     pdf.text(25, 44, this.survey.comment);
+    if (!prePostEqual) {
+      pdf.setFontSize(18);
+      pdf.text(25, 55, 'PRE');
+      pdf.setFontSize(8);
+    }
+
     // Dates and num answers are right-aligned (Logo added at the very bottom)
-    rightAlignedText(25, 34, this.translateService.instant('Last modified: d', this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
-    if(this.survey.activationDate) {
-      rightAlignedText(25, 39, this.translateService.instant('Published: d', this.datePipe.transform(this.survey.activationDate, 'yyyy-MM-dd')));
+    rightAlignedText(25, 34, this.translateService.instant('Last modified: d',
+      this.datePipe.transform(this.survey.date, 'yyyy-MM-dd')));
+    if (this.survey.activationDate) {
+      rightAlignedText(25, 39, this.translateService.instant('Published: d',
+        this.datePipe.transform(this.survey.activationDate, 'yyyy-MM-dd')));
       if (this.survey.deactivationDate) {
-        rightAlignedText(25, 44, this.translateService.instant('Completed: d', this.datePipe.transform(this.survey.deactivationDate, 'yyyy-MM-dd')));
+        rightAlignedText(25, 44, this.translateService.instant('Completed: d',
+        this.datePipe.transform(this.survey.deactivationDate, 'yyyy-MM-dd')));
       }
     }
     const responses = this.responses.length;
@@ -286,55 +314,132 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     const tableOffset = 5;
     const itemWidth = chartHeight * 2; // this has to be a constant ratio
     let counter = 0;
-    canvases.forEach((canvas, i) => {
-      if (i === 1 || counter === 2) {
-        pageNr += 1;
-        counter = 0;
-        pdf.addPage();
-        baseOffset = 18;
+    let postIsSet = false;    // 'Post' should only be written once
+    // canvases.forEach((canvas, i) => {
+
+    let allQuestions = this.survey.questionlist;    // All questions holds all questions to be iterated over in pdf
+    if (this.postSurvey && !prePostEqual) {
+      allQuestions = allQuestions.concat(this.postSurvey.questionlist);
+    }
+    let canvasIterator = 0;
+    allQuestions.forEach((question, i) => {
+      let canvas;
+      if (question.mode !== 'text') {
+        canvas = canvases[canvasIterator];
+
+        if (i === 1 || counter === 2) {
+          pageNr += 1;
+          counter = 0;
+          pdf.addPage();
+          baseOffset = 18;
+        }
+        const chartPos = counter === 0 ? baseOffset : (pdf.internal.pageSize.height / 2);
+        if (!prePostEqual && !postIsSet && (i > this.survey.questionlist.length)) {
+          pdf.setFontSize(18);
+          pdf.text(25, 18, 'POST');
+          console.log('Pinted POST on survey!');
+          pdf.setFontSize(8);
+          postIsSet = true;
+        }
+        // Draw our white background on the dummy canvas
+        dummyCanvasContext.fillRect(0, 0, dummyCanvas.width, dummyCanvas.height);
+        // Draw the chart from the real canvas onto our dummy canvas, centered in the dummy canvas
+        dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
+        dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
+        // Add the chart with white background into our PDF at the right position
+        pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.8), 'JPEG',
+          (pdf.internal.pageSize.width - itemWidth) / 2, chartPos, itemWidth, chartHeight);
+
+        pdf.setFontSize(5);
+        centeredText(chartPos + chartHeight + 2, this.translateService.instant('Figure: n', (i + 1).toString()));
+
+        // Modify our table slightly, as to make it pretty for the PDF.
+        // This circumvents the fact that the autoTableHtmlToJson does not deal with
+        // html cell attribute colspan.
+        const tableClone = tables[canvasIterator].cloneNode(true); // true => copy children.
+        const prepostRow = tableClone.querySelector('tr.prepost');
+        const prepostRowHeaders = tableClone.querySelectorAll('tr.prepost th');
+        if (prepostRowHeaders && prepostRowHeaders.length > 0) {
+          const preObject = prepostRowHeaders[0].cloneNode();
+          // prepostRowHeaders: empty, PRE, POST
+          prepostRow.insertBefore(preObject, prepostRowHeaders[2]);
+          prepostRow.appendChild(preObject.cloneNode());
+          // should now be: empty, PRE, empty, POST, empty
+        }
+        // End of circumventing the colspan issue here.
+
+        // Append our clone to the pdf
+        const res = pdf.autoTableHtmlToJson(tableClone);
+        const tablePos = counter === 0 ? (baseOffset + chartHeight + tableOffset) :
+          (pdf.internal.pageSize.height / 2) + chartHeight + tableOffset;
+        pdf.autoTable(res.columns, res.data, {
+          startY: tablePos,
+          margin: {horizontal: (pdf.internal.pageSize.width - itemWidth) / 2},
+          styles: {fontSize: 7 },
+          tableWidth: itemWidth
+        });
+        pdf.setFontSize(5);
+        centeredText(pdf.autoTable.previous.finalY + 3, this.translateService.instant('Table: n', (i + 1).toString()));
+        // <-- END TABLE
+        counter++;
+        canvasIterator++;
+      } else {
+
+        if (!prePostEqual && !postIsSet && (i > this.survey.questionlist.length)) {
+          pdf.setFontSize(18);
+          pdf.text(25, 18, 'POST');
+          console.log('Pinted POST on survey!');
+          pdf.setFontSize(8);
+          postIsSet = true;
+        }
+
+        pdf.setFontSize(12);
+        const activePageWidth = pdf.internal.pageSize.width - 25 * 2;
+        console.log(activePageWidth);
+        console.log('not a canvas');
+        if (i !== 0) {
+          pageNr++;
+          pdf.addPage();
+         }
+        pdf.setLineWidth(50);
+        const addTextAnswers = (_responses: Response[], index) => {
+          let _counter = 1;
+          let textQuestionHeight = 30;
+          if (i === 0) {
+            textQuestionHeight = 60;
+          }
+          const questionText = (question.lang.en
+            && this.translateService.getCurrentLang() === 'en') ? question.lang.en.txt : question.lang.no.txt;
+          pdf.text(25, textQuestionHeight, index.toString() + '. ' + questionText);
+          _responses.forEach((response) => {
+            // console.log(response.questionlist, index);
+            if (response.questionlist[index]) {
+              if (_counter % 3 === 0) {
+                pageNr++;
+                pdf.addPage();
+              }
+              pdf.text(25, 44 + ((_counter % 3) * 60), pdf.splitTextToSize(
+                this.translateService.instant('Response: ') +
+                response.questionlist[index], activePageWidth
+              ) );
+              _counter++;
+            }
+          });
+          // pageNr++;
+          // pdf.addPage();
+          counter = 2;
+
+        };
+        if (!prePostEqual && (i >= this.survey.questionlist.length)) {
+          addTextAnswers(this.postResponses, i - this.survey.questionlist.length);
+        } else if (!prePostEqual && (i < this.survey.questionlist.length)) {
+          addTextAnswers(this.responses, i);
+        } else if (prePostEqual && this.postResponses) {
+          addTextAnswers(this.responses.concat(this.postResponses), i);
+        } else {
+          addTextAnswers(this.responses, i);
+        }
       }
-      const chartPos = counter === 0 ? baseOffset : (pdf.internal.pageSize.height / 2);
-      // Draw our white background on the dummy canvas
-      dummyCanvasContext.fillRect(0, 0, dummyCanvas.width, dummyCanvas.height);
-      // Draw the chart from the real canvas onto our dummy canvas, centered in the dummy canvas
-      dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
-      dummyCanvasContext.drawImage(canvas, dummyCanvas.width / 2 - canvas.width / 2, 0);
-      // Add the chart with white background into our PDF at the right position
-      pdf.addImage(dummyCanvas.toDataURL('image/jpeg', 0.8), 'JPEG',
-        (pdf.internal.pageSize.width - itemWidth) / 2, chartPos, itemWidth, chartHeight);
-
-      pdf.setFontSize(5);
-      centeredText(chartPos + chartHeight + 2, this.translateService.instant('Figure: n', i + 1));
-
-      // Modify our table slightly, as to make it pretty for the PDF.
-      // This circumvents the fact that the autoTableHtmlToJson does not deal with
-      // html cell attribute colspan.
-      const tableClone = tables[i].cloneNode(true); // true => copy children.
-      const prepostRow = tableClone.querySelector('tr.prepost');
-      const prepostRowHeaders = tableClone.querySelectorAll('tr.prepost th');
-      if (prepostRowHeaders && prepostRowHeaders.length > 0) {
-        const preObject = prepostRowHeaders[0].cloneNode();
-        // prepostRowHeaders: empty, PRE, POST
-        prepostRow.insertBefore(preObject, prepostRowHeaders[2]);
-        prepostRow.appendChild(preObject.cloneNode());
-        // should now be: empty, PRE, empty, POST, empty
-      }
-      // End of circumventing the colspan issue here.
-
-      // Append our clone to the pdf
-      const res = pdf.autoTableHtmlToJson(tableClone);
-      const tablePos = counter === 0 ? (baseOffset + chartHeight + tableOffset) :
-        (pdf.internal.pageSize.height / 2) + chartHeight + tableOffset;
-      pdf.autoTable(res.columns, res.data, {
-        startY: tablePos,
-        margin: {horizontal: (pdf.internal.pageSize.width - itemWidth) / 2},
-        styles: {fontSize: 7 },
-        tableWidth: itemWidth
-      });
-      pdf.setFontSize(5);
-      centeredText(pdf.autoTable.previous.finalY + 3, this.translateService.instant('Table: n', i + 1));
-      // <-- END TABLE
-      counter++;
     });
 
     // Add page count to the bottom of the page
@@ -357,10 +462,11 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         const canvas = document.createElement('canvas') as any;
         canvas.width = img.width;
         canvas.height = img.height;
+        const imageWidth = (img.width / img.height) * 15;
         canvas.getContext('2d').drawImage(img, 0, 0);
         // pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
         pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
-          pdf.internal.pageSize.width - logoSize - 23, 12, logoSize, logoSize
+          pdf.internal.pageSize.width - imageWidth - 23, 12, imageWidth, logoSize
         );
 
         // save our doc with a OS-friendly filename that is related to the survey at hand

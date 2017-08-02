@@ -8,6 +8,10 @@ import { AuthenticationService } from '../../_services/authentication.service';
 import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdSnackBar } from '@angular/material';
+import { FileUploader } from 'ng2-file-upload';
+import { environment } from '../../../environments/environment';
+
+
 
 @Component({
   selector: 'app-admin-settings',
@@ -27,6 +31,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private emailSub: Subscription;
   public tabIndex: number;
   selectedLanguage;
+  public uploader: FileUploader = new FileUploader({url: environment.URL.newDoc});
+
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
 
@@ -48,6 +54,18 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
     public languageService: TranslateService) {
+      const token = localStorage.getItem('token');
+      this.uploader.authToken = token;
+      this.uploader.autoUpload = true;
+      const myOptions = {
+                  autoUpload: false,
+                  isHTML5: true,
+                  filters: [],
+                  removeAfterUpload: false,
+                  disableMultipart: false,
+                  authToken: token
+              };
+      this.uploader.setOptions(myOptions);
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
       if (this.user.role === 'sysadmin' || this.user.role === 'vitenleader') {
@@ -59,7 +77,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
       const sub = this.centerService.getAllCenters().subscribe(result => {
         if (result && result[0]) {  // if there is no array we instead get the 'route exists but no centers..' thing
           this.centers = result;
-          if (result.indexOf(localStorage.getItem('center')) !== -1) {
+          if (result.filter( c => {return c._id === localStorage.getItem('center'); })) {
             this.selectedCenter = localStorage.getItem('center');
           }
         }
@@ -82,6 +100,17 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // this.emailSub.unsubscribe();
+  }
+
+  public _onChange(files: any) {
+    this.uploader.queue[0].formData = {'file': ' myval'};
+    // console.log(this.uploader);
+    if (files && files.length > 0) {
+     const file: File = files.item(0);
+   }
+   if (this.uploader.queue.length > 1) {
+     this.uploader.queue.shift();
+   }
   }
 
   onTabChange(e: MdTabChangeEvent) {

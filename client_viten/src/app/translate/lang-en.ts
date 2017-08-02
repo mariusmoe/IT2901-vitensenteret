@@ -38,6 +38,7 @@ export const LANG_EN_TRANS = {
   'Option': 'Option',
   'Percentage': 'Percentage',
   'Responses': 'Responses',
+  'Response: ': 'Response: ',
   'User': 'User',
   'Nickname': 'Nickname',
   'Code': 'Code',
@@ -88,6 +89,8 @@ export const LANG_EN_TRANS = {
   // Survey Pre post labels
   'Pre': 'Pre',
   'Post': 'Post',
+  'Pre survey': 'Pre survey',
+  'Post survey': 'Post survey',
 
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
@@ -146,6 +149,8 @@ export const LANG_EN_TRANS = {
   'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
     'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.',
   'Survey completed': 'Survey completed',
+  'Documentation settings': 'Documentation settings',
+  'Choose documentation pdf': 'Choose documentation pdf',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
@@ -184,7 +189,9 @@ export const LANG_EN_TRANS = {
   'When a survey is unpublished it will no logner accept responses.':
   'When a survey is unpublished it will no logner accept responses.',
   'To run the survey again, try to copy it.':
-  'To run the survey again, try to copy it.',
+    'To run the survey again, try to copy it.',
+  'The pre and post survevys do not match, so they have been separated.':
+    'The pre and post survevys do not match, so they have been separated.',
 
   // Admin settings component
   'Retype password': 'Retype password',
@@ -291,4 +298,6 @@ export const LANG_EN_TRANS = {
   'Delete folder': 'Delete folder',
   'Create subfolder': 'Create subfolder',
   'Folder Options': 'Folder Options',
+  'New name': 'New name',
+
 };

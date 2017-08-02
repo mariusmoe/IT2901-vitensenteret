@@ -39,6 +39,7 @@ export const LANG_NO_TRANS = {
   'Option': 'Valg',
   'Percentage': 'Prosent',
   'Responses': 'Svar',
+  'Response: ': 'Svar: ',
   'User': 'Bruker',
   'Nickname': 'Kallenavn',
   'Code': 'Kode',
@@ -89,6 +90,8 @@ export const LANG_NO_TRANS = {
   // Survey Pre post labels
   'Pre': 'Pre',
   'Post': 'Post',
+  'Pre survey': 'Pre-undersøkelse',
+  'Post survey': 'Post-undersøkelse',
 
   // Survey response numbers
   'Number of responses: n': 'Antall svar: %0',
@@ -186,7 +189,9 @@ export const LANG_NO_TRANS = {
   'When a survey is unpublished it will no logner accept responses.':
   'Når en undersøkelse avpubliseres vil den ikke lengre akseptere svar',
   'To run the survey again, try to copy it.':
-  'For å kjøre undersøkelsen igjen, prøv å kopiere den.',
+    'For å kjøre undersøkelsen igjen, prøv å kopiere den.',
+  'The pre and post survevys do not match, so they have been separated.':
+    'For- og etterundersøkelsene stemmer ikke overens, og har derfor blitt separert.',
 
 
   // Admin settings component
@@ -222,6 +227,8 @@ export const LANG_NO_TRANS = {
   'Center settings': 'Senterinstillinger',
   'Update center': 'Endre senter',
   'New center': 'Nytt senter',
+  'Documentation settings': 'Dokumentasjonsinstillinger',
+  'Choose documentation pdf': 'Velg dokumentasjon pdf',
 
   // New center component
   'Change title': 'Bytt navn',
@@ -288,8 +295,9 @@ export const LANG_NO_TRANS = {
   // Folder system
   'Warning! This will delete the folder along with ALL surveys inside!':
     'Advarsel! Dette vil slette mappen samt ALLE undersøkelser i mappen!',
-  'Rename folder': 'Gi nytt navn',
+  'Rename folder': 'Endre mappenavn',
   'Delete folder': 'Slett mappen',
   'Create subfolder': 'Lag ny undermappe',
   'Folder Options': 'Mappealternativer',
+  'New name': 'Nytt mappenavn',
 };

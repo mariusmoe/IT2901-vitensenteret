@@ -9,6 +9,8 @@ import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdSnackBar } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
+import { environment } from '../../../environments/environment';
+
 
 @Component({
   selector: 'app-new-center',
@@ -23,7 +25,7 @@ export class NewCenterComponent implements OnInit {
 
 
 
-  public uploader: FileUploader = new FileUploader({url: 'http://localhost:2000/api/image/center'});
+  public uploader: FileUploader = new FileUploader({url: environment.URL.newLogo});
   public hasBaseDropZoneOver = false;
   public hasAnotherDropZoneOver = false;
   private user: User;
@@ -125,6 +127,7 @@ export class NewCenterComponent implements OnInit {
     this.centerService.centerUpdateCenterName(name, this.selectedCenter)
       .subscribe(result => {
         this.openSnackBar(this.languageService.instant('Center title updated'), 'SUCCESS');
+        setTimeout( () => { window.location.reload(); }, 2000);
       },
       error => {
         this.openSnackBar(this.languageService.instant('Could not change center title at this time'), 'FAILURE');

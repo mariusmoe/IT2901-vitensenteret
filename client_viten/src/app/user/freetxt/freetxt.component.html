@@ -1,7 +1,7 @@
-<md-card>
+<md-card ngClass="parentBox">
   <md-card-content>
-    <md-input-container>
-      <textarea mdInput type='text' class="freetxtBox" [(ngModel)] = "textValue"
+    <md-input-container ngClass="freetxtBox">
+      <textarea mdInput type='text' [(ngModel)] = "textValue" class="freeTextArea"
       [formControl]="textControl" #textBox maxlength="255" name=""
       placeholder="{{ 'Your answer' | translate }}" (change) = "updateAnswers()"></textarea>
       <md-hint>

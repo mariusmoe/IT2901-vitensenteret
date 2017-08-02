@@ -38,6 +38,26 @@ export class CenterService {
   }
 
 
+  getCenter(centerId: String): Observable<any> {
+    return this.http.get(environment.URL.allCenters)
+    .map(
+      response => {
+        const result = response.json();
+        // if there is no array we instead get the 'route exists but no centers..' thing
+        if (result && result[0]) {
+          const center = result.filter(c => { return c['_id'] === centerId })[0];
+          return center;
+        }
+        return response.json();
+      },
+      error => {
+        console.log(error.text());
+        return null;
+      }
+    );
+  }
+
+
 
   /**
    * Requests to exit a survey
