@@ -227,6 +227,8 @@ export const LANG_NO_TRANS = {
   'Center settings': 'Senterinstillinger',
   'Update center': 'Endre senter',
   'New center': 'Nytt senter',
+  'Documentation settings': 'Dokumentasjonsinstillinger',
+  'Choose documentation pdf': 'Velg dokumentasjon pdf',
 
   // New center component
   'Change title': 'Bytt navn',

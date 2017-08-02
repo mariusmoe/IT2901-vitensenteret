@@ -149,6 +149,8 @@ export const LANG_EN_TRANS = {
   'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
     'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.',
   'Survey completed': 'Survey completed',
+  'Documentation settings': 'Documentation settings',
+  'Choose documentation pdf': 'Choose documentation pdf',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',

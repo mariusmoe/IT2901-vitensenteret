@@ -143,7 +143,7 @@ module.exports = {
     code: 2019
   },
   UPLOAD_SUCCESS: {
-    message: 'Uploaded image successfully.',
+    message: 'Uploaded file successfully.',
     code: 1017
   },
 
@@ -250,7 +250,11 @@ module.exports = {
   FOLDER_DELETED: {
     message: 'The folder and all its content was successfully deleted.',
     code: 3010
-  }
+  },
+  FILE_INVALID: {
+    message: 'File is invalid',
+    code: 3032
+  },
 
 
 

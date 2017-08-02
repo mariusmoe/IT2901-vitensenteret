@@ -39,6 +39,8 @@ export const environment = {
       folders: 'https://vitensurvey.party/api/folders/',
       newCenter: 'https://vitensurvey.party/api/center/new',
       newCenterName: 'https://vitensurvey.party/api/center/name',
+      newLogo: 'https://vitensurvey.party/api/image/center',
+      newDoc: 'https://vitensurvey.party/api/image/doc',
 
     }
 };
