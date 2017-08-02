@@ -38,6 +38,7 @@ export const LANG_EN_TRANS = {
   'Option': 'Option',
   'Percentage': 'Percentage',
   'Responses': 'Responses',
+  'Response: ': 'Response: ',
   'User': 'User',
   'Nickname': 'Nickname',
   'Code': 'Code',
