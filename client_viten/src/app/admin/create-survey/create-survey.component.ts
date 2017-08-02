@@ -134,13 +134,13 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     const sub = this.surveyService.getSurvey(param).subscribe(
       result => {
         if (this.isPost) {
-          this.setupInitialSurveyStateFrom(result.survey);
+          this.setupInitialSurveyStateFrom(result.survey, true);  // true -> delete _id
           this.survey.name = 'POST: ' + this.survey.name;
           this.survey.isPost = true;
 
           this.preSurvey = result.survey;
         } else {
-          this.survey = result.survey;
+          this.setupInitialSurveyStateFrom(result.survey);
           this.isPatch = true;
         }
 
@@ -185,9 +185,20 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
    * Initiates state
    * @param  {Survey} survey the survey reference to copy
    */
-  private setupInitialSurveyStateFrom(survey: Survey) {
+  private setupInitialSurveyStateFrom(survey: Survey, deleteId = false) {
     this.survey = JSON.parse(JSON.stringify(survey)); // Initiate the survey with an exact duplicate.
-    delete this.survey._id;
+    for (const qo of this.survey.questionlist) {
+      qo.lang.no.options = qo.lang.no.options || [];
+      if (!qo.lang.en) {
+        qo.lang.en = {
+          'txt': ''
+        };
+      }
+      qo.lang.en.options = qo.lang.en.options || [];
+    }
+    if (deleteId) {
+      delete this.survey._id;
+    }
 
   }
 
@@ -324,19 +335,18 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // fashion as to avoid issues should the route name be altered.
       if (this.preSurvey && this.preSurvey._id) {
         this.router.navigate([this.route.parent.snapshot.url.join('/'), this.preSurvey._id]);
-        console.log('PRE found; PRE._id found');
+        // console.log('PRE found; PRE._id found');
       } else if (this.survey._id && (!this.isPost || !this.survey.isPost)) {
-        // FIXME BUG this happens when editing post survey;
-        console.log(this.survey);
+        // console.log(this.survey);
         if (this.survey.isPost) {
-          console.log('IS edit of POST survey');
+          // console.log('IS edit of POST survey');
           this.router.navigate([this.route.parent.snapshot.url.join('/')]);
         } else {
           this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
         }
       } else {
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
-        console.log('Navigate to home');
+        // console.log('Navigate to home');
       }
     };
 
