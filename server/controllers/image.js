@@ -26,9 +26,15 @@ const AuthenticationController = require('./authentication'),
 //
 // var upload = multer({ storage: _storage });
 
-
-const UPLOAD_FOLDER = __dirname +'/../../client_viten/src/assets/uploads/'
-const UPLOAD_FOLDER_MANUALS = __dirname +'/../../client_viten/src/assets/manuals/'
+const UPLOAD_FOLDER;
+const UPLOAD_FOLDER_MANUALS;
+if (config.util.getEnv('NODE_ENV') == 'production') {
+  UPLOAD_FOLDER = __dirname +'/../../client_viten/dist/assets/uploads/'
+  UPLOAD_FOLDER_MANUALS = __dirname +'/../../client_viten/dist/assets/manuals/'
+} else {
+  UPLOAD_FOLDER = __dirname +'/../../client_viten/src/assets/uploads/'
+  UPLOAD_FOLDER_MANUALS = __dirname +'/../../client_viten/src/assets/manuals/'
+}
 // const UPLOAD_FOLDER = './uploads'
 
 // Require login/auth
