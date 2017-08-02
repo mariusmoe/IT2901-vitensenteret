@@ -26,8 +26,8 @@ const AuthenticationController = require('./authentication'),
 //
 // var upload = multer({ storage: _storage });
 
-const UPLOAD_FOLDER;
-const UPLOAD_FOLDER_MANUALS;
+let UPLOAD_FOLDER ='';
+let UPLOAD_FOLDER_MANUALS ='';
 if (config.util.getEnv('NODE_ENV') == 'production') {
   UPLOAD_FOLDER = __dirname +'/../../client_viten/dist/assets/uploads/'
   UPLOAD_FOLDER_MANUALS = __dirname +'/../../client_viten/dist/assets/manuals/'
