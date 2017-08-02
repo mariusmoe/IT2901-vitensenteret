@@ -60,13 +60,17 @@
   }
 }
 
-
 li.survey,
 li.folder {
   position: relative;
   vertical-align: middle;
   list-style-type: none;
 }
+
+li.folder .click {
+  margin-right: 30px;
+}
+
 
 li.survey:hover .hoverUnderline {
   display: block;
