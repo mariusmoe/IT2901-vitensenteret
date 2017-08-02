@@ -383,8 +383,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       } else {
 
         pdf.setFontSize(12);
-
-
+        const activePageWidth = pdf.internal.pageSize.width - 25 * 2;
+        console.log(activePageWidth);
         console.log('not a canvas');
         pdf.addPage();
         pdf.setLineWidth(50);
@@ -393,7 +393,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
           _responses.forEach((response) => {
             // console.log(response.questionlist, index);
             if (response.questionlist[index]) {
-              pdf.text(25, 44, pdf.splitTextToSize(response.questionlist[index], 140) );
+              pdf.text(25, 44, pdf.splitTextToSize(response.questionlist[index], activePageWidth) );
               pdf.addPage();
             }
           });
