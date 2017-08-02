@@ -558,7 +558,6 @@ export class SurveyAlternativesDialog implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    console.log(this.data);
   }
 
   ngOnDestroy() {
