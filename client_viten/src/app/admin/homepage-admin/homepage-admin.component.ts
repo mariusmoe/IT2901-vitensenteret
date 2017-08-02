@@ -64,11 +64,15 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       const newParam = this.route.snapshot.params['surveyId'];
       if (newParam) { this.getSurvey(newParam); }
     });
-    this.center = localStorage.getItem('center');
-    const sub = this.centerService.getCenter(this.center).subscribe((center) => {
-      this.centerName = center['name'];
-      sub.unsubscribe();
-    });
+    if (this.authenticationService.getUser().role === 'sysadmin') {
+      this.centerName = 'VitenSurvey';
+    } else {
+      this.center = localStorage.getItem('center');
+      const sub = this.centerService.getCenter(this.center).subscribe((center) => {
+        this.centerName = center['name'];
+        sub.unsubscribe();
+      });
+    }
   }
 
   ngOnDestroy() {

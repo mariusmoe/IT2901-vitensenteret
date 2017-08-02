@@ -17,7 +17,7 @@ import 'rxjs/add/operator/filter';
 export class AdminOutletComponent implements OnInit, OnDestroy {
   public breadcrumbs;
   private routerSub: Subscription;
-  public center = 'Science Center';
+  public center = 'VitenSurvey';
   // public logoPath = '../assets/images/vitenlogo.png';
   public logoPath: string;
 
