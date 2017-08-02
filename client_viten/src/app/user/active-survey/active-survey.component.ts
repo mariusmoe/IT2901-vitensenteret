@@ -451,7 +451,7 @@ addOrChangeAnswer(alternative: any) {
      return;
    }
    this.abortCounter++;
-   if (this.abortCounter >= 60) {
+   if (this.abortCounter >= 60 * 3) {
      this.exitSurvey();
    } else if (this.done && this.abortCounter >= 5) {
      this.exitSurvey();

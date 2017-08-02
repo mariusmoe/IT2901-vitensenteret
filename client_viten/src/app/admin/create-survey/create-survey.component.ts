@@ -195,12 +195,25 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           'txt': ''
         };
       }
-      qo.lang.en.options = qo.lang.en.options || [];
+      qo.lang.en.options = qo.lang.en.options || Array(qo.lang.no.options.length).fill('');
     }
     if (deleteId) {
       delete this.survey._id;
     }
+  }
 
+
+  onEnglishChange() {
+    for (const qo of this.survey.questionlist) {
+      qo.lang.no.options = qo.lang.no.options || [];
+      if (!qo.lang.en) {
+        qo.lang.en = {
+          'txt': ''
+        };
+      }
+      qo.lang.en.options = qo.lang.en.options || Array(qo.lang.no.options.length).fill('');
+    }
+    this.onSurveyChange();
   }
 
   /**
@@ -545,7 +558,6 @@ export class SurveyAlternativesDialog implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
   }
 
   ngOnDestroy() {
