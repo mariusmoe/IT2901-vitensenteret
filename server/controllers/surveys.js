@@ -10,7 +10,6 @@ const validator = require('validator'),
       crypto = require('crypto'),
       fs = require('fs'),
       config = require('config'),
-      json2csv = require('json2csv'),
       temp = require('temp'),
       util = require('util'),
       mongoose = require('mongoose'),
@@ -525,7 +524,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
     let csv = "";
     const multipleChoiceQestion = (_options, _responses, i, callback) => {
       let questionOutput = "";
-      _options.forEach( (x) =>{questionOutput += x + ','});
+      _options.forEach( (x) =>{questionOutput += '"' + x.replace(/"/g,'""') + '"' + ','});
       questionOutput += '\n'
       _options.forEach( (x,y) => {
         let totalResponse = 0;
@@ -603,7 +602,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
     const defaultQuestion = (_options, _responses, i, callback) => {
       let questionOutput = "";
 
-      _options.forEach( (x) =>{questionOutput += x + ','});
+      _options.forEach( (x) =>{questionOutput += '"' + x.replace(/"/g,'""') + '"' + ','});
       questionOutput += '\n'
       _options.forEach( (x,y) => {
         let totalResponse = 0;
@@ -622,7 +621,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
       let summary = "";
       survey.questionlist.forEach((question, i) => {
         // Add question number for readability; Add question to csv
-        summary += String(i) + '. ' + question.lang.no.txt + '\n'
+        summary += '"' + String(i) + '. ' +  question.lang.no.txt.replace(/"/g,'""') + '"' + '\n'
         switch (question.mode) {
           case 'multi':
             multipleChoiceQestion(question.lang.no.options, responses, i, (questionOutput) => {
@@ -631,7 +630,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
             break;
           case 'text':
             responses.forEach((response) => {
-              summary += response.questionlist[i] + '\n'
+              summary += '"' + response.questionlist[i].replace(/"/g,'""') + '"' + '\n'
             })
             break;
           case 'star':
@@ -665,17 +664,17 @@ exports.getSurveyAsCSV = (req, res, next) => {
         summary += '\nUserID,'+response.nickname + '\n'
 
         survey.questionlist.forEach((question, i) => {
-          summary += String(i) + '. ' + question.lang.no.txt + '\n'
+          summary += '"' + String(i) + '. ' +  question.lang.no.txt.replace(/"/g,'""') + '"' + '\n'
           // Add question number for readability; Add question to csv
           switch (question.mode) {
             case 'multi':
-            question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
+            question.lang.no.options.forEach( (x) =>{summary +=  '"' + x.replace(/"/g,'""') + '"' + ','});
             summary += '\n'
               summary += response.questionlist[i].toString() + '\n'
             break;
             case 'text':
             summary += ', Tekst\n'
-              summary += response.questionlist[i] + '\n'
+              summary += '"' + response.questionlist[i].replace(/"/g,'""') + '"' + '\n'
             break;
             case 'star':
             let starList = ['1 stjerne', '2 stjerner', '3 stjerner', '4 stjerner', '5 stjerner']
@@ -696,7 +695,7 @@ exports.getSurveyAsCSV = (req, res, next) => {
               summary += response.questionlist[i].toString() + '\n'
             break;
             default:
-            question.lang.no.options.forEach( (x) =>{summary +=  x + ','});
+            question.lang.no.options.forEach( (x) =>{summary += '"' + x.replace(/"/g,'""') + '"' + ','});
             summary += '\n'
               summary += response.questionlist[i].toString() + '\n'
             break;
