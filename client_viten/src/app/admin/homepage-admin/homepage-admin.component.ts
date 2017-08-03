@@ -236,12 +236,49 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    * Initiates a download of a PDF containing data of the given survey
    */
   downloadAsPDF() {
+    console.log('starting pdf download...');
+    const self = this;
     // notify component that we are generating the PDF
     this.generatingPDF = true;
     const pdf = new jsPDF();
     // Get date of today
     const today = Date.now();
     const todayFormatted = this.datePipe.transform(today, 'yyyy-MM-dd');
+
+    let imageLoaded = false;
+    let pdfDoneRenderingPages = false;
+
+    const preparePDF = () => {
+      // console.log('saving pdf...')
+      // save our doc with a OS-friendly filename that is related to the survey at hand
+      const filename = todayFormatted + '_' + self.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
+      pdf.save(filename);
+      // update our component with our new status
+      self.generatingPDF = false;
+    };
+
+
+    if (this.centerObject && this.centerObject['pathToLogo']) {
+      const img = new Image();
+      img.src = '../../assets/uploads/' + this.centerObject['pathToLogo'];
+      const logoSize = 15;
+      img.onload = function() {
+        const canvas = document.createElement('canvas') as any;
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const imageWidth = (img.width / img.height) * 15;
+        canvas.getContext('2d').drawImage(img, 0, 0);
+        // pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
+        pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
+          pdf.internal.pageSize.width - imageWidth - 23, 12, imageWidth, logoSize
+        );
+        // console.log('image done loading');
+        if (pdfDoneRenderingPages) { preparePDF(); }
+        imageLoaded = true;
+      };
+    } else {
+      imageLoaded = true;
+    }
 
     // define functions that allow us some text position manipulation
     const centeredText = function(y, text) {
@@ -343,7 +380,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         if (!prePostEqual && !postIsSet && (i > this.survey.questionlist.length)) {
           pdf.setFontSize(18);
           pdf.text(25, 18, 'POST');
-          console.log('Pinted POST on survey!');
+          // console.log('Printed POST on survey!');
           pdf.setFontSize(8);
           postIsSet = true;
         }
@@ -394,15 +431,15 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         if (!prePostEqual && !postIsSet && (i > this.survey.questionlist.length)) {
           pdf.setFontSize(18);
           pdf.text(25, 18, 'POST');
-          console.log('Pinted POST on survey!');
+          // console.log('Printed POST on survey!');
           pdf.setFontSize(8);
           postIsSet = true;
         }
 
         pdf.setFontSize(12);
         const activePageWidth = pdf.internal.pageSize.width - 25 * 2;
-        console.log(activePageWidth);
-        console.log('not a canvas');
+        // console.log(activePageWidth);
+        // console.log('not a canvas');
         if (i !== 0) {
           pageNr++;
           pdf.addPage();
@@ -455,32 +492,14 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       rightAlignedText(20, pdf.internal.pageSize.height - 18, i + '/' + pageNr);
     }
 
-    pdf.setPage(1);
-    const img = new Image();
-    if (this.center == null || this.centerObject['pathToLogo']) {
-      img.src = '../../assets/images/vitenlogo.png';
-    } else {
-      img.src = '../../assets/uploads/' + this.centerObject['pathToLogo'];
-    }
-    const self = this;
-    const logoSize = 15;
-    img.onload = function() {
-        const canvas = document.createElement('canvas') as any;
-        canvas.width = img.width;
-        canvas.height = img.height;
-        const imageWidth = (img.width / img.height) * 15;
-        canvas.getContext('2d').drawImage(img, 0, 0);
-        // pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
-        pdf.addImage(canvas.toDataURL('image/png', 1), 'PNG',
-          pdf.internal.pageSize.width - imageWidth - 23, 12, imageWidth, logoSize
-        );
 
-        // save our doc with a OS-friendly filename that is related to the survey at hand
-        const filename = todayFormatted + '_' + self.survey.name.replace(/ /g, '_').replace(/\?/g, '').replace(/\./g, '') + '.pdf';
-        pdf.save(filename);
-        // update our component with our new status
-        self.generatingPDF = false;
-    };
+    // if the image loads first, we execute the preparePDF here.
+    // Else it happens once the image is done loading
+    if (imageLoaded) {
+      preparePDF();
+    }
+    pdfDoneRenderingPages = true;
+    // console.log('reached end of PDF...')
   }
 
   /**
