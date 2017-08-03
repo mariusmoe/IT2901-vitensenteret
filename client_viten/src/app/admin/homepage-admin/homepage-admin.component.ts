@@ -41,6 +41,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
   public  dialogRef: MdDialogRef<DeleteSurveyDialog>;
   public  dialogRef2: MdDialogRef<PublishDialog>;
   private center: string;
+  private centerObject: Object;
   private centerName: string;
 
 
@@ -70,6 +71,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       this.center = localStorage.getItem('center');
       const sub = this.centerService.getCenter(this.center).subscribe((center) => {
         this.centerName = center['name'];
+        this.centerObject = center;
         sub.unsubscribe();
       });
     }
@@ -458,7 +460,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     if (this.center == null) {
       img.src = '../../assets/images/vitenlogo.png';
     } else {
-      img.src = '../../assets/uploads/' + this.center.toString() + '.jpg';
+      img.src = '../../assets/uploads/' + this.centerObject['pathToLogo'];
     }
     const self = this;
     const logoSize = 15;

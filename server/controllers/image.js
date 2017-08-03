@@ -97,7 +97,8 @@ imageRoutes.post('/center', requireAuth, function(req, res, next) {
   	}
   })
 	var upload = multer({
-		storage: storage
+		storage: storage,
+    limits: { fileSize: 5000 }
 	}).fields([{ name: 'file', maxCount: 1 }, { name: 'center', maxCount: 1 }])
 	upload(req, res, function(err) {
     if (err) {
