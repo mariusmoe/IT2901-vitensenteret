@@ -240,6 +240,8 @@ export const LANG_NO_TRANS = {
   'Center title updated': 'Senterets navn er oppdatert',
   'Could not change center title at this time': 'Kunne ikke endre navnet på senteret på dette tidspunktet',
   'Create new center': 'Lag nytt senter',
+  'Do note, it is highly recommended to use images of low file size. Images above 10MB will be ignored.':
+    'Vær oppmerksom! Det er høyst anbefalt å bruke bilder av liten filstørrelse. Bilder over 10MB vil bli ignorert.',
 
   // survey retrieval chart component
   'Download as PNG': 'Last ned som PNG',
