@@ -165,6 +165,9 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
           return;
         }
         this.survey = result.survey;
+        if (this.survey.deactivationDate) {
+          this.router.navigate(['/choosesurvey']);
+        }
 
         this.response = <Response> {
             nickname: undefined,
@@ -362,7 +365,7 @@ addOrChangeAnswer(alternative: any) {
       if (!(this.survey.isPost || this.survey.postKey !== undefined) || this.postDone === true) {
 
         const responseClone = <Response>JSON.parse(JSON.stringify(this.response));
-        this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
+        const sub = this.surveyService.postSurveyResponse(responseClone).subscribe((proper: boolean) => {
           if (proper) {
             this.transition = true;
             this.properSurvey = true;
@@ -371,12 +374,13 @@ addOrChangeAnswer(alternative: any) {
             this.animLoop = false;
             this.done = true;
             this.resetTimer();
+            sub.unsubscribe();
           }
         },
         error => {
-            console.error('Error when posting survey');
-            this.nicknamePage = true;
-            return;
+          sub.unsubscribe();
+          console.error('Error when posting survey');
+          // this.nicknamePage = true;
         });
         // this.response.questionlist = [];
         // this.lastQuestionAnswered = 'inactive';

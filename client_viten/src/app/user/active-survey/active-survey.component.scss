@@ -211,12 +211,13 @@ h3 {
   align-content: center;
   height: 100vh;
   width: 100vw;
-  overflow: hidden;
     span {
       font-family: 'Baloo Bhaina', cursive;
+      padding: 10vh 10vw;
       margin: auto auto;
       font-weight: bold;
-      font-size: 10vw;
+      line-height: 5.7vw;
+      font-size: 5.5vw;
     }
 }
 
