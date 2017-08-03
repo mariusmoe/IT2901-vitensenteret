@@ -189,13 +189,14 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         this.timer.subscribe('refreshNicknames', e => {
           const sub2 = this.surveyService.getNicknames(this.survey._id)
             .subscribe( result2 => {
-                console.log(result2);
+                // console.log(result2);
                 this.nicknamesForSurvey = [];
                 result2.forEach((x) => { this.nicknamesForSurvey.push(x.nickname); });
                 sub2.unsubscribe();
               },
               error => {
-                console.error('error when get nicknames');
+                sub2.unsubscribe();
+                // console.error('error when get nicknames');
               }
             );
         });
@@ -203,8 +204,8 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         if (this.survey && this.survey._id) {
           this.properSurvey = true;
         } else {
-          console.log(this.survey)
-          console.error('Survey is not active or something else is wrong!');
+          // console.log(this.survey)
+          // console.error('Survey is not active or something else is wrong!');
         }
       });
       return;
@@ -244,6 +245,8 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
 
 
 
+      }, error => {
+        this.openSnackBar(this.translateService.instant('Connection issues'), 'FAILURE');
       });
     }
   }
@@ -252,36 +255,41 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
  * This method resets a survey completely
  */
   private exitSurvey() {
-    this.started = false;
-    this.properSurvey = false;
-    this.page = 0;
-    this.done = false;
-    this.transition = false;
-    this.nicknamePage = undefined;
-    this.postDone = undefined;
-    this.response.nickname = undefined;
-
-    this.response.questionlist = [];
-    // Animation variable
-    this.lastQuestionAnswered = 'inactive';
-    this.animLoop = false;
-
-    this.subscribeabortTimer();
-    this.timer.delTimer('idleTimer');
-
     if (this.route.snapshot.params['surveyId']) {
-      const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).subscribe(result => {
+      const sub = this.surveyService.getSurvey(this.route.snapshot.params['surveyId']).timeout(
+        3000
+      ).subscribe(result => {
         sub.unsubscribe();
         if (!result) {
           return;
         }
+        this.started = false;
+        this.properSurvey = false;
+        this.page = 0;
+        this.done = false;
+        this.transition = false;
+        this.nicknamePage = undefined;
+        this.postDone = undefined;
+        this.response.nickname = undefined;
+
+        this.response.questionlist = [];
+        // Animation variable
+        this.lastQuestionAnswered = 'inactive';
+        this.animLoop = false;
+
+        this.subscribeabortTimer();
+        this.timer.delTimer('idleTimer');
+
         this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
         if (this.survey && this.survey._id) {
           this.properSurvey = true;
         }
+      },
+      error => {
+        sub.unsubscribe();
+        this.openSnackBar(this.translateService.instant('Connection issues'), 'FAILURE');
       });
-      return;
     }
   }
 
@@ -380,6 +388,7 @@ addOrChangeAnswer(alternative: any) {
         error => {
           sub.unsubscribe();
           console.error('Error when posting survey');
+          this.openSnackBar(this.translateService.instant('Connection issues'), 'FAILURE');
           // this.nicknamePage = true;
         });
         // this.response.questionlist = [];
@@ -506,13 +515,16 @@ openSnackBar(message: string, action: string) {
         }
       },
       error => {
-          console.error(error._body);
-          if (error._body){
-            const error_message = JSON.parse(error._body)
-              this.openSnackBar(error_message['message'], 'FAILURE ');
+          const json = error.json();
+          console.error(json);
+          if (json.message) { // lets assume that if we do get a json message back, the likelihood of it being
+                              // 'nickname taken' is high. If we do not get a message back, the connection is gone
+            this.openSnackBar(this.translateService.instant('This nickname is taken, choose another one'), 'FAILURE ');
+            this.isNicknameTaken = true;
+          } else {
+            this.openSnackBar(this.translateService.instant('Connection issues'), 'FAILURE');
           }
           this.postDone = false;
-          this.isNicknameTaken = true;
       });
       // this.response.questionlist = [];
       // this.lastQuestionAnswered = 'inactive';
