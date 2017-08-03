@@ -58,6 +58,7 @@ export const LANG_EN_TRANS = {
 
   // guard
   'Session expired': 'Session expired',
+  'Connection issues': 'Nettverksproblemer',
 
   // Permissions
   'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',

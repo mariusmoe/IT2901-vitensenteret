@@ -59,6 +59,7 @@ export const LANG_NO_TRANS = {
 
   // guard
   'Session expired': 'Økten er utgått',
+  'Connection issues': 'Nettverksproblemer',
 
   // Permissions
   'You do not have the required permissions for this action!': 'Du har ikke de nødvendige rettighetene for dette!',
