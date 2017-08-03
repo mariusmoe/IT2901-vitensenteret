@@ -280,7 +280,7 @@
                 <td nowrap>
                     <button md-raised-button color="primary" class="btn btn-success btn-xs" [ngClass]="{'success' : item.isSuccess, 'error' : (item.isError || item.isCancel)}"
                             (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
-                        <md-icon>file_upload</md-icon> {{ 'Upload and replace logo' | translate }}
+                        <md-icon>file_upload</md-icon> {{ 'Upload and replace documentation' | translate }}
                     </button>
                     <button md-raised-button class="btn btn-warning btn-xs"
                             (click)="item.cancel()" [disabled]="!item.isUploading">

@@ -269,7 +269,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     // start writing data to the PDF.
     pdf.setFontSize(30);
-    centeredText(22, this.centerName);
+    pdf.text(25, 22, this.centerName);
     pdf.setFontSize(18);
     pdf.text(25, 35, this.survey.name);
     pdf.setFontSize(8);
