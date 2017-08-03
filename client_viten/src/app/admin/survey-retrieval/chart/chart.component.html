@@ -24,9 +24,9 @@
 
       <!-- CHART -->
       <div *ngSwitchCase="false">
-        <div [ngClass]="{'canvasParent': true, 'needsResize': (bigCharts.indexOf(chartType) >= 0) }">
+        <div class="canvasParent">
           <!-- the classname surveyQuestionChart is required. Used by the pdf generator function -->
-          <canvas baseChart #canvas class="surveyQuestionChart" width="912px" height="456px"
+          <canvas baseChart #canvas class="surveyQuestionChart" width="912" height="456"
                   [datasets]="chartData"
                   [labels]="chartLabels"
                   [options]="chartOptions"
