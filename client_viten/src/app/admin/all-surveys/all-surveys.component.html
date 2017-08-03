@@ -1,54 +1,70 @@
-<div class="searchBox">
-  <md-input-container class="search">
-    <input mdInput type="search"
-            placeholder="{{'Search' | translate}}"
-            [formControl]="searchFormControl"
-            [(value)]="searchInput"
-            md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">
-    <span md-prefix><md-icon class="searchIcon">search</md-icon></span>
-  </md-input-container>
-  <button md-mini-fab
-  class="addButton"
-  color="primary"
-  routerLink="/admin/editsurvey"
-  routerLinkActive="active"
-  md-tooltip="{{ 'Create New Survey' | translate }}">
-  <md-icon>add</md-icon>
-</button>
+<div class="wrapper">
+  <!-- <div class="searchBox">
+    <md-input-container class="search">
+      <input mdInput type="search"
+              placeholder="{{'Search' | translate}}"
+              autocomplete="off"
+              [formControl]="searchFormControl"
+              [(value)]="searchInput"
+              md-tooltip="{{ 'Filter results on title and / or admin comment' | translate }}">
+      <md-icon class="icon" mdPrefix>search</md-icon>
+    </md-input-container>
+  </div> -->
+
+  <!-- <md-progress-spinner *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner> -->
+
+  <div>
+    <button md-raised-button
+      class="addButton"
+      color="primary"
+      routerLink="/admin/editsurvey"
+      routerLinkActive="active"
+      md-tooltip="{{ 'Create New Survey' | translate }}"
+      [disabled]="user.role == 'sysadmin'">
+      <md-icon>add</md-icon> {{ 'Create New Survey' | translate }}
+    </button>
+
+    <!-- loading circle -->
+    <md-progress-spinner *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
+    <div class="treeArea" #autoscroll>
+      <ul *ngIf="!loading" class="tree" id="folderTree">
+        <ng-template #recursiveList let-node>
+          <li class="folder item" [ngClass]="{ 'open': node.open, 'closed': !node.open }" id="{{node._id}}">
+            <a class="click" (click)="toggleFolderOpenState($event, node)">
+              <md-icon class="icon">{{ node.open ? 'folder_open' : 'folder'}}</md-icon>{{node.title}}
+            </a>
+
+            <md-menu #folderTasksMenu="mdMenu"  xPosition="after" yPosition="below" [overlapTrigger]="true">
+              <button md-menu-item (click)="openRenameFolderDialog(node)" [disabled]="node.isRoot">
+                <md-icon class="icon">edit</md-icon>{{ 'Rename folder' | translate }}
+              </button>
+              <button md-menu-item (click)="openDeleteFolderDialog(node)" [disabled]="node.isRoot">
+                <md-icon class="icon">delete_forever</md-icon>{{ 'Delete folder' | translate }}
+              </button>
+              <button md-menu-item (click)="createNewFolder(node)">
+                <md-icon class="icon">create_new_folder</md-icon>{{ 'Create subfolder' | translate }}
+              </button>
+            </md-menu>
+
+            <md-icon class="dotdotdot"  [mdMenuTriggerFor]="folderTasksMenu">more_horiz</md-icon>
+
+            <ul class="items" [dragula]="'folderBag'">
+              <li class="survey item" *ngFor="let survey of node.surveys" id="{{survey._id}}">
+                <a routerLink="/admin/{{survey._id}}" class="click">
+                  <md-icon class="icon">{{ survey.active ? 'public' : 'pie_chart_outlined' }}</md-icon>
+                  {{survey.name}}
+                </a> <!-- insert_chart, assessment -->
+                <div class="selectedUnderline" *ngIf="survey._id == selectedSurvey"></div>
+                <div class="hoverUnderline"></div>
+              </li>
+              <ng-container *ngFor="let subfolder of node.folders">
+                <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: subfolder }"></ng-container>
+              </ng-container>
+            </ul>
+          </li>
+        </ng-template>
+        <ng-container *ngTemplateOutlet="recursiveList; context:{ $implicit: root }"></ng-container>
+      </ul>
+    </div>
+  </div>
 </div>
-
-
-<md-progress-spinner *ngIf="searchLoading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
-
-<md-list class="list" *ngIf="!searchLoading">
-  <md-list-item
-    *ngFor="let survey of (surveyService.surveyList | adminSurveyPipe: searchInput : searchResultNum : false )"
-    [ngClass]="{'survey': true, 'selected': survey._id == route.snapshot.params['surveyId'],  'active': survey.active}"
-    (click)="select(survey._id)"> <!-- the pipe has "true" at the end as we want to NOT show post-surveys -->
-    <!-- <md-icon md-list-avatar [color]="survey.active ? 'primary' : ''">question_answer</md-icon> -->
-    <div class="chip" *ngIf="survey.postKey">
-      <md-chip-list *ngIf="survey.postKey.length > 1">
-        <md-chip color="accent" selected="true" disabled="true">PRE - POST</md-chip>
-      </md-chip-list>
-    </div>
-    
-    <h4 md-line>{{survey.name}}</h4>
-    <div md-line class="date">
-      {{formatDate(survey.date)}}
-    </div>
-
-    <p md-line *ngIf="survey.comment">{{survey.comment}}</p>
-    <!-- <p md-line>ID: {{survey._id}}</p> -->
-  <!--  <div class="borderbottom"></div>-->
-  </md-list-item>
-</md-list>
-<!-- loading circle -->
-<md-progress-spinner *ngIf="loading" mode="indeterminate" class="loadingCircle" color="primary"></md-progress-spinner>
-<span class="listComment"  *ngIf="!loading">
-  {{ 'n total surveys. A maximum of m items are displayed.' | translate: [surveyService.surveyList.length,
-  searchResultNum > surveyService.surveyList.length ? surveyService.surveyList.length : searchResultNum] }}
-</span>
-
-<!-- More button -->
-<button md-raised-button *ngIf="surveyService.surveyList.length > searchResultNum"
-  class="loadMoreButton" color="primary" (click)="loadMore()">{{ 'Load more' | translate }}</button>

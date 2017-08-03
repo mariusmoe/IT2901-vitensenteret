@@ -1,15 +1,17 @@
 <div class="adminPortal">
-  <div class="constuctionWarning">
-    <p>Site is under construction!</p>
-  </div>
-  <md-toolbar color="primary">
-    <div class="flexchild">
-      <a routerLink="/admin" routerLinkActive="active"
-      ><app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true" height="100%" width="80px"></app-logo-component></a>
+  <md-toolbar color="primary" ngClass="topHeader">
+      <!-- <a routerLink="/admin" routerLinkActive="active">
+      <div class="flexchild">
+        <! <app-logo-component logoVariant="icon" color="primary" [useColorContrast]="true" height="100%" width="80px"></app-logo-component>
+      </a>
     </div>
+  -->
+  <div class="flexchild logoBox"><img *ngIf="logoPath" class="logo" height="64" [src]="logoPath"/></div>
     <div class="flexchild alignCenter">
-      <a routerLink="/admin" routerLinkActive="active"
-      ><app-logo-component logoVariant="text" color="primary" [useColorContrast]="true" height="100%" width="400px"></app-logo-component></a>
+      <a routerLink="/admin" routerLinkActive="active" class="centerTitle">
+        <!-- <app-logo-component logoVariant="text" color="primary" [useColorContrast]="true" height="100%" width="400px"></app-logo-component> -->
+        {{center}}
+      </a>
     </div>
     <div class="flexchild alignRight">
       <button md-button [mdMenuTriggerFor]="menu">
@@ -25,7 +27,13 @@
           <md-icon>exit_to_app</md-icon>
           {{ 'Log out' | translate }}
         </button>
+        <button md-menu-item (click)="openUserManual()">
+          <md-icon>help_outline</md-icon>
+          {{ 'Help' | translate }}
+        </button>
       </md-menu>
+
+
 
 
     </div>
@@ -54,8 +62,9 @@
       <!-- do not show the '/' if it is the last crumb in the list -->
     </div>
     <div class="notice">
-      <span>{{ 'Group n' | translate : [9] }}</span>
-      <span>{{ 'IT2901 - Informatics Project II' | translate }}</span>
+      <span>Vitensurvey 2017</span>
+      <br />
+      <span>{{ 'Contributors' | translate }}</span>
       <div class="box">
         <div class="col">
           <span>Christian Haugland</span>

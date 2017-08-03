@@ -7,6 +7,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { DragulaService } from 'ng2-dragula/ng2-dragula';
 import { TranslateService } from '../../_services/translate.service';
 import { FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 
 @Component({
   selector: 'app-create-survey',
@@ -47,14 +48,19 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   // SURVEY VARIABLES
   survey: Survey;
   preSurvey: Survey;
-  maxQuestionLength = 1000; // TODO: arbitrary chosen! discuss!
+
+  maxQuestionLength = 150; // TODO: arbitrary chosen! discuss!
+  maxOtherInputsLength = 250;
+
   isPatch = false;
   allowedModes = ['binary', 'star', 'single', 'multi', 'smiley', 'text'];
 
 
+  public  dialogRef: MdDialogRef<WarnDeletionDialog>;
 
   // FORMATTING VARIABLES
   stringPattern = /\S/;
+  imageLinkPattern = /(https):\/\/[\w-]+(\.[\w-]+)+([\w.,@?^=%&amp;:\/~+#-]*[\w@?^=%&amp;\/~+#-])?/;
 
 
   constructor(private dialog: MdDialog, private surveyService: SurveyService,
@@ -88,16 +94,29 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       if (sessionSurveyObject && (<Survey>sessionSurveyObject)._id === undefined) {
         this.survey = sessionSurveyObject;
         // though we should update some bits of information;
-        this.survey.date = new Date().toISOString();
-        this.survey.activationDate = new Date().toISOString();
+
+        // somewhat hacky way to determine english state.
+        if (this.survey.questionlist
+          && this.survey.questionlist[0]
+          && this.survey.questionlist[0].lang.en
+          && this.survey.questionlist[0].lang.en.txt
+          && this.survey.questionlist[0].lang.en.txt.length > 0) {
+          this.englishEnabled = true;
+        }
+        // re-add english if it isn't there. It's then stripped again upon saving if english still isn't enabled.
+        if (this.survey.questionlist[0] && !this.survey.questionlist[0].lang.en) {
+          for (const qo of this.survey.questionlist) {
+            qo.lang.en = {
+              txt: '',
+              options: [],
+            };
+          }
+        }
       } else {
         // Do not remove the following lines!
         this.survey = {
           'name': '',
           'comment': '',
-          'date': new Date().toISOString(),
-          'activationDate': new Date().toISOString(), // intentionally not iso string
-          'deactivationDate': undefined,
           'active': true,
           'isPost': false,
           'questionlist': [],
@@ -116,13 +135,13 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     const sub = this.surveyService.getSurvey(param).subscribe(
       result => {
         if (this.isPost) {
-          this.setupInitialSurveyStateFrom(result.survey);
+          this.setupInitialSurveyStateFrom(result.survey, true);  // true -> delete _id
           this.survey.name = 'POST: ' + this.survey.name;
           this.survey.isPost = true;
 
           this.preSurvey = result.survey;
         } else {
-          this.survey = result.survey;
+          this.setupInitialSurveyStateFrom(result.survey);
           this.isPatch = true;
         }
 
@@ -131,6 +150,16 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           && this.survey.questionlist[0].lang.en.txt
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
+        }
+
+        // re-add english if it isn't there. It's then stripped again upon saving if english still isn't enabled.
+        if (!this.survey.questionlist[0].lang.en) {
+          for (const qo of this.survey.questionlist) {
+            qo.lang.en = {
+              txt: '',
+              options: [],
+            };
+          }
         }
 
         // Do not remove the following lines!
@@ -157,9 +186,34 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
    * Initiates state
    * @param  {Survey} survey the survey reference to copy
    */
-  private setupInitialSurveyStateFrom(survey: Survey) {
+  private setupInitialSurveyStateFrom(survey: Survey, deleteId = false) {
     this.survey = JSON.parse(JSON.stringify(survey)); // Initiate the survey with an exact duplicate.
-    delete this.survey._id;
+    for (const qo of this.survey.questionlist) {
+      qo.lang.no.options = qo.lang.no.options || [];
+      if (!qo.lang.en) {
+        qo.lang.en = {
+          'txt': ''
+        };
+      }
+      qo.lang.en.options = qo.lang.en.options || Array(qo.lang.no.options.length).fill('');
+    }
+    if (deleteId) {
+      delete this.survey._id;
+    }
+  }
+
+
+  onEnglishChange() {
+    for (const qo of this.survey.questionlist) {
+      qo.lang.no.options = qo.lang.no.options || [];
+      if (!qo.lang.en) {
+        qo.lang.en = {
+          'txt': ''
+        };
+      }
+      qo.lang.en.options = qo.lang.en.options || Array(qo.lang.no.options.length).fill('');
+    }
+    this.onSurveyChange();
   }
 
   /**
@@ -204,19 +258,33 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           }
         }
       }
+      if (!this.imageLinkValidate(questionObject.imageLink)) {
+        status = false;
+      }
     }
     // and finally set the status
     this.canPostSurvey = status;
   }
 
   /**
-   * notWhitespace(s: string)
+   * fieldValidate(s: string)
    *
    * @param {string} s a string to check
    * returns true if the input string is not just whitespace
    */
   fieldValidate(s: string) {
     return s && s.length > 0 && (/\S/.test(s));
+  }
+
+
+  /**
+   * imageLinkValidate(s: string)
+   *
+   * @param {string} s a string to check
+   * returns true if the input string matches an image url
+   */
+  imageLinkValidate(s: string) {
+    return s === undefined || (s && s.length > 0 && this.imageLinkPattern.test(s) || s.length === 0);
   }
 
 
@@ -232,6 +300,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     this.submitLoading = true;
 
     // remove options-properties of non-multi questions
+    // also remove imageLink if it is not valid (left blank)
     for (const qo of clone.questionlist) {
       if (qo.mode !== 'multi' && qo.mode !== 'single') {
         if (qo.lang.no) {
@@ -240,6 +309,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
         if (qo.lang.en) {
           delete qo.lang.en.options;
         }
+      }
+
+      if ((typeof qo.imageLink === 'string' ) && qo.imageLink.length === 0) {
+        delete qo.imageLink;
       }
     }
 
@@ -276,10 +349,18 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // fashion as to avoid issues should the route name be altered.
       if (this.preSurvey && this.preSurvey._id) {
         this.router.navigate([this.route.parent.snapshot.url.join('/'), this.preSurvey._id]);
-      } else if (this.survey._id && !this.isPost) {
-        this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
+        // console.log('PRE found; PRE._id found');
+      } else if (this.survey._id && (!this.isPost || !this.survey.isPost)) {
+        // console.log(this.survey);
+        if (this.survey.isPost) {
+          // console.log('IS edit of POST survey');
+          this.router.navigate([this.route.parent.snapshot.url.join('/')]);
+        } else {
+          this.router.navigate([this.route.parent.snapshot.url.join('/'), this.survey._id]);
+        }
       } else {
         this.router.navigate([this.route.parent.snapshot.url.join('/')]);
+        // console.log('Navigate to home');
       }
     };
 
@@ -347,7 +428,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       data: {
         questionObject: qo,
         englishEnabled: this.englishEnabled,
-      }
+
+      },
+      disableClose: true,
+
     };
     const dialogRef = this.dialog.open(SurveyAlternativesDialog, config);
     const sub = dialogRef.afterClosed().subscribe( () => {
@@ -356,12 +440,41 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
       // dialog window
       if (output != null && output !== undefined) {
         qo.lang.no.options = output.lang.no.options;
-        qo.lang.en.options = output.lang.en.options;
+        if (qo.lang.en && qo.lang.en.options && output.lang.en && output.lang.en.options) {
+          qo.lang.en.options = output.lang.en.options;
+        }
         // Do not remove the following line!
         this.onSurveyChange();
       }
       sub.unsubscribe();
     });
+  }
+
+
+
+  /**
+   * Opens a promt if the user realy want to save the changes
+   */
+  openDialog() {
+    this.dialogRef = this.dialog.open(WarnDeletionDialog, {
+      disableClose: false
+    });
+
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (result === 'yes') {
+        this.submitSurvey();
+      }
+      this.dialogRef = null;
+    });
+  }
+
+  saveChanges() {
+    if (this.isPatch) {
+      // Give a modal window that informs the user that all answers will be lost
+      this.openDialog();
+    } else {
+      this.submitSurvey();
+    }
   }
 }
 
@@ -374,25 +487,29 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   <h1 md-dialog-title>{{ 'Set Alternatives' | translate }}</h1>
   <div md-dialog-content>
     <span>{{ 'At least two alternatives must be set, with a maximum of 6.' | translate }}</span>
-    <div *ngFor="let i of numAlternatives;">
-      <md-input-container>
-        <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'Norwegian' | translate }})"
-        [(ngModel)]="qoEditObj.lang.no.options[i]" required (input)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])
-          || fieldCheckDup(qoEditObj.lang.no.options[i], qoEditObj.lang.no.options)"
-          >{{ !fieldValidate(qoEditObj.lang.no.options[i]) ? ('This field is required.' | translate)
-            : ('This field is a duplicate.' | translate) }}</md-hint>
-      </md-input-container>
-      <md-input-container *ngIf="data.englishEnabled">
-        <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(i+1)}} ({{ 'English' | translate }})"
-        [(ngModel)]="qoEditObj.lang.en.options[i]" required (input)='setSaveReadyStatus()'>
-        <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])
-          || fieldCheckDup(qoEditObj.lang.en.options[i], qoEditObj.lang.en.options)"
-          >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
-            : ('This field is a duplicate.' | translate) }}</md-hint>
-      </md-input-container>
-      <button md-icon-button color="warn" [disabled]="(i < 2)" class="alignRight"
-      (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
+
+    <div [dragula]="'alterativesBag'" [dragulaModel]="numAlternatives" class="alternativesBag">
+      <div *ngFor="let i of numAlternatives; let in = index">
+        <md-input-container>
+          <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(in+1)}} ({{ 'Norwegian' | translate }})"
+          [(ngModel)]="qoEditObj.lang.no.options[i]" required (input)='setSaveReadyStatus()' autocomplete="off">
+          <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.no.options[i])
+            || fieldCheckDup(qoEditObj.lang.no.options[i], qoEditObj.lang.no.options)"
+            >{{ !fieldValidate(qoEditObj.lang.no.options[i]) ? ('This field is required.' | translate)
+              : ('This field is a duplicate.' | translate) }}</md-hint>
+        </md-input-container>
+        <md-input-container *ngIf="data.englishEnabled">
+          <input mdInput type="text" placeholder="{{ 'Alternative' | translate }} {{(in+1)}} ({{ 'English' | translate }})"
+          [(ngModel)]="qoEditObj.lang.en.options[i]" required (input)='setSaveReadyStatus()' autocomplete="off">
+          <md-hint color="warn" *ngIf="!fieldValidate(qoEditObj.lang.en.options[i])
+            || fieldCheckDup(qoEditObj.lang.en.options[i], qoEditObj.lang.en.options)"
+            >{{ !fieldValidate(qoEditObj.lang.en.options[i]) ? ('This field is required.' | translate)
+              : ('This field is a duplicate.' | translate) }}</md-hint>
+        </md-input-container>
+        <button md-icon-button color="warn" [disabled]="(in < 2)" class="alignRight"
+        (click)="removeOption(qoEditObj, i)"><md-icon>remove_circle</md-icon></button>
+      </div>
+
     </div>
     <button md-raised-button color="accent" [disabled]="qoEditObj.lang.no.options.length==6"
     (click)="addOption(qoEditObj)"><md-icon>add_box</md-icon> {{ 'Add Option' | translate }}</button>
@@ -408,7 +525,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
   </div>
   `
 })
-export class SurveyAlternativesDialog implements OnInit {
+export class SurveyAlternativesDialog implements OnInit, OnDestroy {
   qoEditObj: QuestionObject;
   outputQuestionObject: QuestionObject;
   alternativeDefaults: boolean[];
@@ -418,7 +535,9 @@ export class SurveyAlternativesDialog implements OnInit {
   // for complicated reasons, this is required.
   numAlternatives: number[];
 
-  constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>, @Inject(MD_DIALOG_DATA) public data: any) {
+  constructor(public dialogRef: MdDialogRef<SurveyAlternativesDialog>,
+    @Inject(MD_DIALOG_DATA) public data: any,
+    private dragulaService: DragulaService, private translate: TranslateService) {
 
     // Create a copy of our questionObject
     this.qoEditObj = JSON.parse(JSON.stringify(this.data.questionObject));
@@ -426,13 +545,23 @@ export class SurveyAlternativesDialog implements OnInit {
     while (this.qoEditObj.lang.no.options.length < 2) {
       this.addOption(this.qoEditObj);
     }
+
+    this.dragulaService.setOptions('alternativesBag', {
+      revertOnSpill: true,
+      direction: 'vertical',
+      // moves: function(el, container, handle) { return handle.classList.contains('dragHandle'); }
+    });
+
     // this is required! Do NOT remove!
     this.numAlternatives = Array(this.qoEditObj.lang.no.options.length).fill(0).map((x, i) => i);
     this.setSaveReadyStatus();
   }
 
   ngOnInit() {
+  }
 
+  ngOnDestroy() {
+    this.dragulaService.destroy('alternativesBag');
   }
 
   /**
@@ -449,6 +578,22 @@ export class SurveyAlternativesDialog implements OnInit {
    * Hides the dialog window, and stores any changes to alternatives
    */
   save() {
+    // the following block deals with reordering of the questions
+    const newOptionsNO = [], newOptionsEN = [];
+    for (const i of this.numAlternatives) {
+      newOptionsNO.push(this.qoEditObj.lang.no.options[i]);
+      if (this.qoEditObj.lang.en && this.qoEditObj.lang.en.options) {
+        newOptionsEN.push(this.qoEditObj.lang.en.options[i]);
+      }
+    }
+    for (let i = 0; i < this.numAlternatives.length; i++) {
+      this.qoEditObj.lang.no.options[i] = newOptionsNO[i];
+      if (this.qoEditObj.lang.en && this.qoEditObj.lang.en.options) {
+        this.qoEditObj.lang.en.options[i] = newOptionsEN[i];
+      }
+    }
+
+
     this.outputQuestionObject = this.qoEditObj;
     this.dialogRef.close();
   }
@@ -506,7 +651,9 @@ export class SurveyAlternativesDialog implements OnInit {
       qo.lang.en.options = [];
     }
     qo.lang.no.options.push('');
-    qo.lang.en.options.push('');
+    if (qo.lang.en && qo.lang.en.options) {
+      qo.lang.en.options.push('');
+    }
     // this is required! Do NOT remove!
     this.numAlternatives = Array(this.qoEditObj.lang.no.options.length).fill(0).map((x, i) => i);
     this.setSaveReadyStatus();
@@ -572,4 +719,32 @@ export class SurveyPublishDialog {
     this.dialogRef.close();
   }
 
+}
+
+
+
+@Component({
+  selector: 'warn-responses-deletion',
+  styleUrls: ['./create-survey.component.scss'],
+  template: `
+  <h1 md-dialog-title class="alignCenter">{{ 'Warning!' | translate }}</h1>
+  <div md-dialog-content align="center">
+    <p>{{ 'All responses to this survey will be lost if you proceed.' | translate }}</p>
+    <br>
+    <p>{{ 'Do you wish to proceed?' | translate }}</p>
+  </div>
+  <div md-dialog-actions align="center">
+    <button md-raised-button color="warn" (click)="okay()">{{ 'yes' | translate }}</button>
+    <button md-raised-button color="primary" (click)="abort()">{{ 'no' | translate }}</button>
+  </div>
+  `
+})
+export class WarnDeletionDialog {
+  constructor(public dialogRef: MdDialogRef<WarnDeletionDialog>, @Inject(MD_DIALOG_DATA) public data: any) {}
+  okay() {
+    this.dialogRef.close('yes');
+  }
+  abort() {
+    this.dialogRef.close('no');
+  }
 }

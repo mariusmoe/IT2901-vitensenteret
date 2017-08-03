@@ -13,6 +13,9 @@ let mongoose = require('mongoose');
 let Survey  = require('../models/survey');
 let Response  = require('../models/response');
 let Nickname  = require('../models/nickname');
+let Center  = require('../models/center');
+let User  = require('../models/user');
+let Referral  = require('../models/referral');
 
 // testing variables
 
@@ -26,6 +29,8 @@ let validJsonObject = {
   "date": "2012-04-23T18:25:43.511Z",
   "activationDate": "2012-04-23T18:25:43.511Z",
   "deactivationDate": "2012-04-23T18:25:43.511Z",
+  // "center": "centerref", this gets filled in by the API itself
+  // "madeBy": "userref", this gets filled in by the API itself
   "active": true,
   "isPost": false,
   "questionlist": [{
@@ -105,19 +110,19 @@ describe('Survey API', () => {
 
   // BEFORE
   before( (done) => {
-    Survey.remove({}, () => {
-      Response.remove({}, () => {
-        Nickname.remove({}, () => {
-          chai.request(server)
-          .post('/api/auth/register_developer')
-          .send({'email': 'test@test.no', 'password': 'test'})
-          .end((err, res) => {
-            //res.should.have.status(200);
+    // yeah.
+    Survey.remove({}).lean().then( Response.remove({}).lean().then(
+      Nickname.remove({}).lean().then( Center.remove({}).lean().then(
+        User.remove({}).lean().then( Referral.remove({}).lean().then( () => {
+          chai.request(server).post('/api/auth/register_testdata').send('{}').end(function(err,res) {
+            centerId = res.body.center._id;
+            validJsonObject.madeBy = res.body.user._id;
+            validJsonObject.center = res.body.center._id;
             done();
           });
-        });
-      });
-    });
+        }))
+      ))
+    ))
   });
 
 
@@ -125,15 +130,12 @@ describe('Survey API', () => {
   beforeEach( (done) => {
         chai.request(server)
         .post('/api/auth/login')
-        .send({'email': 'test@test.no', 'password': 'test'})
+        .send({'email': 'testuser@test.test', 'password': 'test'})
         .end((err, res) => {
           jwt = res.body.token;   // Should be globaly avaliable before each test.
           res.should.have.status(200);
           done();
         });
-  });
-  afterEach((done) => {
-    done();
   });
 
 
@@ -240,17 +242,17 @@ describe('Survey API', () => {
 
   describe('/api/survey/ GET',() => {
     // GET: LIST OF SURVEYS
-    it('should retrieve all surveys /api/survey/ GET', (done) => {
+    it('should return message that the route is okay, but no surveys was found /api/survey/all/[centerId] GET', (done) => {
     chai.request(server)
-      .get('/api/survey/')
+      .get('/api/survey/all/' + centerId)
       .end((err, res) => {
         // verify that the returned object (containing surveys) is valid
-        let listOfSurveys = res.body;
-        listOfSurveys.should.not.be.empty;
-        listOfSurveys[0].should.have.property('_id');
-        listOfSurveys[0].should.have.property('name');
-        listOfSurveys[0].should.have.property('date');
-        listOfSurveys[0].should.have.property('active');
+        let messageObject = res.body;
+        messageObject.should.not.be.empty;
+        messageObject.should.have.property('message');
+        res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
+        messageObject.should.have.property('status');
+        res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
         res.should.have.status(200);
         done();
       });
@@ -374,6 +376,8 @@ describe('Survey API', () => {
       // alter our object
       let clone = JSON.parse(JSON.stringify(validJsonObject));
       clone.name = 'plutorakett';
+      clone.active = true;
+      clone.activationDate = new Date();
     chai.request(server)
       .patch('/api/survey/' + surveyId)
       .set('Authorization', jwt)
@@ -498,6 +502,23 @@ describe('Survey API', () => {
     });
   }); // end describe /api/survey/ PATCH
 
+  describe('/api/survey/ GET ALL',() => {
+    it('should return all active surveys /api/survey/all/[centerId] GET', (done) => {
+      chai.request(server)
+        .get('/api/survey/all/' + centerId)
+        .end((err, res) => {
+          // verify that the returned object (containing surveys) is valid
+          let listOfSurveys = res.body;
+          listOfSurveys.should.not.be.empty;
+          listOfSurveys[0].should.have.property('_id');
+          listOfSurveys[0].should.have.property('name');
+          listOfSurveys[0].should.have.property('date');
+          listOfSurveys[0].should.have.property('active');
+          res.should.have.status(200);
+          done();
+        });
+    });
+  });
 
   describe('/api/survey/ DELETE',() => {
     // DELETE: NO AUTHORIZATION
@@ -573,214 +594,160 @@ describe('Survey API', () => {
         });
       });
     });
-
-    it('should return 200 given empty database /api/survey/ GET', (done) => {
-      Survey.remove({}, () => {
-        chai.request(server)
-        .delete('/api/survey/' + surveyId)
-        .set('Authorization', jwt)
-        .end((err, res) => {
-          chai.request(server)
-          .get('/api/survey/')
-          .end((err, res) => {
-            res.body.should.have.property('message');
-            res.body.message.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.message);
-            res.body.should.have.property('status');
-            res.body.status.should.equal(status.ROUTE_SURVEYS_VALID_NO_SURVEYS.code);
-            res.should.have.status(200);
-            done();
-          });
-        });
-      });
-    });
-});
-// START moe testing delete behavior
-
-
-// ---------- START create prepost ----------------
-// FIXME dirty creation of pre post
-// PRE-survey
-var preSurveyObject;
-describe('/api/survey/prePost',() => {
-  // POST: CREATE SURVEY
-  it('should create a preSurvey given valid input /api/survey/ POST', (done) => {
-    chai.request(server)
-    .post('/api/survey')
-    .set('Authorization', jwt)
-    .send(validJsonObject)
-    .end( (err, res) => {
-      // DO NOT REMOVE: USED FOR THE OTHER TESTS
-      preSurveyId = res.body._id;
-      preSurveyObject = res.body;
-      // DO NOT REMOVE
-      // verify that the returned object is valid
-      expect(val.surveyValidation(res.body)).to.equal(true);
-      res.should.have.status(200);
-      let tasksCompleted = false;
-      for (let response of responsesToSurveyPrepost) {
-        response["surveyId"] = preSurveyId;
-        chai.request(server)
-        .post('/api/survey/' + preSurveyId)
-        .set('Authorization', jwt)
-        .send(response)
-        .end( (err, res) => {
-          // verify that the returned object is valid
-          res.body.should.have.property('message');
-          res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
-          res.body.should.have.property('status');
-          res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
-          res.should.have.status(200);
-          if (tasksCompleted) {
-            done();
-          } else {
-            tasksCompleted = true;
-          }
-        });
-      }
-    });
   });
+  // START moe testing delete behavior
 
-  // POST-survey
-  it('should create a postSurvey given valid input /api/survey/ POST', (done) => {
-    chai.request(server)
-    .post('/api/survey')
-    .set('Authorization', jwt)
-    .send(postValidJsonObject)
-    .end( (err, res) => {
-      // DO NOT REMOVE: USED FOR THE OTHER TESTS
-      postSurveyId = res.body._id;
-      // DO NOT REMOVE
-      // verify that the returned object is valid
-      expect(val.surveyValidation(res.body)).to.equal(true);
-      res.should.have.status(200);
-      let tasksCompleted = false;
-      for (let response of responsesToSurveyPrepost) {
-        response["surveyId"] = postSurveyId;
-        chai.request(server)
-        .post('/api/survey/' + postSurveyId)
-        .set('Authorization', jwt)
-        .send(response)
-        .end( (err, res) => {
-          // verify that the returned object is valid
-          res.body.should.have.property('message');
-          res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
-          res.body.should.have.property('status');
-          res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
-          res.should.have.status(200);
-          if (tasksCompleted) {
-            done();
-          } else {
-            tasksCompleted = true;
-          }
-        });
-      }
-    });
-  });
 
-  // Patch presurvey with postKey
-  it('should return 200 when adding new postKey - /api/survey/escape PATCH', (done) => {
-    preSurveyObject.postKey = postSurveyId;
-    chai.request(server)
-      .patch('/api/survey/' + preSurveyId)
+  // ---------- START create prepost ----------------
+  // FIXME dirty creation of pre post
+  // PRE-survey
+  var preSurveyObject;
+  describe('/api/survey/prePost',() => {
+    // POST: CREATE SURVEY
+    it('should create a preSurvey given valid input /api/survey/ POST', (done) => {
+      chai.request(server)
+      .post('/api/survey')
       .set('Authorization', jwt)
-      .send(preSurveyObject) // send our modified object
+      .send(validJsonObject)
       .end( (err, res) => {
-        // console.log(res.body);
-        res.body.should.have.property('message');
+        // DO NOT REMOVE: USED FOR THE OTHER TESTS
+        preSurveyId = res.body._id;
+        preSurveyObject = res.body;
+        // DO NOT REMOVE
+        // verify that the returned object is valid
+        expect(val.surveyValidation(res.body)).to.equal(true);
         res.should.have.status(200);
-        done();
-      });
-  });
-
-  // ----------- END create prepost -------------
-  //
-  it('should return 400 provided bad survey id - /api/survey/ DELETE', (done) => {
-    chai.request(server)
-      .delete('/api/survey/' + 'BADSurveyID')
-      .set('Authorization', jwt)
-      .end( (err, res) => {
-        res.body.should.have.property('message');
-        res.should.have.status(400);
-        done();
-      });
-  });
-
-  it('should return 404 when survey not in collection - /api/survey/ DELETE', (done) => {
-    chai.request(server)
-      .delete('/api/survey/58d5342fa14b490a1300e53f')
-      .set('Authorization', jwt)
-      .end( (err, res) => {
-        res.body.should.have.property('message');
-        res.should.have.status(404);
-        done();
-      });
-  });
-
-  // TODO test pre post delete check that both surveys get deleted
-  it('should return 200 and delete the prePostsurvey /api/survey/ DELETE', (done) => {
-    chai.request(server)
-    .delete('/api/survey/' + preSurveyId)
-    .set('Authorization', jwt)
-    .end((err, res) => {
-      res.should.have.status(200);
-      // Verify deletion of prePost
-      chai.request(server).get('/api/survey/' + preSurveyId).set('Authorization', jwt)
-      .end((err, getRes) => {
-        // console.log(getRes.body);
-        getRes.body.should.have.property('message');
-        getRes.body.message.should.equal(status.SURVEY_NOT_FOUND.message);
-        getRes.body.should.have.property('status');
-        getRes.body.status.should.equal(status.SURVEY_NOT_FOUND.code);
-        getRes.should.have.status(404);
-        chai.request(server).get('/api/survey/' + postSurveyId).set('Authorization', jwt)
-        .end((err, getRes2) => {
-          // console.log(getRes2.body);
-          getRes2.body.should.have.property('message');
-          getRes2.body.message.should.equal(status.SURVEY_NOT_FOUND.message);
-          getRes2.body.should.have.property('status');
-          getRes2.body.status.should.equal(status.SURVEY_NOT_FOUND.code);
-          getRes2.should.have.status(404);
-          done();
-        })
+        let tasksCompleted = false;
+        for (let response of responsesToSurveyPrepost) {
+          response["surveyId"] = preSurveyId;
+          chai.request(server)
+          .post('/api/survey/' + preSurveyId)
+          .set('Authorization', jwt)
+          .send(response)
+          .end( (err, res) => {
+            // verify that the returned object is valid
+            res.body.should.have.property('message');
+            res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
+            res.body.should.have.property('status');
+            res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
+            res.should.have.status(200);
+            if (tasksCompleted) {
+              done();
+            } else {
+              tasksCompleted = true;
+            }
+          });
+        }
       });
     });
-  });
 
-
-  // TODO test that responses for response get deleted
-  // TODO test that responses for post responses get deleted
-
-
-
-
-//     END moe test delete behavior
-
-
-
-  }); // end describe /api/survey/ DELETE
-
-  describe('/api/survey/escape',() => {
-    it('should return 200 when adding new password - /api/survey/escape PATCH', (done) => {
+    // POST-survey
+    it('should create a postSurvey given valid input /api/survey/ POST', (done) => {
       chai.request(server)
-        .patch('/api/survey/escape')
-        .send({password: 'test'}) // send our modified object
+      .post('/api/survey')
+      .set('Authorization', jwt)
+      .send(postValidJsonObject)
+      .end( (err, res) => {
+        // DO NOT REMOVE: USED FOR THE OTHER TESTS
+        postSurveyId = res.body._id;
+        // DO NOT REMOVE
+        // verify that the returned object is valid
+        expect(val.surveyValidation(res.body)).to.equal(true);
+        res.should.have.status(200);
+        let tasksCompleted = false;
+        for (let response of responsesToSurveyPrepost) {
+          response["surveyId"] = postSurveyId;
+          chai.request(server)
+          .post('/api/survey/' + postSurveyId)
+          .set('Authorization', jwt)
+          .send(response)
+          .end( (err, res) => {
+            // verify that the returned object is valid
+            res.body.should.have.property('message');
+            res.body.message.should.equal(status.SURVEY_RESPONSE_SUCCESS.message);
+            res.body.should.have.property('status');
+            res.body.status.should.equal(status.SURVEY_RESPONSE_SUCCESS.code);
+            res.should.have.status(200);
+            if (tasksCompleted) {
+              done();
+            } else {
+              tasksCompleted = true;
+            }
+          });
+        }
+      });
+    });
+
+    // Patch presurvey with postKey
+    it('should return 200 when adding new postKey - /api/survey/escape PATCH', (done) => {
+      preSurveyObject.postKey = postSurveyId;
+      chai.request(server)
+        .patch('/api/survey/' + preSurveyId)
+        .set('Authorization', jwt)
+        .send(preSurveyObject) // send our modified object
         .end( (err, res) => {
+          // console.log(res.body);
           res.body.should.have.property('message');
           res.should.have.status(200);
           done();
         });
     });
-    it('should return 200 when check the password - /api/survey/escape POST', (done) => {
+
+    // ----------- END create prepost -------------
+    //
+    it('should return 400 provided bad survey id - /api/survey/ DELETE', (done) => {
       chai.request(server)
-        .post('/api/survey/escape')
-        .send({password: 'test'}) // send our modified object
+        .delete('/api/survey/' + 'BADSurveyID')
+        .set('Authorization', jwt)
         .end( (err, res) => {
           res.body.should.have.property('message');
-          res.body.message.should.equal(true);
-          res.should.have.status(200);
+          res.should.have.status(400);
           done();
         });
     });
-  });
+
+    it('should return 404 when survey not in collection - /api/survey/ DELETE', (done) => {
+      chai.request(server)
+        .delete('/api/survey/58d5342fa14b490a1300e53f')
+        .set('Authorization', jwt)
+        .end( (err, res) => {
+          res.body.should.have.property('message');
+          res.should.have.status(404);
+          done();
+        });
+    });
+
+    // TODO test pre post delete check that both surveys get deleted
+    it('should return 200 and delete the prePostsurvey /api/survey/ DELETE', (done) => {
+      chai.request(server)
+      .delete('/api/survey/' + preSurveyId)
+      .set('Authorization', jwt)
+      .end((err, res) => {
+        res.should.have.status(200);
+        // Verify deletion of prePost
+        chai.request(server).get('/api/survey/' + preSurveyId).set('Authorization', jwt)
+        .end((err, getRes) => {
+          // console.log(getRes.body);
+          getRes.body.should.have.property('message');
+          getRes.body.message.should.equal(status.SURVEY_NOT_FOUND.message);
+          getRes.body.should.have.property('status');
+          getRes.body.status.should.equal(status.SURVEY_NOT_FOUND.code);
+          getRes.should.have.status(404);
+          chai.request(server).get('/api/survey/' + postSurveyId).set('Authorization', jwt)
+          .end((err, getRes2) => {
+            // console.log(getRes2.body);
+            getRes2.body.should.have.property('message');
+            getRes2.body.message.should.equal(status.SURVEY_NOT_FOUND.message);
+            getRes2.body.should.have.property('status');
+            getRes2.body.status.should.equal(status.SURVEY_NOT_FOUND.code);
+            getRes2.should.have.status(404);
+            done();
+          })
+        });
+      });
+    });
+  });  // end describe /api/survey/ prepost
+
+
 
 });

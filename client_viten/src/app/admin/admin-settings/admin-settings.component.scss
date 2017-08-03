@@ -26,15 +26,19 @@
 .btn {
   margin-left: 10px;
 }
-.btn-success {
+.btn.success {
   background-color: green;
   color: white;
 }
 
+.btn.error {
+  background-color: #f44336;
+}
+
 .userTable {
   border-collapse: collapse;
-  max-height: 150px;
-  overflow-y: scroll;
+
+  width: 100%;
   .odd {
     background: rgba(0, 0, 0, 0.1);
   }
@@ -49,6 +53,28 @@
   }
 }
 
+.editCell {
+    text-align: center;
+}
+
+.tableHolder {
+  max-height: 300px;
+  overflow-y: scroll;
+}
+
+.centerSettings {
+  min-width: 300px;
+}
+
+.changeCenter {
+  min-width: 100%;
+  width: 100%;
+}
+
+.dropdown {
+  display: inline-block;
+}
+
 
 input[type=number]::-webkit-inner-spin-button,
 input[type=number]::-webkit-outer-spin-button {
@@ -56,4 +82,8 @@ input[type=number]::-webkit-outer-spin-button {
     -moz-appearance: none;
     appearance: none;
     margin: 0;
+}
+
+.uploadDocWrapper {
+  min-height: 250px;
 }

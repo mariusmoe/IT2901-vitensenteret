@@ -3,7 +3,7 @@
   <form [formGroup]="codeForm" (ngSubmit)="quitSurvey(codeForm.value.code.toString())">
     <div align="center">
       <md-input-container>
-        <input mdInput type="number" placeholder="{{ 'Code' | translate }}" autocomplete="off" [formControl]="codeForm.controls['code']">
+        <input mdInput type="tel" placeholder="{{ 'Code' | translate }}" autocomplete="off" [formControl]="codeForm.controls['code']">
         <md-hint *ngIf="codeForm.controls['code'].hasError('required') && codeForm.controls['code'].touched">
           {{ 'This field is required.' | translate }}
         </md-hint>

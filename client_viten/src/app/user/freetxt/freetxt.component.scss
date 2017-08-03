@@ -1,19 +1,20 @@
 .freetxtBox {
-  font-family: 'Roboto Mono', monospace;
   font-size: 2vw;
   width: 75vw;
-  height: 45vh;
   max-width: 75vw;
-  max-height: 45vh;
-  background-color: white;
-  resize: none;
 }
 
-input {
+.freeTextArea {
+  font-family: 'Roboto Mono', monospace;
   resize: none;
-  border: none;
-  height: auto;
+  height: 25vh;
+  max-height: 25vh;
 }
+
+.parentBox {
+  margin-bottom: 10vh;
+}
+
 
 md-card-content {
   padding: 0;

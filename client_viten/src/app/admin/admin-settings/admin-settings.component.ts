@@ -1,13 +1,17 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
-import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
+import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA, MdTabChangeEvent } from '@angular/material';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { User } from '../../_models/index';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { AuthenticationService } from '../../_services/authentication.service';
-import { SurveyService } from '../../_services/survey.service';
+import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdSnackBar } from '@angular/material';
+import { FileUploader } from 'ng2-file-upload';
+import { environment } from '../../../environments/environment';
+
+
 
 @Component({
   selector: 'app-admin-settings',
@@ -25,28 +29,70 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
   private selectedRow: number;
   private referralURL = '';
   private emailSub: Subscription;
+  public tabIndex: number;
   selectedLanguage;
+  public uploader: FileUploader = new FileUploader({url: environment.URL.newDoc});
+
 
   public  dialogRef: MdDialogRef<DeleteDialog>;
+
+  public selectedRole: string;
+  public selectedCenter: string;
+
+  roles = [
+    {value: 'sysadmin'},
+    {value: 'vitenleader'},
+    {value: 'user'}
+  ];
+  public centers: Object[] = [];
 
   constructor(
     private router: Router,
     private service: AuthenticationService,
-    private surveyService: SurveyService,
+    private centerService: CenterService,
     public dialog: MdDialog,
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
     public languageService: TranslateService) {
+      const token = localStorage.getItem('token');
+      this.uploader.authToken = token;
+      this.uploader.autoUpload = true;
+      const myOptions = {
+                  autoUpload: false,
+                  isHTML5: true,
+                  filters: [],
+                  removeAfterUpload: false,
+                  disableMultipart: false,
+                  authToken: token,
+                  maxFileSize: 10 * 1024 * 1024 // 10 MB
+              };
+      this.uploader.setOptions(myOptions);
       this.selectedLanguage = languageService.getCurrentLang();
       this.user = this.service.getUser();
-      if (this.user.role === 'admin') {
-        this.getUsers(); // TODO: if user ISN'T superadmin, do not do execute getUsers()
+      if (this.user.role === 'sysadmin' || this.user.role === 'vitenleader') {
+        this.getUsers();
       }
       this.newEmailForm = fb.group({
         'newEmail': [null, Validators.required],
       });
-
+      const sub = this.centerService.getAllCenters().subscribe(result => {
+        if (result && result[0]) {  // if there is no array we instead get the 'route exists but no centers..' thing
+          this.centers = result;
+          if (result.filter( c => {return c._id === localStorage.getItem('center'); })) {
+            this.selectedCenter = localStorage.getItem('center');
+          }
+        }
+        sub.unsubscribe();
+      });
+      if (localStorage.getItem('activesettingstab')) {
+        this.tabIndex = Number(localStorage.getItem('activesettingstab'));
+      }
+      if (this.user.role !== 'sysadmin') {
+        this.selectedRole = this.roles[2].value;
+      }
     }
+
+
 
 
 
@@ -55,6 +101,21 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // this.emailSub.unsubscribe();
+  }
+
+  public _onChange(files: any) {
+    this.uploader.queue[0].formData = {'file': ' myval'};
+    // console.log(this.uploader);
+    if (files && files.length > 0) {
+     const file: File = files.item(0);
+   }
+   if (this.uploader.queue.length > 1) {
+     this.uploader.queue.shift();
+   }
+  }
+
+  onTabChange(e: MdTabChangeEvent) {
+    localStorage.setItem('activesettingstab', e.index.toString());
   }
 
   /**
@@ -69,7 +130,7 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    * @param  {string} password new password
    */
   changeExitSurveyPassword(password: string) {
-    this.surveyService.changeChoosesurvey(password)
+    this.centerService.exitSurveyUpdatePassword(password, localStorage.getItem('center'))
       .subscribe(result => {
         this.openSnackBar(this.languageService.instant('Password changed'), 'SUCCESS');
       },
@@ -150,8 +211,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    * requests a referral link
    * @param  {string} role The role of the user that is to be referred
    */
-  requestReferral(role: string) {
-    this.service.getReferral(role)
+  requestReferral(role: string, center: string) {
+    this.service.getReferral(role, center)
         .subscribe(result => {
           const config: MdDialogConfig = {
             data: {
@@ -226,6 +287,11 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
         this.dialogRef = null;
       });
     }
+  }
+
+
+  updateCenter(centerId: string) {
+    this.router.navigate(['/admin/center/' + centerId]);
   }
 
 

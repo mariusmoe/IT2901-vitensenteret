@@ -19,7 +19,7 @@ export const environment = {
 
 
     URL: {
-
+      base: 'https://survey.vitensenteret.com',
       login: 'https://survey.vitensenteret.com/api/auth/login',
       allUsers: 'https://survey.vitensenteret.com/api/auth/all_users',
       delete: 'https://survey.vitensenteret.com/api/auth/delete_account',
@@ -28,11 +28,18 @@ export const environment = {
       newEmail: 'https://survey.vitensenteret.com/api/auth/change_email/',
       newPassword: 'https://survey.vitensenteret.com/api/auth/change_password/',
       survey: 'https://survey.vitensenteret.com/api/survey',
+      surveyAll: 'https://survey.vitensenteret.com/api/survey/all',
       surveyAsJson: 'https://survey.vitensenteret.com/api/survey/json',
       surveyAsCSV: 'https://survey.vitensenteret.com/api/survey/csv',
       newUser: 'https://survey.vitensenteret.com/api/auth/register',
-      checkChoosesurvey: 'https://survey.vitensenteret.com/api/survey/escape',
+      exitSurvey: 'https://survey.vitensenteret.com/api/center/escape',
       surveyCopy:   'https://survey.vitensenteret.com/api/survey/copy',
       allNicknames: 'https://survey.vitensenteret.com/api/survey/all_nicknames',
+      allCenters: 'https://survey.vitensenteret.com/api/center/',
+      folders: 'https://survey.vitensenteret.com/api/folders/',
+      newCenter: 'https://survey.vitensenteret.com/api/center/new',
+      newCenterName: 'https://survey.vitensenteret.com/api/center/name',
+      newLogo: 'https://survey.vitensenteret.com/api/image/center',
+      newDoc: 'https://survey.vitensenteret.com/api/image/doc',
     }
 };

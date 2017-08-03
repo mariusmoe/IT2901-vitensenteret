@@ -21,58 +21,59 @@
 
 
 
-    <md-menu #copyMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
-      <button md-menu-item  (click)="copySurvey(false)" [disabled]="generatingPDF">
-        {{ 'Copy' | translate }}
-      </button>
-      <button md-menu-item (click)="copySurvey(true)" [disabled] = "(responses ? responses.length : 0) == 0">
-        {{ 'Copy with responses' | translate }}
-      </button>
-    </md-menu>
 
+
+    <ng-template #surveyButtons>
+      <div class="flexchild"></div>
+      <div class="flexchild alignCenter"></div>
+      <div class="flexchild alignRight">
+        <button md-raised-button color="primary" [mdMenuTriggerFor]="goToMenu" [disabled]="survey.deactivationDate">
+        <span [mdTooltip]="(survey.deactivationDate) ?
+        ('The survey is not active' | translate ) : '' "
+        mdTooltipPosition="below">
+        <md-icon class="openInBrowser">open_in_browser</md-icon>
+        {{ 'Go to survey' | translate }}
+      </span>
+        </button>
+        <md-menu #goToMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
+          <button md-menu-item  routerLink="/survey/{{survey._id}}" routerLinkActive="active">
+            {{ 'Go to survey' | translate }}
+          </button>
+          <button *ngIf="survey.postKey && survey.postKey.length > 0" md-menu-item routerLink="/survey/{{survey.postKey}}" routerLinkActive="active">
+            {{ 'Go to post survey' | translate }}
+          </button>
+        </md-menu>
+        <button md-raised-button color="primary" [mdMenuTriggerFor]="downloadMenu" [disabled] = "(responses ? responses.length : 0) == 0">
+          <md-icon>file_download</md-icon>{{'Download' | translate}}</button>
+        <!-- display ADD post survey if there is no post survey, else display edit post survey  -->
+        <button *ngIf="!survey.postKey || !(survey.postKey.length > 0)" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active" [disabled]="survey.active || survey.deactivationDate">
+          <md-icon>local_post_office</md-icon> {{ 'Create post-survey' | translate }}
+        </button>
+
+        <!-- Disable edit keys if the survey is published or completed -->
+        <button *ngIf="survey.postKey && survey.postKey.length > 0" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey.postKey}}" routerLinkActive="active" [disabled]="survey.active || survey.deactivationDate">
+          <md-icon>local_post_office</md-icon> {{ 'Edit post-survey' | translate }}
+        </button>
+        <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active" [disabled]="survey.active || survey.deactivationDate">
+          <md-icon>build</md-icon> {{ 'Edit' | translate }}
+        </button>
+        <button md-raised-button color="primary" (click)="copySurvey()"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
+        <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
+            <md-icon>delete</md-icon> {{ 'Delete' | translate }}
+        </button>
+      </div>
+    </ng-template>
 
 
 
 
     <div *ngIf="survey && responses && !loadingSurvey && !loadingPostSurvey" class="selectedSurveyArea" [@fadeIn]="">
       <md-toolbar style = "background: none !important;">
-        <div class="flexchild"></div>
-        <div class="flexchild alignCenter"></div>
-        <div class="flexchild alignRight">
-          <button md-raised-button color="primary" [mdMenuTriggerFor]="goToMenu" [disabled]="!survey.active">
-          <span [mdTooltip]="(!survey.active) ?
-          ('The survey is not active' | translate ) : '' "
-          mdTooltipPosition="below">
-          <md-icon class="openInBrowser">open_in_browser</md-icon>
-          {{ 'Go to survey' | translate }}
-        </span>
-          </button>
-          <md-menu #goToMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
-            <button md-menu-item  routerLink="/survey/{{survey._id}}" routerLinkActive="active">
-              {{ 'Go to survey' | translate }}
-            </button>
-            <button *ngIf="survey.postKey && survey.postKey.length > 0" md-menu-item routerLink="/survey/{{survey.postKey}}" routerLinkActive="active">
-              {{ 'Go to post survey' | translate }}
-            </button>
-          </md-menu>
-          <button md-raised-button color="primary" [mdMenuTriggerFor]="downloadMenu" [disabled] = "(responses ? responses.length : 0) == 0">
-            <md-icon>file_download</md-icon>{{'Download' | translate}}</button>
-          <!-- display ADD post survey if there is no post survey, else display edit post survey  -->
-          <button *ngIf="!survey.postKey || !(survey.postKey.length > 0)" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
-            <md-icon>local_post_office</md-icon> {{ 'Create post-survey' | translate }}
-          </button>
-          <button *ngIf="survey.postKey && survey.postKey.length > 0" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey.postKey}}" routerLinkActive="active">
-            <md-icon>local_post_office</md-icon> {{ 'Edit post-survey' | translate }}
-          </button>
-          <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-            <md-icon>build</md-icon> {{ 'Edit' | translate }}
-          </button>
-          <button md-raised-button color="primary" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
-          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
-              <md-icon>delete</md-icon> {{ 'Delete' | translate }}
-          </button>
-        </div>
+
+        <ng-container *ngTemplateOutlet="surveyButtons"></ng-container>
+
       </md-toolbar>
+
       <md-card>
         <md-card-title-group>
           <md-card-title>{{survey.name}}</md-card-title>
@@ -84,7 +85,7 @@
           }}</md-card-subtitle>
           <md-icon align="left" class="activeIcon"
           [ngClass]="{active: survey.active, surveyActiveIcon: true}">{{ survey.active === true ? "visibility" : "visibility_off"}}</md-icon>
-          <span class="activeIconText">{{ (survey.active ? 'Active' : 'Inactive') | translate }}</span>
+          <!-- <span class="activeIconText">{{ (survey.active ? 'Active' : 'Inactive') | translate }}</span> -->
         </md-card-title-group>
         <md-card-content>
           <div *ngIf="survey.postKey && survey.postKey.length > 1" class="chip">
@@ -93,49 +94,37 @@
             </md-chip-list>
           </div>
           <div class="activeToggle">
-            <md-slide-toggle color="primary" [checked]="survey.active" (change)="toggleActive()">
-            </md-slide-toggle>
+            <!-- <md-slide-toggle color="primary" [checked]="survey.active" (change)="toggleActive()">
+            </md-slide-toggle> -->
+            <button md-raised-button *ngIf="!survey.active && !survey.deactivationDate" color="accent" (click)="openPublishWarning(true)" >
+              <span [mdTooltip]="(survey.deactivationDate) ?
+              ('The survey ' | translate ) : '' "
+              mdTooltipPosition="below">
+              <md-icon class="openInBrowser">cloud_up</md-icon> {{ 'Publish' | translate }}
+            </span>
+            </button>
+            <button md-raised-button *ngIf="survey.active" color="accent" (click)="openPublishWarning(false)" >
+              <span [mdTooltip]="(survey.deactivationDate) ?
+              ('The survey ' | translate ) : '' "
+              mdTooltipPosition="below">
+              <md-icon class="openInBrowser">cloud_down</md-icon> {{ 'Unpublish' | translate }}
+            </span>
+            </button>
+            <button md-raised-button *ngIf="!survey.active && survey.deactivationDate" color="accent" (click)="toggleActive()" [disabled]="survey.deactivationDate" >
+              <span [mdTooltip]="(survey.deactivationDate) ?
+              ('The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.' | translate ) : '' "
+              mdTooltipPosition="below">
+              <md-icon class="openInBrowser">cloud_done</md-icon> {{ 'Survey completed' | translate }}
+            </span>
+            </button>
+
           </div>
-          <app-survey-retrieval *ngIf="responses && responses.length > 0"
-          [survey] = "survey" [responses] = "responses" [postSurvey] = "postSurvey" [postResponses] = "postResponses" class="surveyRetrieval"></app-survey-retrieval>
-          <div *ngIf="responses.length == 0">
-            {{   'No responses have been registered, so there is nothing to show here yet.' | translate }}
-          </div>
-          <!-- file_download // Icon for download -->
+          <app-survey-retrieval [survey] = "survey" [responses] = "responses" [postSurvey] = "postSurvey"
+          [postResponses] = "postResponses" class="surveyRetrieval">
+          </app-survey-retrieval>
         </md-card-content>
         <md-card-actions align="right">
-          <button md-raised-button color="primary" [mdMenuTriggerFor]="goToMenu" [disabled]="!survey.active">
-          <span [mdTooltip]="(!survey.active) ?
-          ('The survey is not active' | translate ) : '' "
-          mdTooltipPosition="below">
-          <md-icon class="openInBrowser">open_in_browser</md-icon>
-          {{ 'Go to survey' | translate }}
-        </span>
-          </button>
-          <md-menu #goToMenu="mdMenu"  x-position="before" y-position="below" [overlapTrigger]="false">
-            <button md-menu-item  routerLink="/survey/{{survey._id}}" routerLinkActive="active">
-              {{ 'Go to survey' | translate }}
-            </button>
-            <button *ngIf="survey.postKey && survey.postKey.length > 0" md-menu-item routerLink="/survey/{{survey.postKey}}" routerLinkActive="active">
-              {{ 'Go to post survey' | translate }}
-            </button>
-          </md-menu>
-          <button md-raised-button color="primary" [mdMenuTriggerFor]="downloadMenu" [disabled] = "(responses ? responses.length : 0) == 0"
-            ><md-icon>file_download</md-icon>{{'Download' | translate}}</button>
-          <!-- display ADD post survey if there is no post survey, else display edit post survey  -->
-          <button *ngIf="!survey.postKey || !(survey.postKey.length > 0)" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}/prepost" routerLinkActive="active">
-            <md-icon>local_post_office</md-icon> {{ 'Create post-survey' | translate }}
-          </button>
-          <button *ngIf="survey.postKey && survey.postKey.length > 0" md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey.postKey}}" routerLinkActive="active">
-            <md-icon>local_post_office</md-icon> {{ 'Edit post-survey' | translate }}
-          </button>
-          <button md-raised-button color="accent" routerLink="/admin/editsurvey/{{survey._id}}" routerLinkActive="active">
-            <md-icon>build</md-icon> {{ 'Edit' | translate }}
-          </button>
-          <button md-raised-button color="primary" [mdMenuTriggerFor]="copyMenu"><md-icon>content_copy</md-icon>{{'Copy' | translate}}</button>
-          <button md-raised-button color="warn" (click)="deleteSurvey(survey._id)">
-            <md-icon>delete</md-icon> {{ 'Delete' | translate }}
-          </button>
+          <ng-container *ngTemplateOutlet="surveyButtons"></ng-container>
         </md-card-actions>
       </md-card>
     </div>

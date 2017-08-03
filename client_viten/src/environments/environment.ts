@@ -7,6 +7,7 @@ export const environment = {
   production: false,
 
   URL: {
+    base:        'http://localhost:2000',
     login:        'http://localhost:2000/api/auth/login',
     allUsers:     'http://localhost:2000/api/auth/all_users',
     delete:       'http://localhost:2000/api/auth/delete_account',
@@ -15,11 +16,18 @@ export const environment = {
     newEmail:     'http://localhost:2000/api/auth/change_email/',
     newPassword:  'http://localhost:2000/api/auth/change_password/',
     survey:       'http://localhost:2000/api/survey',
+    surveyAll:       'http://localhost:2000/api/survey/all',
     surveyCopy:   'http://localhost:2000/api/survey/copy',
     surveyAsJson: 'http://localhost:2000/api/survey/json',
     surveyAsCSV: 'http://localhost:2000/api/survey/csv',
     newUser: 'http://localhost:2000/api/auth/register',
-    checkChoosesurvey: 'http://localhost:2000/api/survey/escape',
-    allNicknames: 'http://localhost:2000/api/survey/all_nicknames'
+    exitSurvey: 'http://localhost:2000/api/center/escape',
+    allNicknames: 'http://localhost:2000/api/survey/all_nicknames',
+    allCenters: 'http://localhost:2000/api/center/',
+    folders: 'http://localhost:2000/api/folders/',
+    newCenter: 'http://localhost:2000/api/center/new',
+    newCenterName: 'http://localhost:2000/api/center/name',
+    newLogo: 'http://localhost:2000/api/image/center',
+    newDoc: 'http://localhost:2000/api/image/doc',
   }
 };

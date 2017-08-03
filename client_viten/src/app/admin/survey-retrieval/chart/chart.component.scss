@@ -8,6 +8,8 @@
   text-align: center;
   //border-bottom: 2px solid map-get(nth($vitenPrimary,1), 900);
   h1 {
+    white-space: pre-line;
+
     margin: 0;
   }
 }
@@ -19,12 +21,6 @@
     margin-left: 10px;
     align-self: center; // this is vertical align
   }
-}
-
-.needsResize {
-  margin: 0 auto;
-  max-width: 50%;
-  height: auto;
 }
 
 .chartWrapper {
@@ -62,6 +58,12 @@ table {
     }
 }
 
+
+.textResponses {
+ max-height: 400px;
+ min-height: 100px;
+ overflow-y: scroll;
+}
 
 
 // .tble {

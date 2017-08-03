@@ -1,6 +1,8 @@
 const AuthenticationController = require('./controllers/authentication'),
       SurveyController = require('./controllers/surveys'),
       ErrorController = require('./controllers/error'),
+      CenterController = require('./controllers/centers'),
+      FolderController = require('./controllers/folders'),
       express = require('express'),
       passportService = require('./libs/passport'),
       passport = require('passport'),
@@ -12,19 +14,24 @@ const AuthenticationController = require('./controllers/authentication'),
 const requireAuth   = passport.authenticate('jwt', { session: false });
 const requireLogin  = passport.authenticate('local', { session: false });
 
-// Role types
-const REQUIRE_ADMIN = "admin",
-      REQUIRE_MEMBER = "member";
+// Role types enum: ['sysadmin', 'vitenleader', 'user'],
+const REQUIRE_SYSADMIN = "sysadmin",
+      REQUIRE_LEADER = "vitenleader",
+      REQUIRE_USER = "user";
 
 module.exports = (app) => {
   // route groups
   const apiRoutes  = express.Router(),
         authRoutes = express.Router(),
         surveyRoutes = express.Router(),
-        angularRoutes = express.Router();
+        angularRoutes = express.Router(),
+        folderRoutes = express.Router(),
+        centerRoutes = express.Router();
   // Set auth and survey routes as subgroup to apiRoutes
   apiRoutes.use('/auth', authRoutes);
   apiRoutes.use('/survey', surveyRoutes);
+  apiRoutes.use('/center', centerRoutes);
+  apiRoutes.use('/folders', folderRoutes);
   // Set a common fallback for /api/*; 404 for invalid route
   apiRoutes.all('*', ErrorController.error);
 
@@ -41,13 +48,14 @@ module.exports = (app) => {
   authRoutes.post('/login', requireLogin, AuthenticationController.login);
 
   // get a referral link - requires admin rights
-  authRoutes.get('/get_referral_link/:role',
+  authRoutes.get('/get_referral_link/:role/:centerId',
                  requireAuth,
-                 AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                 AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
                  AuthenticationController.getReferralLink);
 
  if (config.util.getEnv('NODE_ENV') !== 'production') {
      authRoutes.post('/register_developer', AuthenticationController.register_developer);
+     authRoutes.post('/register_testdata', AuthenticationController.register_testdata);
  }
 
   // Request a new token
@@ -56,13 +64,13 @@ module.exports = (app) => {
   // Delete the account with the provided JWT
   authRoutes.delete('/delete_account',
                     requireAuth,
-                    AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                    AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
                     AuthenticationController.deleteAccount);
 
   // Return all users to superadmin
   authRoutes.get('/all_users',
                     requireAuth,
-                    AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                    AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
                     AuthenticationController.getAllUsers);
 
   // // TODO Password reset request route
@@ -83,25 +91,23 @@ module.exports = (app) => {
   // Test authentication with roleAuthorization
   authRoutes.get('/test',
                  requireAuth,
-                 AuthenticationController.roleAuthorization(REQUIRE_ADMIN),
+                 AuthenticationController.roleAuthorization(REQUIRE_SYSADMIN),
                  AuthenticationController.test);
 
    authRoutes.get('test2',
                   requireAuth,
-                  AuthenticationController.roleAuthorization(REQUIRE_MEMBER),
+                  AuthenticationController.roleAuthorization(REQUIRE_LEADER),
                   AuthenticationController.test);
   //
   // change email for this account
   authRoutes.post('/change_email', requireAuth, AuthenticationController.changeEmail);
-  //
-  //
 
 
-  // Add or update password
-  surveyRoutes.patch('/escape', AuthenticationController.patchOneEscape);
-
-  //Check if password is correct
-  surveyRoutes.post('/escape', AuthenticationController.checkOneEscape);
+  /*
+   |--------------------------------------------------------------------------
+   | Survey routes
+   |--------------------------------------------------------------------------
+  */
 
   surveyRoutes.get('/all_nicknames/:surveyId', SurveyController.getNicknamesForOneSurvey);
 
@@ -112,22 +118,82 @@ module.exports = (app) => {
 
   surveyRoutes.post('/copy/:surveyId', requireAuth, SurveyController.copySurvey);
 
-  surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
 
-  surveyRoutes.get('/',  SurveyController.getAllSurveys);
-
+  surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
   surveyRoutes.get('/:surveyId', SurveyController.getOneSurvey);
-
   surveyRoutes.patch('/:surveyId', requireAuth, SurveyController.patchOneSurvey);
+
+
+  surveyRoutes.get('/all/:centerId', SurveyController.getAllSurveys);
+
 
   // surveyRoutes.post('/linkPrePost', requireAuth, SurveyController.linkPrePost);
 
   surveyRoutes.delete('/:surveyId',
                       requireAuth,
+
+                      AuthenticationController.roleAuthorizationUp(REQUIRE_USER),
+
                       SurveyController.deleteOneSurvey);
 
 
-  surveyRoutes.post('/:surveyId', SurveyController.answerOneSurvey);
+  surveyRoutes.post('/', requireAuth, SurveyController.createSurvey);
+
+
+  /*
+   |--------------------------------------------------------------------------
+   | Center routes
+   |--------------------------------------------------------------------------
+  */
+  centerRoutes.post('/', requireAuth,
+    AuthenticationController.roleAuthorization(REQUIRE_SYSADMIN),
+    CenterController.createCenter);
+
+  centerRoutes.get('/',  CenterController.getAllCenters);
+
+  // Is not needed
+  // centerRoutes.get('/:centerId',  CenterController.getCenter);
+
+  // Add or update password
+  centerRoutes.patch('/escape/:centerId', requireAuth,
+    AuthenticationController.roleAuthorizationUp(REQUIRE_LEADER),
+    CenterController.patchOneEscape);
+
+  //Check if password is correct
+  centerRoutes.post('/escape/:centerId', CenterController.checkOneEscape);
+
+  centerRoutes.patch('/name', requireAuth, CenterController.patchCenterName)
+
+  // Add a new center
+  centerRoutes.patch('/new', requireAuth,
+                     AuthenticationController.roleAuthorization(REQUIRE_SYSADMIN),
+                     CenterController.postCenter)
+
+  /*
+   |--------------------------------------------------------------------------
+   | Image routes is in a separate controller
+   |       See controllers/image.js
+   |--------------------------------------------------------------------------
+  */
+
+
+  /*
+   |--------------------------------------------------------------------------
+   | Folder routes
+   |--------------------------------------------------------------------------
+  */
+
+  folderRoutes.get('/', requireAuth, FolderController.getUserFolders);
+
+  folderRoutes.post('/', requireAuth, FolderController.createUserFolder);
+
+  folderRoutes.patch('/', requireAuth, FolderController.updateFolders); // updates two folders (drag'n'drop to/from folders)
+
+  folderRoutes.patch('/:folderId', requireAuth, FolderController.updateFolderSingular);
+
+  folderRoutes.delete('/:folderId', requireAuth, FolderController.deleteUserFolder);
+
+
 
 
   // retrive one survey as a json object

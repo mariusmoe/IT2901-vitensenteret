@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input, Output, EventEmitter } from '@angular/core';
 import { trigger, state, style, transition, animate, keyframes } from '@angular/animations';
 import { QuestionObject } from '../../_models/survey';
 
@@ -27,7 +27,7 @@ import { QuestionObject } from '../../_models/survey';
   ])
 ]
 })
-export class StarsComponent implements OnInit {
+export class StarsComponent implements OnInit, OnDestroy {
   @Input() questionObject: QuestionObject;
   @Output() answer = new EventEmitter();
   selectedStar: number;
@@ -39,11 +39,12 @@ export class StarsComponent implements OnInit {
   starActiveThree = 'inactive';
   starActiveFour = 'inactive';
   starActiveFive = 'inactive';
-
+  private hasAnswered = false;
   constructor() {
   }
 
   ngOnInit() {
+    this.hasAnswered = false;
     if (this.currentAnswer === 0) {
       this.starActiveOne = 'active';
     } else if (this.currentAnswer === 1) {
@@ -67,17 +68,25 @@ export class StarsComponent implements OnInit {
     }
   }
 
+  ngOnDestroy() {
+    this.hasAnswered = false;
+  }
+
   /**
    * This method emits the changes to its parent. The parent HTML listens for $event changes and call the addOrChangeAnswer(alt)
    * @param  {number[]} alt The output answer sent to active-survey-component
    */
   private addChange() {
+    // console.log('Emiting now!')
+    this.hasAnswered = true;
     this.answer.emit(this.selectedStar);
   }
 
   animationEnd(event) {
     if (event.fromState === 'inactive' || event.fromState === 'active') {
-      this.addChange();
+      if (!this.hasAnswered) {
+        this.addChange();
+      }
     }
   }
 

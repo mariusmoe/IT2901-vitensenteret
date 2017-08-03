@@ -1,5 +1,8 @@
 <div>
-  <md-tab-group dynamicHeight="true">
+  <md-tab-group dynamicHeight="true" [(selectedIndex)]="tabIndex" (selectChange)="onTabChange($event)">
+
+
+
   <md-tab label="{{ 'User settings' | translate }}">
     <div class="tabContent">
       <md-card>
@@ -42,7 +45,7 @@
               <md-hint align="end">
                 {{newPassword2.value.length}} / 4++</md-hint>
           </md-input-container>
-          <md-icon class="done" *ngIf="newPassword.value === newPassword2.value && !(newPassword.value === '') ">done all</md-icon>
+          <md-icon class="done" *ngIf="newPassword.value === newPassword2.value && !(newPassword.value === '') ">done_all</md-icon>
         </md-card-content>
         <md-card-actions>
           <button md-raised-button
@@ -78,22 +81,50 @@
       </md-card>
     </div>
   </md-tab>
-  <md-tab *ngIf="user.role=='admin'" label="{{ 'Admin settings' | translate }}">
+
+
+
+
+  <!-- ADMIN SETTINGS START HERE!!! -->
+
+  <md-tab *ngIf="user.role==='vitenleader' || user.role==='sysadmin'" label="{{ 'Admin settings' | translate }}">
     <div class="tabContent">
       <md-card>
-        <md-card-title>{{ 'Superadmin settings' | translate }}</md-card-title>
-        <md-card-subtitle>{{user.role | translate }}</md-card-subtitle>
+        <md-card-title>{{ 'Refer user' | translate }}</md-card-title>
+        <md-card-subtitle>{{ 'Current role: role' | translate: user.role }}</md-card-subtitle>
+        <md-card-content>
+
+          <md-select placeholder="{{ 'Role' | translate }}" class="dropdown" [(ngModel)]="selectedRole" name="role">
+            <md-option *ngFor="let role of roles" [value]="role.value"
+              [disabled]="(role.value==='sysadmin' && user.role != 'sysadmin') || ((!centers || centers.length == 0) && role.value != 'sysadmin')">
+              {{role.value}}
+            </md-option>
+          </md-select>
+
+
+          <md-select placeholder="{{ 'Center' | translate }}" class="dropdown" [(ngModel)]="selectedCenter"
+            name="center" [disabled]="user.role != 'sysadmin' || (!centers || centers.length == 0)">
+            <md-option *ngFor="let center of centers" [value]="center._id">
+              {{center.name}}
+            </md-option>
+          </md-select>
+
+          <button md-raised-button class="dropdown" color="primary" minlength="3"
+            (click)="requestReferral(selectedRole, selectedCenter)"
+            [disabled]="(!selectedCenter && selectedRole !== 'sysadmin') || !selectedRole">
+            {{ 'Refer user' | translate}}
+          </button>
+        </md-card-content>
         <md-card-actions>
-          <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
+          <!-- <button md-raised-button color="primary" minlength="3" (click)="requestReferral('admin')">
             {{ 'Refer admin' | translate }}
           </button>
           <button md-raised-button color="primary" minlength="3" (click)="requestReferral('member')">
             {{ 'Refer member' | translate }}
-          </button>
+          </button> -->
         </md-card-actions>
-        <br>
 
-
+<!--
           <md-card-title>{{ 'Code to exit survey' | translate }}</md-card-title>
           <md-card-content>
             <md-input-container>
@@ -139,37 +170,136 @@
                 {{ 'Change password' | translate }}
               </div>
             </button>
-          </md-card-actions>
-
+          </md-card-actions> -->
 
 
       </md-card>
+      <md-card class="centerSettings">
+        <md-card-content>
+          <button md-menu-item routerLink="/admin/center" *ngIf="user.role !== 'sysadmin'">
+            <md-icon>settings</md-icon> {{ 'Center settings' | translate }}
+          </button>
+
+          <div *ngIf="user.role==='sysadmin'">
+
+
+            <md-card-title>{{ 'Update center' | translate }}</md-card-title>
+            <md-card-content>
+              <div class="tableHolder">
+                <table class="userTable">
+                  <tr>
+                    <th>{{ 'Center' | translate }}</th>
+                    <th>{{ 'Action' | translate }}</th>
+                  </tr>
+                  <tr *ngFor="let center of centers;  let i=index; let odd=odd; let even=even;"
+                  (click)="updateCenter(center._id)"
+                  [ngClass]="{ odd: odd, even: even }">
+                  <td>{{center.name}}</td>
+                  <td class="editCell"><md-icon>edit</md-icon></td>
+                </tr>
+              </table>
+            </div>
+            <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
+            <br />
+            <button md-menu-item routerLink="/admin/center/addcenter" >
+              <md-icon>add</md-icon>
+              {{ 'New center' | translate }}
+            </button>
+          </md-card-content>
+        </div>
+      </md-card-content>
+    </md-card>
+
+
+
       <md-card>
         <md-card-title>{{ 'Delete account' | translate }}</md-card-title>
         <md-card-content>
+          <div class="tableHolder">
+
           <table class="userTable">
             <tr>
-              <th>{{ 'User ID' | translate }}</th>
+
               <th>{{ 'Email' | translate }}</th>
               <th>{{ 'Role' | translate }}</th>
             </tr>
             <tr *ngFor="let user of userList;  let i=index; let odd=odd; let even=even;"
             (click)="openDialog(user._id)"
             [ngClass]="{ odd: odd, even: even }">
-            <td>{{user._id}}</td>
+
             <td>{{user.email}}</td>
-            <td>{{ user.role | translate }}</td>
+            <td>{{user.role}}</td>
             <td><md-icon>delete_forever</md-icon></td>
           </tr>
         </table>
+      </div>
         <!-- <button md-raised-button color="warn" (click)="openDialog()">Delete!</button> -->
       </md-card-content>
     </md-card>
+  </div>
 
+<!-- Upload starts here !-->
+    <div *ngIf="user.role == 'sysadmin'" >
+      <md-card ngClass="uploadCard uploadDocWrapper">
+        <md-card-title>{{ 'Documentation settings' | translate }}</md-card-title>
+        <!-- <input md-raised-button name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)"/> -->
 
+        <button (click)="fileInput.click()" md-raised-button     color="primary" class="marginbottom">
+          <md-icon>library_add</md-icon>
+          <span>{{ 'Choose documentation pdf' | translate }}</span>
+          <input #fileInput name="userFile" type="file" ng2FileSelect [uploader]="uploader" (change)="_onChange($event.target.files)" style="display:none;" />
+        </button>
+        <!-- <h3>Upload queue</h3>
+        <p>Queue length: {{ uploader?.queue?.length }}</p> -->
 
+        <table class="table">
+            <thead>
+            <tr>
+                <th width="160px">{{ 'Filename' | translate }}</th>
+                <th>{{ 'Size' | translate }}</th>
+                <th width="160px">{{ 'Progress' | translate }}</th>
+                <th>{{ 'Status' | translate }}</th>
+                <th>{{ 'Actions' | translate }}</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let item of uploader.queue">
+                <td><strong>{{ item?.file?.name }}</strong></td>
+                <td  nowrap>{{ item?.file?.size/1024/1024 | number:'.2' }} MB</td>
+                <td>
+                    <div class="progress" style="margin-bottom: 0;">
+                        <md-progress-bar mode="determinate" [value]="item.progress" ></md-progress-bar>
+                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': item.progress + '%' }"></div>
+                    </div>
+                </td>
+                <td class="text-center">
+                    <md-icon *ngIf="item.isSuccess">done</md-icon>
+                    <md-icon *ngIf="item.isCancel">remove_circle</md-icon>
+                    <md-icon *ngIf="item.isError">remove_circle</md-icon>
+                </td>
+                <td nowrap>
+                    <button md-raised-button color="primary" class="btn btn-success btn-xs" [ngClass]="{'success' : item.isSuccess, 'error' : (item.isError || item.isCancel)}"
+                            (click)="item.upload()" [disabled]="item.isReady || item.isUploading || item.isSuccess">
+                        <md-icon>file_upload</md-icon> {{ 'Upload and replace documentation' | translate }}
+                    </button>
+                    <button md-raised-button class="btn btn-warning btn-xs"
+                            (click)="item.cancel()" [disabled]="!item.isUploading">
+                        <md-icon>cancel</md-icon> {{ 'Cancel' | translate }}
+                    </button>
+                    <button md-raised-button class="btn btn-danger btn-xs"
+                            (click)="item.remove()">
+                        <md-icon>delete</md-icon> {{ 'Remove' | translate }}
+                    </button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
 
+      </md-card>
     </div>
+
+
+
   </md-tab>
 </md-tab-group>
 </div>

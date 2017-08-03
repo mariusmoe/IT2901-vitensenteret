@@ -4,8 +4,8 @@ export const LANG_EN_NAME = 'en';
 
 export const LANG_EN_TRANS = {
   // Application
-  'Vitensenteret - AdminPortal': 'Vitensenteret - AdminPortal',
-  'Vitensenteret - Survey': 'Vitensenteret - Survey',
+  'Center - AdminPortal': '%0 - AdminPortal',
+  'Center - Survey': '%0 - Survey',
 
   // Generic
   'Edit': 'Edit',
@@ -38,13 +38,27 @@ export const LANG_EN_TRANS = {
   'Option': 'Option',
   'Percentage': 'Percentage',
   'Responses': 'Responses',
+  'Response: ': 'Response: ',
   'User': 'User',
   'Nickname': 'Nickname',
   'Code': 'Code',
+  'Contributors': 'Contributors',
+  'Help': 'Help',
+  'Center': 'Center',
+  'Action': 'Action',
+  'Actions': 'Actions',
+  'Back': 'Back',
+  'Progress': 'Progress',
+  'Filesize': 'Filesize',
+  'Filename': 'Filename',
+  'Status': 'Status',
+  'Publish': 'Publish',
+  'Unpublish': 'Unpublish',
+  'Warning': 'Warning',
 
-  // roles
-  'admin': 'Superadmin',
-  'member': 'Admin',
+  // guard
+  'Session expired': 'Session expired',
+  'Connection issues': 'Nettverksproblemer',
 
   // Permissions
   'You do not have the required permissions for this action!': 'You do not have the required permissions for this action!',
@@ -56,6 +70,8 @@ export const LANG_EN_TRANS = {
   // Forms
   'This field is required.': 'This field is required.',
   'This field is a duplicate.': 'This field is a duplicate.',
+  'This field is invalid.': 'This field is invalid.',
+  'Bad format': 'Bad format',
 
   // Survey Question modes
   'binary': 'Yes/No',
@@ -65,9 +81,17 @@ export const LANG_EN_TRANS = {
   'smiley': 'Smiley',
   'text': 'Free Text',
 
+  // Image URL in create survey
+  'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.':
+    'This field is OPTIONAL. The field takes a full URL. Example: https://www.myWebsite.com/myImage.png. www.imgur.com is an image hosting service you can use.',
+  'Bad format. This field requires a full URL to an image, beginning with https://':
+    'Bad format. This field requires a full URL to an image, beginning with https://',
+
   // Survey Pre post labels
   'Pre': 'Pre',
   'Post': 'Post',
+  'Pre survey': 'Pre survey',
+  'Post survey': 'Post survey',
 
   // Survey response numbers
   'Number of responses: n': 'Number of responses: %0',
@@ -110,6 +134,7 @@ export const LANG_EN_TRANS = {
   'Alternatives: n/m': 'Alternatives: %0/%1',
   'Set Alternatives': 'Set Alternatives',
   'Add a question': 'Add a question',
+  'Image URL (not requrired)': 'Image URL (not required)',
   'At least two alternatives must be set, with a maximum of 6.': 'At least two alternatives must be set, with a maximum of 6.',
   'Deletes this particular question! Careful!': 'Deletes this particular question! Careful!',
   'Several fields are required. Verify that you have filled out all required fields.':
@@ -119,6 +144,14 @@ export const LANG_EN_TRANS = {
   'Could not post your survey. Error:': 'Could not post your survey. The server replied:',
   'The system cannot proceed until the issue has been resolved.': 'The system cannot proceed until the issue has been resolved.',
   'Required question': 'Required question',
+  'Warning!': 'Warning!',
+  'All responses to this survey will be lost if you proceed.': 'All responses to this survey will be lost if you proceed.',
+  'Do you wish to proceed?': 'Do you wish to proceed?',
+  'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.':
+    'The survey is completed and cannot be republished. If you want to run the survey again, try to copy it.',
+  'Survey completed': 'Survey completed',
+  'Documentation settings': 'Documentation settings',
+  'Choose documentation pdf': 'Choose documentation pdf',
 
   // All surveys component
   'n total surveys. A maximum of m items are displayed.': '%0 total surveys. A maximum of %1 items are displayed.',
@@ -129,12 +162,12 @@ export const LANG_EN_TRANS = {
   'Log in': 'Log in',
   'Email and password are required': 'Email and password are required',
   'Email or password is incorrect': 'Email or password is incorrect',
+  'There was an issue connecting to the server': 'There was an issue connecting to the server',
 
   // New user component
   'You need to write the same pasword twice': 'You need to write the same pasword twice',
   'Register New User': 'Register New User',
   'Could not register account': 'Could not register account',
-  'This field is invalid.': 'This field is invalid.',
 
   // Admin homepage component
   'Download as PDF': 'Download as PDF',
@@ -144,13 +177,22 @@ export const LANG_EN_TRANS = {
     'No responses have been registered, so there is nothing to show here yet.',
   'Create post-survey': 'Create post-survey',
   'Edit post-survey': 'Edit post-survey',
-  'Copy with responses': 'Copy with responses',
-    'Survey deleted': 'Survey deleted',
-    'Are you sure you want to delete this survey?': 'Are you sure you want to delete this survey?',
-    'The survey will be deleted! This action is permanent!': 'The survey will be deleted! This action is permanent!',
-    'Go to survey': 'Go to survey',
-    'Go to post survey': 'Go to post survey',
-    'The survey is not active': 'The survey is not active',
+  'Survey deleted': 'Survey deleted',
+  'Are you sure you want to delete this survey?': 'Are you sure you want to delete this survey?',
+  'The survey will be deleted! This action is permanent!': 'The survey will be deleted! This action is permanent!',
+  'Go to survey': 'Go to survey',
+  'Go to post survey': 'Go to post survey',
+  'The survey is not active': 'The survey is not active',
+  'A survey can only be published once. When it is published it cannot be changed.':
+  'A survey can only be published once. When it is published it cannot be changed.',
+  'All responses up until this point in time will be deleted.':
+  'All responses up until this point in time will be deleted.',
+  'When a survey is unpublished it will no logner accept responses.':
+  'When a survey is unpublished it will no logner accept responses.',
+  'To run the survey again, try to copy it.':
+    'To run the survey again, try to copy it.',
+  'The pre and post survevys do not match, so they have been separated.':
+    'The pre and post survevys do not match, so they have been separated.',
 
   // Admin settings component
   'Retype password': 'Retype password',
@@ -159,9 +201,9 @@ export const LANG_EN_TRANS = {
   'Password changed': 'Password changed',
   'Admin settings': 'Admin settings',
   'Change password': 'Change password',
+  'Refer user': 'Refer user',
   'Change email': 'Change email',
   'User settings': 'User settings',
-  'Superadmin settings': 'Superadmin settings',
   'Refer admin': 'Refer admin',
   'Refer member': 'Refer member',
   'You need to write the same password twice': 'You need to write the same password twice',
@@ -181,6 +223,24 @@ export const LANG_EN_TRANS = {
   'You will now be logged out': 'You will now be logged out',
   'Referral link': 'Referral link',
   'Code to exit survey': 'Code to exit survey',
+  'Current role: role': 'Current role: %0',
+  'Center settings': 'Center settings',
+  'Update center': 'Update center',
+  'New center': 'New center',
+
+  // New center component
+  'Change title': 'Change title',
+  'Logo settings': 'Logo settings',
+  'Choose file': 'Choose file',
+  'Upload and replace logo': 'Upload and replace logo',
+  'Upload and replace documentation': 'Upload and replace documentation',
+  'Center title updated': 'Center title updated',
+  'Could not change center title at this time': 'Could not change center title at this time',
+  'Create new center': 'Create new center',
+  'Do note, it is highly recommended to use images of low file size. Images above 10MB will be ignored.':
+    'Do note, it is highly recommended to use images of low file size. Images above 10MB will be ignored.',
+
+
 
   // survey retrieval chart component
   'Download as PNG': 'Download as PNG',
@@ -201,10 +261,13 @@ export const LANG_EN_TRANS = {
   'Start': 'Start',
   'Start POST': 'Start POST',
   'Start survey': 'Start survey',
+  'Choose center': 'Choose center',
+  'Could not find any published surveys at this time.': 'Could not find any published surveys at this time.',
 
   // PDF download lines
-  'Date created: d': 'Date created: %0',
-  'Date printed: d': 'Date printed: %0',
+  'Last modified: d': 'Last modified: %0',
+  'Published: d': 'Published: %0',
+  'Completed: d': 'Completed: %0',
   'Figure: n': 'Figure: %0',
   'Table: n': 'Table: %0',
 
@@ -225,7 +288,20 @@ export const LANG_EN_TRANS = {
   'Max 255 characters': 'Max 255 characters',
   'Your answer': 'Your answer',
 
-    // Footer
-    'Group n': 'Group %0',
-    'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
+  // play survey
+  'Show image': 'Show image',
+
+  // Footer
+  'Group n': 'Group %0',
+  'IT2901 - Informatics Project II': 'IT2901 - Informatics Project II',
+
+  // Folder system
+  'Warning! This will delete the folder along with ALL surveys inside!':
+    'Warning! This will delete the folder along with ALL surveys inside!',
+  'Rename folder': 'Rename folder',
+  'Delete folder': 'Delete folder',
+  'Create subfolder': 'Create subfolder',
+  'Folder Options': 'Folder Options',
+  'New name': 'New name',
+
 };

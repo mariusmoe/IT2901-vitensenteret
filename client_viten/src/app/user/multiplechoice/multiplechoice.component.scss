@@ -1,15 +1,11 @@
 .multiChoiceContainer {
-  width: 60vw;
-  height: 60vh;
-  margin-left: 25vw;
-  display: flex;
-  flex-wrap: wrap;
-
   .choice {
     text-align: left;
-    width: 30vw;
+    display: block;
+    margin: 3vh;
+    max-width: 70vw;
     .child {
-      zoom: 2;
+      zoom: 1.25;
     }
   }
 }

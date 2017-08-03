@@ -1,7 +1,11 @@
 .adminPortal {
   .logo {
     margin: 20px auto;
-    max-width: 175px;
+    margin-top: 30px;
+    text-align: center;
+    font-size: 4em;
+    // font-family: 'Roboto Mono', sans-serif;
+    font-family: 'Baloo Bhaina', cursive;
   }
 
   md-card {
@@ -36,4 +40,11 @@
   color: red;
   top: 11px;
   margin-bottom: 11px;
+}
+
+
+.helpBox {
+  display: block;
+  margin: 30px auto;
+  text-align: center;
 }

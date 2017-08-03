@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Router, CanActivate } from '@angular/router';
 import { JwtHelper } from 'angular2-jwt';
 import { AuthenticationService } from '../_services/authentication.service';
+import { MdSnackBar } from '@angular/material';
+import { TranslateService } from '../_services/translate.service';
 
 
 @Injectable()
@@ -11,6 +13,8 @@ export class AuthGuard implements CanActivate {
 
   constructor(
     private router: Router,
+    public snackBar: MdSnackBar,
+    public translateService: TranslateService,
     private authenticationService: AuthenticationService) { }
 
   /**
@@ -39,6 +43,12 @@ export class AuthGuard implements CanActivate {
               if (result === true) {
                 return true;
               } else {
+                // Session expired
+                // TODO Give feedback
+                localStorage.removeItem('token');
+                localStorage.removeItem('center');
+                this.openSnackBar(this.translateService.instant('Session expired'), '');
+
                 this.router.navigate(['/login']);
                 return false;
               }
@@ -51,7 +61,18 @@ export class AuthGuard implements CanActivate {
       this.router.navigate(['/login']);
       return false;
     }
-
-
   }
+
+
+  /**
+   * Opens a snackbar with the given message and action message
+   * @param  {string} message The message that is to be displayed
+   * @param  {string} action  the action message that is to be displayed
+   */
+  openSnackBar(message: string, action: string) {
+    this.snackBar.open(message, action, {
+      duration: 7000,
+    });
+  }
+
 }

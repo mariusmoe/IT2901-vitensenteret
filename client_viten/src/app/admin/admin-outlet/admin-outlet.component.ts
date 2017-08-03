@@ -4,6 +4,9 @@ import { Subscription } from 'rxjs/Subscription';
 import { AuthenticationService } from '../../_services/authentication.service';
 import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
+import { CenterService } from '../../_services/center.service';
+
+
 import 'rxjs/add/operator/filter';
 
 @Component({
@@ -14,25 +17,53 @@ import 'rxjs/add/operator/filter';
 export class AdminOutletComponent implements OnInit, OnDestroy {
   public breadcrumbs;
   private routerSub: Subscription;
+  public center = 'VitenSurvey';
+  // public logoPath = '../assets/images/vitenlogo.png';
+  public logoPath: string;
+
+
 
   constructor(private router: Router,
     private route: ActivatedRoute,
     private service: AuthenticationService,
+    private centerService: CenterService,
     private translateService: TranslateService,
     private title: Title) {
-      title.setTitle(translateService.instant('Vitensenteret - AdminPortal'));
+      title.setTitle(translateService.instant('Center - AdminPortal', 'Center'));
     }
 
   ngOnInit() {
     // Update whenever you navigate
     this.routerSub = this.router.events.filter(event => event instanceof NavigationEnd).subscribe(event => {
       this.breadcrumbs = this.getBreadcrumbs();
-
     });
+    const sub = this.centerService.getAllCenters().subscribe(result => {
+      if (result && result[0]) { // if there is no array we instead get the 'route exists but no centers..' thing
+        const currentCenter = localStorage.getItem('center');
+        const center = result.filter(c => { return c['_id'] === currentCenter })[0];
+        if (center) {
+          this.center = center['name'];
+          this.title.setTitle(this.translateService.instant('Center - AdminPortal', this.center));
+          if (center.pathToLogo) {
+            this.logoPath = '/assets/uploads/' + center.pathToLogo;
+          }
+        } else {
+          this.title.setTitle(this.translateService.instant('Center - AdminPortal', 'Sysadmin'));
+        }
+      }
+      sub.unsubscribe();
+    });
+
+
   }
+
 
   ngOnDestroy() {
     this.routerSub.unsubscribe();
+  }
+
+  openUserManual() {
+    window.open('/assets/manuals/manual-usermanual-2.pdf', '_blank');
   }
 
   /**
