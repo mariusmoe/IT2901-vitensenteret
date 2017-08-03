@@ -63,7 +63,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
                   filters: [],
                   removeAfterUpload: false,
                   disableMultipart: false,
-                  authToken: token
+                  authToken: token,
+                  maxFileSize: 10 * 1024 * 1024 // 10 MB
               };
       this.uploader.setOptions(myOptions);
       this.selectedLanguage = languageService.getCurrentLang();
