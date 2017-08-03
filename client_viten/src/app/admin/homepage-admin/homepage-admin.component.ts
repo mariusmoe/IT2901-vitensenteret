@@ -236,7 +236,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
    * Initiates a download of a PDF containing data of the given survey
    */
   downloadAsPDF() {
-    console.log('starting pdf download...');
+    // console.log('starting pdf download...');
     const self = this;
     // notify component that we are generating the PDF
     this.generatingPDF = true;
@@ -247,6 +247,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     let imageLoaded = false;
     let pdfDoneRenderingPages = false;
+    let pageNr = 1;           // page number (starting at 1)
 
     const preparePDF = () => {
       // console.log('saving pdf...')
@@ -263,6 +264,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
       img.src = '../../assets/uploads/' + this.centerObject['pathToLogo'];
       const logoSize = 15;
       img.onload = function() {
+        pdf.setPage(1);
         const canvas = document.createElement('canvas') as any;
         canvas.width = img.width;
         canvas.height = img.height;
@@ -273,6 +275,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
           pdf.internal.pageSize.width - imageWidth - 23, 12, imageWidth, logoSize
         );
         // console.log('image done loading');
+        pdf.setPage(pageNr);
         if (pdfDoneRenderingPages) { preparePDF(); }
         imageLoaded = true;
       };
@@ -351,7 +354,6 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
     dummyCanvasContext.fillStyle = '#FFFFFF';
 
     // Declare variables that are used to handle positioning of our charts
-    let pageNr = 1;           // page number (starting at 1)
     let baseOffset = 65;      // The fixed base offset from the top of the page
     const chartHeight = 70;   // The drawn chart's height in the PDF
     const tableOffset = 5;

@@ -237,6 +237,8 @@ export const LANG_EN_TRANS = {
   'Center title updated': 'Center title updated',
   'Could not change center title at this time': 'Could not change center title at this time',
   'Create new center': 'Create new center',
+  'Do note, it is highly recommended to use images of low file size. Images above 10MB will be ignored.':
+    'Do note, it is highly recommended to use images of low file size. Images above 10MB will be ignored.',
 
 
 
