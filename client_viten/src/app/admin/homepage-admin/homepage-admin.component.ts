@@ -457,7 +457,7 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
 
     pdf.setPage(1);
     const img = new Image();
-    if (this.center == null) {
+    if (this.center == null || this.centerObject['pathToLogo']) {
       img.src = '../../assets/images/vitenlogo.png';
     } else {
       img.src = '../../assets/uploads/' + this.centerObject['pathToLogo'];
