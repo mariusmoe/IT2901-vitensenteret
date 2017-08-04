@@ -24,6 +24,12 @@ export class CenterService {
     private router: Router ) {
   }
 
+
+  /**
+   * getAllCenters()
+   * returns all senters
+   * @return {Observable<any>} returns all senters, as a list
+   */
   getAllCenters(): Observable<any> {
       return this.http.get(environment.URL.allCenters)
       .map(
@@ -31,13 +37,18 @@ export class CenterService {
           return response.json();
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return null;
         }
       );
   }
 
-
+  /**
+   * getCenter()
+   * gets a center
+   * @param  {String}          centerId the id of the center to get
+   * @return {Observable<any>}          the center object
+   */
   getCenter(centerId: String): Observable<any> {
     return this.http.get(environment.URL.allCenters)
     .map(
@@ -48,10 +59,10 @@ export class CenterService {
           const center = result.filter(c => { return c['_id'] === centerId })[0];
           return center;
         }
-        return response.json();
+        return result;
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return null;
       }
     );
@@ -97,6 +108,13 @@ export class CenterService {
     });
   }
 
+  /**
+   * centerUpdateCenterName()
+   * updates the name of the center
+   * @param  {string}              name     the new name of the center
+   * @param  {string}              centerId the id of the center to rename
+   * @return {Observable<boolean>}          whether or not the request was successful
+   */
   centerUpdateCenterName(name: string, centerId: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -109,14 +127,20 @@ export class CenterService {
           return true;
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return false;
         }
       );
   }
 
 
-
+  /**
+   * newCenter()
+   * creates a new center
+   * @param  {string}              name     the name of the new center
+   * @param  {string}              password the exit-survey keycode
+   * @return {Observable<boolean>}          whether or not the request was successful
+   */
   newCenter(name: string, password: string): Observable<boolean> {
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
@@ -129,7 +153,7 @@ export class CenterService {
           return true;
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return false;
         }
       );

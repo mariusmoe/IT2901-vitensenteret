@@ -429,6 +429,8 @@ export class HomepageAdminComponent implements OnInit, OnDestroy {
         counter++;
         canvasIterator++;
       } else {
+        // Add text answers
+        // 3 on each page
 
         if (!prePostEqual && !postIsSet && (i > this.survey.questionlist.length)) {
           pdf.setFontSize(18);

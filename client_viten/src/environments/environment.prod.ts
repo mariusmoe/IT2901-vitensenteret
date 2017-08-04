@@ -41,6 +41,5 @@ export const environment = {
       newCenterName: 'https://vitensurvey.party/api/center/name',
       newLogo: 'https://vitensurvey.party/api/image/center',
       newDoc: 'https://vitensurvey.party/api/image/doc',
-
     }
 };

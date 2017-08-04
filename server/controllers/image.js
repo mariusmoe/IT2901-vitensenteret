@@ -15,17 +15,9 @@ const AuthenticationController = require('./authentication'),
       multer    = require('multer'),
       fs = require('fs');
 
-// const _storage = multer.diskStorage({
-//   destination: function (req, file, cb) {
-//     cb(null, 'uploads/')
-//   },
-//   filename: function (req, file, cb) {
-//     cb(null, Date.now() + '.jpg') //Appending .jpg
-//   }
-// })
-//
-// var upload = multer({ storage: _storage });
 
+// Upload folder should be different on production than in dev mode bacause they
+// look for assets in diffrent folders
 let UPLOAD_FOLDER ='';
 let UPLOAD_FOLDER_MANUALS ='';
 if (config.util.getEnv('NODE_ENV') == 'production') {
@@ -35,11 +27,9 @@ if (config.util.getEnv('NODE_ENV') == 'production') {
   UPLOAD_FOLDER = __dirname +'/../../client_viten/src/assets/uploads/'
   UPLOAD_FOLDER_MANUALS = __dirname +'/../../client_viten/src/assets/manuals/'
 }
-// const UPLOAD_FOLDER = './uploads'
 
 // Require login/auth
 const requireAuth   = passport.authenticate('jwt', { session: false });
-// const requireLogin  = passport.authenticate('local', { session: false });
 
 // Role types enum: ['sysadmin', 'vitenleader', 'user'],
 const REQUIRE_SYSADMIN = "sysadmin",
@@ -61,7 +51,8 @@ module.exports = (app) => {
  |--------------------------------------------------------------------------
 */
 
-
+// Also called magic numbers
+// all files of filetype gif will contain the string '47494638'
 var IMAGE_SIGNATURES = {
 	jpg: 'ffd8ffe0',
 	jpg1: 'ffd8ffe1',
@@ -73,6 +64,11 @@ var PDF_SIGNATURE = {
   pdf: '25504446'
 }
 
+/**
+ * check if incomming file contain magic numbers / signature
+ * @param  {string} signature Image in string format
+ * @return {[type]}           [description]
+ */
 function checkSignatureNumbers(signature) {
 	if (signature == IMAGE_SIGNATURES.jpg || signature == IMAGE_SIGNATURES.jpg1 || signature == IMAGE_SIGNATURES.png || signature == IMAGE_SIGNATURES.gif) return true
 }
@@ -80,6 +76,11 @@ function checkSignatureNumbersPDF(signature) {
 	if (signature == PDF_SIGNATURE.pdf) return true
 }
 
+/**
+ * Upload a logo
+ * Sysadmins can provide a center that will get the logout
+ * vitenleaders can onlu upload logos to their respective centers.
+ */
 imageRoutes.post('/center', requireAuth, function(req, res, next) {
   let centerId;
 
@@ -107,6 +108,7 @@ imageRoutes.post('/center', requireAuth, function(req, res, next) {
     }
 
     if (typeof req.user.center == 'undefined') {
+      // Create a string to use for checking against signature numbers (magic numbers)
       var bitmap = fs.readFileSync(UPLOAD_FOLDER + req.body.center + path.extname(req.files['file'][0].filename)).toString('hex', 0, 4)
       // console.log(file);
     } else {
@@ -117,6 +119,7 @@ imageRoutes.post('/center', requireAuth, function(req, res, next) {
     // var bitmap = fs.readFileSync('./uploads/' + req.files['file'][0].filename).toString('hex', 0, 4)
 		if (!checkSignatureNumbers(bitmap)) {
       if (typeof req.user.center == 'undefined') {
+        // Delete the file if it is not the expected filetype
         fs.unlinkSync(UPLOAD_FOLDER + req.body.center + path.extname(req.files['file'][0].filename))
         return res.end('File is no valid')
       } else {
@@ -141,7 +144,9 @@ imageRoutes.post('/center', requireAuth, function(req, res, next) {
 
 
 
-
+/**
+ * upload new documentation in pdf format
+ */
 imageRoutes.post('/doc', requireAuth, function(req, res, next) {
 
   var storage = multer.diskStorage({

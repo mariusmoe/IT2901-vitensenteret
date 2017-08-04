@@ -50,7 +50,7 @@ export class AuthenticationService {
           return true;
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return false;
         }
       );
@@ -73,7 +73,7 @@ export class AuthenticationService {
           return true;
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return false;
         }
       );
@@ -103,7 +103,7 @@ export class AuthenticationService {
           }
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return null;
         }
       );
@@ -157,7 +157,7 @@ export class AuthenticationService {
         return true;
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return false;
       }
     );
@@ -196,7 +196,7 @@ export class AuthenticationService {
           }
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return null;
         }
       );
@@ -240,7 +240,7 @@ export class AuthenticationService {
           }
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return false;
         }
       ).catch(e => {
@@ -272,7 +272,7 @@ export class AuthenticationService {
             }
           },
           error => {
-            console.log(error.text());
+            console.error(error.text());
             return error.json();
           }
         );
@@ -293,11 +293,11 @@ export class AuthenticationService {
         .map(
           response => {
             const jsonResponse = response.json();
-            console.log(jsonResponse);
+            // console.log(jsonResponse);
             return true;
           },
           error => {
-            console.log(error.text());
+            console.error(error.text());
             return false;
           }
         );
