@@ -56,7 +56,7 @@ export class UserFolderService {
         return response.json();
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return null;
       }
     );
@@ -76,7 +76,7 @@ export class UserFolderService {
         return response.json();
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return null;
       }
     );
@@ -96,7 +96,7 @@ export class UserFolderService {
         return response.json();
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return null;
       }
     );
@@ -115,7 +115,7 @@ export class UserFolderService {
         return response.json();
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return null;
       }
     );
@@ -133,7 +133,7 @@ export class UserFolderService {
         return response.json();
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return null;
       }
     );

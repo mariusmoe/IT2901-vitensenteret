@@ -215,8 +215,8 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     this.service.getReferral(role, center)
         .subscribe(result => {
           const config: MdDialogConfig = {
-            data: {
-              referralURL: result,
+            data: { // result is the referral TOKEN
+              referralURL: window.location.hostname + '/register/' + result,
               role: role,
             }
           };

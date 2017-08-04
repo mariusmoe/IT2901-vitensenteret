@@ -226,7 +226,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
           this.refreshFolders();
         },
         error => {
-          console.log('Error creating folder');
+          console.error('Error creating folder');
           sub.unsubscribe();
           this.refreshFolders();
         });
@@ -343,7 +343,7 @@ export class FolderOptionsDialog {
         this.close();
       },
       error => {
-        console.log(error.json().message);
+        console.error(error.json().message);
         sub.unsubscribe();
         this.data.callbackError(error);
         this.close();
@@ -367,7 +367,7 @@ export class FolderOptionsDialog {
         this.close();
       },
       error => {
-        console.log(error.json().message);
+        console.error(error.json().message);
         sub.unsubscribe();
         this.data.callbackError(error);
         this.close();

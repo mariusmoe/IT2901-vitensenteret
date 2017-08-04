@@ -31,7 +31,7 @@ export class CenterService {
           return response.json();
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return null;
         }
       );
@@ -51,7 +51,7 @@ export class CenterService {
         return response.json();
       },
       error => {
-        console.log(error.text());
+        console.error(error.text());
         return null;
       }
     );
@@ -109,7 +109,7 @@ export class CenterService {
           return true;
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return false;
         }
       );
@@ -129,7 +129,7 @@ export class CenterService {
           return true;
         },
         error => {
-          console.log(error.text());
+          console.error(error.text());
           return false;
         }
       );
