@@ -301,9 +301,8 @@ exports.getReferralLink = (req, res, next) => {
         })
         referralString.save((err, referral) => {
           if (err) {return next(err); }
-          let refferalBaseLink = req.headers.host.slice(0,req.headers.host.indexOf(':')) + '/register/';
           // console.log(req.headers.host);
-          res.status(200).send({message: status.REFERRAL_CREATED.message, link: refferalBaseLink + token, status: status.REFERRAL_CREATED.code })
+          res.status(200).send({message: status.REFERRAL_CREATED.message, link: token, status: status.REFERRAL_CREATED.code })
         });
       })
     })
