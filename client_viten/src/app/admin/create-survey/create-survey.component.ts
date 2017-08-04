@@ -202,7 +202,11 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  /**
+   * onEnglishChange()
+   * is triggered when the Egnlish state is updated, and adds the required properties to the survey if appropriate.
+   * @return {[type]} [description]
+   */
   onEnglishChange() {
     for (const qo of this.survey.questionlist) {
       qo.lang.no.options = qo.lang.no.options || [];
@@ -211,6 +215,7 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
           'txt': ''
         };
       }
+      // fill the options with empty strings, making sure to have as many as the norwegian version
       qo.lang.en.options = qo.lang.en.options || Array(qo.lang.no.options.length).fill('');
     }
     this.onSurveyChange();
@@ -468,6 +473,10 @@ export class CreateSurveyComponent implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * saveChanges()
+   * opens a modal to warn that data will be erased if you UPDATE a survey, otherwise save the survey.
+   */
   saveChanges() {
     if (this.isPatch) {
       // Give a modal window that informs the user that all answers will be lost
@@ -592,8 +601,6 @@ export class SurveyAlternativesDialog implements OnInit, OnDestroy {
         this.qoEditObj.lang.en.options[i] = newOptionsEN[i];
       }
     }
-
-
     this.outputQuestionObject = this.qoEditObj;
     this.dialogRef.close();
   }

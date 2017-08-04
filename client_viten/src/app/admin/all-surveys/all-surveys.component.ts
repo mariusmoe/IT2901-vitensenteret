@@ -30,7 +30,7 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
     // searchLoading = false;
     // searchResultNum = 20;
 
-    searchSubscription: Subscription;
+    // searchSubscription: Subscription;
     dragulaSubs: Subscription[] = [];
 
 
@@ -116,17 +116,34 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       }
     }
 
-
-    onDragulaDrag(value: any) {
+    /**
+     * onDragulaDrag()
+     * a trigger when a dragula event of type drag occurs
+     * It is used to update the state of the tree, to allow easier drag'n'drop
+     * @param  {any}    value a list of args from drake
+     */
+    private onDragulaDrag(value: any) {
       document.getElementById('folderTree').classList.add('over');
     }
-    onDragulaDragEnd(value: any) {
+    /**
+     * onDragulaDragEnd()
+     * a trigger when a dragula event of type dragEnd occurs
+     * It is used to update the state of the tree, to allow easier drag'n'drop
+     * @param  {any}    value a list of args from drake
+     */
+    private onDragulaDragEnd(value: any) {
       document.getElementById('folderTree').classList.remove('over');
     }
 
 
-
+    /**
+     * onDragulaDragEnd()
+     * a trigger when a dragula event of type dragEnd occurs
+     * It updates the state of folders and surveys when a drag'n'drop has happened
+     * @param  {any}    value a list of args from drake
+     */
     onDragulaDrop(value: any) {
+      // drake args
       const bag = value[0];
       const el: Element = value[1];
       const targetFolderEl: Element = value[2];
@@ -172,7 +189,10 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       }
     }
 
-
+    /**
+     * refreshFolders()
+     * Refreshes all folders so that Angular has all the latest info about the tree structure
+     */
     refreshFolders() {
       this.loading = true;
       const requestNewTreeSub = this.userFolderService.getAllFolders().subscribe(newTree => {
@@ -189,6 +209,12 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       });
     }
 
+    /**
+     * toggleFolderOpenState()
+     * Toggles the state of a folder, and sends the new state to the backend. a refresh is NOT queried after this.
+     * @param  {Event}  e      DOM event
+     * @param  {Folder} folder the folder that was opened or closed
+     */
     toggleFolderOpenState(e: Event, folder: Folder) {
       e.stopPropagation();
       e.preventDefault();
@@ -216,6 +242,11 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       );
     }
 
+    /**
+     * createNewFolder()
+     * Creates a new folder, and refreshes folders.
+     * @param  {Folder} folder the folder to create
+     */
     createNewFolder(folder: Folder) {
       const newFolder: Folder = {
       };
@@ -232,7 +263,11 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
         });
     }
 
-
+    /**
+     * openRenameFolderDialog()
+     * opens the dialog on which a user can rename a folder
+     * @param  {Folder} folder the folder to be renamed
+     */
     openRenameFolderDialog(folder: Folder) {
       const config: MdDialogConfig = {
         data: {
@@ -245,6 +280,11 @@ export class AllSurveysComponent implements OnInit, OnDestroy {
       this.dialog.open(FolderOptionsDialog, config);
     }
 
+    /**
+     * openDeleteFolderDialog()
+     * opens the dialog on which a user can delete a folder
+     * @param  {Folder} folder the folder to be deleted
+     */
     openDeleteFolderDialog(folder: Folder) {
       const config: MdDialogConfig = {
         data: {
@@ -324,7 +364,10 @@ export class FolderOptionsDialog {
     });
   }
 
-
+  /**
+   * submitForm()
+   * Submits the form which holds the data to be sent.
+   */
   submitForm() {
     if (this.data.isRename) {
       this.renameFolder();
@@ -333,7 +376,10 @@ export class FolderOptionsDialog {
     }
   }
 
-
+  /**
+   * deleteFolder()
+   * Deletes the folder for which the dialog was opened.
+   */
   deleteFolder() {
     const sub = this.userFolderService.deleteFolder(this.data.folder._id).subscribe(
       result => {
@@ -350,7 +396,10 @@ export class FolderOptionsDialog {
       });
   }
 
-
+  /**
+   * renameFolder()
+   * Renames the folder for which the dialog was opened.
+   */
   renameFolder() {
     this.data.folder.title = this.renameForm.value;
     const updatedFolder: Folder = {
@@ -376,7 +425,6 @@ export class FolderOptionsDialog {
 
   /**
    * close()
-   *
    * Hides the dialog window.
    */
   close() {

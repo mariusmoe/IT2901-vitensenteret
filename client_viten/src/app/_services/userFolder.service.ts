@@ -45,6 +45,12 @@ export class UserFolderService {
     return localStorage.getItem('token');
   }
 
+
+  /**
+   * getAllFolders()
+   * returns all folders
+   * @return {Observable<Folder[]>} returns a list of folders
+   */
   getAllFolders(): Observable<Folder[]> {
 
     const token = this.getToken();
@@ -63,6 +69,13 @@ export class UserFolderService {
   }
 
 
+  /**
+   * createFolder()
+   * Creates a folder
+   * @param  {Folder}               newFolder    the new folder to create
+   * @param  {Folder}               parentFolder the folder to put it in
+   * @return {Observable<Folder[]>}              returns all folders
+   */
   createFolder(newFolder: Folder, parentFolder: Folder): Observable<Folder[]> {
     const token = this.getToken();
     const headers = new Headers();
@@ -82,7 +95,12 @@ export class UserFolderService {
     );
   }
 
-
+  /**
+   * patchFolder()
+   * Patches a folder
+   * @param  {Folder}               updatedFolder the folder to patch
+   * @return {Observable<Folder[]>}               returns all folders
+   */
   patchFolder(updatedFolder: Folder): Observable<Folder[]> {
     const token = this.getToken();
     const headers = new Headers();
@@ -102,6 +120,12 @@ export class UserFolderService {
     );
   }
 
+  /**
+   * updateFolders()
+   * Updates folders
+   * @param  {any}                  data data
+   * @return {Observable<Folder[]>}      returns all folders
+   */
   updateFolders(data: any): Observable<Folder[]> {
 
     const token = this.getToken();
@@ -121,7 +145,14 @@ export class UserFolderService {
     );
   }
 
-  deleteFolder(folderId: string) {
+
+  /**
+   * deleteFolder()
+   * deletes a folder
+   * @param  {string}          folderId the id of the folder to delete
+   * @return {Observable<any>}          a container object with message, status and, if applicable, return data
+   */
+  deleteFolder(folderId: string): Observable<any> {
     const token = this.getToken();
     const headers = new Headers();
     headers.append('Content-Type', 'application/json');
