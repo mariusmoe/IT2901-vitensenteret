@@ -94,7 +94,10 @@ export class NewCenterComponent implements OnInit {
 
   }
 
-
+  /**
+   * When changing files delete previous item in upload queue
+   * @param  {any}    files file queue
+   */
   public _onChange(files: any) {
     // this.user = this.authenticationService.getUser();
     // console.log(this.uploader.queue);
@@ -150,7 +153,11 @@ export class NewCenterComponent implements OnInit {
     });
   }
 
-
+  /**
+   * create center with passwrod and name
+   * @param  {string} name     name of center
+   * @param  {string} password password to exit survey
+   */
   createNewCenter(name: string, password: string) {
 
     this.centerService.newCenter(name, password).subscribe(result => {

@@ -62,6 +62,9 @@ export class AdminOutletComponent implements OnInit, OnDestroy {
     this.routerSub.unsubscribe();
   }
 
+  /**
+   * Opens the user manual in a new window
+   */
   openUserManual() {
     window.open('/assets/manuals/manual-usermanual-2.pdf', '_blank');
   }
