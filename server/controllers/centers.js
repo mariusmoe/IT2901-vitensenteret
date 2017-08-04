@@ -15,7 +15,9 @@ const status = require('../status'),
       val = require('../libs/validation.js');
 
 
-
+/**
+ * create a new center
+ */
 exports.createCenter = (req, res, next) => {
   let receivedCenter = req.body;
 
@@ -35,7 +37,9 @@ exports.createCenter = (req, res, next) => {
   })
 }
 
-// GET
+/**
+ * GET - Get all centers as a list
+ */
 exports.getAllCenters = (req, res, next) => {
   const centerId = req.params.centerId;
   Center.find( {}, {'password': false }, (err, centers) => {
@@ -53,6 +57,9 @@ exports.getAllCenters = (req, res, next) => {
   }).lean();
 }
 
+/**
+ * PATCH - Edit one centerService
+ */
 exports.patchCenterName = (req, res, next) => {
   const name = req.body.name;
   let centerId = '';
@@ -73,7 +80,9 @@ exports.patchCenterName = (req, res, next) => {
 }
 
 
-
+/**
+ * POST - create a new center
+ */
 exports.postCenter = (req, res, next) => {
   const name = req.body.name;
   const password = req.body.password;
