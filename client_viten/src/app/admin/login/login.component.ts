@@ -71,6 +71,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       );
   }
 
+  /**
+   * Open the user manual in a new window
+   */
   openUserManual() {
     window.open('/assets/manuals/manual-usermanual-2.pdf', '_blank');
   }
