@@ -103,6 +103,12 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
     // this.emailSub.unsubscribe();
   }
 
+  /**
+   * _onChange of files to be uloaded
+   * edit the upload queue to only hold one file
+   * @param  {any}    files [description]
+   * @return {[type]}       [description]
+   */
   public _onChange(files: any) {
     this.uploader.queue[0].formData = {'file': ' myval'};
     // console.log(this.uploader);
@@ -114,6 +120,10 @@ export class AdminSettingsComponent implements OnInit, OnDestroy {
    }
   }
 
+  /**
+   * Hold the last active tab in memory
+   * @param  {MdTabChangeEvent} e The tab clicked on last
+   */
   onTabChange(e: MdTabChangeEvent) {
     localStorage.setItem('activesettingstab', e.index.toString());
   }

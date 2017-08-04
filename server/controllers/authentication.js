@@ -309,7 +309,10 @@ exports.getReferralLink = (req, res, next) => {
   });
 }
 
-
+/**
+ * Approve users that have the provided priveleges
+ * @param  {string} role role to check against
+ */
 exports.roleAuthorization = function(role){
   return function(req,res,next){
     let id = req.user._id;
@@ -328,6 +331,10 @@ exports.roleAuthorization = function(role){
   }
 }
 
+/**
+ * Approve all users that have higher or equal priveleges than the provided one
+ * @param  {string} role role to check agianst
+ */
 exports.roleAuthorizationUp = function(role){
   return function(req,res,next){
 
@@ -347,6 +354,9 @@ exports.roleAuthorizationUp = function(role){
   }
 }
 
+/**
+ * CHenge the email of a user
+ */
 exports.changeEmail = function(req, res, next) {
   if (!req.body.email.newEmail || req.body.email.newEmail === '') {
     res.status(422).json({ error: status.NO_EMAIL_OR_PASSWORD.message, status: status.NO_EMAIL_OR_PASSWORD.code });
@@ -372,6 +382,9 @@ exports.changeEmail = function(req, res, next) {
   });
 }
 
+/**
+ * Change password for the user that sends the request
+ */
 exports.changePassword = (req, res, next) => {
   User.findById(req.user._id, function(err, user) {
     if (err) {
@@ -392,6 +405,9 @@ exports.changePassword = (req, res, next) => {
   });
 }
 
+/**
+ * Test authentication
+ */
 exports.test = (req, res, next) => {
   res.status(200).send({message: 'Welcome sir, you have the right privelages to view this content' })
 }
