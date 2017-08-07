@@ -1,23 +1,27 @@
-import { Component, HostListener, Inject } from '@angular/core';
+import { Component, HostListener, Inject, OnDestroy } from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
 import { CenterService } from '../../_services/center.service';
 import { TranslateService } from '../../_services/translate.service';
 import { MdSnackBar } from '@angular/material';
-import { SimpleTimer } from 'ng2-simple-timer';
+import { Subscription } from 'rxjs/Subscription';
+import { interval } from 'rxjs/Observable/interval';
 
 @Component({
   selector: 'app-quitsurvey-prompt',
   templateUrl: './quitsurvey-prompt.component.html',
   styleUrls: ['./quitsurvey-prompt.component.scss']
 })
-export class QuitsurveyPromptComponent {
+export class QuitsurveyPromptComponent implements OnDestroy {
 
   codeForm: FormGroup;
 
   abortTimer: string;
   abortCounter = 0;
+
+  private timerSub: Subscription;
+
   constructor(
     private centerService: CenterService,
     private translateService: TranslateService,
@@ -25,14 +29,20 @@ export class QuitsurveyPromptComponent {
     private router: Router,
     public snackBar: MdSnackBar,
     private fb: FormBuilder,
-    @Inject(MD_DIALOG_DATA) public data: any,
-    private timer: SimpleTimer ) {
-      this.timer.newTimer('1sec', 1);
-      this.subscribePromptTimer();
+    @Inject(MD_DIALOG_DATA) public data: any) {
+      this.timerSub = interval(1 * 1000).subscribe(() => {
+        this.promptTimerCallback();
+      });
+
       this.codeForm = fb.group({
         'code': [null, Validators.required]
       });
     }
+
+
+  ngOnDestroy() {
+    this.timerSub.unsubscribe();
+  }
 
   quitSurvey(code: string) {
 
@@ -41,14 +51,15 @@ export class QuitsurveyPromptComponent {
           if (result === true) {
             this.router.navigate(['/choosesurvey']);
             this.dialogRef.close();
-            sub.unsubscribe();
           } else {
-            sub.unsubscribe();
             this.openSnackBar(this.translateService.instant('Incorrect code'), 'OK');
           }
+          sub.unsubscribe();
+          this.timerSub.unsubscribe();
         },
         error => {
           sub.unsubscribe();
+          this.timerSub.unsubscribe();
           this.openSnackBar(this.translateService.instant('Incorrect code'), 'OK');
         }
       );
@@ -64,21 +75,6 @@ export class QuitsurveyPromptComponent {
       duration: 2000,
     });
   }
-
-  /**
-   * The subscribe-methods connects variables to timers. These handles connectivity to callback-methods
-   */
-  subscribePromptTimer() {
-  if (this.abortTimer) {
-    // Unsubscribe if timer Id is defined
-    this.timer.unsubscribe(this.abortTimer);
-    this.abortTimer = undefined;
-    } else {
-      // Subscribe if timer Id is undefined
-      this.abortTimer = this.timer.subscribe('1sec', e => this.promptTimerCallback());
-    }
-  }
-
 
   /**
    * The timer-methods update the counters accordingly to realtime seconds, and aborts survey if time has passed over threshold

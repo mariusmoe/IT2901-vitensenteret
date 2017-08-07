@@ -5,12 +5,12 @@ import { Response } from '../../_models/response';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { Survey, QuestionObject } from '../../_models/survey';
 import { MdDialog, MdDialogRef, MdDialogConfig, MD_DIALOG_DATA } from '@angular/material';
-import { SimpleTimer } from 'ng2-simple-timer';
 import { QuitsurveyPromptComponent } from './quitsurvey-prompt.component';
 import { TranslateService } from '../../_services/translate.service';
 import { Title } from '@angular/platform-browser';
-import { Subscription } from 'rxjs/Subscription';
 import { MdSnackBar } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
+import { interval } from 'rxjs/Observable/interval';
 
 
 @Component({
@@ -113,6 +113,9 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
 
   showImage = false;
 
+  refreshNicknamesSub: Subscription;
+  abortTimerSub: Subscription;
+
 
   /**
    * Hostlistener that recognizes clicks on the screen to reset timer
@@ -139,7 +142,6 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
   constructor(private surveyService: SurveyService,
     private router: Router,
     private route: ActivatedRoute,
-    private timer: SimpleTimer,
     public dialog: MdDialog,
       public snackBar: MdSnackBar,
     public translateService: TranslateService,
@@ -185,8 +187,8 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
           && this.survey.questionlist[0].lang.en.txt.length > 0) {
           this.englishEnabled = true;
         }
-        this.timer.newTimer('refreshNicknames', 30);
-        this.timer.subscribe('refreshNicknames', e => {
+        this.refreshNicknamesSub = interval(30 * 1000).subscribe(() => {
+
           const sub2 = this.surveyService.getNicknames(this.survey._id)
             .subscribe( result2 => {
                 // console.log(result2);
@@ -201,6 +203,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
             );
         });
 
+
         if (this.survey && this.survey._id) {
           this.properSurvey = true;
         } else {
@@ -213,8 +216,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.timer.unsubscribe('refreshNicknames');
-    this.timer.delTimer('refreshNicknames');
+    this.refreshNicknamesSub.unsubscribe();
   }
   /**
    * This method starts the survey as well as the inactivity timer
@@ -230,8 +232,17 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         if (this.survey.isPost || this.survey.postKey !== undefined) {
           this.postDone = false;
         }
-        this.timer.newTimer('idleTimer', 1);
-        this.subscribeabortTimer();
+        this.abortTimerSub = interval(1 * 1000).subscribe(() => {
+          if (!this.survey.active) {
+            return;
+          }
+          this.abortCounter++;
+          if (this.abortCounter >= 60 * 3) {
+            this.exitSurvey();
+          } else if (this.done && this.abortCounter >= 5) {
+            this.exitSurvey();
+          }
+        });
         // This method checks if a qestion is required and has been answered
         if (this.survey.questionlist[this.page].required) {
           if (this.response.questionlist[this.page] == null) {
@@ -277,8 +288,7 @@ export class ActiveSurveyComponent implements OnInit, OnDestroy {
         this.lastQuestionAnswered = 'inactive';
         this.animLoop = false;
 
-        this.subscribeabortTimer();
-        this.timer.delTimer('idleTimer');
+        this.abortTimerSub.unsubscribe();
 
         this.survey = result.survey;
         this.totalPages = this.survey.questionlist.length;
@@ -441,35 +451,6 @@ addOrChangeAnswer(alternative: any) {
     }
   }
 
-/**
- * The subscribe-methods connects variables to timers. These handles connectivity to callback-methods
- */
- subscribeabortTimer() {
-  if (this.abortTimer) {
-    // Unsubscribe if timer Id is defined
-    this.timer.unsubscribe(this.abortTimer);
-    this.abortTimer = undefined;
-    } else {
-      // Subscribe if timer Id is undefined
-      this.abortTimer = this.timer.subscribe('idleTimer', e => this.listenCallback());
-    }
-  }
-
-
-/**
- * The timer-methods update the counters accordingly to realtime seconds, and aborts survey if time has passed over threshold
- */
- listenCallback() {
-   if (!this.survey.active) {
-     return;
-   }
-   this.abortCounter++;
-   if (this.abortCounter >= 60 * 3) {
-     this.exitSurvey();
-   } else if (this.done && this.abortCounter >= 5) {
-     this.exitSurvey();
-   }
-  }
 
 /**
  * This method resets the idle-timers
