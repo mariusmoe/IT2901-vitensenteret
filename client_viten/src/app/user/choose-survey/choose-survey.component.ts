@@ -5,6 +5,8 @@ import { CenterService } from '../../_services/center.service';
 import { FormControl } from '@angular/forms';
 import { TranslateService } from '../../_services/translate.service';
 import { Subscription } from 'rxjs/Subscription';
+// import 'rxjs/add/operator/debounceTime';
+
 
 @Component({
   selector: 'app-choose-survey',
@@ -13,7 +15,7 @@ import { Subscription } from 'rxjs/Subscription';
 })
 export class ChooseSurveyComponent implements OnInit, OnDestroy {
 
-  searchFormControl = new FormControl();
+  // searchFormControl = new FormControl();
   centerId = null;
   centerData = null;
   allCenters = [];
@@ -48,9 +50,9 @@ export class ChooseSurveyComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     // subscribe to the search form for searching
-    this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
-      this.search = searchQuery;
-    });
+    // this.searchFormControl.valueChanges.debounceTime(500).subscribe(searchQuery => {
+    //   this.search = searchQuery;
+    // });
   }
 
   ngOnDestroy() {
