@@ -8,12 +8,6 @@ import { MaterialModule } from '@angular/material';
 
 import { ReactiveFormsModule } from '@angular/forms';
 
-
-
-// move to user
-import { SimpleTimer } from 'ng2-simple-timer';
-
-
 // services
 import { AuthenticationService } from './_services/authentication.service';
 import { SurveyService } from './_services/survey.service';
@@ -45,7 +39,6 @@ import { TRANSLATION_PROVIDERS } from './translate/translate';
     CenterService,
     TRANSLATION_PROVIDERS,
     TranslateService,
-    SimpleTimer,
     DatePipe
   ],
   exports: [
