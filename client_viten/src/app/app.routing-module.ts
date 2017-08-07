@@ -4,15 +4,13 @@ import { Routes, RouterModule } from '@angular/router';
 import { AuthGuard } from './_guards/auth.guard';
 
 import { LoginComponent } from './admin/login/login.component';
-import { ChooseSurveyComponent } from './user/choose-survey/choose-survey.component';
 import { NewUserComponent } from './admin/new-user/new-user.component';
-import { ActiveSurveyComponent } from './user/active-survey/active-survey.component';
 
 
 const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
-  { path: 'survey/:surveyId', component: ActiveSurveyComponent },
-  { path: 'choosesurvey', component: ChooseSurveyComponent },
+  { path: 'survey', loadChildren: 'app/user/user.module#UserModule' },
+  { path: 'choosesurvey', loadChildren: 'app/user/user.module#UserModule' },
   { path: 'admin', loadChildren: 'app/admin/admin.module#AdminModule', canActivate: [AuthGuard] },
   { path: 'register/:refLink', component: NewUserComponent },
 
