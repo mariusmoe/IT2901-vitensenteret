@@ -1,7 +1,9 @@
 const mongoose = require('mongoose'),
       Schema = mongoose.Schema;
 
-
+const activeExpiration = function(){
+      return new Date(+new Date() + 14*24*60*60*1000);
+}
 const ReferralSchema = new Schema({
   expirationDate: {
     type: Date,
@@ -18,7 +20,7 @@ const ReferralSchema = new Schema({
   },
   activeExpiration: {
     type: Date,
-    default: new Date(+new Date() + 14*24*60*60*1000),
+    default: activeExpiration,
   },
   active: {
     type: Boolean,
